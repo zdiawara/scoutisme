@@ -1,0 +1,50 @@
+version: "3.8"
+services:
+  main:
+    container_name: scoutisme.serve
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: "php artisan serve --host=0.0.0.0"
+    volumes:
+      - ./:/var/www/html/
+    ports:
+      - "9025:8000"
+
+  queue:
+    container_name: scoutisme.queue
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: "php artisan queue:work"
+    depends_on:
+      - db
+
+  db:
+    platform: linux/x86_64
+    image: mysql:8.0
+    container_name: scoutisme.db
+    environment:
+      MYSQL_DATABASE: scoutisme
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    volumes:
+      - db:/var/lib/mysql
+    ports:
+      - "3320:3306"
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: scoutisme.mail
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - scoutisme-network
+
+networks:
+  scoutisme-network:
+    driver: bridge
+
+volumes:
+  db:
+    driver: local

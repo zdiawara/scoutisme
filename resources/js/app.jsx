@@ -1,13 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import {
-    RouterProvider,
-    createBrowserRouter,
-    BrowserRouter,
-    Routes,
-    Route,
-    Outlet,
-    createRoutesFromElements,
+  RouterProvider,
+  createBrowserRouter,
+  BrowserRouter,
+  Routes,
+  Route,
+  Outlet,
+  createRoutesFromElements,
 } from "react-router-dom";
 import { Root } from "./routes";
 import ErrorPage from "./pages/error/ErrorPage";
@@ -53,38 +53,36 @@ const Index = ReactDOM.createRoot(document.getElementById("app"));
 ]);*/
 
 const router = createBrowserRouter(
-    createRoutesFromElements(
-        <Route path="/" element={<Layout />}>
-            <Route path={LINKS.personnes.base} element={<Outlet />}>
-                <Route
-                    index
-                    element={<ListPersonne />}
-                    loader={async ({ params, request, context }) => {
-                        const data = await fetch(
-                            "http://localhost:8000/api/personnes"
-                        );
-                        console.log("Loading personnes");
-                        return data;
-                    }}
-                />
-                <Route
-                    element={<ViewPersonne />}
-                    path=":personneId"
-                    loader={async ({ params, request, context }) => {
-                        console.log("Loading a personne");
-                        const data = await fetch(
-                            `http://localhost:8000/api/personnes/${params.personneId}`
-                        );
-                        return data;
-                    }}
-                />
-            </Route>
-        </Route>
-    )
+  createRoutesFromElements(
+    <Route path="/" element={<Layout />}>
+      <Route path={LINKS.personnes.base} element={<Outlet />}>
+        <Route
+          index
+          element={<ListPersonne />}
+          loader={async ({ params, request, context }) => {
+            const data = await fetch("http://localhost:9025/api/personnes");
+            console.log("Loading personnes");
+            return data;
+          }}
+        />
+        <Route
+          element={<ViewPersonne />}
+          path=":personneId"
+          loader={async ({ params, request, context }) => {
+            console.log("Loading a personne");
+            const data = await fetch(
+              `http://localhost:9025/api/personnes/${params.personneId}`
+            );
+            return data;
+          }}
+        />
+      </Route>
+    </Route>
+  )
 );
 
 Index.render(
-    <React.StrictMode>
-        <RouterProvider router={router} />
-    </React.StrictMode>
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
 );

@@ -8,7 +8,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html/
 #COPY . .
-RUN composer install
+#RUN composer install
 
 # composer dump-autoload
 # COMPOSER_VENDOR_DIR="/var/www/" composer install

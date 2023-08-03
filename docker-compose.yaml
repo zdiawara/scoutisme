@@ -8,6 +8,7 @@ services:
     command: "php artisan serve --host=0.0.0.0"
     volumes:
       - ./:/var/www/html/
+      - ./docker/index.php:/var/www/html/public/index.php
     ports:
       - "9025:8000"
 

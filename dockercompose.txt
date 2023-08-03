@@ -1,0 +1,30 @@
+version: "3.3"
+services:
+  database:
+    image: mysql
+    container_name: scoutisme.db
+    #volumes:
+    #- ./db_data:/var/lib/mysql
+    #- ./mysqlconf:/etc/mysql/conf.d
+
+    command: --default-authentication-plugin=mysql_native_password && mysql -u root
+    restart: always
+    environment:
+      MYSQL_DATABASE: burval
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+
+    ports:
+      - "3306:3306"
+
+  server:
+    container_name: scoutisme.web
+    build:
+      context: .
+    volumes:
+      - ./:/var/www/html/
+      - ./docker/apache/default.conf:/etc/apache2/sites-enabled/000-default.conf
+      - ./docker/index.php:/var/www/html/public/index.php
+    ports:
+      - 8000:80
+    depends_on:
+      - "database"

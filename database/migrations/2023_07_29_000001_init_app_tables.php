@@ -59,6 +59,8 @@ return new class extends Migration
             $table->uuid('organisation_id');
             $table->uuid('scout_id');
             $table->uuid('role_id');
+            $table->dateTime('date_debut');
+            $table->dateTime('date_fin')->nullable();
             $table->timestamps();
 
             $table->foreign('organisation_id')->references('id')->on('organisations');

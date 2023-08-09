@@ -10,4 +10,9 @@ class Organisation extends Model
     use UUID;
 
     protected $fillable = ['nom', 'code', 'adresse', 'type_organisation_id', 'parent_id', 'etat'];
+
+    public function typeOrganisation()
+    {
+        return $this->belongsTo(TypeOrganisation::class);
+    }
 }

@@ -117,8 +117,8 @@ const ListScout: FC = () => {
               <Button variant="light">Inactif</Button>
             </ButtonGroup>
 
-            <Button variant="outline-dark" className="ms-2">
-              Filtre avancé
+            <Button variant="dark" className="ms-2">
+              <i className="uil-filter"></i> Filtre avancé
             </Button>
           </div>
         </Col>

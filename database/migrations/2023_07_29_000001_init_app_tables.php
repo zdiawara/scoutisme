@@ -14,23 +14,29 @@ return new class extends Migration
         Schema::create('types_organisations', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nom');
-            $table->string('code');
+            $table->string('code')->unique();
             $table->timestamps();
         });
         Schema::create('organisations', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nom');
             $table->string('code')->unique();
-            $table->uuid('type_organisation_id');
+            $table->integer('etat')->default(1); // actif = 1 , inactif = 0
             $table->json('adresse')->nullable();
+            $table->uuid('type_organisation_id');
             $table->timestamps();
 
             $table->foreign('type_organisation_id')->references('id')->on('types_organisations');
         });
-        Schema::create('personnes', function (Blueprint $table) {
+        Schema::table('organisations', function (Blueprint $table) {
+            $table->uuid('parent_id')->nullable();
+            $table->foreign('parent_id')->references('id')->on('organisations');
+        });
+        Schema::create('scouts', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nom');
             $table->string('prenom');
+            $table->integer('etat')->default(1); // actif = 1 , inactif = 0
             $table->string('code')->unique();
             $table->string('email')->unique();
             $table->json('telephones')->nullable();
@@ -48,15 +54,15 @@ return new class extends Migration
 
             $table->foreign('type_organisation_id')->references('id')->on('types_organisations');
         });
-        Schema::create('attributions', function (Blueprint $table) {
+        Schema::create('scout_organisations', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('organisation_id');
-            $table->uuid('personne_id');
+            $table->uuid('scout_id');
             $table->uuid('role_id');
             $table->timestamps();
 
             $table->foreign('organisation_id')->references('id')->on('organisations');
-            $table->foreign('personne_id')->references('id')->on('personnes');
+            $table->foreign('scout_id')->references('id')->on('scouts');
             $table->foreign('role_id')->references('id')->on('roles');
         });
     }
@@ -66,7 +72,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        collect(['attributions', 'roles', 'personnes', 'organisations', 'types_organisations'])
+        collect(['scout_organisations', 'roles', 'scouts', 'organisations', 'types_organisations'])
             ->each(function ($table) {
                 Schema::dropIfExists($table);
             });

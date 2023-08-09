@@ -1,67 +1,88 @@
-import { LINKS } from "../../utils";
-import { SidebarItem } from "./SidebarItem";
+import { Link } from "react-router-dom";
+import { LINKS, changeBodyAttribute, getMenuItems } from "../../utils";
+import SimpleBar from "simplebar-react";
+// import logoDark from "../../assets/images/logo-dark.png";
+// import logoSm from "../..assets/images/logo_sm.png";
+// import logo from "../..assets/images/logo.png";
+
+import { useEffect, useRef } from "react";
+import { Menu } from "./menu";
 
 const MENU = [
-    {
-        title: "Personnes",
-        link: LINKS.personnes.base,
-    },
-    {
-        title: "Organisations",
-        link: LINKS.organisations.base,
-    },
-    {
-        title: "Roles",
-        link: LINKS.roles.base,
-    },
+  {
+    title: "Personnes",
+    link: LINKS.personnes.base,
+  },
+  {
+    title: "Organisations",
+    link: LINKS.organisations.base,
+  },
+  {
+    title: "Roles",
+    link: LINKS.roles.base,
+  },
 ];
 
-export const Sidebar = () => {
-    return (
-        <>
-            <div className="sidebar">
-                <div className="sidebar-inner">
-                    <div className="sidebar-logo">
-                        <div className="peers ai-c fxw-nw">
-                            <div className="peer peer-greed">
-                                <a
-                                    className="sidebar-link td-n"
-                                    href="index.html"
-                                >
-                                    <div className="peers ai-c fxw-nw">
-                                        <div className="peer">
-                                            <div className="logo">
-                                                <img
-                                                    src="assets/static/images/logo.png"
-                                                    alt=""
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="peer peer-greed">
-                                            <h5 className="lh-1 mB-0 logo-text">
-                                                Adminator
-                                            </h5>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div className="peer">
-                                <div className="mobile-toggle sidebar-toggle">
-                                    <a href="" className="td-n">
-                                        <i className="ti-arrow-circle-left"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+// export type MenuItemType = {
+//   key: string;
+//   label: string;
+//   isTitle?: boolean;
+//   icon?: string;
+//   url?: string;
+//   badge?: {
+//     variant: string;
+//     text: string;
+//   };
+//   parentKey?: string;
+//   target?: string;
+//   children?: MenuItemType[];
+// };
 
-                    <ul className="sidebar-menu scrollable pos-r">
-                        {MENU.map((item) => (
-                            <SidebarItem key={item.link} {...item} />
-                        ))}
-                    </ul>
-                </div>
-            </div>
-        </>
-    );
+export const Sidebar = () => {
+  const menuNodeRef = useRef(null);
+
+  /*
+   * layout defaults
+   */
+  useEffect(() => {
+    changeBodyAttribute("data-layout", "vertical");
+    changeBodyAttribute("data-layout-color", "light");
+    // changeBodyAttribute("data-layout-mode", layoutWidth);
+    changeBodyAttribute("data-leftbar-theme", "dark");
+    // changeBodyAttribute("data-leftbar-compact-mode", leftSideBarType);
+  }, []);
+
+  return (
+    <>
+      <div className="leftside-menu" ref={menuNodeRef}>
+        {/* <>
+          <Link to="/" className="logo text-center logo-light">
+            <span className="logo-lg">
+              <img src={isLight ? logoDark : logo} alt="logo" height="16" />
+            </span>
+            <span className="logo-sm">
+              <img src={isLight ? logoSm : logoDarkSm} alt="logo" height="16" />
+            </span>
+          </Link>
+
+          <Link to="/" className="logo text-center logo-dark">
+            <span className="logo-lg">
+              <img src={isLight ? logoDark : logo} alt="logo" height="16" />
+            </span>
+            <span className="logo-sm">
+              <img src={isLight ? logoSm : logoDarkSm} alt="logo" height="16" />
+            </span>
+          </Link>
+        </> */}
+
+        <SimpleBar
+          style={{ maxHeight: "100%" }}
+          timeout={500}
+          scrollbarMaxSize={320}
+        >
+          <Menu menuItems={getMenuItems()} />
+        </SimpleBar>
+      </div>
+    </>
+  );
 };

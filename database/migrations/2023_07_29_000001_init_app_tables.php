@@ -20,8 +20,12 @@ return new class extends Migration
         Schema::create('organisations', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nom');
+            $table->string('code')->unique();
+            $table->uuid('type_organisation_id');
             $table->json('adresse')->nullable();
             $table->timestamps();
+
+            $table->foreign('type_organisation_id')->references('id')->on('types_organisations');
         });
         Schema::create('personnes', function (Blueprint $table) {
             $table->uuid('id')->primary();

@@ -17,7 +17,7 @@ import { ViewPersonne } from "./pages/personnes/ViewPersonne";
 import { Layout } from "./layout";
 import { LINKS } from "./utils";
 
-import "./styles/index.scss";
+import "./assets/scss/app.scss";
 const Index = ReactDOM.createRoot(document.getElementById("app"));
 
 /*const router = createBrowserRouter([

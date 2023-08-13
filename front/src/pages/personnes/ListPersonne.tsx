@@ -1,13 +1,5 @@
 import { FC, useContext } from "react";
-import {
-  Badge,
-  Button,
-  ButtonGroup,
-  Card,
-  Col,
-  Spinner,
-  Stack,
-} from "react-bootstrap";
+import { Badge, Button, ButtonGroup, Col, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { Columns, ListResult, PageFilter, PageHeader } from "pages/common";
 import { personneApi } from "api";
@@ -161,25 +153,13 @@ const ListPersonne: FC = () => {
           </div>
         </Col>
       </PageFilter.Container>
-      {isLoading && (
-        <Card>
-          <Card.Body className="text-center">
-            <Spinner
-              as="span"
-              animation="border"
-              className="avatar-sm"
-              variant="secondary"
-            />
-            <div>Chargement des données</div>
-          </Card.Body>
-        </Card>
-      )}
-      {!isLoading && personnes && (
-        <ListResult.Container>
-          <ListResult.Table<PersonneResource>
-            columns={columns}
-            data={personnes?.data || []}
-          />
+
+      <ListResult.Container isLoading={isLoading}>
+        <ListResult.Table<PersonneResource>
+          columns={columns}
+          data={personnes?.data || []}
+        />
+        {personnes && (
           <ListResult.Paginate
             pageCount={personnes.meta.last_page}
             pageActive={personnes.meta.current_page - 1}
@@ -188,8 +168,8 @@ const ListPersonne: FC = () => {
               setFilter((old) => ({ ...old, page }));
             }}
           />
-        </ListResult.Container>
-      )}
+        )}
+      </ListResult.Container>
     </>
   );
 };

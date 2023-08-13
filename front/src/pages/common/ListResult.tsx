@@ -1,9 +1,28 @@
 import { FC, ReactNode } from "react";
-import { Card, Table as BsTable, Stack } from "react-bootstrap";
+import { Card, Table as BsTable, Stack, Spinner } from "react-bootstrap";
 import ReactPaginate from "react-paginate";
 import Select from "react-select";
 
-const Container: FC<{ children: ReactNode }> = ({ children }) => {
+const Container: FC<{ children: ReactNode; isLoading: boolean }> = ({
+  children,
+  isLoading,
+}) => {
+  if (isLoading) {
+    return (
+      <Card>
+        <Card.Body className="text-center">
+          <Spinner
+            as="span"
+            animation="border"
+            className="avatar-sm"
+            variant="secondary"
+          />
+          <div>Chargement des données</div>
+        </Card.Body>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <Card.Body className="p-0">{children}</Card.Body>

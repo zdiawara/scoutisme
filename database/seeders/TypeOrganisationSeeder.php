@@ -12,7 +12,9 @@ class TypeOrganisationSeeder extends Seeder
      */
     public function run(): void
     {
-        TypeOrganisation::create(['nom' => 'Unité', 'code' => 'unite']);
-        TypeOrganisation::create(['nom' => 'Groupe', 'code' => 'groupe']);
+        TypeOrganisation::create(['nom' => 'Meute', 'code' => 'meute']);
+        TypeOrganisation::create(['nom' => 'Troupe', 'code' => 'troupe']);
+        TypeOrganisation::create(['nom' => 'Communauté', 'code' => 'communaute']);
+        TypeOrganisation::create(['nom' => 'Dièklou', 'code' => 'dieklou']);
     }
 }

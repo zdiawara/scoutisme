@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useState } from "react";
 import { Button, Card, Form, InputGroup, Row } from "react-bootstrap";
 
 type PageFilterProps = {
@@ -15,13 +15,33 @@ const Container: FC<PageFilterProps> = ({ children }) => {
   );
 };
 
-const Search = () => {
+type SearchProps = {
+  initialValue: string | null;
+  onChange: (value: string) => void;
+};
+const Search: FC<SearchProps> = ({ initialValue, onChange }) => {
+  const [search, setSearch] = useState<string>(initialValue || "");
+  const handleChange = (e: React.ChangeEvent<any>) => {
+    setSearch(e.target.value);
+  };
+
+  const onSubmit = () => {
+    onChange(search);
+  };
+
   return (
     <div className="app-search">
       <InputGroup>
-        <Form.Control className="text-black" placeholder="Nom, prénom..." />
+        <Form.Control
+          className="text-black"
+          placeholder="Nom, prénom..."
+          onChange={handleChange}
+          value={search}
+        />
         <span className="mdi mdi-magnify search-icon"></span>
-        <Button variant="dark">Rechercher</Button>
+        <Button variant="dark" onClick={onSubmit}>
+          Rechercher
+        </Button>
       </InputGroup>
     </div>
   );

@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Role;
+use App\Models\Fonction;
 use Illuminate\Http\Request;
 
-class RoleController extends Controller
+class FonctionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return response()->json(Role::all());
+        return response()->json(Fonction::all());
     }
 
     /**
@@ -27,15 +27,15 @@ class RoleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Role $role)
+    public function show(Fonction $fonction)
     {
-        return response()->json($role);
+        return response()->json($fonction);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Role $role)
+    public function update(Request $request, Fonction $fonction)
     {
         //
     }
@@ -43,7 +43,7 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Role $role)
+    public function destroy(Fonction $fonction)
     {
         //
     }

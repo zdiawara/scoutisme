@@ -5,11 +5,9 @@ import Select from "react-select";
 
 const Container: FC<{ children: ReactNode }> = ({ children }) => {
   return (
-    <>
-      <Card>
-        <Card.Body>{children}</Card.Body>
-      </Card>
-    </>
+    <Card>
+      <Card.Body className="p-0">{children}</Card.Body>
+    </Card>
   );
 };
 
@@ -59,9 +57,19 @@ function Table<T>({ columns, data }: TableProps<T>) {
   );
 }
 
-const Paginate = () => {
+type PaginateProps = {
+  pageCount: number;
+  pageActive: number;
+  onPageChange: (page: number) => void;
+};
+
+const Paginate: FC<PaginateProps> = ({
+  pageCount,
+  pageActive,
+  onPageChange,
+}) => {
   return (
-    <Stack direction="horizontal" className="aligns-items-center">
+    <Stack direction="horizontal" className="aligns-items-center mb-3 mx-3">
       <div style={{ width: "80px" }}>
         <Select
           className="react-select"
@@ -78,10 +86,11 @@ const Paginate = () => {
       <ReactPaginate
         breakLabel="..."
         nextLabel={<i className="uil-angle-right"></i>}
-        onPageChange={() => {}}
+        onPageChange={({ selected }) => onPageChange(selected)}
         pageRangeDisplayed={3}
         marginPagesDisplayed={2}
-        pageCount={10}
+        pageCount={pageCount}
+        forcePage={pageActive}
         previousLabel={<i className="uil-angle-left"></i>}
         renderOnZeroPageCount={null}
         pageClassName="page-item"

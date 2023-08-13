@@ -46,7 +46,7 @@
     )};
   --#{$variable-prefix}table-hover-color: #{$table-color};
   --#{$variable-prefix}table-hover-bg: #{map-get($grays, "100")};
-  --#{$variable-prefix}table-border-color: #{map-get($grays, "200")};
+  --#{$variable-prefix}table-border-color: #{map-get($grays, "300")};
   --#{$variable-prefix}table-group-separator-color: #{lighten(
       map-get($grays, "300"),
       5%

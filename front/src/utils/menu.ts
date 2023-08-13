@@ -4,11 +4,11 @@ import { LINKS } from "./links";
 export const MENU_ITEMS = [
   { key: "custom", label: "Navigation", isTitle: true },
   {
-    key: "scouts",
-    label: "Scouts",
+    key: "personnes",
+    label: "Personnes",
     isTitle: false,
     icon: "uil-users-alt",
-    url: LINKS.scouts.base,
+    url: LINKS.personnes.base,
   },
   {
     key: "organisations",

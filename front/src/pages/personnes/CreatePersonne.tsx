@@ -8,11 +8,11 @@ const Control = ({ children, ...props }: any) => {
   return <components.Control {...props}>{children}</components.Control>;
 };
 
-const CreateScout: FC = () => {
+const CreatePersonne: FC = () => {
   return (
     <>
       <PageHeader.View
-        title="Créer un scout"
+        title="Créer une personne"
         left={
           <Button variant="light" size="sm">
             <i className="uil-arrow-left fs-5 me-2"></i>
@@ -208,4 +208,4 @@ const CreateScout: FC = () => {
   );
 };
 
-export default CreateScout;
+export default CreatePersonne;

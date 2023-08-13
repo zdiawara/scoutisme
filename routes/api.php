@@ -1,10 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\FonctionController;
 use App\Http\Controllers\Api\OrganisationController;
-use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\PersonneController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\ScoutController;
 use App\Http\Controllers\Api\TypeOrganisationController;
 
 /*
@@ -22,7 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('scouts', ScoutController::class);
+Route::apiResource('personnes', PersonneController::class);
 Route::apiResource('organisations', OrganisationController::class);
-Route::apiResource('roles', RoleController::class);
+Route::apiResource('fonctions', FonctionController::class);
 Route::apiResource('types_organisations', TypeOrganisationController::class);

@@ -15,3 +15,7 @@ php artisan db:seed
 https://www.larashout.com/using-uuids-in-laravel-models
 
 ## Liste des extensions vscode utilisés
+
+## Hebergement
+
+### Créer sous domaine

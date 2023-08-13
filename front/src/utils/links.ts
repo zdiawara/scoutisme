@@ -1,11 +1,11 @@
 const UTILITAIRES = "/utilitaires";
-const SCOUTS = "/scouts";
+const PERSONNES = "/personnes";
 const ORGANISATIONS = "/organisations";
 
 export const LINKS = {
-  scouts: {
-    base: SCOUTS,
-    view: (id: string) => `${SCOUTS}/${id}`,
+  personnes: {
+    base: PERSONNES,
+    view: (id: string) => `${PERSONNES}/${id}`,
   },
   organisations: {
     base: ORGANISATIONS,

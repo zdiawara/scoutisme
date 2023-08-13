@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from "react";
+import { Suspense, lazy } from "react";
 import {
   Outlet,
   Route,
@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import { Layout } from "layout";
 import { LINKS } from "utils";
+import { OrganisationOutlet, PersonneOutlet } from "./FilterOutlet";
 
 const loading = () => <div className=""></div>;
 
@@ -17,9 +18,15 @@ export const Loadable = (Component: any) => (props: any) =>
     </Suspense>
   );
 
-const ListScout = Loadable(lazy(() => import("pages/scouts/ListScout")));
-const ViewScout = Loadable(lazy(() => import("pages/scouts/ViewScout")));
-const CreateScout = Loadable(lazy(() => import("pages/scouts/CreateScout")));
+const ListPersonne = Loadable(
+  lazy(() => import("pages/personnes/ListPersonne"))
+);
+const ViewPersonne = Loadable(
+  lazy(() => import("pages/personnes/ViewPersonne"))
+);
+const CreatePersonne = Loadable(
+  lazy(() => import("pages/personnes/CreatePersonne"))
+);
 
 const ListOrganisation = Loadable(
   lazy(() => import("pages/organisations/ListOrganisation"))
@@ -32,20 +39,20 @@ const ListUtilitaire = Loadable(
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
-      <Route path={LINKS.scouts.base} element={<Outlet />}>
-        <Route index element={<ListScout />} />
-        <Route element={<CreateScout />} path="create" />
-        <Route element={<ViewScout />} path=":id" />
+      <Route path={LINKS.personnes.base} element={<PersonneOutlet />}>
+        <Route index element={<ListPersonne />} />
+        <Route element={<CreatePersonne />} path="create" />
+        <Route element={<ViewPersonne />} path=":id" />
       </Route>
-      <Route path={LINKS.organisations.base} element={<Outlet />}>
+      <Route path={LINKS.organisations.base} element={<OrganisationOutlet />}>
         <Route index element={<ListOrganisation />} />
-        {/* <Route element={<CreateScout />} path="create" /> */}
-        {/* <Route element={<ViewScout />} path=":id" /> */}
+        {/* <Route element={<CreatePersonne />} path="create" /> */}
+        {/* <Route element={<ViewPersonne />} path=":id" /> */}
       </Route>
       <Route path={LINKS.utilitaires.base} element={<Outlet />}>
         <Route index element={<ListUtilitaire />} />
-        {/* <Route element={<CreateScout />} path="create" /> */}
-        {/* <Route element={<ViewScout />} path=":id" /> */}
+        {/* <Route element={<CreatePersonne />} path="create" /> */}
+        {/* <Route element={<ViewPersonne />} path=":id" /> */}
       </Route>
     </Route>
   )

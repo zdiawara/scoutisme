@@ -70,13 +70,13 @@ const ListOrganisation: FC = () => {
 
       <PageFilter.Container>
         <Col sm={5}>
-          <PageFilter.Search />
+          <PageFilter.Search initialValue={null} onChange={() => {}} />
         </Col>
       </PageFilter.Container>
 
       <ListResult.Container>
         <ListResult.Table<Organisation> columns={columns} data={data} />
-        <ListResult.Paginate />
+        {/* <ListResult.Paginate pageCount={2} /> */}
       </ListResult.Container>
     </>
   );

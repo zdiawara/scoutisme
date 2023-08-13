@@ -3,8 +3,9 @@ import { Badge, Button, Card, Col, Dropdown, Row } from "react-bootstrap";
 import UserBox from "./UserBox";
 import { PageHeader } from "pages/common";
 import { Link } from "react-router-dom";
+import { LINKS } from "utils";
 
-const ViewScout: FC = () => {
+const ViewPersonne: FC = () => {
   const actions = () => {
     return (
       <div className="ms-auto d-flex">
@@ -55,7 +56,7 @@ const ViewScout: FC = () => {
         title="Zakaridia DIAWARA"
         subtitle="N° 1233555"
         left={
-          <Link to="/scouts" className="btn btn-light btn-sm">
+          <Link to={LINKS.personnes.base} className="btn btn-light btn-sm">
             <i className="uil-arrow-left fs-5 me-2"></i>
             Retour
           </Link>
@@ -151,4 +152,4 @@ const ViewScout: FC = () => {
   );
 };
 
-export default ViewScout;
+export default ViewPersonne;

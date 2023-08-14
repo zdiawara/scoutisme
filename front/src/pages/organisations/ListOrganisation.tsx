@@ -46,11 +46,7 @@ const ListOrganisation: FC = () => {
     {
       name: "nature",
       label: "Nature",
-      Cell: ({ nature }) => (
-        <Badge className="fs-5" color="secondary">
-          {nature.nom}
-        </Badge>
-      ),
+      Cell: ({ nature }) => <Badge>{nature.nom}</Badge>,
     },
     {
       name: "type",
@@ -94,7 +90,7 @@ const ListOrganisation: FC = () => {
         subtitle="Consulter et gérer les organisations"
         icon="uil-building"
         right={
-          <Link to="/scouts/create" className="btn btn-primary">
+          <Link to={LINKS.organisations.create} className="btn btn-primary">
             <i className="uil-plus"></i> Ajouter une organisation
           </Link>
         }

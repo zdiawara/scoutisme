@@ -11,7 +11,9 @@ class Organisation extends Model
 {
     use UUID, Filterable;
 
-    protected $fillable = ['nom', 'code', 'adresse', 'nature_id', 'type_id', 'parent_id', 'etat'];
+    protected $fillable = ['nom', 'code', 'adresse', 'nature_id', 'ville_id', 'type_id', 'parent_id', 'etat'];
+
+    protected $casts = ['adresse' => 'array'];
 
     public function type()
     {

@@ -16,8 +16,9 @@ class DatabaseSeeder extends Seeder
             TypeOrganisationSeeder::class,
             NatureSeeder::class,
             FonctionSeeder::class,
-            OrganisationSeeder::class,
-            PersonneSeeder::class
+            VilleSeeder::class,
+            //OrganisationSeeder::class,
+            //PersonneSeeder::class
         ]);
     }
 }

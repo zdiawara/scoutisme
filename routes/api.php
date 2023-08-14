@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\Api\FonctionController;
+use App\Http\Controllers\Api\NatureController;
 use App\Http\Controllers\Api\OrganisationController;
 use App\Http\Controllers\Api\PersonneController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TypeOrganisationController;
+use App\Http\Controllers\Api\VilleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,3 +28,5 @@ Route::apiResource('personnes', PersonneController::class);
 Route::apiResource('organisations', OrganisationController::class);
 Route::apiResource('fonctions', FonctionController::class);
 Route::apiResource('types_organisations', TypeOrganisationController::class);
+Route::apiResource('natures', NatureController::class);
+Route::apiResource('villes', VilleController::class);

@@ -571,7 +571,7 @@ $aspect-ratios: (
 
 // scss-docs-start font-variables
 // stylelint-disable value-keyword-case
-$font-family-sans-serif: "Nunito", sans-serif;
+$font-family-sans-serif: "Ubuntu", sans-serif;
 $font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas,
   "Liberation Mono", "Courier New", monospace;
 // stylelint-enable value-keyword-case
@@ -799,9 +799,9 @@ $btn-link-hover-color: var(--#{$variable-prefix}btn-link-hover-color);
 $btn-link-disabled-color: var(--#{$variable-prefix}btn-link-disabled-color);
 
 // Allows for customizing button radius independently from global border radius
-$btn-border-radius: 0.15rem;
-$btn-border-radius-sm: 0.15rem;
-$btn-border-radius-lg: 0.15rem;
+$btn-border-radius: 0.3rem;
+$btn-border-radius-sm: 0.3rem;
+$btn-border-radius-lg: 0.3rem;
 
 $btn-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
   border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;

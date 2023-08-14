@@ -19,3 +19,9 @@ export type NatureResource = {
   nom: string;
   code: string;
 };
+
+export type VilleResource = {
+  id: string;
+  nom: string;
+  code: string;
+};

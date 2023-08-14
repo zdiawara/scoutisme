@@ -26,7 +26,7 @@ class OrganisationController extends Controller
         $query = Organisation::filter($request->all(), OrganisationFilter::class);
 
         $total = $query->count();
-        $data = null;
+        $data = collect([]);
 
         if ($total > 0) {
             $page = $request->get('page', 1);
@@ -51,6 +51,8 @@ class OrganisationController extends Controller
     public function store(Request $request)
     {
         //
+        $organisation = $this->organisationService->create($request->all());
+        return new OrganisationResource($organisation);
     }
 
     /**

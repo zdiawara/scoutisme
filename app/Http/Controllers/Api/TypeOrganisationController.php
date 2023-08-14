@@ -13,7 +13,9 @@ class TypeOrganisationController extends Controller
      */
     public function index()
     {
-        return response()->json(TypeOrganisation::all());
+        return [
+            'data' => TypeOrganisation::all()
+        ];
     }
 
     /**

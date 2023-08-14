@@ -18,4 +18,11 @@ class OrganisationFilter extends ModelFilter
     {
         return $this->where('etat', $value);
     }
+
+    public function codeNature($value)
+    {
+        return $this->whereHas('nature', function ($q) use ($value) {
+            $q->where('code', $value);
+        });
+    }
 }

@@ -31,6 +31,9 @@ const CreatePersonne = Loadable(
 const ListOrganisation = Loadable(
   lazy(() => import("pages/organisations/ListOrganisation"))
 );
+const CreateOrganisation = Loadable(
+  lazy(() => import("pages/organisations/CreateOrganisation"))
+);
 
 const ListUtilitaire = Loadable(
   lazy(() => import("pages/utilitaires/ListUtilitaire"))
@@ -46,7 +49,7 @@ export const router = createBrowserRouter(
       </Route>
       <Route path={LINKS.organisations.base} element={<OrganisationOutlet />}>
         <Route index element={<ListOrganisation />} />
-        {/* <Route element={<CreatePersonne />} path="create" /> */}
+        <Route element={<CreateOrganisation />} path="create" />
         {/* <Route element={<ViewPersonne />} path=":id" /> */}
       </Route>
       <Route path={LINKS.utilitaires.base} element={<Outlet />}>

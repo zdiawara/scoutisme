@@ -23,6 +23,12 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->timestamps();
         });
+        Schema::create('villes', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('nom');
+            $table->string('code')->unique();
+            $table->timestamps();
+        });
         Schema::create('organisations', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nom');
@@ -31,10 +37,12 @@ return new class extends Migration
             $table->json('adresse')->nullable();
             $table->uuid('type_id')->nullable();
             $table->uuid('nature_id');
+            $table->uuid('ville_id');
             $table->timestamps();
 
             $table->foreign('type_id')->references('id')->on('types_organisations');
             $table->foreign('nature_id')->references('id')->on('natures');
+            $table->foreign('ville_id')->references('id')->on('villes');
         });
         Schema::table('organisations', function (Blueprint $table) {
             $table->uuid('parent_id')->nullable();

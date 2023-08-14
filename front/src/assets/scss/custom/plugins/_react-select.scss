@@ -55,7 +55,8 @@
   background-color: $dropdown-link-hover-bg !important;
 }
 .react-select__single-value {
-  color: #{map-get($grays, "600")} !important;
+  color: $black;
+  font-weight: 600 !important;
 }
 .react-select__multi-value {
   background-color: rgba($primary, 0.2) !important;

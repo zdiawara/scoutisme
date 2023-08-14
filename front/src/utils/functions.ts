@@ -1,3 +1,4 @@
+import { SelectItem } from "types/form.type";
 import { RequestParam } from "types/request.type";
 
 export const requestParams = (params?: RequestParam) => {
@@ -8,4 +9,10 @@ export const requestParams = (params?: RequestParam) => {
     return `?${entries.map((entry) => `${entry[0]}=${entry[1]}`).join("&")}`;
   }
   return "";
+};
+
+export const selectHelper = {
+  getValue: (item?: SelectItem) => {
+    return item?.value || null;
+  },
 };

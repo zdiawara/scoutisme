@@ -37,9 +37,12 @@ const CreatePersonne: FC = () => {
           <Card className="shadow-sm">
             <Card.Body>
               <Form>
-                <h5 className="mb-3 mt-0 text-uppercase bg-light p-2">
+                <h5
+                  className="mb-3 text-uppercase  text-black p-2 rounded shadow-sm"
+                  style={{ backgroundColor: "#eee" }}
+                >
                   <i className="mdi mdi-office-building me-1"></i> Information
-                  personnelle
+                  generale
                 </h5>
                 <Row className="mb-3">
                   <Col>
@@ -89,7 +92,10 @@ const CreatePersonne: FC = () => {
                   </Col>
                 </Row>
 
-                <h5 className="mb-3 mt-3 text-uppercase bg-light p-2">
+                <h5
+                  className="mb-3 text-uppercase  text-black p-2 rounded shadow-sm"
+                  style={{ backgroundColor: "#eee" }}
+                >
                   <i className="mdi mdi-office-building me-1"></i> Contact
                 </h5>
 
@@ -153,7 +159,10 @@ const CreatePersonne: FC = () => {
                 </Row>
               </Form>
 
-              <h5 className="mb-3 mt-3 text-uppercase bg-light p-2">
+              <h5
+                className="mb-3 text-uppercase  text-black p-2 rounded shadow-sm"
+                style={{ backgroundColor: "#eee" }}
+              >
                 <i className="mdi mdi-office-building me-1"></i> Adhésion
               </h5>
               <Row className="mb-3">

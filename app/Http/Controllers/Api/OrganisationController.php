@@ -60,7 +60,8 @@ class OrganisationController extends Controller
      */
     public function show(Organisation $organisation)
     {
-        return response()->json($organisation);
+        $organisation->load(['nature', 'type', 'parent', 'ville']);
+        return new OrganisationResource($organisation);
     }
 
     /**

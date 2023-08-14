@@ -15,8 +15,6 @@ class NatureSeeder extends Seeder
         Nature::create(['nom' => 'Unité', 'code' => 'unite']);
         Nature::create(['nom' => 'Groupe', 'code' => 'groupe']);
         Nature::create(['nom' => 'Région', 'code' => 'region']);
-        Nature::create(['nom' => 'Equipe régionale', 'code' => 'equipe_regionale']);
-        Nature::create(['nom' => 'Equipe nationale', 'code' => 'equipe_nationale']);
-        Nature::create(['nom' => 'Conseil national', 'code' => 'conseil_national']);
+        Nature::create(['nom' => 'National', 'code' => 'national']);
     }
 }

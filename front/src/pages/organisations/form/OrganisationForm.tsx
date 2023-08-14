@@ -58,10 +58,7 @@ const FormContainer: FC<WrapperProps> = ({ renderButtons, backUrl }) => {
         <Col sm={10} className="mx-auto">
           <Card className="shadow-sm">
             <Card.Body>
-              <h5
-                className="mb-3 text-uppercase  text-black p-2 rounded shadow-sm"
-                style={{ backgroundColor: "#eee" }}
-              >
+              <h5 className="mb-3 text-uppercase  text-black p-2 rounded bg-light">
                 <i className="mdi mdi-office-building me-1"></i>
                 Information generale
               </h5>
@@ -118,10 +115,7 @@ const FormContainer: FC<WrapperProps> = ({ renderButtons, backUrl }) => {
                 </Col>
               </Row>
 
-              <h5
-                className="mb-3 text-uppercase  text-black p-2 rounded shadow-sm"
-                style={{ backgroundColor: "#eee" }}
-              >
+              <h5 className="mb-3 text-uppercase  text-black p-2 rounded bg-light">
                 <i className="mdi mdi-office-building me-1"></i> Adresse
               </h5>
 
@@ -147,7 +141,7 @@ const FormContainer: FC<WrapperProps> = ({ renderButtons, backUrl }) => {
 
               {/* <h5
                 className="mb-3 text-uppercase  text-black p-2 rounded shadow-sm"
-                style={{ backgroundColor: "#eee" }}
+                
               >
                 <i className="mdi mdi-office-building me-1"></i> Personnes
               </h5>

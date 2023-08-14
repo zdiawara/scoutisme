@@ -30,24 +30,23 @@ const ListOrganisation: FC = () => {
       label: "Nom",
       Cell: (organisation) => {
         return (
-          <Stack className="fw-semibold">
+          <Stack>
             <Link
-              className="text-black"
+              className="text-black fw-semibold"
               to={LINKS.organisations.view(organisation.id)}
             >
               {organisation.nom}
             </Link>
-            <span className="text-muted fw-semibold">{organisation.code}</span>
+            <span className="text-secondary">{organisation.nature.nom}</span>
           </Stack>
         );
       },
     },
-
     {
-      name: "nature",
-      label: "Nature",
-      Cell: ({ nature }) => <Badge>{nature.nom}</Badge>,
+      name: "code",
+      label: "Code",
     },
+
     {
       name: "type",
       label: "Type",

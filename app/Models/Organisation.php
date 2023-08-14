@@ -30,6 +30,11 @@ class Organisation extends Model
         return $this->belongsTo(Organisation::class);
     }
 
+    public function ville()
+    {
+        return $this->belongsTo(Ville::class);
+    }
+
     public function modelFilter()
     {
         return $this->provideFilter(OrganisationFilter::class);

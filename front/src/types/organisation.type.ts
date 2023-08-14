@@ -5,7 +5,12 @@ export type OrganisationResource = {
   type?: TypeOrganisationResource;
   nature: NatureResource;
   parent?: OrganisationResource;
+  ville: VilleResource;
   etat: string;
+  adresse?: {
+    secteur?: string;
+    emplacement?: string;
+  };
 };
 
 export type TypeOrganisationResource = {

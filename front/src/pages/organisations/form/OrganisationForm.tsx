@@ -27,6 +27,8 @@ const FormContainer: FC<WrapperProps> = ({ renderButtons, backUrl }) => {
       case "unite":
         return { codeNature: "groupe" };
       case "groupe":
+        return { codeNature: "region" };
+      case "region":
         return { codeNature: "equipe_regionale" };
       case "equipe_regionale":
         return { codeNature: "equipe_nationale" };
@@ -103,7 +105,9 @@ const FormContainer: FC<WrapperProps> = ({ renderButtons, backUrl }) => {
                     isClearable
                     requestParams={buildRequestParams()}
                     resetDeps={resetDeps}
-                    isDisabled={codeNature === "conseil_national"}
+                    isDisabled={
+                      codeNature === "conseil_national" || !codeNature
+                    }
                     isRequired={[
                       "unite",
                       "groupe",

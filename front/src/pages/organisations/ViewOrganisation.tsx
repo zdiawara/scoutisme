@@ -1,14 +1,6 @@
 import { FC } from "react";
-import {
-  Badge,
-  Button,
-  Card,
-  Col,
-  Dropdown,
-  ListGroup,
-  Row,
-} from "react-bootstrap";
-import { Header, PageHeader } from "pages/common";
+import { Button, Card, Col, Row } from "react-bootstrap";
+import { Header, ICONS, PageHeader } from "pages/common";
 import { Link, useParams } from "react-router-dom";
 import { LINKS } from "utils";
 import { useQuery } from "@tanstack/react-query";
@@ -16,12 +8,12 @@ import { QUERY_KEY } from "utils/constants";
 import { organisationApi } from "api";
 import { OrganisationResource } from "types/organisation.type";
 import { View } from "components";
+import { Organigramme } from "./view";
 
 const ViewOrganisation: FC = () => {
   const { id } = useParams();
   const { data: organisation, isLoading } = useQuery({
     queryKey: [QUERY_KEY.organisations, id],
-    keepPreviousData: true,
     queryFn: ({ queryKey }) => {
       return organisationApi.findById<OrganisationResource>(
         queryKey[1] as string
@@ -36,7 +28,7 @@ const ViewOrganisation: FC = () => {
           <i className="uil-edit-alt"></i> Modifier
         </Button>
 
-        <Dropdown className="ms-2">
+        {/*         <Dropdown className="ms-2">
           <Dropdown.Toggle variant="outline-secondary">Actions</Dropdown.Toggle>
           <Dropdown.Menu className="topbar-dropdown-menu mt-2">
             <Dropdown.Header>Options sur le scout</Dropdown.Header>
@@ -69,7 +61,7 @@ const ViewOrganisation: FC = () => {
               </Dropdown.Item>
             </div>
           </Dropdown.Menu>
-        </Dropdown>
+        </Dropdown> */}
       </div>
     );
   };
@@ -94,41 +86,12 @@ const ViewOrganisation: FC = () => {
 
       <Row>
         <Col xl={3} lg={3}>
-          <Card className="text-black">
-            <Card.Header className="fw-semibold border-0">
-              Organigramme
-            </Card.Header>
-            <Card.Body className="p-1">
-              <ListGroup className="text-center">
-                <ListGroup.Item className="border-1 fs-7 p-1" action>
-                  <span className="text-secondary">Région :</span>
-                  &nbsp;Haut bassins
-                </ListGroup.Item>
-                <ListGroup.Item className="border-0 p-0">
-                  <i className="uil-angle-down fs-3"></i>
-                </ListGroup.Item>
-                <ListGroup.Item className="border-1 fs-7 p-1" action>
-                  <span className="text-secondary">Groupe :</span>
-                  &nbsp;{organisation.parent?.nom}
-                </ListGroup.Item>
-                <ListGroup.Item className="border-0 rounded p-0">
-                  <i className="uil-angle-down fs-3"></i>
-                </ListGroup.Item>
-                <ListGroup.Item className="p-1 rounded bg-light">
-                  <span className="text-secondary">
-                    {organisation.nature.nom} :
-                  </span>
-                  &nbsp;
-                  {organisation.nom}
-                </ListGroup.Item>
-              </ListGroup>
-            </Card.Body>
-          </Card>
+          <Organigramme parents={organisation.parents} />
         </Col>
         <Col xl={9} lg={9}>
           <Card className="shadow-sm">
             <Card.Body>
-              <View.Header {...Header.infoGenerale} className="mt-0" />
+              <View.Header {...Header.infoGenerale} className="mb-4" />
               <Row className="g-3">
                 <Col sm={3}>
                   <View.Item label="Code">{organisation.code}</View.Item>
@@ -156,7 +119,7 @@ const ViewOrganisation: FC = () => {
                 </Col>
               </Row>
 
-              <View.Header {...Header.adresse} />
+              <View.Header {...Header.adresse} className="my-4" />
               <Row>
                 <Col sm={3}>
                   <View.Item label="Ville">{organisation.ville?.nom}</View.Item>
@@ -172,6 +135,39 @@ const ViewOrganisation: FC = () => {
                   </View.Item>
                 </Col>
               </Row>
+
+              <View.Header
+                label="Organisations rattachées"
+                icon={ICONS.organisation}
+                className="my-4"
+              />
+
+              {organisation.enfants?.length ? (
+                <Row className="g-3">
+                  {organisation.enfants?.map((org) => (
+                    <Col sm={4} key={org.id}>
+                      <Card className="shadow-sm m-0 border">
+                        <Card.Body className="d-flex align-items-center p-2">
+                          <Card.Title as="div" className="text-black m-0">
+                            {org.nom}
+                            <Card.Text className="text-muted">
+                              {org.nature.nom}
+                            </Card.Text>
+                          </Card.Title>
+                          <Link
+                            className="ms-auto btn btn-secondary btn-sm"
+                            to={LINKS.organisations.view(org.id)}
+                          >
+                            <i className="uil-eye"></i> voir
+                          </Link>
+                        </Card.Body>
+                      </Card>
+                    </Col>
+                  ))}
+                </Row>
+              ) : (
+                <View.Empty label="Aucune " />
+              )}
             </Card.Body>
           </Card>
         </Col>

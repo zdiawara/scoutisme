@@ -1,3 +1,12 @@
+export type OrganisationParent = {
+  id: string;
+  nom: string;
+  nature: {
+    id: string;
+    nom: string;
+  };
+};
+
 export type OrganisationResource = {
   id: string;
   nom: string;
@@ -11,6 +20,8 @@ export type OrganisationResource = {
     secteur?: string;
     emplacement?: string;
   };
+  parents?: Array<OrganisationParent>;
+  enfants?: OrganisationResource[];
 };
 
 export type TypeOrganisationResource = {

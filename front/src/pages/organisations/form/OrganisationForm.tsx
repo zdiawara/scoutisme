@@ -29,7 +29,7 @@ const FormContainer: FC<WrapperProps> = ({ renderButtons, backUrl }) => {
       case "groupe":
         return { codeNature: "region" };
       case "region":
-        return { codeNature: "equipe_regionale" };
+        return { codeNature: "national" };
       case "equipe_regionale":
         return { codeNature: "equipe_nationale" };
       case "equipe_nationale":

@@ -1,4 +1,4 @@
-import { PageHeader } from "pages/common";
+import { ICONS, PageHeader } from "pages/common";
 import { FC } from "react";
 
 const ListUtilitaire: FC = () => {
@@ -7,7 +7,7 @@ const ListUtilitaire: FC = () => {
       <PageHeader.List
         title="Utilitaires"
         subtitle="Consulter et gérer les utilitaires"
-        icon="uil-cog"
+        icon={ICONS.setting}
       />
     </>
   );

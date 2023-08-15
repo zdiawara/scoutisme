@@ -35,6 +35,11 @@ class Organisation extends Model
         return $this->belongsTo(Ville::class);
     }
 
+    public function enfants()
+    {
+        return $this->hasMany(Organisation::class, 'parent_id');
+    }
+
     public function modelFilter()
     {
         return $this->provideFilter(OrganisationFilter::class);

@@ -1,7 +1,13 @@
 import { FC, useContext } from "react";
 import { Badge, Button, ButtonGroup, Col, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { Columns, ListResult, PageFilter, PageHeader } from "pages/common";
+import {
+  Columns,
+  ICONS,
+  ListResult,
+  PageFilter,
+  PageHeader,
+} from "pages/common";
 import { personneApi } from "api";
 import { PersonneResource } from "types/personne.type";
 import { LINKS } from "utils";
@@ -107,7 +113,7 @@ const ListPersonne: FC = () => {
       <PageHeader.List
         title="Personnes"
         subtitle="Consulter et gérer les personnes"
-        icon="uil-users-alt"
+        icon={ICONS.personne}
         right={
           <Link to="/personnes/create" className="btn btn-primary">
             <i className="uil-plus"></i> Ajouter une personne

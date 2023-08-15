@@ -1,7 +1,13 @@
 import { FC, useContext } from "react";
 import { Badge, Col, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { Columns, ListResult, PageFilter, PageHeader } from "pages/common";
+import {
+  Columns,
+  ICONS,
+  ListResult,
+  PageFilter,
+  PageHeader,
+} from "pages/common";
 import { FilterContext } from "context/FIlterContext";
 import { OrganisationFilter, RequestParam } from "types/request.type";
 import { useQuery } from "@tanstack/react-query";
@@ -87,7 +93,7 @@ const ListOrganisation: FC = () => {
       <PageHeader.List
         title="Organisations"
         subtitle="Consulter et gérer les organisations"
-        icon="uil-building"
+        icon={ICONS.organisation}
         right={
           <Link to={LINKS.organisations.create} className="btn btn-primary">
             <i className="uil-plus"></i> Ajouter une organisation

@@ -103,7 +103,8 @@ class OrganisationController extends Controller
      */
     public function update(Request $request, Organisation $organisation)
     {
-        //
+        $organisation = $this->organisationService->update($organisation, $request->all());
+        return $organisation;
     }
 
     /**

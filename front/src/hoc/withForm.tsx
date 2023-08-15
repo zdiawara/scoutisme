@@ -2,30 +2,34 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { FC, ReactNode, useState } from "react";
 import { Alert, Button, Form } from "react-bootstrap";
 import { FormProvider, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AnyObjectSchema } from "yup";
 
 type HocCompomentProps = {
   onSave: (data: any) => Promise<any>;
-  onFinished: (data: any) => void;
+  onFinished?: (data: any) => void;
   defaultValues?: Record<string, any>;
-  backUrl?: string;
+  title: string;
+  subtitle?: string;
 };
 
 export type WrapperProps = {
   isEditMode: boolean;
   renderButtons: () => ReactNode;
   renderGeneralError: () => ReactNode;
-  backUrl?: string;
   onSubmit: () => void;
+  goBack: () => void;
+  title: string;
+  subtitle?: string;
 };
 
 export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
   const HocCompoment: FC<HocCompomentProps> = ({
     onSave,
     onFinished,
-    backUrl,
     defaultValues,
+    title,
+    subtitle,
   }) => {
     const methods = useForm({
       resolver: schema ? yupResolver(schema) : undefined,
@@ -33,6 +37,7 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
       mode: "onChange",
       reValidateMode: "onChange",
     });
+    const navigation = useNavigate();
     const [saving, setSaving] = useState<boolean>(false);
     //const notification = useNotification();
 
@@ -49,7 +54,11 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
           if (onReset) {
             methods.reset(onReset(data));
           }*/
-          onFinished(element);
+          if (onFinished) {
+            onFinished(element);
+          } else {
+            goBack();
+          }
         })
         .catch((e) => {
           /*if (e.status === 422) {
@@ -77,6 +86,10 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
         });
     };
 
+    const goBack = () => {
+      navigation(-1);
+    };
+
     const onError = (e: any) => {
       console.error(e);
       /*notification.warning({
@@ -87,11 +100,12 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
     const renderButtons = () => {
       return (
         <>
-          {backUrl && (
-            <Link className="btn btn-danger me-1" to={backUrl}>
-              Annuler
-            </Link>
-          )}
+          <Button
+            className="btn btn-danger me-1"
+            onClick={() => navigation(-1)}
+          >
+            Annuler
+          </Button>
           <Button
             onClick={methods.handleSubmit(onSubmit, onError)}
             variant="primary"
@@ -120,9 +134,11 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
           <Wrapper
             isEditMode={isEditMode}
             renderButtons={renderButtons}
-            backUrl={backUrl}
+            goBack={goBack}
             onSubmit={methods.handleSubmit(onSubmit, onError)}
             renderGeneralError={renderGeneralError}
+            title={title}
+            subtitle={subtitle}
           />
         </Form>
       </FormProvider>

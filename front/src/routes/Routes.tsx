@@ -8,6 +8,7 @@ import {
 import { Layout } from "layout";
 import { LINKS } from "utils";
 import { OrganisationOutlet, PersonneOutlet } from "./FilterOutlet";
+import { organisationApi } from "api";
 
 const loading = () => <div className=""></div>;
 
@@ -34,6 +35,9 @@ const ListOrganisation = Loadable(
 const CreateOrganisation = Loadable(
   lazy(() => import("pages/organisations/CreateOrganisation"))
 );
+const EditOrganisation = Loadable(
+  lazy(() => import("pages/organisations/EditOrganisation"))
+);
 const ViewOrganisation = Loadable(
   lazy(() => import("pages/organisations/ViewOrganisation"))
 );
@@ -54,6 +58,13 @@ export const router = createBrowserRouter(
         <Route index element={<ListOrganisation />} />
         <Route element={<CreateOrganisation />} path="create" />
         <Route element={<ViewOrganisation />} path=":id" />
+        <Route
+          element={<EditOrganisation />}
+          path=":id/edit"
+          loader={({ params }) => {
+            return organisationApi.findById(params.id!);
+          }}
+        />
       </Route>
       <Route path={LINKS.utilitaires.base} element={<Outlet />}>
         <Route index element={<ListUtilitaire />} />

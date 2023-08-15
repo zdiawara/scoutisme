@@ -20,4 +20,10 @@ class OrganisationService
         $string = str_shuffle($pin);
         return Organisation::create(array_merge($body, ['code' => $string]));
     }
+
+    public function update(Organisation $organisation, array $body)
+    {
+        $organisation->update($body);
+        return $organisation;
+    }
 }

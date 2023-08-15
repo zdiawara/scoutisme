@@ -1,5 +1,6 @@
 import { FC, ReactNode } from "react";
-import { Stack } from "react-bootstrap";
+import { Button, Stack } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 type HeaderProps = {
   title: string;
@@ -39,5 +40,24 @@ export const PageHeader = {
     />
   ),
 
-  View: (props: HeaderProps & HeaderLeftProps) => <Header {...props} />,
+  View: ({ left, ...props }: HeaderProps & HeaderLeftProps) => {
+    const navigation = useNavigate();
+    return (
+      <Header
+        {...props}
+        left={
+          <>
+            <Button
+              className="btn btn-sm btn-light"
+              onClick={() => navigation(-1)}
+            >
+              <i className="uil-arrow-left fs-5 me-2"></i>
+              Retour
+            </Button>
+            {left}
+          </>
+        }
+      />
+    );
+  },
 };

@@ -1,19 +1,23 @@
 import { FC, useMemo } from "react";
 import { Card, Col, Row } from "react-bootstrap";
-import { PageHeader } from "pages/common";
-import { Link } from "react-router-dom";
+import { Header, PageHeader } from "pages/common";
 import {
   SelectNature,
   SelectOrganisation,
   SelectTypeOrganisation,
   SelectVille,
   TextInput,
+  View,
 } from "components";
 import { WrapperProps, withForm } from "hoc";
 import { organisationSchema } from "./organisationSchema";
 import { useFormContext } from "react-hook-form";
 
-const FormContainer: FC<WrapperProps> = ({ renderButtons, backUrl }) => {
+const FormContainer: FC<WrapperProps> = ({
+  renderButtons,
+  title,
+  subtitle,
+}) => {
   const { watch, setValue } = useFormContext();
 
   const codeNature = watch("nature")?.item?.code;
@@ -42,15 +46,8 @@ const FormContainer: FC<WrapperProps> = ({ renderButtons, backUrl }) => {
   return (
     <>
       <PageHeader.View
-        title="Créer une organisation"
-        left={
-          backUrl && (
-            <Link className="btn btn-sm btn-light" to={backUrl}>
-              <i className="uil-arrow-left fs-5 me-2"></i>
-              Retour
-            </Link>
-          )
-        }
+        title={title}
+        subtitle={subtitle}
         right={renderButtons()}
       />
 
@@ -58,12 +55,9 @@ const FormContainer: FC<WrapperProps> = ({ renderButtons, backUrl }) => {
         <Col sm={10} className="mx-auto">
           <Card className="shadow-sm">
             <Card.Body>
-              <h5 className="mb-3 text-uppercase  text-black p-2 rounded bg-light">
-                <i className="mdi mdi-office-building me-1"></i>
-                Information generale
-              </h5>
-              <Row className="mb-3">
-                <Col>
+              <View.Header {...Header.infoGenerale} className="mb-4" />
+              <Row className="g-3">
+                <Col sm={4}>
                   <SelectNature
                     name="nature"
                     label="Nature"
@@ -75,7 +69,7 @@ const FormContainer: FC<WrapperProps> = ({ renderButtons, backUrl }) => {
                     }}
                   />
                 </Col>
-                <Col>
+                <Col sm={4}>
                   <TextInput
                     name="nom"
                     label="Nom"
@@ -83,7 +77,7 @@ const FormContainer: FC<WrapperProps> = ({ renderButtons, backUrl }) => {
                     isRequired
                   />
                 </Col>
-                <Col>
+                <Col sm={4}>
                   <SelectTypeOrganisation
                     name="type"
                     label="Type"
@@ -92,10 +86,7 @@ const FormContainer: FC<WrapperProps> = ({ renderButtons, backUrl }) => {
                     isDisabled={codeNature !== "unite"}
                   />
                 </Col>
-              </Row>
-
-              <Row className="mb-3">
-                <Col>
+                <Col sm={12}>
                   <SelectOrganisation
                     name="parent"
                     label="Parent"
@@ -115,9 +106,7 @@ const FormContainer: FC<WrapperProps> = ({ renderButtons, backUrl }) => {
                 </Col>
               </Row>
 
-              <h5 className="mb-3 text-uppercase  text-black p-2 rounded bg-light">
-                <i className="mdi mdi-office-building me-1"></i> Adresse
-              </h5>
+              <View.Header {...Header.adresse} className="my-4" />
 
               <Row className="mb-3">
                 <Col>
@@ -138,38 +127,6 @@ const FormContainer: FC<WrapperProps> = ({ renderButtons, backUrl }) => {
                   />
                 </Col>
               </Row>
-
-              {/* <h5
-                className="mb-3 text-uppercase  text-black p-2 rounded shadow-sm"
-                
-              >
-                <i className="mdi mdi-office-building me-1"></i> Personnes
-              </h5>
-              <Row className="mb-3">
-                <Col sm={4}>
-                  <Select name="personne" label="Personne" />
-                </Col>
-
-                <Col sm={4}>
-                  <Select name="fonction" label="Fonction" />
-                </Col>
-                <Col sm={4}>
-                  <Form.Group>
-                    <Form.Label>Date début</Form.Label>
-                    <Form.Control
-                      type="text"
-                      className="text-black"
-                      placeholder="Date adhesion"
-                    />
-                  </Form.Group>
-                </Col>
-              </Row> */}
-
-              {/*               <Row>
-                <Col>
-                  <Button size="sm">Ajouter une personne</Button>
-                </Col>
-              </Row> */}
             </Card.Body>
           </Card>
         </Col>

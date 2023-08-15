@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Button, Card, Col, Row } from "react-bootstrap";
+import { Card, Col, Row } from "react-bootstrap";
 import { Header, ICONS, PageHeader } from "pages/common";
 import { Link, useParams } from "react-router-dom";
 import { LINKS } from "utils";
@@ -22,11 +22,18 @@ const ViewOrganisation: FC = () => {
   });
 
   const actions = () => {
+    if (!organisation) {
+      return null;
+    }
+
     return (
       <div className="ms-auto d-flex">
-        <Button className="rounded-corner" variant="danger">
+        <Link
+          className="rounded-corner btn btn-danger"
+          to={LINKS.organisations.edit(organisation.id)}
+        >
           <i className="uil-edit-alt"></i> Modifier
-        </Button>
+        </Link>
 
         {/*         <Dropdown className="ms-2">
           <Dropdown.Toggle variant="outline-secondary">Actions</Dropdown.Toggle>
@@ -75,12 +82,6 @@ const ViewOrganisation: FC = () => {
       <PageHeader.View
         title={organisation.nom}
         subtitle={`Code : ${organisation.code}`}
-        left={
-          <Link to={LINKS.organisations.base} className="btn btn-light btn-sm">
-            <i className="uil-arrow-left fs-5 me-2"></i>
-            Retour
-          </Link>
-        }
         right={actions()}
       />
 

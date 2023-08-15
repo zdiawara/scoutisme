@@ -10,6 +10,7 @@ export const LINKS = {
   organisations: {
     base: ORGANISATIONS,
     view: (id: string) => `${ORGANISATIONS}/${id}`,
+    edit: (id: string) => `${ORGANISATIONS}/${id}/edit`,
     create: `${ORGANISATIONS}/create`,
   },
   utilitaires: {

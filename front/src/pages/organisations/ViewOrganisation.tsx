@@ -155,7 +155,7 @@ const ViewOrganisation: FC = () => {
                             </Card.Text>
                           </Card.Title>
                           <Link
-                            className="ms-auto btn btn-secondary btn-sm"
+                            className="ms-auto btn btn-info btn-sm"
                             to={LINKS.organisations.view(org.id)}
                           >
                             <i className="uil-eye"></i> voir
@@ -166,7 +166,7 @@ const ViewOrganisation: FC = () => {
                   ))}
                 </Row>
               ) : (
-                <View.Empty label="Aucune " />
+                <View.Empty label="Pas d'organisations enfants" />
               )}
             </Card.Body>
           </Card>

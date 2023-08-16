@@ -55,12 +55,6 @@ const ViewPersonne: FC = () => {
       <PageHeader.View
         title="Zakaridia DIAWARA"
         subtitle="N° 1233555"
-        left={
-          <Link to={LINKS.personnes.base} className="btn btn-light btn-sm">
-            <i className="uil-arrow-left fs-5 me-2"></i>
-            Retour
-          </Link>
-        }
         right={actions()}
       />
 

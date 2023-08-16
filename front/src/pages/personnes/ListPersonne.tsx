@@ -40,11 +40,7 @@ const ListPersonne: FC = () => {
             to={LINKS.personnes.view(personne.id)}
             className="text-black table-user d-flex"
           >
-            <img
-              src={`https://randomuser.me/api/portraits/men/${i + 1}.jpg`}
-              alt=""
-              className="me-2 rounded-circle"
-            />
+            <img src={personne.photo} alt="" className="me-2 rounded-circle" />
             <Stack className="fw-semibold">
               <span>
                 {personne.prenom} {personne.nom}

@@ -9,4 +9,5 @@ export type PersonneResource = {
   email: string;
   fonction: string;
   etat: number;
+  photo?: string;
 };

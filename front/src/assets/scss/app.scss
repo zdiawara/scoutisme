@@ -74,7 +74,7 @@ File: Main Css File
 
 // Vendors
 // @import "vendor/daterangepicker";
-// @import "vendor/bootstrap-datepicker.min";
+//@import "vendor/bootstrap-datepicker.min";
 // @import "vendor/jquery.toast.min";
 // @import "vendor/select2.min";
 // @import "vendor/jquery.toast.min";
@@ -88,7 +88,8 @@ File: Main Css File
 // @import "custom/plugins/chartjs";
 // @import "custom/plugins/datatable";
 // @import "custom/plugins/daterange"; //react-range slider style
-// @import "custom/plugins/datepicker"; //react-date picker style
+@import "react-datepicker/dist/react-datepicker.css";
+@import "custom/plugins/datepicker"; //react-date picker style
 // @import "custom/plugins/dragula";
 // @import "custom/plugins/dropzone";
 // @import "custom/plugins/form-wizard";

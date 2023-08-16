@@ -4,6 +4,7 @@ export const ICONS = {
   setting: "uil-cog",
   adresseAlt: "uil-location-pin-alt",
   info: "uil-info-circle",
+  contact: " uil-receipt-alt",
 };
 
 export const Header = {
@@ -14,6 +15,10 @@ export const Header = {
   infoGenerale: {
     icon: ICONS.info,
     label: "Information générale",
+  },
+  contact: {
+    icon: ICONS.contact,
+    label: "Contacts",
   },
   membre: {
     icon: ICONS.personne,

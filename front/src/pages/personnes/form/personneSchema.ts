@@ -1,7 +1,5 @@
 import * as yup from "yup";
 
-import { differenceInYears } from "date-fns";
-
 export const personneSchema = yup.object({
   type: yup.object().required().nullable(),
   nom: yup.string().required(),

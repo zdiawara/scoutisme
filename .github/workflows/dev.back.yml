@@ -1,0 +1,47 @@
+name: Deployer Back [DEV] # Nom de la tâche dans GitHub
+on:
+  workflow_dispatch: # Evénement déclencheur de la tâche, en l’occurrence, il s’agit d’un déclenchement manuel
+    inputs:
+      migrate_seed:
+        type: choice
+        description: 'Run migrate and seeder ?'
+        required: true
+        options:
+          - 'true'
+          - 'false'
+        default: 'false'
+jobs:
+  Deploiement:
+    runs-on: ubuntu-latest # OS sur lequel va s’exécuter la tâche
+    defaults:
+      run:
+        working-directory: ./back
+    steps:
+      - name: Check out repository code # récupération du dépôt GitHub dans la machine
+        uses: actions/checkout@v3
+      - name: Setup PHP # Configuration de PHP sur la machine virtuelle
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "7.2.5" # Je propose d’utiliser la version 8.0
+      - name: Install PHP dependencies # Installation des paquets composer
+        uses: "ramsey/composer-install@v2"
+        with:
+          dependency-versions: "locked" # Installation en utilisant le fichier composer.lock
+          working-directory: "back"
+      #- name: Deploiement # Exécution de Deployer. A partir de là, c’est le script créé dans la partie 1 de l’article qui prend le relais.
+      #  run: cd ${{ github.workspace }} && php vendor/bin/dep deploy ftp.mondomaine.com
+
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@4.1.0
+        with:
+          server: 109.234.166.84
+          username: ytav8401
+          password: dj5V-NQ7u-duC?
+          local-dir: /home/runner/work/burval/burval/back/
+          server-dir: dev.burvalgroup.com/backend/
+      - name: Copy env file
+        run: cp .env.dev .env
+      ## If migrate and seed
+      - if: github.event.inputs.migrate_seed == 'true'
+        name: Runing migrate and seed
+        run: php artisan migrate:fresh --seed

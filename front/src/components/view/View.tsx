@@ -10,12 +10,12 @@ const Empty: FC<EmptyProps> = ({ label = "Non renseigné" }) => {
 
 type ItemProps = {
   children?: ReactNode;
-  label: string;
+  label?: string;
 };
 const Item: FC<ItemProps> = ({ label, children }) => {
   return (
     <>
-      <h4 className="font-13 m-0 mb-1 text-black">{label}</h4>
+      {label && <h4 className="font-13 m-0 mb-1 text-black">{label}</h4>}
       {children === undefined || children === null ? (
         <Empty />
       ) : (

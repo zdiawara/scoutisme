@@ -1,40 +1,19 @@
-import { ChangeEvent, FC, forwardRef } from "react";
+import { ChangeEvent, FC, Fragment } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import { Header, PageHeader } from "pages/common";
-import { SelectVille, TextInput, View } from "components";
+import {
+  AsyncSelect,
+  DatePicker,
+  SelectRefFormation,
+  SelectVille,
+  TextInput,
+  View,
+} from "components";
 import { WrapperProps, withForm } from "hoc";
 import { personneSchema } from "./personneSchema";
 import { useFormContext } from "react-hook-form";
 import { PersonneBox } from "../view";
-import DatePicker from "react-datepicker";
-import frLocale from "date-fns/locale/fr";
-import { getYear, getMonth } from "date-fns";
-
-type DatepickerInputProps = {
-  onClick?: () => void;
-  value?: string;
-  inputClass: string;
-  children?: React.ReactNode;
-};
-
-/* Datepicker with Input */
-const DatepickerInput = forwardRef<HTMLInputElement, DatepickerInputProps>(
-  (props, ref) => {
-    const onDateValueChange = () => {
-      console.log("date value changed");
-    };
-    return (
-      <input
-        type="text"
-        className="form-control date"
-        onClick={props.onClick}
-        value={props.value}
-        onChange={onDateValueChange}
-        ref={ref}
-      />
-    );
-  }
-);
+import { MASK } from "utils/constants";
 
 const FormContainer: FC<WrapperProps> = ({
   renderButtons,
@@ -54,22 +33,7 @@ const FormContainer: FC<WrapperProps> = ({
     reader.readAsDataURL(e.target.files?.[0] as File);
   };
 
-  //const years = range(1990, getYear(new Date()) + 1, 1);
-  const years = [1900, 2000];
-  const months = [
-    "Janvier",
-    "Février",
-    "Mars",
-    "Avril",
-    "Mai",
-    "Juin",
-    "Juillet",
-    "Aout",
-    "Septembre",
-    "Octobre",
-    "Novembre",
-    "Decembre",
-  ];
+  const typePersonne = watch("type")?.value;
 
   return (
     <>
@@ -87,7 +51,7 @@ const FormContainer: FC<WrapperProps> = ({
                 variant="outline-danger"
                 size="sm"
                 className="me-2"
-                onClick={() => setValue("photo", undefined)}
+                onClick={() => setValue("photo", null)}
               >
                 Effacer
               </Button>
@@ -106,9 +70,23 @@ const FormContainer: FC<WrapperProps> = ({
         <Col xl={9} lg={9} className="mx-auto">
           <Card className="shadow-sm">
             <Card.Body>
-              <View.Header {...Header.infoGenerale} className="mb-4" />
+              <View.Header {...Header.infoGenerale} className="mb-3" />
               <Row className="g-3">
-                <Col sm={6}>
+                <Col sm={4}>
+                  <AsyncSelect
+                    name="type"
+                    label="Type"
+                    placeholder="Scout ou adulte"
+                    isRequired
+                    fetchOptions={() =>
+                      Promise.resolve([
+                        { label: "Adulte", value: "adulte" },
+                        { label: "Scout", value: "scout" },
+                      ])
+                    }
+                  />
+                </Col>
+                <Col sm={4}>
                   <TextInput
                     name="nom"
                     label="Nom"
@@ -116,7 +94,7 @@ const FormContainer: FC<WrapperProps> = ({
                     isRequired
                   />
                 </Col>
-                <Col sm={6}>
+                <Col sm={4}>
                   <TextInput
                     name="prenom"
                     label="Prénom"
@@ -129,81 +107,43 @@ const FormContainer: FC<WrapperProps> = ({
                   <TextInput
                     name="lieu_naissance"
                     label="Lieu naissance"
-                    placeholder="Ex. Moussa"
+                    placeholder="Ex. Bobo Dioulasso"
                     isRequired
                   />
                 </Col>
 
                 <Col sm={6}>
                   <DatePicker
-                    selected={new Date()}
-                    onChange={() => {}}
-                    customInput={<DatepickerInput inputClass="" />}
-                    className="form-control"
-                    locale={frLocale}
-                    renderCustomHeader={({
-                      date,
-                      changeYear,
-                      changeMonth,
-                      decreaseMonth,
-                      increaseMonth,
-                      prevMonthButtonDisabled,
-                      nextMonthButtonDisabled,
-                    }) => (
-                      <div
-                        style={{
-                          margin: 10,
-                          display: "flex",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <button
-                          onClick={decreaseMonth}
-                          disabled={prevMonthButtonDisabled}
-                          className="btn btn-sm btn-light"
-                        >
-                          {"<"}
-                        </button>
-                        <select
-                          value={getYear(date)}
-                          onChange={({ target: { value } }) => {}}
-                          className="form-select"
-                        >
-                          {years.map((option) => (
-                            <option key={option} value={option}>
-                              {option}
-                            </option>
-                          ))}
-                        </select>
-
-                        <select
-                          value={months[getMonth(date)]}
-                          onChange={({ target: { value } }) =>
-                            changeMonth(months.indexOf(value))
-                          }
-                          className="form-select"
-                        >
-                          {months.map((option) => (
-                            <option key={option} value={option}>
-                              {option}
-                            </option>
-                          ))}
-                        </select>
-
-                        <button
-                          onClick={increaseMonth}
-                          disabled={nextMonthButtonDisabled}
-                          className="btn btn-sm btn-light"
-                        >
-                          {">"}
-                        </button>
-                      </div>
-                    )}
+                    name="date_naissance"
+                    label="Date naissance"
+                    useHookForm
+                    required
+                    maxDate={new Date()}
                   />
                 </Col>
+                {typePersonne === "adulte" && (
+                  <Fragment key="adulte">
+                    <Col sm={6}>
+                      <TextInput
+                        name="profession"
+                        label="Profession"
+                        placeholder="Profession"
+                      />
+                    </Col>
+
+                    <Col sm={6}>
+                      <SelectRefFormation
+                        name="niveau_formation"
+                        label="Formation"
+                        placeholder="Niveau formation"
+                        isRequired
+                      />
+                    </Col>
+                  </Fragment>
+                )}
               </Row>
 
-              <View.Header {...Header.contact} className="my-4" />
+              <View.Header {...Header.contact} className="my-3" />
 
               <Row className="g-3">
                 <Col sm={6}>
@@ -217,28 +157,67 @@ const FormContainer: FC<WrapperProps> = ({
                   <TextInput
                     name="telephone"
                     label="Téléphone"
-                    placeholder="Numéro de téléphone"
+                    placeholder="00 00 00 00"
+                    mask={MASK.telephone}
+                  />
+                </Col>
+
+                <Col sm={4}>
+                  <TextInput
+                    name="personne_a_contacter.nom"
+                    label="Personne à contacter"
+                    placeholder="Nom et prénom"
+                  />
+                </Col>
+                <Col sm={4}>
+                  <TextInput
+                    name="personne_a_contacter.relation"
+                    label="Rélation"
+                    placeholder="Père"
+                  />
+                </Col>
+                <Col sm={4}>
+                  <TextInput
+                    name="personne_a_contacter.telephone"
+                    label="Téléphone"
+                    placeholder="00 00 00 00"
+                    mask={MASK.telephone}
                   />
                 </Col>
               </Row>
 
-              <View.Header {...Header.adresse} className="my-4" />
+              <View.Header {...Header.adresse} className="my-3" />
 
               <Row className="g-3">
                 <Col sm={6}>
-                  <SelectVille name="ville" label="Ville" isRequired />
+                  <SelectVille
+                    name="ville"
+                    label="Ville"
+                    placeholder="Ville de résidence"
+                    isRequired
+                    isClearable
+                  />
                 </Col>
 
                 <Col sm={6}>
                   <TextInput
                     name="adresse"
                     label="Adresse"
-                    placeholder="Adresse de la personne"
+                    placeholder="Secteur, quartier, emplacement"
                   />
                 </Col>
               </Row>
             </Card.Body>
           </Card>
+
+          {/* <Card>
+            <Card.Body>
+              <View.Header label="Role" className="mb-3" />
+              <Button variant="dark" size="sm">
+                Ajouter un role
+              </Button>
+            </Card.Body>
+          </Card> */}
         </Col>
       </Row>
     </>

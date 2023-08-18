@@ -30,6 +30,11 @@ export type TypeOrganisationResource = {
   code: string;
 };
 
+export type RefFormationResource = {
+  id: string;
+  nom: string;
+};
+
 export type NatureResource = {
   id: string;
   nom: string;

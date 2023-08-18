@@ -30,4 +30,10 @@ class PersonneService
         $string = str_shuffle($pin);
         return Personne::create(array_merge($body, ['code' => $string]));
     }
+
+    public function update(Personne $personne, array $body)
+    {
+        $personne->update($body);
+        return $personne;
+    }
 }

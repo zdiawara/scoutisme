@@ -22,7 +22,7 @@ export interface PersonneFilter extends Filter {
   search: string | null;
   etat: string | null;
   page: number;
-  pageCount: number;
+  size: number;
 }
 
 export interface OrganisationFilter extends Filter {

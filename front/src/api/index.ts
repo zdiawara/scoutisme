@@ -16,3 +16,6 @@ export const natureApi = new NatureApi("natures");
 
 class VilleApi extends CrudService {}
 export const villeApi = new VilleApi("villes");
+
+class RefFormationApi extends CrudService {}
+export const refFormationApi = new RefFormationApi("ref_formations");

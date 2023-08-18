@@ -1,5 +1,5 @@
 import { FC, useContext } from "react";
-import { Badge, Button, ButtonGroup, Col, Stack } from "react-bootstrap";
+import { Button, ButtonGroup, Col, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import {
   Columns,
@@ -14,11 +14,11 @@ import { LINKS } from "utils";
 import { useQuery } from "@tanstack/react-query";
 import { PersonneFilter, RequestParam } from "types/request.type";
 import { FilterContext } from "context/FIlterContext";
+import { View } from "components";
 
 const ListPersonne: FC = () => {
   const { filter, setFilter } = useContext(FilterContext);
   const { etat, search } = filter as PersonneFilter;
-  console.log(filter);
 
   const { data: personnes, isLoading } = useQuery({
     queryKey: ["personnes", filter],
@@ -32,6 +32,10 @@ const ListPersonne: FC = () => {
 
   const columns: Columns<PersonneResource>[] = [
     {
+      name: "code",
+      label: "Code",
+    },
+    {
       name: "nom",
       label: "Nom",
       Cell: (personne: PersonneResource, i) => {
@@ -40,29 +44,41 @@ const ListPersonne: FC = () => {
             to={LINKS.personnes.view(personne.id)}
             className="text-black table-user d-flex"
           >
-            <img src={personne.photo} alt="" className="me-2 rounded-circle" />
-            <Stack className="fw-semibold">
-              <span>
+            <div className="avatar-sm me-2">
+              {personne.photo ? (
+                <img
+                  src={personne.photo}
+                  alt=""
+                  className="rounded-circle"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    textAlign: "center",
+                    objectFit: "cover",
+                    color: "transparent",
+                    textIndent: "10000px",
+                  }}
+                />
+              ) : (
+                <span className="avatar-title bg-primary-lighten text-primary fs-4 rounded-circle">
+                  {personne.prenom[0]}
+                  {personne.nom[0]}
+                </span>
+              )}
+            </div>
+            <Stack>
+              <span className="fw-semibold">
                 {personne.prenom} {personne.nom}
               </span>
-              <span className="text-muted fw-semibold">{personne.code}</span>
+              <span className="text-secondary text-capitalize">
+                {personne.type}
+              </span>
             </Stack>
           </Link>
         );
       },
     },
 
-    {
-      name: "type",
-      label: "Type",
-      Cell: ({ type }) => (
-        <Badge
-          className={`${type === "scout" ? "bg-outline-info" : "bg-secondary"}`}
-        >
-          {type}
-        </Badge>
-      ),
-    },
     /*{
       name: "fonction",
       label: "Fonction",
@@ -85,11 +101,7 @@ const ListPersonne: FC = () => {
     {
       name: "etat",
       label: "Etat",
-      Cell: ({ etat }) => (
-        <Badge bg={etat === 1 ? "success" : "danger"}>
-          {etat === 1 ? "Actif" : "Inactif"}
-        </Badge>
-      ),
+      Cell: ({ etat }) => <View.Etat value={etat} />,
     },
     {
       name: "actions",
@@ -161,7 +173,7 @@ const ListPersonne: FC = () => {
           columns={columns}
           data={personnes?.data || []}
         />
-        {personnes && (
+        {/* {personnes && (
           <ListResult.Paginate
             pageCount={personnes.meta.last_page}
             pageActive={personnes.meta.current_page - 1}
@@ -170,7 +182,7 @@ const ListPersonne: FC = () => {
               setFilter((old) => ({ ...old, page }));
             }}
           />
-        )}
+        )} */}
       </ListResult.Container>
     </>
   );

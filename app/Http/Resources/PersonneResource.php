@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Ville;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,6 +15,11 @@ class PersonneResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return collect(parent::toArray($request))->except(['ville_id', 'niveau_formation_id'])
+            ->merge([
+                'ville' => new VilleResource($this->whenLoaded('ville')),
+                'niveau_formation' => new RefFormationResource($this->whenLoaded('niveauFormation')),
+                'etat' => (string)$this->etat
+            ])->all();
     }
 }

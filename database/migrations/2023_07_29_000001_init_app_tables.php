@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -21,6 +22,11 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('nom');
             $table->string('code')->unique();
+            $table->timestamps();
+        });
+        Schema::create('ref_formations', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('nom');
             $table->timestamps();
         });
         Schema::create('villes', function (Blueprint $table) {
@@ -55,15 +61,21 @@ return new class extends Migration
             $table->integer('etat')->default(1); // actif = 1 , inactif = 0
             $table->string('code')->unique();
             $table->string('email')->unique();
-            $table->json('telephones')->nullable();
+            $table->string('telephone')->nullable();
             $table->date('date_naissance')->nullable();
             $table->string('lieu_naissance')->nullable();
-            $table->string('photo')->nullable();
             $table->string('profession')->nullable();
-            $table->string('niveau_formation')->nullable();
-            $table->string('type'); // scouts; adultes
+            $table->string('type'); // scout; adulte
+            $table->json('personne_a_contacter')->nullable();
+            $table->uuid('niveau_formation_id')->nullable();
+            $table->uuid('ville_id');
+            $table->string('adresse')->nullable();
             $table->timestamps();
+
+            $table->foreign('ville_id')->references('id')->on('villes');
+            $table->foreign('niveau_formation_id')->references('id')->on('ref_formations');
         });
+        DB::statement("ALTER TABLE personnes ADD photo MEDIUMBLOB NULL AFTER prenom");
         Schema::create('fonctions', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nom');

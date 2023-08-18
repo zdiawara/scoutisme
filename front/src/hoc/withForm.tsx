@@ -101,7 +101,8 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
       return (
         <>
           <Button
-            className="btn btn-danger me-1"
+            className="me-1"
+            variant="danger"
             onClick={() => navigation(-1)}
           >
             Annuler

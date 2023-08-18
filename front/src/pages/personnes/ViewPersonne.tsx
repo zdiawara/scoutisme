@@ -1,19 +1,39 @@
 import { FC } from "react";
-import { Badge, Button, Card, Col, Dropdown, Row } from "react-bootstrap";
-import UserBox from "./UserBox";
-import { PageHeader } from "pages/common";
+import { Badge, Card, Col, Row } from "react-bootstrap";
+import { Header, PageHeader } from "pages/common";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { QUERY_KEY } from "utils/constants";
+import { personneApi } from "api";
+import { PersonneResource } from "types/personne.type";
+import { PersonneBox } from "./view/PersonneBox";
+import { View } from "components";
 import { Link } from "react-router-dom";
 import { LINKS } from "utils";
 
 const ViewPersonne: FC = () => {
+  const { id } = useParams();
+  const { data: personne, isLoading } = useQuery({
+    queryKey: [QUERY_KEY.organisations, id],
+    queryFn: ({ queryKey }) => {
+      return personneApi.findById<PersonneResource>(queryKey[1] as string);
+    },
+  });
+
   const actions = () => {
+    if (!personne) {
+      return null;
+    }
     return (
       <div className="ms-auto d-flex">
-        <Button className="rounded-corner" variant="danger">
+        <Link
+          className="rounded-corner btn btn-danger"
+          to={LINKS.personnes.edit(personne.id)}
+        >
           <i className="uil-edit-alt"></i> Modifier
-        </Button>
+        </Link>
 
-        <Dropdown className="ms-2">
+        {/* <Dropdown className="ms-2">
           <Dropdown.Toggle variant="outline-secondary">Actions</Dropdown.Toggle>
           <Dropdown.Menu className="topbar-dropdown-menu mt-2">
             <Dropdown.Header>Options sur le scout</Dropdown.Header>
@@ -46,96 +66,138 @@ const ViewPersonne: FC = () => {
               </Dropdown.Item>
             </div>
           </Dropdown.Menu>
-        </Dropdown>
+        </Dropdown> */}
       </div>
     );
   };
+
+  if (isLoading || !personne) {
+    return <span>chargement ...</span>;
+  }
+
   return (
     <>
       <PageHeader.View
-        title="Zakaridia DIAWARA"
-        subtitle="N° 1233555"
+        title={`${personne.nom} ${personne.prenom}`}
+        subtitle={`Code : ${personne.code}`}
         right={actions()}
       />
 
       <Row>
         <Col xl={3} lg={3}>
-          <UserBox />
+          <PersonneBox
+            source={personne.photo}
+            title={
+              <>
+                <h4 className="mb-2 mt-2">
+                  {personne.nom} {personne.prenom}
+                </h4>
+                <Badge
+                  className={`${
+                    personne.type === "scout" ? "bg-info" : "bg-secondary"
+                  } fs-5`}
+                >
+                  {personne.type}
+                </Badge>
+              </>
+            }
+          >
+            <div className="text-start mt-3">
+              <h4 className="font-13 text-black">
+                <i className="uil-phone me-2" />
+                Numéro de tél.
+              </h4>
+              <View.Item>{personne.telephone}</View.Item>
+              <hr />
+              <h4 className="font-13 text-black">
+                <i className="uil-envelope me-2"></i>
+                Email
+              </h4>
+              <View.Item>{personne.email}</View.Item>
+            </div>
+          </PersonneBox>
         </Col>
         <Col xl={9} lg={9}>
           <Card className="shadow-sm">
             <Card.Body>
-              <h5 className="mb-3 mt-0 text-uppercase bg-light p-2">
-                <i className="mdi mdi-office-building me-1"></i> Information
-                personnelle
-              </h5>
-              <Row>
-                <Col sm={3}>
-                  <h4 className="font-13 text-secondary">Numéro</h4>
-                  <p className="font-13 mb-2">0487820</p>
+              <View.Header {...Header.infoGenerale} className="mb-3" />
+              <Row className="g-3">
+                <Col sm={4}>
+                  <View.Item label="Code">{personne.code}</View.Item>
                 </Col>
-                <Col sm={3}>
-                  <h4 className="font-13 text-secondary">Nom</h4>
-                  <p className="font-13 mb-2">DIAWARA</p>
+                <Col sm={4}>
+                  <View.Item label="Nom">{personne.nom}</View.Item>
                 </Col>
-                <Col sm={3}>
-                  <h4 className="font-13 text-secondary fw-semibold">Prénom</h4>
-                  <p className="font-13 text-black mb-2">Zakaridia</p>
+                <Col sm={4}>
+                  <View.Item label="Prénom">{personne.prenom}</View.Item>
+                </Col>
+                <Col sm={4}>
+                  <View.Item label="Etat">
+                    <View.Etat value={personne.etat} />
+                  </View.Item>
                 </Col>
 
-                <Col sm={3}>
-                  <h4 className="font-13 text-secondary">Etat</h4>
-                  <p className="font-13 mb-2">
-                    <Badge bg="success">Actif</Badge>
-                  </p>
+                <Col sm={4}>
+                  <View.Item label="Date naissance">
+                    {personne.date_naissance}
+                  </View.Item>
                 </Col>
-                <Col sm={3}>
-                  <h4 className="font-13 text-secondary">Naissance</h4>
-                  <p className="font-13 mb-2">25/04/1990 à Bobo Dioulasso</p>
+
+                <Col sm={4}>
+                  <View.Item label="Lieu naissance">
+                    {personne.lieu_naissance}
+                  </View.Item>
+                </Col>
+
+                {personne.type === "adulte" && (
+                  <>
+                    <Col sm={4}>
+                      <View.Item label="Profession">
+                        {personne.profession}
+                      </View.Item>
+                    </Col>
+
+                    <Col sm={4}>
+                      <View.Item label="Niveau formation">
+                        {personne.niveau_formation?.nom}
+                      </View.Item>
+                    </Col>
+                  </>
+                )}
+              </Row>
+
+              <View.Header {...Header.contact} className="my-3" />
+              <Row className="g-3">
+                <Col sm={4}>
+                  <View.Item label="Email">{personne.email}</View.Item>
+                </Col>
+                <Col sm={8}>
+                  <View.Item label="Téléphone">{personne.telephone}</View.Item>
+                </Col>
+                <Col sm={4}>
+                  <View.Item label="Personne à contacter">
+                    {personne.personne_a_contacter?.nom}
+                  </View.Item>
+                </Col>
+                <Col sm={4}>
+                  <View.Item label="Rélation">
+                    {personne.personne_a_contacter?.relation}
+                  </View.Item>
+                </Col>
+                <Col sm={4}>
+                  <View.Item label="Téléphone">
+                    {personne.personne_a_contacter?.telephone}
+                  </View.Item>
                 </Col>
               </Row>
 
-              <h5 className="mb-3 mt-3 text-uppercase bg-light p-2">
-                <i className="mdi mdi-office-building me-1"></i> Contact
-              </h5>
+              <View.Header {...Header.adresse} className="my-3" />
               <Row>
-                <Col sm={3}>
-                  <h4 className="font-13 text-secondary">Numéro téléphone</h4>
-                  <p className="font-13 mb-2">07 82 31 02 93</p>
+                <Col sm={4}>
+                  <View.Item label="Ville">{personne.ville?.nom}</View.Item>
                 </Col>
-                <Col sm={3}>
-                  <h4 className="font-13 text-secondary fw-semibold">Email</h4>
-                  <p className="font-13 text-black mb-2">
-                    Zakaridia.diawara@gmail.com
-                  </p>
-                </Col>
-                <Col sm={6}>
-                  <h4 className="font-13 text-secondary">Adresse</h4>
-                  <p className="font-13 mb-2">
-                    Accart ville secteur 10 près du marché
-                  </p>
-                </Col>
-              </Row>
-
-              <h5 className="mb-3 mt-3 text-uppercase bg-light p-2">
-                <i className="mdi mdi-office-building me-1"></i> Adhésion
-              </h5>
-              <Row>
-                <Col sm={3}>
-                  <h4 className="font-13 text-secondary">Cotisation</h4>
-                  <p className="font-13 mb-2">
-                    <Badge bg="success">A jour</Badge>
-                  </p>
-                </Col>
-                <Col sm={3}>
-                  <h4 className="font-13 text-secondary fw-semibold">
-                    Date adhésion
-                  </h4>
-                  <p className="font-13 text-black mb-2">25/04/1990</p>
-                </Col>
-                <Col sm={6}>
-                  <h4 className="font-13 text-secondary">Rôle</h4>
-                  <p className="font-13 mb-2">Membre de l'unité Lafia</p>
+                <Col sm={8}>
+                  <View.Item label="Adresse">{personne?.adresse}</View.Item>
                 </Col>
               </Row>
             </Card.Body>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PersonneResource;
 use App\Http\Services\PersonneService;
+use App\ModelFilters\PersonneFilter;
 use App\Models\Personne;
 use Illuminate\Http\Request;
 
@@ -22,6 +23,29 @@ class PersonneController extends Controller
      */
     public function index(Request $request)
     {
+
+        $query = Personne::filter($request->all(), PersonneFilter::class);
+
+        $total = $query->count();
+        $data = collect([]);
+
+        if ($total > 0) {
+            $page = $request->get('page', 1);
+            $size = $request->get('size', 10);
+            $data = $query
+                ->offset(($page - 1) * $size)
+                ->limit($size)
+                ->orderBy('nom', 'asc')
+                ->with(['ville'])
+                ->get();
+        }
+
+        return [
+            'data' => PersonneResource::collection($data),
+            'total' => $total,
+        ];
+
+
         return $this->personneService->readPersonnes($request->all());
     }
 
@@ -39,7 +63,8 @@ class PersonneController extends Controller
      */
     public function show(Personne $personne)
     {
-        return response()->json($personne);
+        $personne->load(['ville', 'niveauFormation']);
+        return new PersonneResource($personne);
     }
 
     /**
@@ -47,7 +72,8 @@ class PersonneController extends Controller
      */
     public function update(Request $request, Personne $personne)
     {
-        //
+        $personne = $this->personneService->update($personne, $request->all());
+        return $personne;
     }
 
     /**

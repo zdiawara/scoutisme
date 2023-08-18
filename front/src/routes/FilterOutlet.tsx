@@ -7,7 +7,7 @@ export const PersonneOutlet = () => {
     etat: "tous",
     search: "",
     page: 1,
-    pageCount: 1,
+    size: 10,
   };
   return (
     <FilterProvider initial={filter}>

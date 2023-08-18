@@ -6,6 +6,7 @@ export const LINKS = {
   personnes: {
     base: PERSONNES,
     view: (id: string) => `${PERSONNES}/${id}`,
+    edit: (id: string) => `${PERSONNES}/${id}/edit`,
   },
   organisations: {
     base: ORGANISATIONS,

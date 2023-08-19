@@ -4,12 +4,12 @@ on:
     inputs:
       migrate_seed:
         type: choice
-        description: 'Run migrate and seeder ?'
+        description: "Run migrate and seeder ?"
         required: true
         options:
-          - 'true'
-          - 'false'
-        default: 'false'
+          - "true"
+          - "false"
+        default: "false"
 jobs:
   Deploiement:
     runs-on: ubuntu-latest # OS sur lequel va s’exécuter la tâche
@@ -22,7 +22,7 @@ jobs:
       - name: Setup PHP # Configuration de PHP sur la machine virtuelle
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "7.2.5" # Je propose d’utiliser la version 8.0
+          php-version: "8.1"
       - name: Install PHP dependencies # Installation des paquets composer
         uses: "ramsey/composer-install@v2"
         with:
@@ -34,13 +34,11 @@ jobs:
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.1.0
         with:
-          server: 109.234.166.84
-          username: ytav8401
-          password: dj5V-NQ7u-duC?
-          local-dir: /home/runner/work/burval/burval/back/
-          server-dir: dev.burvalgroup.com/backend/
-      - name: Copy env file
-        run: cp .env.dev .env
+          server: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          local-dir: /home/runner/work/scoutisme/scoutisme/back/
+          server-dir: asbf/back/
       ## If migrate and seed
       - if: github.event.inputs.migrate_seed == 'true'
         name: Runing migrate and seed

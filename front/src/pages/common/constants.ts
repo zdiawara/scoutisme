@@ -14,7 +14,7 @@ export const Header = {
   },
   infoGenerale: {
     icon: ICONS.info,
-    label: "Information générale",
+    label: "Information generale",
   },
   contact: {
     icon: ICONS.contact,

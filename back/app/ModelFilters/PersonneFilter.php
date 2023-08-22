@@ -22,6 +22,12 @@ class PersonneFilter extends ModelFilter
     }
 
 
+    public function type($value)
+    {
+        return $this->where('type', $value);
+    }
+
+
     /*public function onlyShowDeletedForAdmins()
     {
         if (Auth::user()->isAdmin()) {

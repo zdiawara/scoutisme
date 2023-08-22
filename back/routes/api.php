@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AttributionController;
 use App\Http\Controllers\Api\FonctionController;
 use App\Http\Controllers\Api\NatureController;
 use App\Http\Controllers\Api\OrganisationController;
@@ -32,3 +33,5 @@ Route::apiResource('types_organisations', TypeOrganisationController::class);
 Route::apiResource('natures', NatureController::class);
 Route::apiResource('villes', VilleController::class);
 Route::apiResource('ref_formations', RefFormationController::class);
+Route::apiResource('fonctions', FonctionController::class);
+Route::apiResource('attributions', AttributionController::class);

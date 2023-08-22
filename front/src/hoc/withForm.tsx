@@ -8,6 +8,7 @@ import { AnyObjectSchema } from "yup";
 type HocCompomentProps = {
   onSave: (data: any) => Promise<any>;
   onFinished?: (data: any) => void;
+  goBack?: () => void;
   defaultValues?: Record<string, any>;
   title: string;
   subtitle?: string;
@@ -19,7 +20,7 @@ export type WrapperProps = {
   renderGeneralError: () => ReactNode;
   onSubmit: () => void;
   goBack: () => void;
-  title: string;
+  title?: string;
   subtitle?: string;
 };
 
@@ -30,6 +31,7 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
     defaultValues,
     title,
     subtitle,
+    goBack,
   }) => {
     const methods = useForm({
       resolver: schema ? yupResolver(schema) : undefined,
@@ -57,7 +59,7 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
           if (onFinished) {
             onFinished(element);
           } else {
-            goBack();
+            goBack ? goBack() : _goBack();
           }
         })
         .catch((e) => {
@@ -86,7 +88,7 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
         });
     };
 
-    const goBack = () => {
+    const _goBack = () => {
       navigation(-1);
     };
 
@@ -100,11 +102,7 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
     const renderButtons = () => {
       return (
         <>
-          <Button
-            className="me-1"
-            variant="danger"
-            onClick={() => navigation(-1)}
-          >
+          <Button className="me-1" variant="danger" onClick={goBack || _goBack}>
             Annuler
           </Button>
           <Button
@@ -135,7 +133,7 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
           <Wrapper
             isEditMode={isEditMode}
             renderButtons={renderButtons}
-            goBack={goBack}
+            goBack={goBack || _goBack}
             onSubmit={methods.handleSubmit(onSubmit, onError)}
             renderGeneralError={renderGeneralError}
             title={title}

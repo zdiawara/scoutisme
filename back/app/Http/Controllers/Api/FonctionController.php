@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\ModelFilters\FonctionFilter;
 use App\Models\Fonction;
 use Illuminate\Http\Request;
 
@@ -11,9 +12,12 @@ class FonctionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Fonction::all());
+        $query = Fonction::filter($request->all(), FonctionFilter::class);
+        return [
+            "data" => $query->get()
+        ];
     }
 
     /**

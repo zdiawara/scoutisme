@@ -80,7 +80,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('nom');
             $table->string('code')->unique();
-            $table->uuid('nature_id');
+            $table->uuid('nature_id')->nullable();
             $table->timestamps();
 
             $table->foreign('nature_id')->references('id')->on('natures');

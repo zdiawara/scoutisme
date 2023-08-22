@@ -1,20 +1,39 @@
 import { FC, Fragment } from "react";
-import { Card, ListGroup } from "react-bootstrap";
+import { Badge, Card, ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { LINKS } from "utils";
 import classNames from "classnames";
 import { OrganisationParent } from "types/organisation.type";
+import { ICONS } from "pages/common";
 
 type OrganigrammeProps = {
   parents?: OrganisationParent[];
+  organisation: {
+    nom: string;
+    nature: string;
+  };
 };
 
-export const Organigramme: FC<OrganigrammeProps> = ({ parents }) => {
+export const Organigramme: FC<OrganigrammeProps> = ({
+  parents,
+  organisation,
+}) => {
   return (
     <>
       <Card className="text-black">
-        <Card.Header className="fw-semibold border-0">Organigramme</Card.Header>
         <Card.Body className="p-1">
+          <div className="text-center mt-2">
+            <div className="avatar-xl mx-auto">
+              <span className="avatar-title bg-warning-lighten font-20 rounded-circle">
+                <i className={`${ICONS.organisation} fs-1 text-black`}></i>
+              </span>
+            </div>
+            <div className="fs-4 fw-semibold my-2">{organisation.nom}</div>
+            <Badge className="bg-info">{organisation.nature}</Badge>
+          </div>
+
+          <hr />
+
           <ListGroup className="text-center">
             {parents?.map((parent, i) => {
               const isLast = i + 1 === parents?.length;
@@ -23,7 +42,7 @@ export const Organigramme: FC<OrganigrammeProps> = ({ parents }) => {
                   <ListGroup.Item
                     className={classNames("fs-7 p-1", {
                       "border-0": !isLast,
-                      "shadow-lg": isLast,
+                      "shadow-lg bg-secondary-lighten": isLast,
                     })}
                     action={!isLast}
                     as={isLast ? "div" : Link}
@@ -37,7 +56,7 @@ export const Organigramme: FC<OrganigrammeProps> = ({ parents }) => {
                   </ListGroup.Item>
                   {!isLast && (
                     <ListGroup.Item className="border-0 p-0">
-                      <i className="uil-angle-down fs-3"></i>
+                      <i className="uil-angle-down fs-4"></i>
                     </ListGroup.Item>
                   )}
                 </Fragment>

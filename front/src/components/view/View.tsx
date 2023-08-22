@@ -1,10 +1,10 @@
 import { FC, ReactNode } from "react";
-import { Badge } from "react-bootstrap";
+import { Badge, Stack } from "react-bootstrap";
 
 type EmptyProps = {
   label?: string;
 };
-const Empty: FC<EmptyProps> = ({ label = "Non renseigné" }) => {
+const Empty: FC<EmptyProps> = ({ label = "non renseingé" }) => {
   return <span className="text-muted fs-10 fst-italic">{label}</span>;
 };
 
@@ -15,11 +15,13 @@ type ItemProps = {
 const Item: FC<ItemProps> = ({ label, children }) => {
   return (
     <>
-      {label && <h4 className="font-13 m-0 mb-1 text-black">{label}</h4>}
+      {label && <div className="font-14 m-0 mb-1  text-secondary">{label}</div>}
       {children === undefined || children === null ? (
         <Empty />
       ) : (
-        <div className="m-0 text-black">{children}</div>
+        <div className="m-0 text-black" style={{}}>
+          {children}
+        </div>
       )}
     </>
   );
@@ -28,14 +30,31 @@ const Item: FC<ItemProps> = ({ label, children }) => {
 type HeaderProps = {
   icon?: string;
   label: string;
+  description?: string;
   className?: string;
+  right?: ReactNode;
 };
-const Header: FC<HeaderProps> = ({ label, icon, className }) => {
+const Header: FC<HeaderProps> = ({
+  label,
+  description,
+  icon,
+  right,
+  className,
+}) => {
   return (
-    <h5 className={`m-0 text-black p-2 rounded bg-light ${className}`}>
-      {icon && <i className={`me-1 ${icon}`}></i>}
-      {label}
-    </h5>
+    <Stack direction="horizontal" className={`text-black p-0 ${className}`}>
+      {icon && (
+        <i
+          className={`me-1 fs-3 align-self-start ${icon}`}
+          //style={{ lineHeight: "1px" }}
+        ></i>
+      )}
+      <Stack>
+        <div className={`fs-3 text-black`}>{label}</div>
+        {description && <div className="text-secondary">{description}</div>}
+      </Stack>
+      <div className="ms-auto align-self-start">{right}</div>
+    </Stack>
   );
 };
 

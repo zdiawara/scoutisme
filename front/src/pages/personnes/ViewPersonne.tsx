@@ -89,9 +89,9 @@ const ViewPersonne: FC = () => {
             source={personne.photo}
             title={
               <>
-                <h4 className="mb-2 mt-2">
+                <div className="mb-2 mt-2 fs-4">
                   {personne.nom} {personne.prenom}
-                </h4>
+                </div>
                 <Badge
                   className={`${
                     personne.type === "scout" ? "bg-info" : "bg-secondary"
@@ -102,7 +102,7 @@ const ViewPersonne: FC = () => {
               </>
             }
           >
-            <div className="text-start mt-3">
+            <div className="text-start mt-4">
               <h4 className="font-13 text-black">
                 <i className="uil-phone me-2" />
                 Numéro de tél.
@@ -120,86 +120,115 @@ const ViewPersonne: FC = () => {
         <Col xl={9} lg={9}>
           <Card className="shadow-sm">
             <Card.Body>
-              <View.Header {...Header.infoGenerale} className="mb-3" />
-              <Row className="g-3">
-                <Col sm={4}>
-                  <View.Item label="Code">{personne.code}</View.Item>
-                </Col>
-                <Col sm={4}>
-                  <View.Item label="Nom">{personne.nom}</View.Item>
-                </Col>
-                <Col sm={4}>
-                  <View.Item label="Prénom">{personne.prenom}</View.Item>
-                </Col>
-                <Col sm={4}>
-                  <View.Item label="Etat">
-                    <View.Etat value={personne.etat} />
-                  </View.Item>
-                </Col>
+              <View.Header
+                {...Header.infoGenerale}
+                description="Information générale de la personne"
+                className="mb-0"
+              />
 
-                <Col sm={4}>
-                  <View.Item label="Date naissance">
-                    {personne.date_naissance}
-                  </View.Item>
-                </Col>
-
-                <Col sm={4}>
-                  <View.Item label="Lieu naissance">
-                    {personne.lieu_naissance}
-                  </View.Item>
-                </Col>
-
-                {personne.type === "adulte" && (
-                  <>
+              <Card className="shadow-sm">
+                <Card.Body>
+                  <Row className="g-3">
                     <Col sm={4}>
-                      <View.Item label="Profession">
-                        {personne.profession}
+                      <View.Item label="Code">{personne.code}</View.Item>
+                    </Col>
+                    <Col sm={4}>
+                      <View.Item label="Nom">{personne.nom}</View.Item>
+                    </Col>
+                    <Col sm={4}>
+                      <View.Item label="Prénom">{personne.prenom}</View.Item>
+                    </Col>
+                    <Col sm={4}>
+                      <View.Item label="Etat">
+                        <View.Etat value={personne.etat} />
                       </View.Item>
                     </Col>
 
                     <Col sm={4}>
-                      <View.Item label="Niveau formation">
-                        {personne.niveau_formation?.nom}
+                      <View.Item label="Date naissance">
+                        {personne.date_naissance}
                       </View.Item>
                     </Col>
-                  </>
-                )}
-              </Row>
 
-              <View.Header {...Header.contact} className="my-3" />
-              <Row className="g-3">
-                <Col sm={4}>
-                  <View.Item label="Email">{personne.email}</View.Item>
-                </Col>
-                <Col sm={8}>
-                  <View.Item label="Téléphone">{personne.telephone}</View.Item>
-                </Col>
-                <Col sm={4}>
-                  <View.Item label="Personne à contacter">
-                    {personne.personne_a_contacter?.nom}
-                  </View.Item>
-                </Col>
-                <Col sm={4}>
-                  <View.Item label="Rélation">
-                    {personne.personne_a_contacter?.relation}
-                  </View.Item>
-                </Col>
-                <Col sm={4}>
-                  <View.Item label="Téléphone">
-                    {personne.personne_a_contacter?.telephone}
-                  </View.Item>
-                </Col>
-              </Row>
+                    <Col sm={4}>
+                      <View.Item label="Lieu naissance">
+                        {personne.lieu_naissance}
+                      </View.Item>
+                    </Col>
 
-              <View.Header {...Header.adresse} className="my-3" />
-              <Row>
-                <Col sm={4}>
-                  <View.Item label="Ville">{personne.ville?.nom}</View.Item>
-                </Col>
-                <Col sm={8}>
-                  <View.Item label="Adresse">{personne?.adresse}</View.Item>
-                </Col>
-              </Row>
+                    {personne.type === "adulte" && (
+                      <>
+                        <Col sm={4}>
+                          <View.Item label="Profession">
+                            {personne.profession}
+                          </View.Item>
+                        </Col>
+
+                        <Col sm={4}>
+                          <View.Item label="Niveau formation">
+                            {personne.niveau_formation?.nom}
+                          </View.Item>
+                        </Col>
+                      </>
+                    )}
+                  </Row>
+                </Card.Body>
+              </Card>
+
+              <View.Header
+                {...Header.contact}
+                description="Email, numéro tél. de la personne"
+                className="mt-4"
+              />
+
+              <Card className="shadow-sm">
+                <Card.Body>
+                  <Row className="g-3">
+                    <Col sm={4}>
+                      <View.Item label="Email">{personne.email}</View.Item>
+                    </Col>
+                    <Col sm={8}>
+                      <View.Item label="Téléphone">
+                        {personne.telephone}
+                      </View.Item>
+                    </Col>
+                    <Col sm={4}>
+                      <View.Item label="Personne à contacter">
+                        {personne.personne_a_contacter?.nom}
+                      </View.Item>
+                    </Col>
+                    <Col sm={4}>
+                      <View.Item label="Rélation">
+                        {personne.personne_a_contacter?.relation}
+                      </View.Item>
+                    </Col>
+                    <Col sm={4}>
+                      <View.Item label="Téléphone">
+                        {personne.personne_a_contacter?.telephone}
+                      </View.Item>
+                    </Col>
+                  </Row>
+                </Card.Body>
+              </Card>
+
+              <View.Header
+                {...Header.adresse}
+                className="mt-4"
+                description="Adresse postale de la personne"
+              />
+
+              <Card className="shadow-sm mb-0">
+                <Card.Body>
+                  <Row className="g-3">
+                    <Col sm={4}>
+                      <View.Item label="Ville">{personne.ville?.nom}</View.Item>
+                    </Col>
+                    <Col sm={8}>
+                      <View.Item label="Adresse">{personne?.adresse}</View.Item>
+                    </Col>
+                  </Row>
+                </Card.Body>
+              </Card>
             </Card.Body>
           </Card>
         </Col>

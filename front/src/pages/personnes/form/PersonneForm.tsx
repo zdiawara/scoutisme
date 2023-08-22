@@ -38,7 +38,7 @@ const FormContainer: FC<WrapperProps> = ({
   return (
     <>
       <PageHeader.View
-        title={title}
+        title={title!}
         subtitle={subtitle}
         right={renderButtons()}
       />
@@ -202,8 +202,8 @@ const FormContainer: FC<WrapperProps> = ({
                 <Col sm={6}>
                   <TextInput
                     name="adresse"
-                    label="Adresse"
-                    placeholder="Secteur, quartier, emplacement"
+                    label="Lieu de résidence"
+                    placeholder="Quartier"
                   />
                 </Col>
               </Row>
@@ -223,5 +223,11 @@ const FormContainer: FC<WrapperProps> = ({
     </>
   );
 };
+
+// Sous groupe == Saka ==> Nombre max de scouts
+// Nom du saka ==> Toto
+// Affecter 5 scoutes
+// Il reste 27
+// Créer un autre saka
 
 export const PersonneForm = withForm(FormContainer, personneSchema);

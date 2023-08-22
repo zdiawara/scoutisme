@@ -1,4 +1,5 @@
-import { VilleResource } from "./organisation.type";
+import { OrganisationResource, VilleResource } from "./organisation.type";
+import { OrganisationFilter } from "./request.type";
 
 export type PersonneResource = {
   id: string;
@@ -24,4 +25,18 @@ export type PersonneResource = {
 export type NiveauFormationResource = {
   id: string;
   nom: string;
+};
+
+export type FonctionResource = {
+  id: string;
+  nom: string;
+};
+
+export type AttributionResource = {
+  id: string;
+  personne: PersonneResource;
+  organisation: OrganisationResource;
+  fonction: FonctionResource;
+  date_debut: string;
+  date_fin?: string;
 };

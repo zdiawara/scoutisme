@@ -53,12 +53,12 @@ export const Header = ({
         <div className={containerCssClasses}>
           <ul className="list-unstyled topbar-menu float-end mb-0">
             <li className="dropdown notification-list">
-              <ProfileDropdown
+              {/* <ProfileDropdown
                 userImage={userImage}
                 menuItems={profileMenus}
                 username={"Dominic Keller"}
                 userTitle={"Founder"}
-              />
+              /> */}
             </li>
           </ul>
         </div>

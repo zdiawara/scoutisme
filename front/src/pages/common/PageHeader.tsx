@@ -6,6 +6,7 @@ type HeaderProps = {
   title: string;
   subtitle?: string;
   right?: ReactNode;
+  className?: string;
 };
 
 type HeaderLeftProps = {
@@ -17,9 +18,13 @@ const Header: FC<HeaderProps & HeaderLeftProps> = ({
   subtitle,
   left,
   right,
+  className = "",
 }) => {
   return (
-    <Stack direction="horizontal" className="my-4 align-items-center">
+    <Stack
+      direction="horizontal"
+      className={`my-4 align-items-center ${className}`}
+    >
       <Stack direction="horizontal" className="align-items-start">
         {left}
         <div className="ms-2">
@@ -48,7 +53,8 @@ export const PageHeader = {
         left={
           <>
             <Button
-              className="btn btn-sm btn-light"
+              variant="light"
+              className="mt-1"
               onClick={() => navigation(-1)}
             >
               <i className="uil-arrow-left fs-5 me-2"></i>
@@ -59,5 +65,9 @@ export const PageHeader = {
         }
       />
     );
+  },
+
+  Default: (props: HeaderProps & HeaderLeftProps) => {
+    return <Header {...props} />;
   },
 };

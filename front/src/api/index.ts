@@ -19,3 +19,9 @@ export const villeApi = new VilleApi("villes");
 
 class RefFormationApi extends CrudService {}
 export const refFormationApi = new RefFormationApi("ref_formations");
+
+class FonctionApi extends CrudService {}
+export const fonctionApi = new FonctionApi("fonctions");
+
+class AttributionApi extends CrudService {}
+export const attributionApi = new AttributionApi("attributions");

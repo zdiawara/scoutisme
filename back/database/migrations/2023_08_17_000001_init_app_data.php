@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Fonction;
 use App\Models\Nature;
 use App\Models\RefFormation;
 use App\Models\TypeOrganisation;
@@ -35,6 +36,18 @@ return new class extends Migration
         collect(["Badge de bois", "Formateur adjoint", "Formateur des formateurs"])->each(function ($nom) {
             RefFormation::create(['nom' => $nom]);
         });
+
+        ## Initialiser la liste des fonctions
+        $groupe = Nature::where('code', 'groupe')->firstOrFail();
+        $unite = Nature::where('code', 'unite')->firstOrFail();
+
+        Fonction::create(['nom' => "Chef d'unité", 'code' => 'chef_unite', 'nature_id' => $unite->id]);
+        Fonction::create(['nom' => "Adjoint au chef d'unité", 'code' => 'adj_chef_unite']);
+        Fonction::create(['nom' => "Chargé de la trésorerie", 'code' => 'charge_tresorie', 'nature_id' => $unite->id]);
+        Fonction::create(['nom' => "Chargé de l'information", 'code' => 'charge_info', 'nature_id' => $unite->id]);
+        Fonction::create(['nom' => "Conseiller de groupe", 'code' => 'conseiller_groupe', 'nature_id' => $groupe->id]);
+        Fonction::create(['nom' => "Ajoint au conseiller de groupe", 'code' => 'adj_onseiller_groupe', 'nature_id' => $groupe->id]);
+        Fonction::create(['nom' => "Sécretaire", 'code' => 'secretaire', 'nature_id' => $groupe->id]);
     }
 
     /**

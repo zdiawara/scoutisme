@@ -15,7 +15,7 @@ export const personneSchema = yup.object({
   email: yup.string().email().nullable(),
   ville: yup.object().required().nullable(),
   niveau_formation: yup
-    .string()
+    .object()
     .when(["type"], {
       is: (type: any) => type?.value === "adulte",
       then: () => {

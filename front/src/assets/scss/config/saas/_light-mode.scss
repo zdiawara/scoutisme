@@ -291,8 +291,8 @@
   --#{$variable-prefix}figure-caption-color: #{map-get($grays, "600")};
 
   // scss-docs-start breadcrumb-variables
-  --#{$variable-prefix}breadcrumb-divider-color: #{map-get($grays, "400")};
-  --#{$variable-prefix}breadcrumb-active-color: #{map-get($grays, "500")};
+  --#{$variable-prefix}breadcrumb-divider-color: #{map-get($grays, "500")};
+  --#{$variable-prefix}breadcrumb-active-color: #{map-get($grays, "900")};
 
   // scss-docs-start carousel-variables
   --#{$variable-prefix}carousel-control-color: #{$white};

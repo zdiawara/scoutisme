@@ -12,6 +12,7 @@ import {
 import { WrapperProps, withForm } from "hoc";
 import { organisationSchema } from "./organisationSchema";
 import { useFormContext } from "react-hook-form";
+import { NATURE } from "utils/constants";
 
 const FormContainer: FC<WrapperProps> = ({
   renderButtons,
@@ -22,24 +23,20 @@ const FormContainer: FC<WrapperProps> = ({
 
   const codeNature = watch("nature")?.item?.code;
 
-  const resetDeps = useMemo(() => {
+  const parentResetDeps = useMemo(() => {
     return [codeNature];
   }, [codeNature]);
 
-  const buildRequestParams = () => {
+  const buildParentsRequestParams = () => {
     switch (codeNature) {
-      case "unite":
-        return { codeNature: "groupe" };
-      case "groupe":
-        return { codeNature: "region" };
-      case "region":
-        return { codeNature: "national" };
-      case "equipe_regionale":
-        return { codeNature: "equipe_nationale" };
-      case "equipe_nationale":
-        return { codeNature: "conseil_national" };
+      case NATURE.unite:
+        return { codeNature: [NATURE.groupe, NATURE.region].join(";") };
+      case NATURE.groupe:
+        return { codeNature: NATURE.region };
+      case NATURE.region:
+        return { codeNature: NATURE.national };
       default:
-        break;
+        return { codeNature: NATURE.national };
     }
   };
 
@@ -49,6 +46,7 @@ const FormContainer: FC<WrapperProps> = ({
         title={title!}
         subtitle={subtitle}
         right={renderButtons()}
+        className="my-4"
       />
 
       <Row>
@@ -70,14 +68,6 @@ const FormContainer: FC<WrapperProps> = ({
                   />
                 </Col>
                 <Col sm={4}>
-                  <TextInput
-                    name="nom"
-                    label="Nom"
-                    placeholder="Nom de l'organisation"
-                    isRequired
-                  />
-                </Col>
-                <Col sm={4}>
                   <SelectTypeOrganisation
                     name="type"
                     label="Type"
@@ -86,22 +76,25 @@ const FormContainer: FC<WrapperProps> = ({
                     isDisabled={codeNature !== "unite"}
                   />
                 </Col>
+                <Col sm={4}>
+                  <TextInput
+                    name="nom"
+                    label="Nom"
+                    placeholder="Nom de l'organisation"
+                    isRequired
+                  />
+                </Col>
                 <Col sm={12}>
                   <SelectOrganisation
                     name="parent"
                     label="Parent"
                     isClearable
-                    requestParams={buildRequestParams()}
-                    resetDeps={resetDeps}
-                    isDisabled={
-                      codeNature === "conseil_national" || !codeNature
-                    }
-                    isRequired={[
-                      "unite",
-                      "groupe",
-                      "equipe_regionale",
-                      "equipe_nationale",
-                    ].includes(codeNature)}
+                    requestParams={buildParentsRequestParams()}
+                    resetDeps={parentResetDeps}
+                    isDisabled={!codeNature}
+                    isRequired={["unite", "groupe", "region"].includes(
+                      codeNature
+                    )}
                   />
                 </Col>
               </Row>

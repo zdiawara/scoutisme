@@ -1,5 +1,6 @@
+import classNames from "classnames";
 import { FC, ReactNode } from "react";
-import { Form, Modal, ModalProps } from "react-bootstrap";
+import { Form, Modal, ModalHeaderProps, ModalProps } from "react-bootstrap";
 
 type UtilitaireModalProps = {
   onClose?: () => void;
@@ -9,6 +10,7 @@ type UtilitaireModalProps = {
   subtitle?: string;
   modalProps?: ModalProps;
   modalBodyClassName?: string;
+  modalHeaderProps?: ModalHeaderProps;
   children: ReactNode;
 };
 
@@ -20,6 +22,7 @@ export const HookModalForm: FC<UtilitaireModalProps> = ({
     animation: true,
     size: "lg",
   },
+  modalHeaderProps,
   modalBodyClassName = "bg-light",
   onClose,
   renderButtons,
@@ -27,12 +30,18 @@ export const HookModalForm: FC<UtilitaireModalProps> = ({
   children,
 }) => {
   return (
-    <Modal {...modalProps} onHide={onClose} show={true}>
+    <Modal {...modalProps} show={true}>
       <Form onSubmit={onSubmit}>
         {title && (
-          <Modal.Header closeButton>
-            <Modal.Title className="text-black">{title}</Modal.Title>
-            {subtitle && <span>&nbsp;{subtitle}</span>}
+          <Modal.Header {...modalHeaderProps}>
+            <div>
+              <Modal.Title
+                className={classNames("text-black", { "my-0": !!subtitle })}
+              >
+                {title}
+              </Modal.Title>
+              {subtitle && <>{subtitle}</>}
+            </div>
           </Modal.Header>
         )}
         <Modal.Body className={modalBodyClassName}>{children}</Modal.Body>

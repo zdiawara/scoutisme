@@ -7,3 +7,10 @@ export const QUERY_KEY = {
 export const MASK = {
   telephone: [/\d/, /\d/, " ", /\d/, /\d/, " ", /\d/, /\d/, " ", /\d/, /\d/],
 };
+
+export const NATURE = {
+  unite: "unite",
+  groupe: "groupe",
+  region: "region",
+  national: "national",
+};

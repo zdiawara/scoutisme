@@ -127,6 +127,7 @@ const ListPersonne: FC = () => {
             <i className="uil-plus"></i> Ajouter une personne
           </Link>
         }
+        className="my-4"
       />
 
       <PageFilter.Container>

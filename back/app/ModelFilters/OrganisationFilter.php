@@ -22,7 +22,7 @@ class OrganisationFilter extends ModelFilter
     public function codeNature($value)
     {
         return $this->whereHas('nature', function ($q) use ($value) {
-            $q->where('code', $value);
+            $q->whereIn('code', explode(";", $value));
         });
     }
 }

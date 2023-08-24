@@ -1,9 +1,9 @@
 import { ListPaginated, RequestParam } from "types/request.type";
-import { requestGet, requestPost, requestPut } from "./request";
+import { requestDelete, requestGet, requestPost, requestPut } from "./request";
 import { requestParams } from "utils/functions";
 
 export class CrudService {
-  private base: string;
+  protected base: string;
 
   constructor(base: string) {
     this.base = base;
@@ -26,6 +26,10 @@ export class CrudService {
   public async update<T>(id: string, body: any) {
     const { data } = await requestPut<{ data: T }>(`${this.base}/${id}`, body);
     return data;
+  }
+
+  async delete(id: string) {
+    await requestDelete(`${this.base}/${id}`);
   }
 
   getBase = () => {

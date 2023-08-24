@@ -17,4 +17,10 @@ class AttributionService
         $attribution->update($body);
         return $attribution;
     }
+
+    public function cloturer(Attribution $attribution, array $body)
+    {
+        $attribution->update(collect($body)->get('date_fin'));
+        return $attribution;
+    }
 }

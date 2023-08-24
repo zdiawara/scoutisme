@@ -1,10 +1,10 @@
 import classNames from "classnames";
-import ProfileDropdown from "./ProfileDropdown";
+/* import ProfileDropdown from "./ProfileDropdown";
 import userImage from "assets/images/users/avatar-1.jpg";
-import { ProfileOption } from "layout/types";
+import { ProfileOption } from "layout/types"; */
 
 // get the profilemenu
-const profileMenus: ProfileOption[] = [
+/* const profileMenus: ProfileOption[] = [
   {
     label: "My Account",
     icon: "mdi mdi-account-circle",
@@ -30,7 +30,7 @@ const profileMenus: ProfileOption[] = [
     icon: "mdi mdi-logout",
     redirectTo: "/account/logout",
   },
-];
+]; */
 
 type TopbarProps = {
   hideLogo?: boolean;

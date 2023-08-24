@@ -28,7 +28,7 @@ export const Organigramme: FC<OrganigrammeProps> = ({
                 <i className={`${ICONS.organisation} fs-1 text-black`}></i>
               </span>
             </div>
-            <div className="fs-4 fw-semibold my-2">{organisation.nom}</div>
+            <div className="fs-4 fw-semibold mt-2">{organisation.nom}</div>
             <Badge className="bg-info">{organisation.nature}</Badge>
           </div>
 
@@ -42,7 +42,7 @@ export const Organigramme: FC<OrganigrammeProps> = ({
                   <ListGroup.Item
                     className={classNames("fs-7 p-1", {
                       "border-0": !isLast,
-                      "shadow-lg bg-secondary-lighten": isLast,
+                      "shadow-lg bg-light": isLast,
                     })}
                     action={!isLast}
                     as={isLast ? "div" : Link}

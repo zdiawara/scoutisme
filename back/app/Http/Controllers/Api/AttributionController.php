@@ -59,4 +59,12 @@ class AttributionController extends Controller
         $attribution->load(['personne', 'organisation.nature', 'fonction']);
         return new AttributionResource($attribution);
     }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function destroy(Attribution $attribution)
+    {
+        $attribution->delete();
+    }
 }

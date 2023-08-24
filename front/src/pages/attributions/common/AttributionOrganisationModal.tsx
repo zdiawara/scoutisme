@@ -20,7 +20,7 @@ const Form: FC<WrapperV2Props> = (props) => {
   const natureId = watch("natureId");
   return (
     <HookModalForm {...props} onClose={props.onExit}>
-      <Row className="g-2 bg-light">
+      <Row className="g-2">
         <Col sm={12}>
           <SelectPersonne
             label="Personne"

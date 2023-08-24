@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation } from "@tanstack/react-query";
 import { FC, ReactNode } from "react";
-import { Alert, Button, Form, Spinner } from "react-bootstrap";
+import { Alert, Button, Form, ModalProps, Spinner } from "react-bootstrap";
 import { FormProvider, useForm } from "react-hook-form";
 import { AnyObjectSchema } from "yup";
 
@@ -13,6 +13,8 @@ type HocCompomentProps = {
   title: string;
   subtitle?: string;
   onSuccess?: () => void;
+  modalProps?: ModalProps;
+  modalBodyClassName?: string;
 };
 
 export type WrapperV2Props = {
@@ -23,6 +25,8 @@ export type WrapperV2Props = {
   onExit?: () => void;
   title?: string;
   subtitle?: string;
+  modalProps?: ModalProps;
+  modalBodyClassName?: string;
 };
 
 export function withMutationForm(
@@ -37,6 +41,8 @@ export function withMutationForm(
     subtitle,
     onSuccess,
     onExit,
+    modalProps,
+    modalBodyClassName,
   }) => {
     const methods = useForm({
       resolver: schema ? yupResolver(schema) : undefined,
@@ -112,6 +118,8 @@ export function withMutationForm(
             renderGeneralError={renderGeneralError}
             title={title}
             subtitle={subtitle}
+            modalProps={modalProps}
+            modalBodyClassName={modalBodyClassName}
           />
         </Form>
       </FormProvider>

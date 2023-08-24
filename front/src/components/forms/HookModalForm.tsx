@@ -1,5 +1,5 @@
 import { FC, ReactNode } from "react";
-import { Form, Modal } from "react-bootstrap";
+import { Form, Modal, ModalProps } from "react-bootstrap";
 
 type UtilitaireModalProps = {
   onClose?: () => void;
@@ -7,25 +7,27 @@ type UtilitaireModalProps = {
   onSubmit: () => void;
   title?: string;
   subtitle?: string;
+  modalProps?: ModalProps;
+  modalBodyClassName?: string;
   children: ReactNode;
 };
 
 export const HookModalForm: FC<UtilitaireModalProps> = ({
   title,
   subtitle,
+  modalProps = {
+    centered: false,
+    animation: true,
+    size: "lg",
+  },
+  modalBodyClassName = "bg-light",
   onClose,
   renderButtons,
   onSubmit,
   children,
 }) => {
   return (
-    <Modal
-      show={true}
-      onHide={onClose}
-      centered={false}
-      animation={false}
-      size="lg"
-    >
+    <Modal {...modalProps} onHide={onClose} show={true}>
       <Form onSubmit={onSubmit}>
         {title && (
           <Modal.Header closeButton>
@@ -33,7 +35,7 @@ export const HookModalForm: FC<UtilitaireModalProps> = ({
             {subtitle && <span>&nbsp;{subtitle}</span>}
           </Modal.Header>
         )}
-        <Modal.Body className="bg-light">{children}</Modal.Body>
+        <Modal.Body className={modalBodyClassName}>{children}</Modal.Body>
         <Modal.Footer>{renderButtons()}</Modal.Footer>
       </Form>
     </Modal>

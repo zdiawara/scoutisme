@@ -63,7 +63,7 @@ export const SousOrganisation: FC<SousOrganisationProps> = ({
             <Row className="g-2">
               {organisation.enfants?.map((org) => (
                 <Col sm={4} key={org.id}>
-                  <Card className="m-0">
+                  <Card className="m-0 border">
                     <Card.Body className="text-center">
                       <Link
                         to={LINKS.organisations.view(org.id)}

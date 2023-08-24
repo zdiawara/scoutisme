@@ -21,10 +21,7 @@ const Header: FC<HeaderProps & HeaderLeftProps> = ({
   className = "",
 }) => {
   return (
-    <Stack
-      direction="horizontal"
-      className={`my-4 align-items-center ${className}`}
-    >
+    <Stack direction="horizontal" className={`align-items-center ${className}`}>
       <Stack direction="horizontal" className="align-items-start">
         {left}
         <div className="ms-2">

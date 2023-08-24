@@ -1,10 +1,10 @@
 import { FC } from "react";
-import { Col, Row } from "react-bootstrap";
+import { Breadcrumb, Col, Row } from "react-bootstrap";
 import { PageHeader } from "pages/common";
 import { Link, useParams } from "react-router-dom";
 import { LINKS } from "utils";
 import { useQuery } from "@tanstack/react-query";
-import { QUERY_KEY } from "utils/constants";
+import { NATURE, QUERY_KEY } from "utils/constants";
 import { organisationApi } from "api";
 import { OrganisationResource } from "types/organisation.type";
 import {
@@ -13,6 +13,7 @@ import {
   OrganisationMembres,
   SousOrganisation,
 } from "./view";
+import { NavLink } from "react-router-dom";
 
 const ViewOrganisation: FC = () => {
   const { id } = useParams();
@@ -46,12 +47,36 @@ const ViewOrganisation: FC = () => {
     return <span>chargement ...</span>;
   }
 
+  const hasParent =
+    organisation.parents?.length && organisation.parents?.length > 1;
+
   return (
     <>
+      {hasParent && (
+        <Breadcrumb className="mb-0 fs-4">
+          {organisation.parents?.map((parent) =>
+            parent.id === organisation.id ? (
+              <Breadcrumb.Item key={parent.id} active>
+                {parent.nom}
+              </Breadcrumb.Item>
+            ) : (
+              <Breadcrumb.Item
+                as={NavLink}
+                to={LINKS.organisations.view(parent.id)}
+                key={parent.id}
+                href="/"
+              >
+                {parent.nom}
+              </Breadcrumb.Item>
+            )
+          )}
+        </Breadcrumb>
+      )}
       <PageHeader.View
         title={organisation.nom}
         subtitle={`Code : ${organisation.code}`}
         right={actions()}
+        className={hasParent ? "mb-4 mt-2" : "my-4"}
       />
       <Row>
         <Col xl={3} lg={3}>
@@ -66,7 +91,9 @@ const ViewOrganisation: FC = () => {
         <Col xl={9} lg={9}>
           <DetailOrganisation organisation={organisation} />
           <OrganisationMembres organisation={organisation} />
-          <SousOrganisation organisation={organisation} />
+          {organisation.nature.code !== NATURE.unite && (
+            <SousOrganisation organisation={organisation} />
+          )}
         </Col>
       </Row>
     </>

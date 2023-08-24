@@ -82,7 +82,7 @@ export const AddAttributionOrganisationModal: FC<
     <OrganisationMembreForm
       onSave={ajouterMembre}
       title="Ajouter un membre"
-      subtitle="(organe de direction)"
+      subtitle="Membre de l'organe de direction"
       defaultValues={{
         natureId: organisation.nature.id,
       }}
@@ -115,7 +115,7 @@ export const EditAttributionOrganisationModal: FC<
     <OrganisationMembreForm
       onSave={modifierAttribution}
       title="Modifier un membre"
-      subtitle="(organe de direction)"
+      subtitle="Membre de l'organe de direction"
       defaultValues={{
         ...attributionConverter.toInput(attribution),
         natureId: attribution.organisation.nature.id,

@@ -81,6 +81,7 @@ const ViewPersonne: FC = () => {
         title={`${personne.nom} ${personne.prenom}`}
         subtitle={`Code : ${personne.code}`}
         right={actions()}
+        className="my-4"
       />
 
       <Row>

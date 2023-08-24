@@ -94,6 +94,7 @@ const ListOrganisation: FC = () => {
         title="Organisations"
         subtitle="Consulter et gérer les organisations"
         icon={ICONS.organisation}
+        className="my-4"
         right={
           <Link to={LINKS.organisations.create} className="btn btn-primary">
             <i className="uil-plus"></i> Ajouter une organisation

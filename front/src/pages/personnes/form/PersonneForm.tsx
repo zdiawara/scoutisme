@@ -41,6 +41,7 @@ const FormContainer: FC<WrapperProps> = ({
         title={title!}
         subtitle={subtitle}
         right={renderButtons()}
+        className="my-4"
       />
 
       <Row>

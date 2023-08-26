@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { TooltipHelper } from "components/view";
 import { FC, useEffect, useMemo, useState } from "react";
 import { Form } from "react-bootstrap";
 import { Controller, useFormContext } from "react-hook-form";
@@ -70,6 +71,7 @@ export const AsyncSelect: FC<AsyncSelectProps> = ({
   fetchOptions,
   afterSelected,
   resetDeps,
+  description,
 }) => {
   const [options, setOptions] = useState<SelectItem[]>([]);
   const {
@@ -96,11 +98,12 @@ export const AsyncSelect: FC<AsyncSelectProps> = ({
     <>
       <Form.Group className="position-relative">
         {label && (
-          <Form.Label className="fw-semibold text-secondary">
+          <Form.Label>
             {label}
             {isRequired ? (
               <strong className="text-danger">&nbsp;*</strong>
             ) : null}
+            {description && <TooltipHelper description={description} />}
           </Form.Label>
         )}
 
@@ -130,6 +133,72 @@ export const AsyncSelect: FC<AsyncSelectProps> = ({
         <Form.Control.Feedback type="invalid">
           {error?.message?.toString()}
         </Form.Control.Feedback>
+      </Form.Group>
+    </>
+  );
+};
+
+export const AsyncSelectSimple: FC<
+  AsyncSelectProps & {
+    onChange: (v: any, action: any) => void;
+    value?: SelectItem;
+  }
+> = ({
+  label,
+  placeholder,
+  name,
+  isClearable,
+  isRequired,
+  isDisabled,
+  fetchOptions,
+  afterSelected,
+  resetDeps,
+  description,
+  onChange,
+  value,
+}) => {
+  const [options, setOptions] = useState<SelectItem[]>([]);
+
+  useEffect(() => {
+    setOptions([]);
+  }, [resetDeps]);
+
+  const maybeLoadOptions = async () => {
+    if (!options.length) {
+      const data = await fetchOptions();
+      setOptions(data);
+    }
+  };
+
+  return (
+    <>
+      <Form.Group className="position-relative">
+        {label && (
+          <Form.Label>
+            {label}
+            {isRequired ? (
+              <strong className="text-danger">&nbsp;*</strong>
+            ) : null}
+            {description && <TooltipHelper description={description} />}
+          </Form.Label>
+        )}
+
+        <ReactSelect
+          name={name}
+          value={value}
+          onChange={(newValue, action) => {
+            onChange(newValue, action);
+            afterSelected && afterSelected(newValue as SelectItem);
+          }}
+          className="react-select"
+          placeholder={placeholder}
+          isClearable={isClearable}
+          classNamePrefix="react-select"
+          noOptionsMessage={() => "Pas de données"}
+          options={options}
+          isDisabled={isDisabled}
+          onFocus={maybeLoadOptions}
+        />
       </Form.Group>
     </>
   );

@@ -15,6 +15,11 @@ import { AttributionResource } from "types/personne.type";
 import { QUERY_KEY } from "utils/constants";
 import { useQueryClient } from "@tanstack/react-query";
 
+/**
+ * Formulaire commun d'ajout et de modification d'une attribution
+ * @param props
+ * @returns
+ */
 const Form: FC<WrapperV2Props> = (props) => {
   const { watch } = useFormContext();
   const natureId = watch("natureId");
@@ -67,6 +72,11 @@ type AddAttributionOrganisationModalProps = {
   organisation: OrganisationResource;
 };
 
+/**
+ * Ajouter une nouvelle attribution
+ * @param param0
+ * @returns
+ */
 export const AddAttributionOrganisationModal: FC<
   AddAttributionOrganisationModalProps
 > = ({ closeModal, organisation }) => {
@@ -100,6 +110,11 @@ type EditAttributionOrganisationModalProps = {
   attribution: AttributionResource;
 };
 
+/**
+ * Modifier une attribution
+ * @param param0
+ * @returns
+ */
 export const EditAttributionOrganisationModal: FC<
   EditAttributionOrganisationModalProps
 > = ({ closeModal, attribution }) => {

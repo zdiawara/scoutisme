@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Breadcrumb, Col, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import { PageHeader } from "pages/common";
 import { Link, useParams } from "react-router-dom";
 import { LINKS } from "utils";
@@ -13,7 +13,6 @@ import {
   OrganisationMembres,
   SousOrganisation,
 } from "./view";
-import { NavLink } from "react-router-dom";
 
 const ViewOrganisation: FC = () => {
   const { id } = useParams();
@@ -34,7 +33,7 @@ const ViewOrganisation: FC = () => {
     return (
       <div className="ms-auto d-flex">
         <Link
-          className="rounded-corner btn btn-danger"
+          className="rounded-corner btn btn-primary"
           to={LINKS.organisations.edit(organisation.id)}
         >
           <i className="uil-edit-alt"></i> Modifier
@@ -47,36 +46,40 @@ const ViewOrganisation: FC = () => {
     return <span>chargement ...</span>;
   }
 
-  const hasParent =
-    organisation.parents?.length && organisation.parents?.length > 1;
+  /*   const hasParent =
+    organisation.parents?.length && organisation.parents?.length > 1; */
 
   return (
     <>
-      {hasParent && (
-        <Breadcrumb className="mb-0 fs-4">
-          {organisation.parents?.map((parent) =>
-            parent.id === organisation.id ? (
-              <Breadcrumb.Item key={parent.id} active>
-                {parent.nom}
-              </Breadcrumb.Item>
-            ) : (
-              <Breadcrumb.Item
-                as={NavLink}
-                to={LINKS.organisations.view(parent.id)}
-                key={parent.id}
-                href="/"
-              >
-                {parent.nom}
-              </Breadcrumb.Item>
-            )
-          )}
-        </Breadcrumb>
-      )}
+      {/* {hasParent && (
+        <>
+          <nav className="mb-0 fs-4">
+            <ol className="breadcrumb">
+              {organisation.parents?.map((parent) => (
+                <li
+                  key={parent.id}
+                  className={classNames("breadcrumb-item", {
+                    active: parent.id === organisation.id,
+                  })}
+                >
+                  {parent.id === organisation.id ? (
+                    parent.nom
+                  ) : (
+                    <Link to={LINKS.organisations.view(parent.id)}>
+                      {parent.nom}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </nav>
+        </>
+      )} */}
       <PageHeader.View
         title={organisation.nom}
         subtitle={`Code : ${organisation.code}`}
         right={actions()}
-        className={hasParent ? "mb-4 mt-2" : "my-4"}
+        className={"my-4"}
       />
       <Row>
         <Col xl={3} lg={3}>

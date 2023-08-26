@@ -70,8 +70,8 @@ $colors: (
 // scss-docs-end colors-map
 
 // scss-docs-start theme-color-variables
-$primary: $purple;
-$secondary: $gray-700;
+$primary: #040444; //$purple;
+$secondary: #b49d84;
 $success: $green;
 $info: $cyan;
 $warning: $yellow;
@@ -401,7 +401,7 @@ $position-values: (
 //
 // Settings for the `<body>` element.
 
-$body-bg: #fafbfe;
+$body-bg: #eee;
 $body-color: $gray-700;
 $body-text-align: null;
 

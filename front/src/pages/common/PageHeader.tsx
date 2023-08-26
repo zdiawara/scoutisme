@@ -25,8 +25,8 @@ const Header: FC<HeaderProps & HeaderLeftProps> = ({
       <Stack direction="horizontal" className="align-items-start">
         {left}
         <div className="ms-2">
-          <h2 className="m-0 text-black fw-semibold">{title}</h2>
-          <div className="text-black">{subtitle}</div>
+          <div className="m-0 h2 fw-normal text-primary">{title}</div>
+          <div className="text-primary">{subtitle}</div>
         </div>
       </Stack>
       <div className="ms-auto">{right}</div>
@@ -38,7 +38,9 @@ export const PageHeader = {
   List: ({ icon, ...props }: HeaderProps & { icon?: string }) => (
     <Header
       {...props}
-      left={icon ? <i className={`${icon} text-black fs-1 lh-1`} /> : undefined}
+      left={
+        icon ? <i className={`${icon} text-primary fs-1 lh-1`} /> : undefined
+      }
     />
   ),
 
@@ -51,6 +53,7 @@ export const PageHeader = {
           <>
             <Button
               variant="light"
+              size="sm"
               className="mt-1"
               onClick={() => navigation(-1)}
             >

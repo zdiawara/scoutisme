@@ -10,15 +10,18 @@ import { WrapperV2Props, withMutationForm } from "hoc";
 import { FC } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useFormContext } from "react-hook-form";
-import { attributionApi } from "api";
+import { organisationApi } from "api";
 import { OrganisationResource } from "types/organisation.type";
-import { QUERY_KEY } from "utils/constants";
+import { NATURE, QUERY_KEY } from "utils/constants";
 import { useQueryClient } from "@tanstack/react-query";
 import { Header } from "pages/common";
+import { organisationSchema } from "../form/organisationSchema";
+import { organisationConverter } from "../form";
 
 const Form: FC<WrapperV2Props> = (props) => {
   const { watch } = useFormContext();
-  const natureId = watch("natureId");
+  const codeNature = watch("nature")?.item?.code;
+
   return (
     <HookModalForm {...props} onClose={props.onExit}>
       <Row className="g-2">
@@ -28,16 +31,7 @@ const Form: FC<WrapperV2Props> = (props) => {
           description="Les informations générales de l'organisation"
         />
         <Col sm={6}>
-          <SelectNature
-            name="nature"
-            label="Nature"
-            isClearable
-            isRequired
-            afterSelected={() => {
-              /* setValue("type", null);
-                      setValue("parent", null); */
-            }}
-          />
+          <SelectNature name="nature" label="Nature" isClearable isRequired />
         </Col>
 
         <Col sm={6}>
@@ -45,8 +39,8 @@ const Form: FC<WrapperV2Props> = (props) => {
             name="type"
             label="Type"
             isClearable
-            /* isRequired={codeNature === "unite"}
-                    isDisabled={codeNature !== "unite"} */
+            isRequired={codeNature === NATURE.unite}
+            isDisabled={codeNature !== NATURE.unite}
           />
         </Col>
         <Col sm={12}>
@@ -86,7 +80,7 @@ const Form: FC<WrapperV2Props> = (props) => {
   );
 };
 
-const OrganisationMembreForm = withMutationForm(Form);
+const OrganisationMembreForm = withMutationForm(Form, organisationSchema);
 
 type SousOrganisationModalProps = {
   closeModal: () => void;
@@ -98,22 +92,28 @@ export const SousOrganisationModal: FC<SousOrganisationModalProps> = ({
   organisation,
 }) => {
   const query = useQueryClient();
-
+  const createSousOrganisation = (data: Record<string, any>) => {
+    const body = {
+      ...organisationConverter.toBody(data),
+      parent_id: organisation.id,
+    };
+    return organisationApi.create(body);
+  };
   return (
     <OrganisationMembreForm
-      onSave={attributionApi.create}
+      onSave={createSousOrganisation}
       title="Ajouter une sous organisation"
       subtitle={`Cette organisation sera rattachée à ${organisation.nom}`}
       modalProps={{
         size: "lg",
+      }}
+      modalHeaderProps={{
         closeButton: false,
       }}
       modalBodyClassName="bg-light p-3"
-      defaultValues={{
-        parent: { label: organisation.nom, value: organisation.id },
-      }}
+      defaultValues={{}}
       onSuccess={() => {
-        query.invalidateQueries([QUERY_KEY.attributions, organisation.id]);
+        query.invalidateQueries([QUERY_KEY.organisations, organisation.id]);
         closeModal();
       }}
       onExit={closeModal}

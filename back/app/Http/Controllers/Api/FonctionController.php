@@ -3,12 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\FonctionService;
 use App\ModelFilters\FonctionFilter;
 use App\Models\Fonction;
 use Illuminate\Http\Request;
 
 class FonctionController extends Controller
 {
+
+    private $fonctionService;
+
+    public function __construct(FonctionService $fonctionService)
+    {
+        $this->fonctionService = $fonctionService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -16,7 +25,7 @@ class FonctionController extends Controller
     {
         $query = Fonction::filter($request->all(), FonctionFilter::class);
         return [
-            "data" => $query->get()
+            "data" => $query->with(['nature'])->get()
         ];
     }
 
@@ -25,7 +34,7 @@ class FonctionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->fonctionService->create($request->all());
     }
 
     /**
@@ -41,7 +50,7 @@ class FonctionController extends Controller
      */
     public function update(Request $request, Fonction $fonction)
     {
-        //
+        $this->fonctionService->update($fonction, $request->except(['code']));
     }
 
     /**

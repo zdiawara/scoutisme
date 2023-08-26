@@ -1,13 +1,16 @@
 import { Suspense, lazy } from "react";
 import {
-  Outlet,
   Route,
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
 import { Layout } from "layout";
 import { LINKS } from "utils";
-import { OrganisationOutlet, PersonneOutlet } from "./FilterOutlet";
+import {
+  FonctionOutlet,
+  OrganisationOutlet,
+  PersonneOutlet,
+} from "./FilterOutlet";
 import { organisationApi, personneApi } from "api";
 
 const loading = () => <div className=""></div>;
@@ -45,8 +48,8 @@ const ViewOrganisation = Loadable(
   lazy(() => import("pages/organisations/ViewOrganisation"))
 );
 
-const ListUtilitaire = Loadable(
-  lazy(() => import("pages/utilitaires/ListUtilitaire"))
+const ListFonction = Loadable(
+  lazy(() => import("pages/utilitaires/fonctions/ListFonction"))
 );
 
 export const router = createBrowserRouter(
@@ -76,10 +79,8 @@ export const router = createBrowserRouter(
           }}
         />
       </Route>
-      <Route path={LINKS.utilitaires.base} element={<Outlet />}>
-        <Route index element={<ListUtilitaire />} />
-        {/* <Route element={<CreatePersonne />} path="create" /> */}
-        {/* <Route element={<ViewPersonne />} path=":id" /> */}
+      <Route path={LINKS.fonctions.base} element={<FonctionOutlet />}>
+        <Route index element={<ListFonction />} />
       </Route>
     </Route>
   )

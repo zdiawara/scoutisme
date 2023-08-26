@@ -42,7 +42,7 @@ const ListPersonne: FC = () => {
         return (
           <Link
             to={LINKS.personnes.view(personne.id)}
-            className="text-black table-user d-flex"
+            className="table-user d-flex"
           >
             <div className="avatar-sm me-2">
               {personne.photo ? (
@@ -60,17 +60,17 @@ const ListPersonne: FC = () => {
                   }}
                 />
               ) : (
-                <span className="avatar-title bg-primary-lighten text-primary fs-4 rounded-circle">
+                <span className="avatar-title bg-secondary-lighten text-secondary fs-4 rounded-circle">
                   {personne.prenom[0]}
                   {personne.nom[0]}
                 </span>
               )}
             </div>
             <Stack>
-              <span className="fw-semibold">
+              <span className="text-primary fw-semibold">
                 {personne.prenom} {personne.nom}
               </span>
-              <span className="text-secondary text-capitalize">
+              <span className="text-muted text-capitalize">
                 {personne.type}
               </span>
             </Stack>
@@ -143,26 +143,26 @@ const ListPersonne: FC = () => {
           <div className="text-sm-end">
             <ButtonGroup>
               <Button
-                variant={etat === "tous" ? "dark" : "light"}
+                variant={etat === "tous" ? "secondary" : "light"}
                 onClick={() => setFilter((prev) => ({ ...prev, etat: "tous" }))}
               >
                 Tous
               </Button>
               <Button
-                variant={etat === "1" ? "dark" : "light"}
+                variant={etat === "1" ? "secondary" : "light"}
                 onClick={() => setFilter((prev) => ({ ...prev, etat: "1" }))}
               >
                 Actif
               </Button>
               <Button
-                variant={etat === "0" ? "dark" : "light"}
+                variant={etat === "0" ? "secondary" : "light"}
                 onClick={() => setFilter((prev) => ({ ...prev, etat: "0" }))}
               >
                 Inactif
               </Button>
             </ButtonGroup>
 
-            <Button variant="outline-dark" className="ms-2">
+            <Button variant="secondary" className="ms-2">
               <i className="uil-filter"></i> Filtre avancé
             </Button>
           </div>
@@ -174,16 +174,18 @@ const ListPersonne: FC = () => {
           columns={columns}
           data={personnes?.data || []}
         />
-        {/* {personnes && (
+        {personnes && (
           <ListResult.Paginate
-            pageCount={personnes.meta.last_page}
-            pageActive={personnes.meta.current_page - 1}
+            /*             pageCount={personnes.meta.last_page}
+            pageActive={personnes.meta.current_page - 1} */
+            pageCount={2}
+            pageActive={1}
             onPageChange={(page) => {
               console.log(page);
               setFilter((old) => ({ ...old, page }));
             }}
           />
-        )} */}
+        )}
       </ListResult.Container>
     </>
   );

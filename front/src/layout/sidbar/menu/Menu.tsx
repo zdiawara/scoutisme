@@ -70,7 +70,9 @@ export const Menu = ({ menuItems }: AppMenuProps) => {
         return (
           <React.Fragment key={index.toString()}>
             {item.isTitle ? (
-              <li className="side-nav-title side-nav-item">{item.label}</li>
+              <li className="side-nav-title side-nav-item text-light">
+                {item.label}
+              </li>
             ) : (
               <>
                 {item.children ? (

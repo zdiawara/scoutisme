@@ -36,14 +36,14 @@ const ListOrganisation: FC = () => {
       label: "Nom",
       Cell: (organisation) => {
         return (
-          <Stack>
+          <Stack className="fw-semibold">
             <Link
-              className="text-black fw-semibold"
+              className="text-primary"
               to={LINKS.organisations.view(organisation.id)}
             >
               {organisation.nom}
             </Link>
-            <span className="text-secondary">{organisation.nature.nom}</span>
+            <span className="text-muted ">{organisation.nature.nom}</span>
           </Stack>
         );
       },
@@ -57,11 +57,7 @@ const ListOrganisation: FC = () => {
       name: "type",
       label: "Type",
       Cell: ({ type }) => {
-        return type?.nom ? (
-          <span>{type?.nom}</span>
-        ) : (
-          <span className="text-muted fst-italic">Non renseigné</span>
-        );
+        return type?.nom ? <span>{type?.nom}</span> : null;
       },
     },
     {
@@ -70,14 +66,12 @@ const ListOrganisation: FC = () => {
       Cell: ({ parent }) => {
         return parent?.nom ? (
           <Link
-            className="text-black fw-semibold"
+            className="text-primary fw-semibold"
             to={LINKS.organisations.view(parent.id)}
           >
             {parent.nom}
           </Link>
-        ) : (
-          <span className="text-muted fst-italic">Non renseigné</span>
-        );
+        ) : null;
       },
     },
 
@@ -118,7 +112,11 @@ const ListOrganisation: FC = () => {
           columns={columns}
           data={organisations?.data || []}
         />
-        {/* <ListResult.Paginate pageCount={2} /> */}
+        <ListResult.Paginate
+          pageCount={2}
+          onPageChange={() => {}}
+          pageActive={1}
+        />
       </ListResult.Container>
     </>
   );

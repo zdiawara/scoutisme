@@ -2,7 +2,6 @@ import { MenuItemType } from "../appConstants";
 import { LINKS } from "./links";
 
 export const MENU_ITEMS = [
-  { key: "custom", label: "Navigation", isTitle: true },
   {
     key: "personnes",
     label: "Personnes",
@@ -17,13 +16,20 @@ export const MENU_ITEMS = [
     icon: "uil-building",
     url: LINKS.organisations.base,
   },
-  { key: "params", label: "Paramètres", isTitle: true },
+  { key: "params", label: "Parametres", isTitle: true },
   {
-    key: "utilitaire",
-    label: "Utilitaires",
+    key: "fonction",
+    label: "Fonctions",
+    isTitle: false,
+    icon: "uil-bag",
+    url: LINKS.fonctions.base,
+  },
+  {
+    key: "types-unites",
+    label: "Types d'unités",
     isTitle: false,
     icon: "uil-cog",
-    url: LINKS.utilitaires.base,
+    url: LINKS.types_unites.base,
   },
 ];
 

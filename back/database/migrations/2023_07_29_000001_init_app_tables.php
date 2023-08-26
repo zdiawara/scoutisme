@@ -80,6 +80,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('nom');
             $table->string('code')->unique();
+            $table->integer('duree_mandat')->nullable();
             $table->uuid('nature_id')->nullable();
             $table->timestamps();
 

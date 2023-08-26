@@ -27,7 +27,7 @@ const ViewPersonne: FC = () => {
     return (
       <div className="ms-auto d-flex">
         <Link
-          className="rounded-corner btn btn-danger"
+          className="rounded-corner btn btn-primary"
           to={LINKS.personnes.edit(personne.id)}
         >
           <i className="uil-edit-alt"></i> Modifier
@@ -93,13 +93,7 @@ const ViewPersonne: FC = () => {
                 <div className="mb-2 mt-2 fs-4">
                   {personne.nom} {personne.prenom}
                 </div>
-                <Badge
-                  className={`${
-                    personne.type === "scout" ? "bg-info" : "bg-secondary"
-                  } fs-5`}
-                >
-                  {personne.type}
-                </Badge>
+                <Badge className="bg-primary fs-5">{personne.type}</Badge>
               </>
             }
           >

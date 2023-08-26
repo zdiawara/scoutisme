@@ -194,7 +194,7 @@ export const DatePicker: FC<
   return (
     <Form.Group className="position-relative">
       {label && (
-        <Form.Label htmlFor={name} className="fw-semibold text-secondary">
+        <Form.Label htmlFor={name}>
           {label}
           {props.required ? (
             <strong className="text-danger">&nbsp;*</strong>

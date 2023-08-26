@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
+import { SelectItem } from "./form.type";
 
 export type RequestParam = Record<string, any>;
 
@@ -27,4 +28,9 @@ export interface PersonneFilter extends Filter {
 
 export interface OrganisationFilter extends Filter {
   search: string | null;
+}
+
+export interface FonctionFilter extends Filter {
+  search?: string;
+  nature?: SelectItem;
 }

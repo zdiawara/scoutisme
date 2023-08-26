@@ -1,6 +1,7 @@
 import { SelectItem } from "types/form.type";
 import { RequestParam } from "types/request.type";
 import { format, parse } from "date-fns";
+import { NATURE } from "./constants";
 
 export const requestParams = (params?: RequestParam) => {
   const entries = Object.entries(params || {}).filter(
@@ -52,4 +53,22 @@ export const dateParser = {
   parse: (date?: string, pattern?: string) => {
     return toDate(pattern || "yyyy-MM-dd HH:mm:ss", date);
   },
+};
+
+/**
+ *
+ * @param codeNature
+ * @returns
+ */
+export const buildNatureColor = (codeNature: string) => {
+  switch (codeNature) {
+    case NATURE.unite:
+      return "primary";
+    case NATURE.groupe:
+      return "secondary";
+    case NATURE.region:
+      return "info";
+    case NATURE.national:
+      return "warning";
+  }
 };

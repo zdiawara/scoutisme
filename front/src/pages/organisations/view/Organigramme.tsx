@@ -1,8 +1,5 @@
-import { FC, Fragment } from "react";
-import { Badge, Card, ListGroup } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { LINKS } from "utils";
-import classNames from "classnames";
+import { FC } from "react";
+import { Badge, Card } from "react-bootstrap";
 import { OrganisationParent } from "types/organisation.type";
 import { ICONS } from "pages/common";
 
@@ -23,12 +20,14 @@ export const Organigramme: FC<OrganigrammeProps> = ({
       <Card.Body className="p-1">
         <div className="text-center my-3">
           <div className="avatar-xl mx-auto">
-            <span className="avatar-title bg-warning-lighten font-20 rounded-circle">
-              <i className={`${ICONS.organisation} fs-1 text-black`}></i>
+            <span className="avatar-title bg-secondary-lighten font-20 rounded-circle">
+              <i className={`${ICONS.organisation} fs-1 text-secondary`}></i>
             </span>
           </div>
           <div className="fs-4 fw-semibold mt-2">{organisation.nom}</div>
-          <Badge className="bg-info">{organisation.nature}</Badge>
+          <Badge className="bg-secondary fs-6 mt-1">
+            {organisation.nature}
+          </Badge>
         </div>
         {/*         <ListGroup className="text-center">
           {parents?.map((parent, i) => {

@@ -14,7 +14,7 @@ export const Sidebar = () => {
     changeBodyAttribute("data-layout", "vertical");
     changeBodyAttribute("data-layout-color", "light");
     // changeBodyAttribute("data-layout-mode", layoutWidth);
-    changeBodyAttribute("data-leftbar-theme", "dark");
+    changeBodyAttribute("data-leftbar-theme", "light");
     // changeBodyAttribute("data-leftbar-compact-mode", leftSideBarType);
   }, []);
 

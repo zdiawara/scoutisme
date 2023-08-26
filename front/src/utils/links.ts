@@ -1,6 +1,7 @@
-const UTILITAIRES = "/utilitaires";
 const PERSONNES = "/personnes";
 const ORGANISATIONS = "/organisations";
+const FONCTIONS = "/fonctions";
+const TYPES_UNITES = "/types-unites";
 
 export const LINKS = {
   personnes: {
@@ -14,7 +15,10 @@ export const LINKS = {
     edit: (id: string) => `${ORGANISATIONS}/${id}/edit`,
     create: `${ORGANISATIONS}/create`,
   },
-  utilitaires: {
-    base: UTILITAIRES,
+  fonctions: {
+    base: FONCTIONS,
+  },
+  types_unites: {
+    base: TYPES_UNITES,
   },
 };

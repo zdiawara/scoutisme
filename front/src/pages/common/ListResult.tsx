@@ -25,7 +25,7 @@ const Container: FC<{ children: ReactNode; isLoading: boolean }> = ({
 
   return (
     <Card>
-      <Card.Body className="p-0">{children}</Card.Body>
+      <Card.Body>{children}</Card.Body>
     </Card>
   );
 };
@@ -44,8 +44,8 @@ type TableProps<T> = {
 function Table<T>({ columns, data }: TableProps<T>) {
   return (
     <>
-      <BsTable hover className="table-centered text-black">
-        <thead className="text-black bg-light">
+      <BsTable className="table-centered">
+        <thead className="text-black ">
           <tr>
             {columns.map((col) => (
               <th key={col.name}>{col.label}</th>
@@ -88,7 +88,7 @@ const Paginate: FC<PaginateProps> = ({
   onPageChange,
 }) => {
   return (
-    <Stack direction="horizontal" className="aligns-items-center mb-3 mx-3">
+    <Stack direction="horizontal" className="aligns-items-center ">
       <div style={{ width: "80px" }}>
         <Select
           className="react-select"

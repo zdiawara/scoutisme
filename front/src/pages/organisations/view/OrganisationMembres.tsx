@@ -44,7 +44,7 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
     }
     return (
       <table className="table mt-3 mb-0">
-        <thead className="text-black bg-light">
+        <thead className="bg-secondary-lighten text-black">
           <tr>
             <th>Nom</th>
             <th>Fonction</th>
@@ -84,9 +84,11 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
                       </span>
                     )}
                   </div>
-                  <Stack>
-                    <span className="">{attribution.personne.prenom}</span>
-                    <span className="text-secondary text-capitalize">
+                  <Stack className="fw-semibold">
+                    <span className="text-primary">
+                      {attribution.personne.prenom}
+                    </span>
+                    <span className="text-muted text-capitalize">
                       {attribution.personne.nom}
                     </span>
                   </Stack>

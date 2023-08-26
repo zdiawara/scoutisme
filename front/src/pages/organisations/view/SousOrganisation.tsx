@@ -16,7 +16,7 @@ export const SousOrganisation: FC<SousOrganisationProps> = ({
 }) => {
   return (
     <>
-      <Card className="shadow-sm">
+      <Card>
         <Card.Body>
           <View.Header
             icon={ICONS.organisation}
@@ -29,16 +29,24 @@ export const SousOrganisation: FC<SousOrganisationProps> = ({
             <Row className="g-2 mt-1">
               {organisation.enfants?.map((org) => (
                 <Col sm={4} key={org.id}>
-                  <Card className="m-0 border">
-                    <Card.Body className="text-center">
+                  <Card className="m-0 border border-light">
+                    <Card.Body className="text-center p-2">
+                      <span>{org.nature.nom}</span>&nbsp;/&nbsp;
                       <Link
                         to={LINKS.organisations.view(org.id)}
                         className="mb-2 fw-semibold text-black"
                       >
                         {org.nom}
                       </Link>
-                      <p className="m-0 mt-1">{org.nature.nom}</p>
                     </Card.Body>
+                    <Card.Footer className="px-2 pt-0 border-0 text-right d-flex">
+                      <Link
+                        to={LINKS.organisations.view(org.id)}
+                        className="btn btn-sm btn-secondary mx-auto"
+                      >
+                        Voir la fiche
+                      </Link>
+                    </Card.Footer>
                   </Card>
                 </Col>
               ))}

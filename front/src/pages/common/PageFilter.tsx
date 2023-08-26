@@ -34,12 +34,12 @@ const Search: FC<SearchProps> = ({ initialValue, onChange }) => {
       <InputGroup>
         <Form.Control
           className="text-black"
-          placeholder="Nom, prénom..."
+          placeholder="Rechercher ..."
           onChange={handleChange}
           value={search}
         />
         <span className="mdi mdi-magnify search-icon"></span>
-        <Button variant="dark" onClick={onSubmit}>
+        <Button variant="secondary" onClick={onSubmit}>
           Rechercher
         </Button>
       </InputGroup>

@@ -62,9 +62,11 @@ export const AttributionActions: FC<AttributionActionsProps> = ({
               onClick={onSelect(item.code)}
               key={item.code}
             >
-              <i className={`${item.icon} text-black me-2`}></i>
-              <span className="text-black fs-5 fw-semibold">{item.label}</span>
-              <div className="text-secondary">{item.description}</div>
+              <i className={`${item.icon} text-primary me-2`}></i>
+              <span className="text-primary fs-5 fw-semibold">
+                {item.label}
+              </span>
+              <div className="text-muted fw-semibold">{item.description}</div>
             </Dropdown.Item>
           ))}
         </Dropdown.Menu>

@@ -1,3 +1,4 @@
+import { TooltipHelper } from "components/view";
 import { FC, useMemo } from "react";
 import { Form } from "react-bootstrap";
 import { useFormContext, Controller } from "react-hook-form";
@@ -10,6 +11,7 @@ type TextInputProps = {
   type?: string;
   isRequired?: boolean;
   mask?: Mask;
+  description?: string;
 };
 
 export const TextInput: FC<TextInputProps> = ({
@@ -17,6 +19,7 @@ export const TextInput: FC<TextInputProps> = ({
   isRequired,
   name,
   mask,
+  description,
   ...rest
 }) => {
   const {
@@ -32,9 +35,10 @@ export const TextInput: FC<TextInputProps> = ({
   return (
     <Form.Group className="position-relative">
       {label && (
-        <Form.Label htmlFor={name} className="fw-semibold text-secondary">
+        <Form.Label htmlFor={name}>
           {label}
           {isRequired ? <strong className="text-danger">&nbsp;*</strong> : null}
+          {description && <TooltipHelper description={description} />}
         </Form.Label>
       )}
       {mask ? (
@@ -46,7 +50,6 @@ export const TextInput: FC<TextInputProps> = ({
               <MaskedInput
                 mask={mask}
                 id={name}
-                placeholder="00 00 00 00"
                 className="form-control text-black fw-semibold"
                 {...field}
               />
@@ -55,7 +58,7 @@ export const TextInput: FC<TextInputProps> = ({
         </>
       ) : (
         <Form.Control
-          className="text-black fw-semibold"
+          className="text-primary fw-semibold"
           id={name}
           {...rest}
           {...register(name)}

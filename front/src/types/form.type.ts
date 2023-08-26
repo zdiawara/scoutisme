@@ -20,4 +20,5 @@ export type SelectProps = {
   afterSelected?: (value: SelectItem) => void;
   requestParams?: RequestParam;
   resetDeps?: string[];
+  description?: string;
 };

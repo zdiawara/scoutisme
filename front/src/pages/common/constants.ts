@@ -5,6 +5,7 @@ export const ICONS = {
   adresseAlt: "uil-location-pin-alt",
   info: "uil-info-circle",
   contact: " uil-receipt-alt",
+  fonction: "uil-bag-alt",
 };
 
 export const Header = {

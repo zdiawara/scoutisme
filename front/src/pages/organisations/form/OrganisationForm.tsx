@@ -49,81 +49,75 @@ const FormContainer: FC<WrapperProps> = ({
         className="my-4"
       />
 
-      <Row>
-        <Col sm={10} className="mx-auto">
-          <Card className="shadow-sm">
-            <Card.Body>
-              <View.Header {...Header.infoGenerale} className="mb-4" />
-              <Row className="g-3">
-                <Col sm={4}>
-                  <SelectNature
-                    name="nature"
-                    label="Nature"
-                    isClearable
-                    isRequired
-                    afterSelected={() => {
-                      setValue("type", null);
-                      setValue("parent", null);
-                    }}
-                  />
-                </Col>
-                <Col sm={4}>
-                  <SelectTypeOrganisation
-                    name="type"
-                    label="Type"
-                    isClearable
-                    isRequired={codeNature === "unite"}
-                    isDisabled={codeNature !== "unite"}
-                  />
-                </Col>
-                <Col sm={4}>
-                  <TextInput
-                    name="nom"
-                    label="Nom"
-                    placeholder="Nom de l'organisation"
-                    isRequired
-                  />
-                </Col>
-                <Col sm={12}>
-                  <SelectOrganisation
-                    name="parent"
-                    label="Parent"
-                    isClearable
-                    requestParams={buildParentsRequestParams()}
-                    resetDeps={parentResetDeps}
-                    isDisabled={!codeNature}
-                    isRequired={["unite", "groupe", "region"].includes(
-                      codeNature
-                    )}
-                  />
-                </Col>
-              </Row>
+      <Card className="shadow-sm">
+        <Card.Body>
+          <View.Header {...Header.infoGenerale} className="mb-4" />
+          <Row className="g-3">
+            <Col sm={4}>
+              <SelectNature
+                name="nature"
+                label="Nature"
+                isClearable
+                isRequired
+                afterSelected={() => {
+                  setValue("type", null);
+                  setValue("parent", null);
+                }}
+              />
+            </Col>
+            <Col sm={4}>
+              <SelectTypeOrganisation
+                name="type"
+                label="Type"
+                isClearable
+                isRequired={codeNature === "unite"}
+                isDisabled={codeNature !== "unite"}
+              />
+            </Col>
+            <Col sm={4}>
+              <TextInput
+                name="nom"
+                label="Nom"
+                placeholder="Nom de l'organisation"
+                isRequired
+              />
+            </Col>
+            <Col sm={12}>
+              <SelectOrganisation
+                name="parent"
+                label="Parent"
+                isClearable
+                requestParams={buildParentsRequestParams()}
+                resetDeps={parentResetDeps}
+                isDisabled={!codeNature}
+                isRequired={["unite", "groupe", "region"].includes(codeNature)}
+              />
+            </Col>
+          </Row>
 
-              <View.Header {...Header.adresse} className="my-4" />
+          <View.Header {...Header.adresse} className="my-4" />
 
-              <Row className="mb-3">
-                <Col>
-                  <SelectVille name="ville" label="Ville" isRequired />
-                </Col>
-                <Col>
-                  <TextInput
-                    name="adresse.secteur"
-                    label="Secteur"
-                    placeholder="Secteur de l'organisation"
-                  />
-                </Col>
-                <Col>
-                  <TextInput
-                    name="adresse.emplacement"
-                    label="Emplacement"
-                    placeholder="Emplacement de l'organisation"
-                  />
-                </Col>
-              </Row>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+          <Row className="mb-3">
+            <Col>
+              <SelectVille name="ville" label="Ville" isRequired />
+            </Col>
+            <Col>
+              <TextInput
+                name="adresse.secteur"
+                label="Secteur"
+                placeholder="Secteur de l'organisation"
+              />
+            </Col>
+            <Col>
+              <TextInput
+                name="adresse.emplacement"
+                label="Emplacement"
+                placeholder="Emplacement de l'organisation"
+              />
+            </Col>
+          </Row>
+        </Card.Body>
+      </Card>
     </>
   );
 };

@@ -38,7 +38,7 @@ export const SousOrganisationActions: FC<SousOrganisationActionsProps> = ({
   return (
     <>
       <Dropdown className="ms-2">
-        <Dropdown.Toggle variant="light">Actions</Dropdown.Toggle>
+        <Dropdown.Toggle variant="secondary">Actions</Dropdown.Toggle>
         <Dropdown.Menu className="topbar-dropdown-menu mt-2">
           {ACTIONS.map((item) => (
             <Dropdown.Item
@@ -48,8 +48,10 @@ export const SousOrganisationActions: FC<SousOrganisationActionsProps> = ({
               key={item.code}
             >
               <i className={`${item.icon} text-black me-2`}></i>
-              <span className="text-black fs-5 fw-semibold">{item.label}</span>
-              <div className="text-secondary">{item.description}</div>
+              <span className="text-primary fs-5 fw-semibold">
+                {item.label}
+              </span>
+              <div className="text-muted">{item.description}</div>
             </Dropdown.Item>
           ))}
         </Dropdown.Menu>

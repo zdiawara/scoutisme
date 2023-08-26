@@ -398,10 +398,10 @@
 
 body[data-leftbar-theme="dark"] {
   // Left Sidebar
-  --#{$variable-prefix}bg-leftbar: #{map-get($grays, "900")};
+  --#{$variable-prefix}bg-leftbar: #040444; //#{map-get($grays, "900")};
 
   // Menu
-  --#{$variable-prefix}dark-menu-item: #8391a2;
+  --#{$variable-prefix}dark-menu-item: #{$white};
   --#{$variable-prefix}dark-menu-item-hover: #bccee4;
   --#{$variable-prefix}dark-menu-item-active: #{$white};
 }

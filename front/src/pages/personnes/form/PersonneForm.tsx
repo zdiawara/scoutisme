@@ -159,7 +159,7 @@ const FormContainer: FC<WrapperProps> = ({
                     name="telephone"
                     label="Téléphone"
                     placeholder="00 00 00 00"
-                    mask={MASK.telephone}
+                    mask={MASK.number}
                   />
                 </Col>
 

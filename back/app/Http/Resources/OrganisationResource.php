@@ -22,7 +22,7 @@ class OrganisationResource extends JsonResource
             'adresse' => $this->adresse,
             'nature' => new NatureResource($this->whenLoaded('nature')),
             'type' => new TypeOrganisationResource($this->whenLoaded('type')),
-            'parent' => new OrganisationResource($this->whenLoaded('parent')),
+            'parent' => [], //new OrganisationResource($this->whenLoaded('parent')),
             'enfants' => OrganisationResource::collection($this->whenLoaded('enfants')),
             'ville' => new VilleResource($this->whenLoaded('ville')),
             'parents' => $this->parents,

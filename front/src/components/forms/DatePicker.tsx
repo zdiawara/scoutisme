@@ -1,7 +1,6 @@
 import { FC, forwardRef, useMemo } from "react";
 import ReactDatePicker, { ReactDatePickerProps } from "react-datepicker";
 import frLocale from "date-fns/locale/fr";
-import { getYear, getMonth } from "date-fns";
 import { useFormContext } from "react-hook-form";
 import { Form } from "react-bootstrap";
 import classNames from "classnames";
@@ -24,7 +23,7 @@ const DatepickerInput = forwardRef<HTMLInputElement, DatepickerInputProps>(
       <>
         <input
           type="text"
-          className={classNames("form-control text-black fw-semibold", {
+          className={classNames("form-control text-primary fw-semibold", {
             "is-invalid": !!props.error,
           })}
           onClick={props.onClick}
@@ -40,23 +39,6 @@ const DatepickerInput = forwardRef<HTMLInputElement, DatepickerInputProps>(
     );
   }
 );
-
-//const years = range(1990, getYear(new Date()) + 1, 1);
-const years = [1900, 2000];
-const months = [
-  "Janvier",
-  "Février",
-  "Mars",
-  "Avril",
-  "Mai",
-  "Juin",
-  "Juillet",
-  "Aout",
-  "Septembre",
-  "Octobre",
-  "Novembre",
-  "Decembre",
-];
 
 type QuantumPerson = Omit<
   ReactDatePickerProps<string, boolean>,
@@ -75,67 +57,13 @@ const CustumDatePicker: FC<
       selected={props.selected}
       onChange={props.onChange}
       customInput={<DatepickerInput error={error} inputClass="" />}
-      className="form-control text-black"
+      className="form-control text-primary"
       locale={frLocale}
       placeholderText="Date"
-      renderCustomHeader={({
-        date,
-        changeYear,
-        changeMonth,
-        decreaseMonth,
-        increaseMonth,
-        prevMonthButtonDisabled,
-        nextMonthButtonDisabled,
-      }) => (
-        <div
-          style={{
-            margin: 10,
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <button
-            onClick={decreaseMonth}
-            disabled={prevMonthButtonDisabled}
-            className="btn btn-sm btn-light"
-          >
-            {"<"}
-          </button>
-          <select
-            value={getYear(date)}
-            onChange={({ target: { value } }) => {}}
-            className="form-select"
-          >
-            {years.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-
-          <select
-            value={months[getMonth(date)]}
-            onChange={({ target: { value } }) =>
-              changeMonth(months.indexOf(value))
-            }
-            className="form-select"
-          >
-            {months.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-
-          <button
-            onClick={increaseMonth}
-            disabled={nextMonthButtonDisabled}
-            className="btn btn-sm btn-light"
-          >
-            {">"}
-          </button>
-        </div>
-      )}
+      peekNextMonth
+      showMonthDropdown
+      showYearDropdown
+      dropdownMode="select"
     />
   );
 };

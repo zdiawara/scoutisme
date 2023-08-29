@@ -78,17 +78,6 @@ const ListPersonne: FC = () => {
         );
       },
     },
-
-    /*{
-      name: "fonction",
-      label: "Fonction",
-      Cell: ({ fonction }) => (
-        <Stack>
-          <span>Conseiller de groupe</span>
-          <span className="text-muted">Badenya</span>
-        </Stack>
-      ),
-    },*/
     {
       name: "lieu_naissance",
       label: "Lieu naissance",
@@ -174,10 +163,10 @@ const ListPersonne: FC = () => {
           columns={columns}
           data={personnes?.data || []}
         />
-        {personnes && (
+        {/* {personnes && (
           <ListResult.Paginate
-            /*             pageCount={personnes.meta.last_page}
-            pageActive={personnes.meta.current_page - 1} */
+            pageCount={personnes.meta.last_page}
+            pageActive={personnes.meta.current_page - 1}
             pageCount={2}
             pageActive={1}
             onPageChange={(page) => {
@@ -185,7 +174,7 @@ const ListPersonne: FC = () => {
               setFilter((old) => ({ ...old, page }));
             }}
           />
-        )}
+        )} */}
       </ListResult.Container>
     </>
   );

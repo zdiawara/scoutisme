@@ -51,7 +51,11 @@ const FormContainer: FC<WrapperProps> = ({
 
       <Card className="shadow-sm">
         <Card.Body>
-          <View.Header {...Header.infoGenerale} className="mb-4" />
+          <View.Header
+            {...Header.infoGenerale}
+            description="Informations générales de l'organisation"
+            className="mb-4"
+          />
           <Row className="g-3">
             <Col sm={4}>
               <SelectNature
@@ -95,25 +99,23 @@ const FormContainer: FC<WrapperProps> = ({
             </Col>
           </Row>
 
-          <View.Header {...Header.adresse} className="my-4" />
+          <View.Header
+            {...Header.adresse}
+            description="Ville et lieu de l'organisation"
+            className="my-4"
+          />
 
           <Row className="mb-3">
             <Col>
-              <SelectVille name="ville" label="Ville" isRequired />
-            </Col>
-            <Col>
-              <TextInput
-                name="adresse.secteur"
-                label="Secteur"
-                placeholder="Secteur de l'organisation"
+              <SelectVille
+                name="ville"
+                label="Ville"
+                placeholder="Choisir"
+                isClearable
               />
             </Col>
             <Col>
-              <TextInput
-                name="adresse.emplacement"
-                label="Emplacement"
-                placeholder="Emplacement de l'organisation"
-              />
+              <TextInput name="adresse" label="Lieu" placeholder="Quartier" />
             </Col>
           </Row>
         </Card.Body>

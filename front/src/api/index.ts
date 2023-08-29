@@ -8,7 +8,7 @@ export const organisationApi = new OrganisationApi("organisations");
 
 class TypeOrganisationApi extends CrudService {}
 export const typeOrganisationApi = new TypeOrganisationApi(
-  "types_organisations"
+  "type_organisations"
 );
 
 class NatureApi extends CrudService {}
@@ -25,3 +25,6 @@ export const fonctionApi = new FonctionApi("fonctions");
 
 class AttributionApi extends CrudService {}
 export const attributionApi = new AttributionApi("attributions");
+
+class GenreApi extends CrudService {}
+export const genreApi = new GenreApi("genres");

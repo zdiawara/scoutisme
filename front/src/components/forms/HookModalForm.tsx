@@ -24,7 +24,6 @@ export const HookModalForm: FC<UtilitaireModalProps> = ({
   },
   modalHeaderProps,
   modalBodyClassName = "bg-light",
-  onClose,
   renderButtons,
   onSubmit,
   children,
@@ -36,7 +35,7 @@ export const HookModalForm: FC<UtilitaireModalProps> = ({
           <Modal.Header {...modalHeaderProps}>
             <div>
               <Modal.Title
-                className={classNames("text-black", { "my-0": !!subtitle })}
+                className={classNames("text-primary", { "my-0": !!subtitle })}
               >
                 {title}
               </Modal.Title>

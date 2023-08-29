@@ -25,7 +25,9 @@ class FonctionController extends Controller
     {
         $query = Fonction::filter($request->all(), FonctionFilter::class);
         return [
-            "data" => $query->with(['nature'])->get()
+            "data" => $query->with(['nature'])
+                ->orderBy('nom', 'asc')
+                ->get()
         ];
     }
 

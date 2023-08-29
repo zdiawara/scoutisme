@@ -77,6 +77,7 @@ export const AsyncSelect: FC<AsyncSelectProps> = ({
   const {
     formState: { errors },
     control,
+    watch,
   } = useFormContext();
 
   useEffect(() => {
@@ -113,6 +114,7 @@ export const AsyncSelect: FC<AsyncSelectProps> = ({
           render={({ field: { onChange, ...rest } }) => (
             <ReactSelect
               {...rest}
+              value={watch(name)}
               onChange={(newValue, action) => {
                 onChange(newValue, action);
                 afterSelected && afterSelected(newValue);

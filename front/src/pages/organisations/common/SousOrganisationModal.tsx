@@ -7,20 +7,56 @@ import {
   View,
 } from "components";
 import { WrapperV2Props, withMutationForm } from "hoc";
-import { FC } from "react";
+import { FC, useEffect, useMemo } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useFormContext } from "react-hook-form";
-import { organisationApi } from "api";
-import { OrganisationResource } from "types/organisation.type";
+import { natureApi, organisationApi } from "api";
+import { NatureResource, OrganisationResource } from "types/organisation.type";
 import { NATURE, QUERY_KEY } from "utils/constants";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Header } from "pages/common";
 import { organisationSchema } from "../form/organisationSchema";
 import { organisationConverter } from "../form";
 
 const Form: FC<WrapperV2Props> = (props) => {
-  const { watch } = useFormContext();
+  const { watch, setValue } = useFormContext();
   const codeNature = watch("nature")?.item?.code;
+  const parentCodeNature = watch("parent.codeNature");
+
+  const { data: natures, isLoading } = useQuery({
+    queryKey: [QUERY_KEY.natures],
+    queryFn: () => natureApi.findAll<NatureResource>(),
+  });
+
+  const naturesAuthorized = useMemo(() => {
+    let codes: string[] = [];
+    switch (parentCodeNature) {
+      case NATURE.national:
+        codes = [NATURE.region];
+        break;
+      case NATURE.region:
+        codes = [NATURE.groupe, NATURE.unite];
+        break;
+      case NATURE.groupe:
+        codes = [NATURE.unite];
+        break;
+    }
+    return codes;
+  }, [parentCodeNature]);
+
+  useEffect(() => {
+    const listNatures = natures?.data.filter((n) =>
+      naturesAuthorized.includes(n.code)
+    );
+    console.log(listNatures);
+
+    if (!props.isEditMode && listNatures?.length === 1) {
+      setValue("nature", {
+        label: listNatures[0].nom,
+        value: listNatures[0].id,
+      });
+    }
+  }, [naturesAuthorized, props.isEditMode, natures?.data, setValue]);
 
   return (
     <HookModalForm {...props} onClose={props.onExit}>
@@ -31,7 +67,16 @@ const Form: FC<WrapperV2Props> = (props) => {
           description="Les informations générales de l'organisation"
         />
         <Col sm={6}>
-          <SelectNature name="nature" label="Nature" isClearable isRequired />
+          <SelectNature
+            name="nature"
+            label="Nature"
+            isClearable
+            isRequired
+            requestParams={{
+              code: naturesAuthorized.join(";"),
+            }}
+            isDisabled={isLoading}
+          />
         </Col>
 
         <Col sm={6}>
@@ -53,27 +98,23 @@ const Form: FC<WrapperV2Props> = (props) => {
         </Col>
       </Row>
 
-      <Row className="g-2 mt-3 ">
-        <View.Header
-          {...Header.adresse}
-          description="Adresse physique de l'organisation"
-        />
-        <Col xs={12}>
-          <SelectVille name="ville" label="Ville" isRequired />
-        </Col>
-        <Col sm={6}>
-          <TextInput
-            name="adresse.secteur"
-            label="Secteur"
-            placeholder="Secteur de l'organisation"
+      <View.Header
+        {...Header.adresse}
+        description="Ville et lieu de l'organisation"
+        className="my-3"
+      />
+
+      <Row className="mb-3">
+        <Col>
+          <SelectVille
+            name="ville"
+            label="Ville"
+            placeholder="Choisir"
+            isClearable
           />
         </Col>
-        <Col sm={6}>
-          <TextInput
-            name="adresse.emplacement"
-            label="Emplacement"
-            placeholder="Emplacement de l'organisation"
-          />
+        <Col>
+          <TextInput name="adresse" label="Lieu" placeholder="Quartier" />
         </Col>
       </Row>
     </HookModalForm>
@@ -92,6 +133,7 @@ export const SousOrganisationModal: FC<SousOrganisationModalProps> = ({
   organisation,
 }) => {
   const query = useQueryClient();
+
   const createSousOrganisation = (data: Record<string, any>) => {
     const body = {
       ...organisationConverter.toBody(data),
@@ -99,6 +141,7 @@ export const SousOrganisationModal: FC<SousOrganisationModalProps> = ({
     };
     return organisationApi.create(body);
   };
+
   return (
     <OrganisationMembreForm
       onSave={createSousOrganisation}
@@ -111,7 +154,11 @@ export const SousOrganisationModal: FC<SousOrganisationModalProps> = ({
         closeButton: false,
       }}
       modalBodyClassName="bg-light p-3"
-      defaultValues={{}}
+      defaultValues={{
+        parent: {
+          codeNature: organisation.nature.code,
+        },
+      }}
       onSuccess={() => {
         query.invalidateQueries([QUERY_KEY.organisations, organisation.id]);
         closeModal();

@@ -35,7 +35,7 @@ export const dateFormater = {
     }
   },
   formatStr: (date?: string, pattern?: string) => {
-    return dateFormater.format(dateParser.parse(date), "dd/MM/yyyy");
+    return dateFormater.format(dateParser.parse(date), pattern || "dd/MM/yyyy");
   },
 };
 

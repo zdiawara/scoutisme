@@ -112,11 +112,11 @@ const ListOrganisation: FC = () => {
           columns={columns}
           data={organisations?.data || []}
         />
-        <ListResult.Paginate
+        {/* <ListResult.Paginate
           pageCount={2}
           onPageChange={() => {}}
           pageActive={1}
-        />
+        /> */}
       </ListResult.Container>
     </>
   );

@@ -82,7 +82,7 @@ $datepicker__triangle-size: 8px;
 }
 
 .react-datepicker-wrapper {
-  display: block;
+  display: block !important;
 }
 
 .react-datepicker {
@@ -155,22 +155,6 @@ $datepicker__triangle-size: 8px;
       left: 42px;
       right: auto;
     }
-  }
-}
-
-.react-datepicker__header {
-  text-align: center;
-  background-color: $datepicker__background-color;
-  border-bottom: 1px solid $datepicker__border-color;
-  border-top-left-radius: $datepicker__border-radius;
-  border-top-right-radius: $datepicker__border-radius;
-  padding-top: 8px;
-  position: relative;
-
-  &--time {
-    padding-bottom: 8px;
-    padding-left: 5px;
-    padding-right: 5px;
   }
 }
 

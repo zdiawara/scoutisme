@@ -13,6 +13,7 @@ class VilleSeeder extends Seeder
     public function run(): void
     {
         Ville::create(['nom' => "Ouagadougu", 'code' => "ouaga"]);
+        Ville::create(['nom' => "Banfora", 'code' => "banfora"]);
         Ville::create(['nom' => "Bobo Dioulasso", 'code' => "bobo"]);
         Ville::create(['nom' => "Koudougou", 'code' => "koudougou"]);
     }

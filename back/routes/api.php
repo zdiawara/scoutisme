@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AttributionController;
 use App\Http\Controllers\Api\FonctionController;
+use App\Http\Controllers\Api\GenreController;
 use App\Http\Controllers\Api\NatureController;
 use App\Http\Controllers\Api\OrganisationController;
 use App\Http\Controllers\Api\PersonneController;
@@ -29,9 +30,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('personnes', PersonneController::class);
 Route::apiResource('organisations', OrganisationController::class);
 Route::apiResource('fonctions', FonctionController::class);
-Route::apiResource('types_organisations', TypeOrganisationController::class);
+Route::apiResource('type_organisations', TypeOrganisationController::class);
 Route::apiResource('natures', NatureController::class);
 Route::apiResource('villes', VilleController::class);
-Route::apiResource('ref_formations', RefFormationController::class);
+Route::apiResource('ref_formations', RefFormationController::class, []);
 Route::apiResource('fonctions', FonctionController::class);
 Route::apiResource('attributions', AttributionController::class);
+Route::apiResource('genres', GenreController::class);

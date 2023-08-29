@@ -1,3 +1,4 @@
+import { ICONS } from "pages/common";
 import { MenuItemType } from "../appConstants";
 import { LINKS } from "./links";
 
@@ -6,14 +7,14 @@ export const MENU_ITEMS = [
     key: "personnes",
     label: "Personnes",
     isTitle: false,
-    icon: "uil-users-alt",
+    icon: ICONS.personne,
     url: LINKS.personnes.base,
   },
   {
     key: "organisations",
     label: "Organisations",
     isTitle: false,
-    icon: "uil-building",
+    icon: ICONS.organisation,
     url: LINKS.organisations.base,
   },
   { key: "params", label: "Parametres", isTitle: true },
@@ -21,15 +22,23 @@ export const MENU_ITEMS = [
     key: "fonction",
     label: "Fonctions",
     isTitle: false,
-    icon: "uil-bag",
+    icon: ICONS.fonction,
     url: LINKS.fonctions.base,
   },
+
   {
     key: "types-unites",
     label: "Types d'unités",
     isTitle: false,
-    icon: "uil-cog",
+    icon: ICONS.type_unite,
     url: LINKS.types_unites.base,
+  },
+  {
+    key: "ref-formation",
+    label: "Réf. formations",
+    isTitle: false,
+    icon: ICONS.formation,
+    url: LINKS.ref_formations.base,
   },
 ];
 

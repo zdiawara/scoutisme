@@ -1,5 +1,6 @@
 import { Suspense, lazy } from "react";
 import {
+  Outlet,
   Route,
   createBrowserRouter,
   createRoutesFromElements,
@@ -51,6 +52,12 @@ const ViewOrganisation = Loadable(
 const ListFonction = Loadable(
   lazy(() => import("pages/utilitaires/fonctions/ListFonction"))
 );
+const ListRefFormation = Loadable(
+  lazy(() => import("pages/utilitaires/ref-formations/ListRefFormation"))
+);
+const ListTypeUnite = Loadable(
+  lazy(() => import("pages/utilitaires/types-unites/ListTypeUnite"))
+);
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -81,6 +88,12 @@ export const router = createBrowserRouter(
       </Route>
       <Route path={LINKS.fonctions.base} element={<FonctionOutlet />}>
         <Route index element={<ListFonction />} />
+      </Route>
+      <Route path={LINKS.ref_formations.base} element={<Outlet />}>
+        <Route index element={<ListRefFormation />} />
+      </Route>
+      <Route path={LINKS.types_unites.base} element={<Outlet />}>
+        <Route index element={<ListTypeUnite />} />
       </Route>
     </Route>
   )

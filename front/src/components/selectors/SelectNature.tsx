@@ -9,7 +9,9 @@ export const SelectNature: FC<SelectProps> = (props) => {
     <AsyncSelect
       {...props}
       fetchOptions={async () => {
-        const { data } = await natureApi.findAll<NatureResource>();
+        const { data } = await natureApi.findAll<NatureResource>(
+          props.requestParams
+        );
         return data.map((item) => ({ label: item.nom, value: item.id, item }));
       }}
     />

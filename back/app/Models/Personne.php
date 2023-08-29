@@ -14,7 +14,7 @@ class Personne extends Model
 
     protected $fillable = [
         'nom', 'prenom', 'photo', 'code', 'adresse', 'email', 'telephone', 'etat', 'personne_a_contacter',
-        'profession', 'date_naissance', 'lieu_naissance', 'type', 'ville_id', 'niveau_formation_id'
+        'profession', 'date_naissance', 'lieu_naissance', 'type', 'genre_id', 'ville_id', 'niveau_formation_id'
     ];
 
     protected $casts = ['personne_a_contacter' => 'array'];
@@ -22,6 +22,11 @@ class Personne extends Model
     public function niveauFormation()
     {
         return $this->belongsTo(RefFormation::class);
+    }
+
+    public function genre()
+    {
+        return $this->belongsTo(Genre::class);
     }
 
     public function ville()

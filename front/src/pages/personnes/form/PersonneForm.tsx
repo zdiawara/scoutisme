@@ -2,8 +2,8 @@ import { ChangeEvent, FC, Fragment } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import { Header, PageHeader } from "pages/common";
 import {
-  AsyncSelect,
   DatePicker,
+  SelectGenre,
   SelectRefFormation,
   SelectVille,
   TextInput,
@@ -49,14 +49,13 @@ const FormContainer: FC<WrapperProps> = ({
           <PersonneBox source={watch("photo")}>
             <div className="text-center mt-3">
               <Button
-                variant="outline-danger"
-                size="sm"
+                variant="outline-secondary"
                 className="me-2"
                 onClick={() => setValue("photo", null)}
               >
                 Effacer
               </Button>
-              <Button as="label" variant="info" size="sm">
+              <Button as="label" variant="primary">
                 Choisir
                 <input
                   hidden
@@ -71,9 +70,13 @@ const FormContainer: FC<WrapperProps> = ({
         <Col xl={9} lg={9} className="mx-auto">
           <Card className="shadow-sm">
             <Card.Body>
-              <View.Header {...Header.infoGenerale} className="mb-3" />
+              <View.Header
+                {...Header.infoGenerale}
+                description="Informations générales de la personne"
+                className="mb-3"
+              />
               <Row className="g-3">
-                <Col sm={4}>
+                {/* <Col sm={4}>
                   <AsyncSelect
                     name="type"
                     label="Type"
@@ -86,8 +89,8 @@ const FormContainer: FC<WrapperProps> = ({
                       ])
                     }
                   />
-                </Col>
-                <Col sm={4}>
+                </Col> */}
+                <Col sm={6}>
                   <TextInput
                     name="nom"
                     label="Nom"
@@ -95,7 +98,7 @@ const FormContainer: FC<WrapperProps> = ({
                     isRequired
                   />
                 </Col>
-                <Col sm={4}>
+                <Col sm={6}>
                   <TextInput
                     name="prenom"
                     label="Prénom"
@@ -104,47 +107,38 @@ const FormContainer: FC<WrapperProps> = ({
                   />
                 </Col>
 
-                <Col sm={6}>
-                  <TextInput
-                    name="lieu_naissance"
-                    label="Lieu naissance"
-                    placeholder="Ex. Bobo Dioulasso"
+                <Col sm={4}>
+                  <SelectGenre
+                    name="genre"
+                    label="Genre"
                     isRequired
+                    placeholder="Homme ou femme"
                   />
                 </Col>
-
-                <Col sm={6}>
+                <Col sm={4}>
                   <DatePicker
                     name="date_naissance"
                     label="Date naissance"
                     useHookForm
-                    required
                     maxDate={new Date()}
+                    isClearable
                   />
                 </Col>
-                {typePersonne === "adulte" && (
-                  <Fragment key="adulte">
-                    <Col sm={6}>
-                      <TextInput
-                        name="profession"
-                        label="Profession"
-                        placeholder="Profession"
-                      />
-                    </Col>
 
-                    <Col sm={6}>
-                      <SelectRefFormation
-                        name="niveau_formation"
-                        label="Formation"
-                        placeholder="Niveau formation"
-                        isRequired
-                      />
-                    </Col>
-                  </Fragment>
-                )}
+                <Col sm={4}>
+                  <TextInput
+                    name="lieu_naissance"
+                    label="Lieu naissance"
+                    placeholder="Ex. Bobo Dioulasso"
+                  />
+                </Col>
               </Row>
 
-              <View.Header {...Header.contact} className="my-3" />
+              <View.Header
+                {...Header.contact}
+                description="Email et numéro de la personne et de son representant"
+                className="my-3"
+              />
 
               <Row className="g-3">
                 <Col sm={6}>
@@ -159,7 +153,7 @@ const FormContainer: FC<WrapperProps> = ({
                     name="telephone"
                     label="Téléphone"
                     placeholder="00 00 00 00"
-                    mask={MASK.number}
+                    mask={MASK.telephone}
                   />
                 </Col>
 
@@ -174,7 +168,7 @@ const FormContainer: FC<WrapperProps> = ({
                   <TextInput
                     name="personne_a_contacter.relation"
                     label="Rélation"
-                    placeholder="Père"
+                    placeholder="Ex: Père"
                   />
                 </Col>
                 <Col sm={4}>
@@ -187,15 +181,18 @@ const FormContainer: FC<WrapperProps> = ({
                 </Col>
               </Row>
 
-              <View.Header {...Header.adresse} className="my-3" />
+              <View.Header
+                {...Header.adresse}
+                description="Ville et lieu de résidence de la personne"
+                className="my-3"
+              />
 
               <Row className="g-3">
                 <Col sm={6}>
                   <SelectVille
                     name="ville"
-                    label="Ville"
-                    placeholder="Ville de résidence"
-                    isRequired
+                    label="Ville de résidence"
+                    placeholder="Choisir"
                     isClearable
                   />
                 </Col>
@@ -210,15 +207,36 @@ const FormContainer: FC<WrapperProps> = ({
               </Row>
             </Card.Body>
           </Card>
+          {typePersonne === "adulte" && (
+            <Card className="shadow-sm">
+              <Card.Body>
+                <View.Header
+                  {...Header.formation}
+                  description="Profession et formation de la personne"
+                  className="mb-3"
+                />
+                <Row className="g-3">
+                  <Fragment key="adulte">
+                    <Col sm={6}>
+                      <TextInput
+                        name="profession"
+                        label="Profession"
+                        placeholder="Profession"
+                      />
+                    </Col>
 
-          {/* <Card>
-            <Card.Body>
-              <View.Header label="Role" className="mb-3" />
-              <Button variant="dark" size="sm">
-                Ajouter un role
-              </Button>
-            </Card.Body>
-          </Card> */}
+                    <Col sm={6}>
+                      <SelectRefFormation
+                        name="niveau_formation"
+                        label="Formation"
+                        placeholder="Niveau formation"
+                      />
+                    </Col>
+                  </Fragment>
+                </Row>
+              </Card.Body>
+            </Card>
+          )}
         </Col>
       </Row>
     </>

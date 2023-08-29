@@ -11,5 +11,5 @@ class RefFormation extends Model
 
     protected $table = 'ref_formations';
 
-    protected $fillable = ['nom'];
+    protected $fillable = ['nom', 'code'];
 }

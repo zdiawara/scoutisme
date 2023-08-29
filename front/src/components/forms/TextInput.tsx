@@ -52,6 +52,7 @@ export const TextInput: FC<TextInputProps> = ({
                 id={name}
                 className="form-control text-black fw-semibold"
                 {...field}
+                placeholder={rest.placeholder}
               />
             )}
           />

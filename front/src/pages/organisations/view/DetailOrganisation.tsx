@@ -3,6 +3,8 @@ import { Card, Col, Row } from "react-bootstrap";
 import { Header } from "pages/common";
 import { OrganisationResource } from "types/organisation.type";
 import { View } from "components";
+import { Link } from "react-router-dom";
+import { LINKS } from "utils";
 
 type DetailOrganisationProps = {
   organisation: OrganisationResource;
@@ -20,7 +22,7 @@ export const DetailOrganisation: FC<DetailOrganisationProps> = ({
             description="Les informations générales de l'organisation"
           />
 
-          <Card className="shadow-sm">
+          <Card className="shadow-sm mt-1">
             <Card.Body>
               <Row className="g-3">
                 <Col sm={4}>
@@ -39,7 +41,14 @@ export const DetailOrganisation: FC<DetailOrganisationProps> = ({
                 </Col>
                 <Col sm={4}>
                   <View.Item label="Parent">
-                    {organisation.parent?.nom}
+                    {organisation.parent ? (
+                      <Link
+                        to={LINKS.organisations.view(organisation.parent.id)}
+                        className="text-decoration-underline"
+                      >
+                        {organisation.parent.nom}
+                      </Link>
+                    ) : null}
                   </View.Item>
                 </Col>
                 <Col sm={4}>
@@ -57,21 +66,14 @@ export const DetailOrganisation: FC<DetailOrganisationProps> = ({
             className="mt-4"
           />
 
-          <Card className="shadow-sm mb-0">
+          <Card className="shadow-sm mb-0 mt-1">
             <Card.Body>
               <Row>
                 <Col sm={4}>
                   <View.Item label="Ville">{organisation.ville?.nom}</View.Item>
                 </Col>
-                <Col sm={4}>
-                  <View.Item label="Secteur">
-                    {organisation.adresse?.secteur}
-                  </View.Item>
-                </Col>
-                <Col sm={4}>
-                  <View.Item label="Emplacement">
-                    {organisation.adresse?.emplacement}
-                  </View.Item>
+                <Col sm={8}>
+                  <View.Item label="Lieu">{organisation.adresse}</View.Item>
                 </Col>
               </Row>
             </Card.Body>

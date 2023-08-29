@@ -14,7 +14,9 @@ class VilleController extends Controller
     public function index()
     {
         return [
-            "data" => Ville::all()
+            "data" => Ville::query()
+                ->orderBy('nom', 'asc')
+                ->get()
         ];
     }
 

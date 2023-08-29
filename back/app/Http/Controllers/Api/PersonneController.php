@@ -31,12 +31,12 @@ class PersonneController extends Controller
 
         if ($total > 0) {
             $page = $request->get('page', 1);
-            $size = $request->get('size', 10);
+            $size = $request->get('size', 100);
             $data = $query
                 ->offset(($page - 1) * $size)
                 ->limit($size)
                 ->orderBy('nom', 'asc')
-                ->with(['ville'])
+                ->with(['genre'])
                 ->get();
         }
 
@@ -63,7 +63,7 @@ class PersonneController extends Controller
      */
     public function show(Personne $personne)
     {
-        $personne->load(['ville', 'niveauFormation']);
+        $personne->load(['ville', 'niveauFormation', 'genre']);
         return new PersonneResource($personne);
     }
 

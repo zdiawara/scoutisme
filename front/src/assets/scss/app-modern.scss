@@ -87,9 +87,10 @@ File: Main Css File
 @import "custom/plugins/calendar";
 @import "custom/plugins/chartjs";
 @import "custom/plugins/datatable";
-@import "custom/plugins/daterange"; //react-range slider style
+@import "custom/plugins/daterange"; //react-range slider style*/
+@import "react-datepicker/dist/react-datepicker.css";
 @import "custom/plugins/datepicker"; //react-date picker style
-@import "custom/plugins/dragula";
+/*@import "custom/plugins/dragula";
 @import "custom/plugins/dropzone";
 @import "custom/plugins/form-wizard";
 @import "custom/plugins/maps"; // react-vector map style

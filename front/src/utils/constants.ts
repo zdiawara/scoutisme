@@ -3,6 +3,9 @@ export const QUERY_KEY = {
   organisations: "organisations",
   attributions: "attributions",
   fonctions: "fonctions",
+  refFormations: "ref-formations",
+  typesUnites: "types-unites",
+  natures: "natures",
 };
 
 export const MASK = {

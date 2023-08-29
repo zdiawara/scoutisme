@@ -14,12 +14,9 @@ export type OrganisationResource = {
   type?: TypeOrganisationResource;
   nature: NatureResource;
   parent?: OrganisationResource;
-  ville: VilleResource;
+  ville?: VilleResource;
   etat: string;
-  adresse?: {
-    secteur?: string;
-    emplacement?: string;
-  };
+  adresse?: string;
   parents?: Array<OrganisationParent>;
   enfants?: OrganisationResource[];
 };

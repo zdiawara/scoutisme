@@ -12,6 +12,7 @@ const toBody = (data: Record<string, any>) => {
     telephone: data.telephone,
     personne_a_contacter: data.personne_a_contacter,
     ville_id: selectHelper.getValue(data.ville),
+    genre_id: selectHelper.getValue(data.genre),
     adresse: data.adresse,
     type: data.type?.value,
   };
@@ -21,21 +22,7 @@ const toBody = (data: Record<string, any>) => {
     body.niveau_formation_id = selectHelper.getValue(data.niveau_formation);
   }
 
-  return {
-    photo: data.photo,
-    nom: data.nom,
-    prenom: data.prenom,
-    lieu_naissance: data.lieu_naissance,
-    date_naissance: dateFormater.toBackPattern(data.date_naissance),
-    email: data.email,
-    telephone: data.telephone,
-    profession: data.profession,
-    niveau_formation_id: selectHelper.getValue(data.niveau_formation),
-    personne_a_contacter: data.personne_a_contacter,
-    ville_id: selectHelper.getValue(data.ville),
-    adresse: data.adresse,
-    type: data.type?.value,
-  };
+  return body;
 };
 const toInput = (data: PersonneResource) => {
   return {
@@ -54,6 +41,7 @@ const toInput = (data: PersonneResource) => {
     personne_a_contacter: data.personne_a_contacter,
     ville: data.ville ? { label: data.ville.nom, value: data.ville.id } : null,
     adresse: data.adresse,
+    genre: data.genre ? { label: data.genre.nom, value: data.genre.id } : null,
     type: {
       value: data.type,
       label: data.type === "scout" ? "Scout" : "Adulte",

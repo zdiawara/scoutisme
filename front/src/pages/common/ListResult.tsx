@@ -44,7 +44,7 @@ type TableProps<T> = {
 function Table<T>({ columns, data }: TableProps<T>) {
   return (
     <>
-      <BsTable className="table-centered">
+      <BsTable hover className="table-centered">
         <thead className="text-black ">
           <tr>
             {columns.map((col) => (

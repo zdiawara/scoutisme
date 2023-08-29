@@ -20,7 +20,7 @@ const toInput = (data: OrganisationResource) => {
     type: type ? { label: type.nom, value: type.id } : null,
     parent: parent ? { label: parent.nom, value: parent.id } : null,
     adresse: data.adresse,
-    ville: { label: ville.nom, value: ville.id },
+    ville: ville ? { label: ville.nom, value: ville.id } : null,
   };
 };
 export const organisationConverter = {

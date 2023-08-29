@@ -1,5 +1,5 @@
-import { FC, Fragment } from "react";
-import { Button, Card, Col, Row } from "react-bootstrap";
+import { FC } from "react";
+import { Card, Col, Row } from "react-bootstrap";
 import { ICONS } from "pages/common";
 import { OrganisationResource } from "types/organisation.type";
 import { View } from "components";
@@ -27,7 +27,7 @@ export const SousOrganisation: FC<SousOrganisationProps> = ({
           />
           {organisation.enfants?.length ? (
             <Row className="g-2 mt-1">
-              {organisation.enfants?.map((org) => (
+              {organisation.enfants.map((org) => (
                 <Col sm={4} key={org.id}>
                   <Card className="m-0 border border-light">
                     <Card.Body className="text-center p-2">
@@ -52,12 +52,7 @@ export const SousOrganisation: FC<SousOrganisationProps> = ({
               ))}
             </Row>
           ) : (
-            <>
-              <View.Empty label="Pas d'organisations enfants" />
-              <Button size="sm" variant="link">
-                Ajouter
-              </Button>
-            </>
+            <View.Empty label="Pas d'organisations enfants" />
           )}
         </Card.Body>
       </Card>

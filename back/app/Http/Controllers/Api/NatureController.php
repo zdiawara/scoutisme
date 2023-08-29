@@ -11,10 +11,15 @@ class NatureController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $quey = Nature::query();
+        if ($request->has("code")) {
+            $quey->whereIn('code', explode(";", $request->get("code")));
+        }
         return [
-            "data" => Nature::all()
+            "data" => $quey->orderBy('nom', 'asc')
+                ->get()
         ];
     }
 

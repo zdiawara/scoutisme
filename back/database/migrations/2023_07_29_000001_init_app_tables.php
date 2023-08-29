@@ -24,15 +24,20 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->timestamps();
         });
+        Schema::create('genres', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('nom');
+            $table->timestamps();
+        });
         Schema::create('ref_formations', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nom');
+            $table->string('code')->unique();
             $table->timestamps();
         });
         Schema::create('villes', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nom');
-            $table->string('code')->unique();
             $table->timestamps();
         });
         Schema::create('organisations', function (Blueprint $table) {
@@ -40,10 +45,10 @@ return new class extends Migration
             $table->string('nom');
             $table->string('code')->unique();
             $table->integer('etat')->default(1); // actif = 1 , inactif = 0
-            $table->json('adresse')->nullable();
+            $table->string('adresse')->nullable();
             $table->uuid('type_id')->nullable();
             $table->uuid('nature_id');
-            $table->uuid('ville_id');
+            $table->uuid('ville_id')->nullable();
             $table->timestamps();
 
             $table->foreign('type_id')->references('id')->on('types_organisations');
@@ -60,7 +65,7 @@ return new class extends Migration
             $table->string('prenom');
             $table->integer('etat')->default(1); // actif = 1 , inactif = 0
             $table->string('code')->unique();
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable();
             $table->string('telephone')->nullable();
             $table->date('date_naissance')->nullable();
             $table->string('lieu_naissance')->nullable();
@@ -68,12 +73,14 @@ return new class extends Migration
             $table->string('type'); // scout; adulte
             $table->json('personne_a_contacter')->nullable();
             $table->uuid('niveau_formation_id')->nullable();
-            $table->uuid('ville_id');
+            $table->uuid('ville_id')->nullable();
+            $table->uuid('genre_id');
             $table->string('adresse')->nullable();
             $table->timestamps();
 
             $table->foreign('ville_id')->references('id')->on('villes');
             $table->foreign('niveau_formation_id')->references('id')->on('ref_formations');
+            $table->foreign('genre_id')->references('id')->on('genres');
         });
         DB::statement("ALTER TABLE personnes ADD photo MEDIUMBLOB NULL AFTER prenom");
         Schema::create('fonctions', function (Blueprint $table) {
@@ -81,7 +88,7 @@ return new class extends Migration
             $table->string('nom');
             $table->string('code')->unique();
             $table->integer('duree_mandat')->nullable();
-            $table->uuid('nature_id')->nullable();
+            $table->uuid('nature_id');
             $table->timestamps();
 
             $table->foreign('nature_id')->references('id')->on('natures');
@@ -106,7 +113,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        collect(['attributions', 'fonctions', 'personnes', 'organisations', 'types_organisations', 'natures'])
+        collect(['attributions', 'fonctions', 'personnes', 'organisations', 'types_organisations', 'villes', 'natures', 'ref_formations', 'genres'])
             ->each(function ($table) {
                 Schema::dropIfExists($table);
             });

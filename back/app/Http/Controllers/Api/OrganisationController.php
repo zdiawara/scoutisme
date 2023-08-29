@@ -31,7 +31,7 @@ class OrganisationController extends Controller
 
         if ($total > 0) {
             $page = $request->get('page', 1);
-            $size = $request->get('size', 10);
+            $size = $request->get('size', 100);
             $data = $query
                 ->offset(($page - 1) * $size)
                 ->limit($size)

@@ -78,7 +78,7 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
                         }}
                       />
                     ) : (
-                      <span className="avatar-title bg-primary-lighten text-primary fs-4 rounded-circle">
+                      <span className="avatar-title bg-secondary-lighten text-secondary fs-4 rounded-circle">
                         {attribution.personne.prenom[0]}
                         {attribution.personne.nom[0]}
                       </span>

@@ -3,18 +3,28 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\TypeOrganisationService;
 use App\Models\TypeOrganisation;
 use Illuminate\Http\Request;
 
 class TypeOrganisationController extends Controller
 {
+    private $typeOrganisationService;
+
+    public function __construct(TypeOrganisationService $typeOrganisationService)
+    {
+        $this->typeOrganisationService = $typeOrganisationService;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         return [
-            'data' => TypeOrganisation::all()
+            'data' => TypeOrganisation::query()
+                ->orderBy('nom', 'asc')
+                ->get()
         ];
     }
 
@@ -23,7 +33,7 @@ class TypeOrganisationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->typeOrganisationService->create($request->all());
     }
 
     /**
@@ -39,7 +49,7 @@ class TypeOrganisationController extends Controller
      */
     public function update(Request $request, TypeOrganisation $typeOrganisation)
     {
-        //
+        $this->typeOrganisationService->update($typeOrganisation, $request->except(['code']));
     }
 
     /**

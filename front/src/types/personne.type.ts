@@ -3,7 +3,6 @@ import {
   OrganisationResource,
   VilleResource,
 } from "./organisation.type";
-import { OrganisationFilter } from "./request.type";
 
 export type PersonneResource = {
   id: string;
@@ -11,10 +10,11 @@ export type PersonneResource = {
   code: string;
   prenom: string;
   type: string;
-  date_naissance: string;
-  lieu_naissance: string;
+  date_naissance?: string;
+  lieu_naissance?: string;
   date_adhesion: string;
   profession?: string;
+  genre?: GenreResource;
   niveau_formation?: NiveauFormationResource;
   email: string;
   telephone?: string;
@@ -45,4 +45,9 @@ export type AttributionResource = {
   fonction: FonctionResource;
   date_debut: string;
   date_fin?: string;
+};
+
+export type GenreResource = {
+  id: string;
+  nom: string;
 };

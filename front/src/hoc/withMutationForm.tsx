@@ -10,6 +10,7 @@ import {
   Spinner,
 } from "react-bootstrap";
 import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import { AnyObjectSchema } from "yup";
 
 type HocCompomentProps = {
@@ -60,7 +61,13 @@ export function withMutationForm(
       mutationFn: (data: any) => {
         return onSave(data);
       },
-      onSuccess,
+      onSuccess: () => {
+        onSuccess && onSuccess();
+        toast("Vos modifications ont bien été enregistrées !", {
+          type: toast.TYPE.SUCCESS,
+          autoClose: 5000,
+        });
+      },
     });
 
     const onSubmit = (data: any) => {

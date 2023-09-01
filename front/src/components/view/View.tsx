@@ -15,7 +15,9 @@ type ItemProps = {
 const Item: FC<ItemProps> = ({ label, children }) => {
   return (
     <>
-      {label && <div className="font-14 m-0 mb-1">{label}</div>}
+      {label && (
+        <div className="font-14 text-black m-0 mb-1">{label}&nbsp;:</div>
+      )}
       {children === undefined || children === null ? (
         <Empty />
       ) : (

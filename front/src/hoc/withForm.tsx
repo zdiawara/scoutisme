@@ -3,6 +3,7 @@ import { FC, ReactNode, useState } from "react";
 import { Alert, Button, Form } from "react-bootstrap";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { AnyObjectSchema } from "yup";
 
 type HocCompomentProps = {
@@ -61,6 +62,10 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
           } else {
             goBack ? goBack() : _goBack();
           }
+          toast("Vos modifications ont bien été enregistrées !", {
+            type: toast.TYPE.SUCCESS,
+            autoClose: 5000,
+          });
         })
         .catch((e) => {
           /*if (e.status === 422) {

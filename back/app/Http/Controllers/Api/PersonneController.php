@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AttributionResource;
 use App\Http\Resources\PersonneResource;
 use App\Http\Services\PersonneService;
 use App\ModelFilters\PersonneFilter;
+use App\Models\Attribution;
 use App\Models\Personne;
 use Illuminate\Http\Request;
 
@@ -47,6 +49,17 @@ class PersonneController extends Controller
 
 
         return $this->personneService->readPersonnes($request->all());
+    }
+
+    public function readAttribiutions(Request $request)
+    {
+        return [
+            'data' => AttributionResource::collection(
+                Attribution::where('personne_id', $request->route('personneId'))
+                    ->with(['organisation.nature', 'fonction'])
+                    ->get()
+            )
+        ];
     }
 
     /**

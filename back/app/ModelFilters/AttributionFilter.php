@@ -10,4 +10,19 @@ class AttributionFilter extends ModelFilter
     {
         return $this->where('organisation_id', $value);
     }
+    public function personneId($value)
+    {
+        return $this->where('personne_id', $value);
+    }
+    public function actif($value)
+    {
+
+        if ($value == 'true') {
+            return $this->where('date_debut', '<=', now())
+                ->where(function ($q) {
+                    $q->whereNull('date_fin')
+                        ->orWhere('date_fin', '>=', now());
+                });
+        }
+    }
 }

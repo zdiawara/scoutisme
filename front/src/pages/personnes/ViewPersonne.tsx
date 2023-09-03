@@ -1,22 +1,48 @@
-import { FC } from "react";
-import { Badge, Card, Col, Row } from "react-bootstrap";
-import { Header, PageHeader } from "pages/common";
+import { FC, useState } from "react";
+import { Badge, Card, Col, Dropdown, ListGroup, Row } from "react-bootstrap";
+import { ICONS, PageHeader } from "pages/common";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "utils/constants";
-import { personneApi } from "api";
-import { PersonneResource } from "types/personne.type";
+import { attributionApi, personneApi } from "api";
+import { AttributionResource, PersonneResource } from "types/personne.type";
 import { PersonneBox } from "./view/PersonneBox";
 import { View } from "components";
 import { Link } from "react-router-dom";
 import { LINKS } from "utils";
+import classNames from "classnames";
+import { PersonneCard, PersonneDetails, PersonneFonctions } from "./view";
+
+const TABS = [
+  { label: "Fiche détaillé", code: "fiche", icon: "uil uil-bookmark" },
+  {
+    label: "Carte membres",
+    code: "carte",
+    icon: "mdi mdi-card-account-details-outline",
+  },
+  { label: "Fonctions", code: "fonctions", icon: ICONS.fonction },
+];
 
 const ViewPersonne: FC = () => {
-  const { id } = useParams();
+  const id = useParams().id!;
+  const [page, setPage] = useState<string>("fiche");
   const { data: personne, isLoading } = useQuery({
-    queryKey: [QUERY_KEY.organisations, id],
+    queryKey: [QUERY_KEY.personnes, id],
     queryFn: ({ queryKey }) => {
       return personneApi.findById<PersonneResource>(queryKey[1] as string);
+    },
+  });
+
+  const { data: attribution } = useQuery({
+    queryKey: [QUERY_KEY.attributions, { personneId: id }],
+    queryFn: ({ queryKey }) => {
+      return attributionApi
+        .findAll<AttributionResource>({
+          personneId: (queryKey[1] as any).personneId,
+          actif: true,
+          projection: "organisation.nature;fonction",
+        })
+        .then(({ data }) => (data.length ? data[0] : null));
     },
   });
 
@@ -33,8 +59,8 @@ const ViewPersonne: FC = () => {
           <i className="uil-edit-alt"></i> Modifier
         </Link>
 
-        {/* <Dropdown className="ms-2">
-          <Dropdown.Toggle variant="outline-secondary">Actions</Dropdown.Toggle>
+        <Dropdown className="ms-2">
+          <Dropdown.Toggle variant="secondary">Actions</Dropdown.Toggle>
           <Dropdown.Menu className="topbar-dropdown-menu mt-2">
             <Dropdown.Header>Options sur le scout</Dropdown.Header>
             <div>
@@ -66,9 +92,27 @@ const ViewPersonne: FC = () => {
               </Dropdown.Item>
             </div>
           </Dropdown.Menu>
-        </Dropdown> */}
+        </Dropdown>
       </div>
     );
+  };
+
+  const onSelectPage = (pageSelected: string) => () => {
+    setPage(pageSelected);
+  };
+
+  const renderContent = () => {
+    if (!personne) {
+      return null;
+    }
+    switch (page) {
+      case "carte":
+        return <PersonneCard />;
+      case "fonctions":
+        return <PersonneFonctions personneId={id} />;
+      default:
+        return <PersonneDetails personne={personne} />;
+    }
   };
 
   if (isLoading || !personne) {
@@ -90,156 +134,66 @@ const ViewPersonne: FC = () => {
             source={personne.photo}
             title={
               <>
-                <div className="mb-2 mt-2 fs-4">
+                <div className="mb mt-2 fs-4">
                   {personne.nom} {personne.prenom}
                 </div>
-                <Badge className="bg-primary fs-5">{personne.type}</Badge>
+                <Badge className="bg-primary text-uppercase">
+                  {personne.type}
+                </Badge>
               </>
             }
           >
-            <div className="text-start mt-4">
+            <div className="text-start mt-2">
               <div className="font-13">
-                <i className="uil-phone me-2" />
-                Numéro de tél.
+                <i className={`${ICONS.fonction} me-1`}></i>
+                Fonction
               </div>
-              <View.Item>{personne.telephone}</View.Item>
+              <View.Item>{attribution?.fonction?.nom}</View.Item>
               <hr />
               <div className="font-13">
-                <i className="uil-envelope me-2"></i>
-                Email
+                <i className={`${ICONS.organisation} me-1`}></i>
+                Organisation
               </div>
-              <View.Item>{personne.email}</View.Item>
+              <View.Item>
+                {attribution?.organisation ? (
+                  <>
+                    <span className="text-muted">
+                      {attribution.organisation.nature.nom}
+                      &nbsp;/&nbsp;
+                    </span>
+                    <Link
+                      to={LINKS.organisations.view(attribution.organisation.id)}
+                      className="text-decoration-underline"
+                    >
+                      {attribution.organisation.nom}
+                    </Link>
+                  </>
+                ) : null}
+              </View.Item>
             </div>
           </PersonneBox>
+
+          <Card>
+            <Card.Body className="p-2">
+              <ListGroup defaultActiveKey="#link1">
+                {TABS.map((item) => (
+                  <ListGroup.Item
+                    key={item.code}
+                    className={classNames("border-0 rounded", {
+                      active: item.code === page,
+                    })}
+                    action
+                    onClick={onSelectPage(item.code)}
+                  >
+                    <i className={`${item.icon} me-1`}></i>&nbsp;{item.label}
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+            </Card.Body>
+          </Card>
         </Col>
         <Col xl={9} lg={9}>
-          <Card className="shadow-sm">
-            <Card.Body>
-              <View.Header
-                {...Header.infoGenerale}
-                description="Informations générales de la personne"
-                className="mb-0"
-              />
-
-              <Card className="shadow-sm">
-                <Card.Body>
-                  <Row className="g-3">
-                    <Col sm={4}>
-                      <View.Item label="Code">{personne.code}</View.Item>
-                    </Col>
-                    <Col sm={4}>
-                      <View.Item label="Nom">
-                        {personne.nom} {personne.prenom}
-                      </View.Item>
-                    </Col>
-                    <Col sm={4}>
-                      <View.Item label="Etat">
-                        <View.Etat value={personne.etat} />
-                      </View.Item>
-                    </Col>
-                    <Col sm={4}>
-                      <View.Item label="Genre">{personne.genre?.nom}</View.Item>
-                    </Col>
-
-                    <Col sm={4}>
-                      <View.Item label="Date naissance">
-                        {personne.date_naissance}
-                      </View.Item>
-                    </Col>
-
-                    <Col sm={4}>
-                      <View.Item label="Lieu naissance">
-                        {personne.lieu_naissance}
-                      </View.Item>
-                    </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
-
-              <View.Header
-                {...Header.contact}
-                description="Email et numéro de la personne et de son representant"
-                className="mt-4"
-              />
-
-              <Card className="shadow-sm">
-                <Card.Body>
-                  <Row className="g-3">
-                    <Col sm={4}>
-                      <View.Item label="Email">{personne.email}</View.Item>
-                    </Col>
-                    <Col sm={8}>
-                      <View.Item label="Téléphone">
-                        {personne.telephone}
-                      </View.Item>
-                    </Col>
-                    <Col sm={4}>
-                      <View.Item label="Personne à contacter">
-                        {personne.personne_a_contacter?.nom}
-                      </View.Item>
-                    </Col>
-                    <Col sm={4}>
-                      <View.Item label="Rélation">
-                        {personne.personne_a_contacter?.relation}
-                      </View.Item>
-                    </Col>
-                    <Col sm={4}>
-                      <View.Item label="Téléphone">
-                        {personne.personne_a_contacter?.telephone}
-                      </View.Item>
-                    </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
-
-              <View.Header
-                {...Header.adresse}
-                className="mt-4"
-                description="Ville et lieu de résidence de la personne"
-              />
-
-              <Card className="shadow-sm mb-0">
-                <Card.Body>
-                  <Row className="g-3">
-                    <Col sm={4}>
-                      <View.Item label="Ville">{personne.ville?.nom}</View.Item>
-                    </Col>
-                    <Col sm={8}>
-                      <View.Item label="Adresse">{personne?.adresse}</View.Item>
-                    </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
-            </Card.Body>
-          </Card>
-
-          <Card className="shadow-sm">
-            <Card.Body>
-              <View.Header
-                {...Header.formation}
-                description="Profession et formation de la personne"
-                className="mb-0"
-              />
-
-              <Card className="shadow-sm mb-0">
-                <Card.Body>
-                  <Row className="g-3">
-                    <Col sm={4}>
-                      <View.Item label="Profession">
-                        {personne.profession}
-                      </View.Item>
-                    </Col>
-
-                    <Col sm={4}>
-                      <View.Item label="Niveau formation">
-                        {personne.niveau_formation?.nom}
-                      </View.Item>
-                    </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
-            </Card.Body>
-          </Card>
+          {renderContent()}
         </Col>
       </Row>
     </>

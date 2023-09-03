@@ -44,7 +44,7 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
     }
     return (
       <table className="table mt-3 mb-0">
-        <thead className="bg-secondary-lighten text-black">
+        <thead className="text-black">
           <tr>
             <th>Nom</th>
             <th>Fonction</th>

@@ -24,8 +24,10 @@ class AttributionController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Attribution::filter($request->all(), AttributionFilter::class)
-            ->with(['personne', 'organisation.nature', 'fonction']);
+        $params = $request->except('projection');
+        $projection = explode(";", $request->get('projection', 'personne;organisation.nature;fonction'));
+        $query = Attribution::filter($params, AttributionFilter::class)
+            ->with($projection);
 
         return [
             "data" => AttributionResource::collection($query->get())

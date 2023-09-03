@@ -44,11 +44,14 @@ const Header: FC<HeaderProps> = ({
   className,
 }) => {
   return (
-    <Stack direction="horizontal" className={`text-black p-0 ${className}`}>
+    <Stack
+      direction="horizontal"
+      className={`text-primary bg-light mb-2 rounded p-2 ${className}`}
+    >
       {icon && <i className={`me-1 fs-3 align-self-start ${icon}`}></i>}
       <Stack>
-        <div className={`fs-3 text-black fw-semibold`}>{label}</div>
-        {description && <div className="text-black">{description}</div>}
+        <div className={`fs-3 text-primary fw-semibold`}>{label}</div>
+        {description && <div className="text-primary">{description}</div>}
       </Stack>
       <div className="ms-auto align-self-start">{right}</div>
     </Stack>

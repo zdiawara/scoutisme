@@ -1,7 +1,8 @@
 import { FC } from "react";
-import { Badge, Card } from "react-bootstrap";
+import { Badge, Card, ListGroup } from "react-bootstrap";
 import { OrganisationParent } from "types/organisation.type";
 import { ICONS } from "pages/common";
+import { Link } from "react-router-dom";
 
 type OrganigrammeProps = {
   parents?: OrganisationParent[];
@@ -29,6 +30,25 @@ export const Organigramme: FC<OrganigrammeProps> = ({
             {organisation.nature}
           </Badge>
         </div>
+
+        <ListGroup defaultActiveKey="#link1">
+          <ListGroup.Item
+            className="border-0 rounded active"
+            action
+            as={Link}
+            to="OK"
+          >
+            <i className="uil uil-bookmark me-1"></i>&nbsp;Détails
+          </ListGroup.Item>
+          <ListGroup.Item className="border-0" action>
+            <i className={`${ICONS.personne} me-1`}></i>
+            &nbsp;Organe de direction
+          </ListGroup.Item>
+          <ListGroup.Item className="border-0" action>
+            <i className={`${ICONS.fonction} me-1`}></i>&nbsp;Scoutes
+          </ListGroup.Item>
+        </ListGroup>
+
         {/*         <ListGroup className="text-center">
           {parents?.map((parent, i) => {
             const isLast = i + 1 === parents?.length;

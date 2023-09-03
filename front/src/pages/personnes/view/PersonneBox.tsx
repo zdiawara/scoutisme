@@ -13,7 +13,7 @@ export const PersonneBox: FC<PersonneBoxProps> = ({
   children,
 }) => {
   return (
-    <Card className="text-black shadow-sm">
+    <Card className="text-black shadow-sm mb-2">
       <Card.Body>
         <div className="text-center">
           <div className="avatar-xl mx-auto">

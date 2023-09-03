@@ -28,6 +28,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('personnes', PersonneController::class);
+
+Route::get('/personnes/{personneId}/attributions', [PersonneController::class, 'readAttribiutions']);
+
 Route::apiResource('organisations', OrganisationController::class);
 Route::apiResource('fonctions', FonctionController::class);
 Route::apiResource('type_organisations', TypeOrganisationController::class);

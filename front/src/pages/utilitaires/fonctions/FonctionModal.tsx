@@ -85,7 +85,6 @@ export const FonctionModal: FC<FonctionModalProps> = ({
         query.invalidateQueries([QUERY_KEY.fonctions]);
         closeModal();
       }}
-      modalProps={{ centered: true }}
       onExit={closeModal}
     />
   );

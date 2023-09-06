@@ -2,6 +2,7 @@ export const QUERY_KEY = {
   personnes: "personnes",
   organisations: "organisations",
   attributions: "attributions",
+  attribution_active: "attribution_active",
   fonctions: "fonctions",
   refFormations: "ref-formations",
   typesUnites: "types-unites",

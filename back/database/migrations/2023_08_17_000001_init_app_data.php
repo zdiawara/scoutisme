@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Fonction;
 use App\Models\Genre;
 use App\Models\Nature;
 use App\Models\Ville;
@@ -27,6 +28,8 @@ return new class extends Migration
         collect($villes)->each(function ($ville) {
             Ville::create(['nom' => $ville['city']]);
         });
+
+        Fonction::create(['nom' => 'Scout', 'code' => 'scout']);
     }
 
     /**

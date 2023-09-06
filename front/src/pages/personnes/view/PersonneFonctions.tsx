@@ -25,7 +25,6 @@ export const PersonneFonctions: FC<PersonneFonctionsProps> = ({
     queryFn: ({ queryKey }) => {
       return attributionApi.findAll<AttributionResource>({
         personneId: (queryKey[1] as any).personneId,
-        actif: true,
         projection: "organisation.nature;fonction",
       });
     },

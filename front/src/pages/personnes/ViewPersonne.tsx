@@ -26,6 +26,7 @@ const TABS = [
 const ViewPersonne: FC = () => {
   const id = useParams().id!;
   const [page, setPage] = useState<string>("fiche");
+
   const { data: personne, isLoading } = useQuery({
     queryKey: [QUERY_KEY.personnes, id],
     queryFn: ({ queryKey }) => {
@@ -34,15 +35,14 @@ const ViewPersonne: FC = () => {
   });
 
   const { data: attribution } = useQuery({
-    queryKey: [QUERY_KEY.attributions, { personneId: id }],
-    queryFn: ({ queryKey }) => {
-      return attributionApi
-        .findAll<AttributionResource>({
-          personneId: (queryKey[1] as any).personneId,
-          actif: true,
-          projection: "organisation.nature;fonction",
-        })
-        .then(({ data }) => (data.length ? data[0] : null));
+    queryKey: [QUERY_KEY.attribution_active, { personneId: id }],
+    queryFn: async ({ queryKey }) => {
+      const { data } = await attributionApi.findAll<AttributionResource>({
+        personneId: (queryKey[1] as any).personneId,
+        actif: true,
+        projection: "organisation.nature;fonction",
+      });
+      return data.length ? data[0] : null;
     },
   });
 

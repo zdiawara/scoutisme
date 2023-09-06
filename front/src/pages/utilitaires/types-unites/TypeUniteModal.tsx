@@ -15,7 +15,11 @@ import { TypeOrganisationResource } from "types/organisation.type";
  */
 const Form: FC<WrapperV2Props> = (props) => {
   return (
-    <HookModalForm {...props} onClose={props.onExit}>
+    <HookModalForm
+      {...props}
+      modalBodyClassName="bg-light p-3"
+      onClose={props.onExit}
+    >
       <Row className="g-2">
         <Col sm={12}>
           <TextInput label="Nom" name="nom" isRequired />
@@ -60,7 +64,6 @@ export const TypeUniteModal: FC<TypeUniteModalProps> = ({
         query.invalidateQueries([QUERY_KEY.typesUnites]);
         closeModal();
       }}
-      modalProps={{ centered: false }}
       onExit={closeModal}
     />
   );

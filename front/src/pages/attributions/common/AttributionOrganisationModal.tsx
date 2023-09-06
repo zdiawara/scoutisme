@@ -24,7 +24,11 @@ const Form: FC<WrapperV2Props> = (props) => {
   const { watch } = useFormContext();
   const natureId = watch("natureId");
   return (
-    <HookModalForm {...props} onClose={props.onExit}>
+    <HookModalForm
+      {...props}
+      modalBodyClassName="bg-light p-3"
+      onClose={props.onExit}
+    >
       <Row className="g-2">
         <Col sm={12}>
           <SelectPersonne
@@ -81,6 +85,7 @@ export const AddAttributionOrganisationModal: FC<
   AddAttributionOrganisationModalProps
 > = ({ closeModal, organisation }) => {
   const query = useQueryClient();
+
   const ajouterMembre = (data: Record<string, any>) => {
     const body = {
       ...attributionConverter.toBody(data),
@@ -88,6 +93,7 @@ export const AddAttributionOrganisationModal: FC<
     };
     return attributionApi.create(body);
   };
+
   return (
     <OrganisationMembreForm
       onSave={ajouterMembre}
@@ -119,6 +125,7 @@ export const EditAttributionOrganisationModal: FC<
   EditAttributionOrganisationModalProps
 > = ({ closeModal, attribution }) => {
   const query = useQueryClient();
+
   const modifierAttribution = (data: Record<string, any>) => {
     const body = {
       ...attributionConverter.toBody(data),
@@ -126,6 +133,7 @@ export const EditAttributionOrganisationModal: FC<
     };
     return attributionApi.update(attribution.id, body);
   };
+
   return (
     <OrganisationMembreForm
       onSave={modifierAttribution}

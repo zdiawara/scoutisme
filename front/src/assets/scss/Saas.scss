@@ -6,3 +6,12 @@
 
 // Hyper Icons
 @import "./icons.scss";
+
+.modal-90w {
+  max-width: none !important;
+  width: 85%;
+}
+
+.bg-modal {
+  background-color: $body-bg;
+}

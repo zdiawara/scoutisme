@@ -8,6 +8,8 @@ export const ICONS = {
   fonction: "uil-bag-alt",
   type_unite: "uil-pathfinder-unite",
   formation: "uil-graduation-hat",
+  direction: "mdi mdi-shield-account",
+  detail: "uil uil-bookmark",
 };
 
 export const Header = {

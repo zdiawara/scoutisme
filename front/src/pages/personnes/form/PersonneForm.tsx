@@ -15,12 +15,9 @@ import { useFormContext } from "react-hook-form";
 import { PersonneBox } from "../view";
 import { MASK } from "utils/constants";
 
-const FormContainer: FC<WrapperProps> = ({
-  renderButtons,
-  title,
-  subtitle,
-}) => {
+export const PersonneFormInputs = () => {
   const { setValue, watch } = useFormContext();
+  const typePersonne = watch("type")?.value;
 
   const loadFiles = async (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -33,23 +30,14 @@ const FormContainer: FC<WrapperProps> = ({
     reader.readAsDataURL(e.target.files?.[0] as File);
   };
 
-  const typePersonne = watch("type")?.value;
-
   return (
     <>
-      <PageHeader.View
-        title={title!}
-        subtitle={subtitle}
-        right={renderButtons()}
-        className="my-4"
-      />
-
       <Row>
         <Col xl={3} lg={3}>
           <PersonneBox source={watch("photo")}>
             <div className="text-center mt-3">
               <Button
-                variant="outline-secondary"
+                variant="danger"
                 className="me-2"
                 onClick={() => setValue("photo", null)}
               >
@@ -76,20 +64,6 @@ const FormContainer: FC<WrapperProps> = ({
                 className="mb-3"
               />
               <Row className="g-3">
-                {/* <Col sm={4}>
-                  <AsyncSelect
-                    name="type"
-                    label="Type"
-                    placeholder="Scout ou adulte"
-                    isRequired
-                    fetchOptions={() =>
-                      Promise.resolve([
-                        { label: "Adulte", value: "adulte" },
-                        { label: "Scout", value: "scout" },
-                      ])
-                    }
-                  />
-                </Col> */}
                 <Col sm={6}>
                   <TextInput
                     name="nom"
@@ -239,6 +213,23 @@ const FormContainer: FC<WrapperProps> = ({
           )}
         </Col>
       </Row>
+    </>
+  );
+};
+const FormContainer: FC<WrapperProps> = ({
+  renderButtons,
+  title,
+  subtitle,
+}) => {
+  return (
+    <>
+      <PageHeader.View
+        title={title!}
+        subtitle={subtitle}
+        right={renderButtons()}
+        className="my-4"
+      />
+      <PersonneFormInputs />
     </>
   );
 };

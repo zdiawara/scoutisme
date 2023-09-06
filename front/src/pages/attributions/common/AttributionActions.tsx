@@ -10,12 +10,12 @@ type AttributionActionsProps = {
 };
 
 const ACTIONS = [
-  {
+  /*   {
     label: "Modifier",
     icon: "uil-edit-alt",
     description: "Mettre à jour les informations de l'affectation",
     code: "modifier",
-  },
+  }, */
   {
     label: "Cloturer",
     icon: "uil-multiply",

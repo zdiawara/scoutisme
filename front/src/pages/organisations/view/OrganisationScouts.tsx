@@ -9,15 +9,15 @@ import { AttributionResource } from "types/personne.type";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { LINKS } from "utils";
-import { OrganisationMembreActions } from "../common";
+import { OrganisationScoutActions } from "../common";
 import { AttributionActions } from "pages/attributions/common";
 import { dateFormater } from "utils/functions";
 
-type OrganisationMembresProps = {
+type OrganisationScoutsProps = {
   organisation: OrganisationResource;
 };
 
-export const OrganisationMembres: FC<OrganisationMembresProps> = ({
+export const OrganisationScouts: FC<OrganisationScoutsProps> = ({
   organisation,
 }) => {
   const {
@@ -29,6 +29,7 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
     queryFn: () =>
       attributionApi.findAll<AttributionResource>({
         organisationId: organisation.id,
+        fonctionCode: "scout",
       }),
   });
 
@@ -111,11 +112,11 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
     <Card>
       <Card.Body>
         <View.Header
-          icon={ICONS.direction}
-          label="Organe de direction"
-          description="Membres de l'organe de direction"
+          icon={ICONS.personne}
+          label="Scouts"
+          description="Liste des scouts de l'unité  "
           className="mb-2"
-          right={<OrganisationMembreActions organisation={organisation} />}
+          right={<OrganisationScoutActions organisation={organisation} />}
         />
         {renderContent()}
       </Card.Body>

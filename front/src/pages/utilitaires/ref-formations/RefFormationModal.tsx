@@ -16,7 +16,11 @@ import { RefFormationResource } from "types/organisation.type";
  */
 const Form: FC<WrapperV2Props> = (props) => {
   return (
-    <HookModalForm {...props} onClose={props.onExit}>
+    <HookModalForm
+      {...props}
+      modalBodyClassName="bg-light p-3"
+      onClose={props.onExit}
+    >
       <Row className="g-2">
         <Col sm={12}>
           <TextInput label="Nom de la formation" name="nom" isRequired />
@@ -63,7 +67,6 @@ export const RefFormationModal: FC<FonctionModalProps> = ({
         query.invalidateQueries([QUERY_KEY.refFormations]);
         closeModal();
       }}
-      modalProps={{ centered: true }}
       onExit={closeModal}
     />
   );

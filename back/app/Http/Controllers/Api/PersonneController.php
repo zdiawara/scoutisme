@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 
 class PersonneController extends Controller
 {
-    private $personneService;
+    private PersonneService $personneService;
 
     public function __construct(PersonneService $personneService)
     {
@@ -68,6 +68,12 @@ class PersonneController extends Controller
     public function store(Request $request)
     {
         $personne = $this->personneService->create($request->all());
+        return new PersonneResource($personne);
+    }
+
+    public function createScout(Request $request)
+    {
+        $personne = $this->personneService->createScout($request->all());
         return new PersonneResource($personne);
     }
 

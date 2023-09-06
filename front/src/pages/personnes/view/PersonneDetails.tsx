@@ -107,34 +107,35 @@ export const PersonneDetails: FC<PersonneDetailsProps> = ({ personne }) => {
           </Card>
         </Card.Body>
       </Card>
+      {personne.type === "adulte" && (
+        <Card className="shadow-sm">
+          <Card.Body>
+            <View.Header
+              {...Header.formation}
+              description="Profession et formation de la personne"
+              className="mb-0"
+            />
 
-      <Card className="shadow-sm">
-        <Card.Body>
-          <View.Header
-            {...Header.formation}
-            description="Profession et formation de la personne"
-            className="mb-0"
-          />
+            <Card className="shadow-sm mb-0">
+              <Card.Body>
+                <Row className="g-3">
+                  <Col sm={4}>
+                    <View.Item label="Profession">
+                      {personne.profession}
+                    </View.Item>
+                  </Col>
 
-          <Card className="shadow-sm mb-0">
-            <Card.Body>
-              <Row className="g-3">
-                <Col sm={4}>
-                  <View.Item label="Profession">
-                    {personne.profession}
-                  </View.Item>
-                </Col>
-
-                <Col sm={4}>
-                  <View.Item label="Niveau formation">
-                    {personne.niveau_formation?.nom}
-                  </View.Item>
-                </Col>
-              </Row>
-            </Card.Body>
-          </Card>
-        </Card.Body>
-      </Card>
+                  <Col sm={4}>
+                    <View.Item label="Niveau formation">
+                      {personne.niveau_formation?.nom}
+                    </View.Item>
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+          </Card.Body>
+        </Card>
+      )}
     </>
   );
 };

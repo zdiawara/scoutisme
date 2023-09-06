@@ -38,7 +38,7 @@ export const OrganisationMembreActions: FC<OrganisationMembreActionsProps> = ({
   return (
     <>
       <Dropdown className="ms-2">
-        <Dropdown.Toggle variant="primary">Actions</Dropdown.Toggle>
+        <Dropdown.Toggle variant="outline-primary">Actions</Dropdown.Toggle>
         <Dropdown.Menu className="topbar-dropdown-menu mt-2">
           {ACTIONS.map((item) => (
             <Dropdown.Item

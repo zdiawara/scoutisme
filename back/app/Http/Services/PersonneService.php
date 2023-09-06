@@ -4,10 +4,19 @@ namespace App\Http\Services;
 
 use App\Http\Resources\PersonneCollection;
 use App\ModelFilters\PersonneFilter;
+use App\Models\Fonction;
 use App\Models\Personne;
+use Illuminate\Support\Facades\DB;
 
 class PersonneService
 {
+
+    private AttributionService $attributinService;
+
+    public function __construct(AttributionService $attributinService)
+    {
+        $this->attributinService = $attributinService;
+    }
 
     public function readPersonnes(array $filters): PersonneCollection
     {
@@ -28,12 +37,49 @@ class PersonneService
 
         // shuffle the result
         $string = str_shuffle($pin);
-        return Personne::create(array_merge($body, ['code' => $string]));
+
+        $bodyCollection = collect($body);
+
+        DB::beginTransaction();
+
+        $personne = Personne::create($bodyCollection->except("attribution")
+            ->merge(['code' => $string])->all());
+
+        if ($bodyCollection->has('attribution')) {
+
+            $attributionInput = collect($bodyCollection->get('attribution'));
+
+            $attributionBody = collect([
+                'personne_id' => $personne->id,
+                'organisation_id' => $attributionInput->get("organisation_id"),
+                'date_debut' => now(),
+                'fonction_id' => $personne->type === "scout" ? Fonction::where('code', 'scout')->first()->id : $attributionInput->get('role_id'),
+            ]);
+
+            $this->attributinService->create($attributionBody->all());
+        }
+        DB::commit();
+
+        return $personne;
     }
 
     public function update(Personne $personne, array $body)
     {
         $personne->update($body);
+        return $personne;
+    }
+
+    public function createScout(array $body): Personne
+    {
+        $personne = $this->create(collect($body)->except("organisation_id")->all());
+
+        $this->attributinService->create([
+            'personne_id' => $personne->id,
+            'organisation_id' => collect($body)->get("organisation_id"),
+            'role_id' => Fonction::where('code', 'scout')->firstOrFailed()->id,
+            'date_debut' => now(),
+        ]);
+
         return $personne;
     }
 }

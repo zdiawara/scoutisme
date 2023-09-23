@@ -14,6 +14,10 @@ class AttributionFilter extends ModelFilter
     {
         return $this->where('personne_id', $value);
     }
+    public function type($value)
+    {
+        return $this->where('type', $value);
+    }
     public function fonctionCode($value)
     {
         return $this->whereHas('fonction', function ($q) use ($value) {

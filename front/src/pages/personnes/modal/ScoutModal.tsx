@@ -43,6 +43,7 @@ export const ScoutModal: FC<ScoutModalProps> = ({
       ...personneConverter.toBody(data),
       attribution: {
         organisation_id: organisation.id,
+        type: "scout",
       },
     };
     return personneApi.create(body);

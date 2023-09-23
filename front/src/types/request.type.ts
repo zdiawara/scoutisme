@@ -17,6 +17,7 @@ export interface Filter {}
 export type FilterParam = {
   filter: Filter;
   setFilter: Dispatch<SetStateAction<Filter>>;
+  setFilterByKey: (key: string, value: any) => void;
 };
 
 export interface PersonneFilter extends Filter {

@@ -14,7 +14,7 @@ import classNames from "classnames";
 import { PersonneCard, PersonneDetails, PersonneFonctions } from "./view";
 
 const TABS = [
-  { label: "Fiche détaillé", code: "fiche", icon: "uil uil-bookmark" },
+  { label: "Fiche détaillée", code: "fiche", icon: "uil uil-bookmark" },
   {
     label: "Carte membres",
     code: "carte",

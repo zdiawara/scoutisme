@@ -61,7 +61,6 @@ const router = createBrowserRouter(
           element={<ListPersonne />}
           loader={async ({ params, request, context }) => {
             const data = await fetch("http://localhost:9025/api/personnes");
-            console.log("Loading personnes");
             return data;
           }}
         />
@@ -69,7 +68,6 @@ const router = createBrowserRouter(
           element={<ViewPersonne />}
           path=":personneId"
           loader={async ({ params, request, context }) => {
-            console.log("Loading a personne");
             const data = await fetch(
               `http://localhost:9025/api/personnes/${params.personneId}`
             );

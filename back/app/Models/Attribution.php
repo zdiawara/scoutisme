@@ -12,7 +12,7 @@ class Attribution extends Model
     use UUID, Filterable;
 
     protected $fillable = [
-        'personne_id', 'organisation_id', 'fonction_id', 'date_debut', 'date_fin'
+        'personne_id', 'organisation_id', 'fonction_id', 'date_debut', 'date_fin', 'type'
     ];
 
     public function personne()

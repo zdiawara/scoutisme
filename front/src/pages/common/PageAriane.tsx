@@ -11,7 +11,6 @@ type PageFilterProps = {
 };
 
 export const PageAriane: FC<PageFilterProps> = ({ items }) => {
-  console.log(items);
   return (
     <Breadcrumb className="mb-0 ariane fw-semibold fs-5">
       <Breadcrumb.Item href="#">Acceuil</Breadcrumb.Item>

@@ -30,6 +30,7 @@ export const OrganisationScouts: FC<OrganisationScoutsProps> = ({
       attributionApi.findAll<AttributionResource>({
         organisationId: organisation.id,
         fonctionCode: "scout",
+        type: "scout",
       }),
   });
 

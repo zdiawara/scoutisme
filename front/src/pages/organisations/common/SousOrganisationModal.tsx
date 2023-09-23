@@ -48,7 +48,6 @@ const Form: FC<WrapperV2Props> = (props) => {
     const listNatures = natures?.data.filter((n) =>
       naturesAuthorized.includes(n.code)
     );
-    console.log(listNatures);
 
     if (!props.isEditMode && listNatures?.length === 1) {
       setValue("nature", {

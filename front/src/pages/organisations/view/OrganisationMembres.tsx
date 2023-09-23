@@ -29,6 +29,7 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
     queryFn: () =>
       attributionApi.findAll<AttributionResource>({
         organisationId: organisation.id,
+        type: "direction",
       }),
   });
 

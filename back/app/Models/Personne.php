@@ -7,6 +7,7 @@ use EloquentFilter\Filterable;
 use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Personne extends Model
 {
@@ -32,6 +33,11 @@ class Personne extends Model
     public function ville()
     {
         return $this->belongsTo(Ville::class);
+    }
+
+    public function attributions(): HasMany
+    {
+        return $this->hasMany(Attribution::class);
     }
 
     public function modelFilter()

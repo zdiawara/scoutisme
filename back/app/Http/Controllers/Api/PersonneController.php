@@ -9,7 +9,9 @@ use App\Http\Services\PersonneService;
 use App\ModelFilters\PersonneFilter;
 use App\Models\Attribution;
 use App\Models\Personne;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PersonneController extends Controller
 {
@@ -28,6 +30,19 @@ class PersonneController extends Controller
 
         $query = Personne::filter($request->all(), PersonneFilter::class);
 
+        if ($request->has('fonctionId') || $request->has('organisationId')) {
+            $fonctionId = $request->input('fonctionId', null);
+            $organisationId = $request->input('organisationId', null);
+            $query->whereHas('attributions', function (Builder $q) use ($fonctionId, $organisationId) {
+                if (isset($fonctionId)) {
+                    $q->where('fonction_id', $fonctionId);
+                }
+                if (isset($organisationId)) {
+                    $q->where('organisation_id', $organisationId);
+                }
+            });
+        }
+
         $total = $query->count();
         $data = collect([]);
 
@@ -38,7 +53,18 @@ class PersonneController extends Controller
                 ->offset(($page - 1) * $size)
                 ->limit($size)
                 ->orderBy('nom', 'asc')
-                ->with(['genre'])
+                ->with([
+                    'genre',
+                    'attributions.fonction',
+                    'attributions.organisation',
+                    'attributions'  => function ($q) {
+                        $q->where('date_debut', '<=', now())
+                            ->where(function ($subQuery) {
+                                $subQuery->whereNull('date_fin')
+                                    ->orWhere('date_fin', '>=', now());
+                            });
+                    }
+                ])
                 ->get();
         }
 

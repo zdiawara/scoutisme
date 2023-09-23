@@ -35,3 +35,20 @@ export const SelectGenre: FC<SelectProps> = ({ requestParams, ...props }) => {
     />
   );
 };
+
+export const SelectTypePersonne: FC<SelectProps> = ({
+  requestParams,
+  ...props
+}) => {
+  return (
+    <AsyncSelect
+      {...props}
+      fetchOptions={async () => {
+        return [
+          { label: "Scout", value: "scout" },
+          { label: "Adulte", value: "adulte" },
+        ];
+      }}
+    />
+  );
+};

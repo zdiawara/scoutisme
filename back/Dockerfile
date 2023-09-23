@@ -7,8 +7,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html/
-#COPY . .
+COPY . .
 #RUN composer install
 
-# composer dump-autoload
-# COMPOSER_VENDOR_DIR="/var/www/" composer install
+#RUN composer dump-autoload
+RUN COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_VENDOR_DIR="/var/www/" composer install

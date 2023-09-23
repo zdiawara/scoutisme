@@ -13,7 +13,7 @@ const Form: FC<WrapperV2Props> = (props) => {
   const { watch } = useFormContext();
   return (
     <HookModalForm {...props} onClose={props.onExit}>
-      <p>
+      <p className="text-dark">
         Vous êtes sur le point de clôturer la mission de&nbsp;
         <strong className="text-black">{watch("meta.fullname")}</strong>
         &nbsp; au poste de&nbsp;
@@ -66,6 +66,7 @@ export const CloturerAttribution: FC<CloturerAttributionProps> = ({
         },
       }}
       modalProps={{ centered: true }}
+      modalBodyClassName="bg-light"
       onSuccess={() => {
         query.invalidateQueries([
           QUERY_KEY.attributions,

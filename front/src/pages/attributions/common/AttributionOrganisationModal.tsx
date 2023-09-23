@@ -90,6 +90,7 @@ export const AddAttributionOrganisationModal: FC<
     const body = {
       ...attributionConverter.toBody(data),
       organisation_id: organisation.id,
+      type: "direction",
     };
     return attributionApi.create(body);
   };

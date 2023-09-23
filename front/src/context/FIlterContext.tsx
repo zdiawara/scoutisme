@@ -11,8 +11,12 @@ type FilterProviderProps = {
 export function FilterProvider({ children, initial }: FilterProviderProps) {
   const [filter, setFilter] = useState<Filter>(initial);
 
+  const setFilterByKey = (key: string, value: any) => {
+    setFilter((prev) => ({ ...prev, [key]: value }));
+  };
+
   return (
-    <FilterContext.Provider value={{ filter, setFilter }}>
+    <FilterContext.Provider value={{ filter, setFilter, setFilterByKey }}>
       {children}
     </FilterContext.Provider>
   );

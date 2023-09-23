@@ -29,7 +29,7 @@ return new class extends Migration
             Ville::create(['nom' => $ville['city']]);
         });
 
-        Fonction::create(['nom' => 'Scout', 'code' => 'scout']);
+        Fonction::create(['nom' => 'Scout', 'code' => 'scout', 'nature_id' => Nature::where('code', 'unite')->first()->id]);
     }
 
     /**

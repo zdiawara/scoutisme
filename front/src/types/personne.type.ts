@@ -24,6 +24,7 @@ export type PersonneResource = {
   personne_a_contacter?: Record<string, any>;
   ville?: VilleResource;
   adresse?: string;
+  attributions?: AttributionResource[];
 };
 
 export type NiveauFormationResource = {

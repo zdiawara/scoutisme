@@ -21,17 +21,18 @@ class PersonneFilter extends ModelFilter
         return $this->where('etat', $value);
     }
 
-
     public function type($value)
     {
         return $this->where('type', $value);
     }
 
-
-    /*public function onlyShowDeletedForAdmins()
+    public function villeId($value)
     {
-        if (Auth::user()->isAdmin()) {
-            $this->withTrashed();
-        }
-    }*/
+        return $this->where('ville_id', $value);
+    }
+
+    public function niveauFormationId($value)
+    {
+        return $this->where('niveau_formation_id', $value);
+    }
 }

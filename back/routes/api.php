@@ -30,6 +30,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('personnes', PersonneController::class);
 
 Route::get('/personnes/{personneId}/attributions', [PersonneController::class, 'readAttribiutions']);
+Route::get('/personnes/exports/csv', [PersonneController::class, 'exportPersonnes']);
 
 Route::apiResource('organisations', OrganisationController::class);
 Route::apiResource('fonctions', FonctionController::class);

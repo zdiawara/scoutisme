@@ -118,6 +118,18 @@ const columns: Columns<PersonneResource>[] = [
   },
 ];
 
+const buildRequestParams = (filter: Record<string, any>) => {
+  return {
+    type: selectHelper.getValue(filter.type),
+    etat: selectHelper.getValue(filter.etat),
+    niveauFormationId: selectHelper.getValue(filter.niveauFormation),
+    villeId: selectHelper.getValue(filter.ville),
+    fonctionId: selectHelper.getValue(filter.fonction),
+    organisationId: selectHelper.getValue(filter.organisation),
+    search: filter.search,
+  };
+};
+
 const ListPersonne: FC = () => {
   const { filter, setFilter, setFilterByKey } = useContext(FilterContext);
   const { search, ...restFilter } = filter as PersonneFilter;
@@ -128,15 +140,7 @@ const ListPersonne: FC = () => {
     keepPreviousData: true,
     queryFn: ({ queryKey }) => {
       const params = { ...(queryKey[1] as RequestParam) };
-      return personneApi.findAll<PersonneResource>({
-        type: selectHelper.getValue(params.type),
-        etat: selectHelper.getValue(params.etat),
-        niveauFormationId: selectHelper.getValue(params.niveauFormation),
-        villeId: selectHelper.getValue(params.ville),
-        fonctionId: selectHelper.getValue(params.fonction),
-        organisationId: selectHelper.getValue(params.organisation),
-        search: params.search,
-      });
+      return personneApi.findAll<PersonneResource>(buildRequestParams(params));
     },
   });
 
@@ -173,6 +177,19 @@ const ListPersonne: FC = () => {
               }}
             >
               <i className="uil-filter"></i> Filtre avancé
+            </Button>
+            <Button
+              variant="outline-primary"
+              className="ms-2"
+              onClick={() => {
+                personneApi
+                  .download("exports/csv", buildRequestParams(filter))
+                  .then(() => {
+                    console.log("i");
+                  });
+              }}
+            >
+              Exporter
             </Button>
           </div>
         </Col>

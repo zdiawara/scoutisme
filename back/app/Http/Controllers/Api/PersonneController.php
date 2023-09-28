@@ -17,9 +17,19 @@ class PersonneController extends Controller
 {
     private PersonneService $personneService;
 
+    private $attributionActive;
+
     public function __construct(PersonneService $personneService)
     {
         $this->personneService = $personneService;
+
+        $this->attributionActive = function ($query) {
+            $query->where('date_debut', '<=', now())
+                ->where(function ($subQuery) {
+                    $subQuery->whereNull('date_fin')
+                        ->orWhere('date_fin', '>=', now());
+                });
+        };
     }
 
     /**
@@ -28,20 +38,7 @@ class PersonneController extends Controller
     public function index(Request $request)
     {
 
-        $query = Personne::filter($request->all(), PersonneFilter::class);
-
-        if ($request->has('fonctionId') || $request->has('organisationId')) {
-            $fonctionId = $request->input('fonctionId', null);
-            $organisationId = $request->input('organisationId', null);
-            $query->whereHas('attributions', function (Builder $q) use ($fonctionId, $organisationId) {
-                if (isset($fonctionId)) {
-                    $q->where('fonction_id', $fonctionId);
-                }
-                if (isset($organisationId)) {
-                    $q->where('organisation_id', $organisationId);
-                }
-            });
-        }
+        $query = $this->buildQuery($request);
 
         $total = $query->count();
         $data = collect([]);
@@ -57,13 +54,7 @@ class PersonneController extends Controller
                     'genre',
                     'attributions.fonction',
                     'attributions.organisation',
-                    'attributions'  => function ($q) {
-                        $q->where('date_debut', '<=', now())
-                            ->where(function ($subQuery) {
-                                $subQuery->whereNull('date_fin')
-                                    ->orWhere('date_fin', '>=', now());
-                            });
-                    }
+                    'attributions'  => $this->attributionActive
                 ])
                 ->get();
         }
@@ -75,6 +66,68 @@ class PersonneController extends Controller
 
 
         return $this->personneService->readPersonnes($request->all());
+    }
+
+    private function buildQuery(Request $request)
+    {
+        $query = Personne::filter($request->all(), PersonneFilter::class);
+
+        if ($request->has('fonctionId') || $request->has('organisationId')) {
+            $fonctionId = $request->input('fonctionId', null);
+            $organisationId = $request->input('organisationId', null);
+            $query->whereHas('attributions', function (Builder $q) use ($fonctionId, $organisationId) {
+                if (isset($fonctionId)) {
+                    $q->where('fonction_id', $fonctionId);
+                }
+                if (isset($organisationId)) {
+                    $q->where('organisation_id', $organisationId);
+                }
+            });
+        }
+        return $query;
+    }
+
+    public function exportPersonnes(Request $request)
+    {
+
+        $query = $this->buildQuery($request);
+
+        $data = $query
+            ->orderBy('nom', 'asc')
+            ->with([
+                'genre',
+                'attributions.fonction',
+                'attributions.organisation',
+                'attributions'  => $this->attributionActive
+            ])
+            ->get();
+
+        $fileName = 'personnes.csv';
+
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
+        $columns = array('Nom', 'Prénom', 'Organisation', 'Fonction', 'Lieu naissance', 'Date naissance', 'Email');
+
+        $callback = function () use ($data, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns, ";");
+            foreach ($data as $personne) {
+                fputcsv(
+                    $file,
+                    array($personne->nom, $personne->prenom, '', '', $personne->lieu_naissance, $personne->date_naissance, $personne->email),
+                    ";"
+                );
+            }
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 
     public function readAttribiutions(Request $request)

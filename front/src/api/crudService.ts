@@ -1,5 +1,11 @@
 import { ListPaginated, RequestParam } from "types/request.type";
-import { requestDelete, requestGet, requestPost, requestPut } from "./request";
+import {
+  requestBlob,
+  requestDelete,
+  requestGet,
+  requestPost,
+  requestPut,
+} from "./request";
 import { requestParams } from "utils/functions";
 
 export class CrudService {
@@ -30,6 +36,24 @@ export class CrudService {
 
   async delete(id: string) {
     await requestDelete(`${this.base}/${id}`);
+  }
+
+  async download(path: string, params?: RequestParam) {
+    return requestBlob(`${this.base}/${path}${requestParams(params)}`).then(
+      (response) => {
+        const filename =
+          response.headers?.get("Content-Disposition")?.split("filename=")[1] ||
+          "document";
+
+        return response.blob().then((blob: any) => {
+          const fileURL = window.URL.createObjectURL(blob);
+          let alink = document.createElement("a");
+          alink.href = fileURL;
+          alink.download = filename;
+          alink.click();
+        });
+      }
+    );
   }
 
   getBase = () => {

@@ -38,21 +38,20 @@ export const ScoutModal: FC<ScoutModalProps> = ({
   organisation,
 }) => {
   const query = useQueryClient();
-  const ajouterMembre = (data: Record<string, any>) => {
+  const ajouterScout = (data: Record<string, any>) => {
     const body = {
       ...personneConverter.toBody(data),
       attribution: {
         organisation_id: organisation.id,
-        type: "scout",
       },
     };
     return personneApi.create(body);
   };
   return (
     <ScoutForm
-      onSave={ajouterMembre}
+      onSave={ajouterScout}
       title="Ajouter un scout"
-      //subtitle=""
+      subtitle="Le nouveau scout sera ajouté dans l'unité ZAMA"
       modalProps={{
         dialogClassName: "modal-90w",
         centered: false,
@@ -60,7 +59,6 @@ export const ScoutModal: FC<ScoutModalProps> = ({
       }}
       modalBodyClassName="bg-light p-3"
       defaultValues={{
-        natureId: organisation.nature.id,
         type: { value: "scout" },
       }}
       onSuccess={() => {

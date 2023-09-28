@@ -49,14 +49,13 @@ class PersonneService
 
             $attributionInput = collect($bodyCollection->get('attribution'));
 
-            $attributionBody = collect([
+            $this->attributinService->create([
                 'personne_id' => $personne->id,
                 'organisation_id' => $attributionInput->get("organisation_id"),
                 'date_debut' => now(),
-                'fonction_id' => $personne->type === "scout" ? Fonction::where('code', 'scout')->first()->id : $attributionInput->get('role_id'),
+                'fonction_id' => $personne->type === "scout" ? Fonction::where('code', 'scout')->first()->id : $attributionInput->get('fonction_id'),
+                'type' => $personne->type === "scout" ? 'scout' : 'direction'
             ]);
-
-            $this->attributinService->create($attributionBody->all());
         }
         DB::commit();
 
@@ -66,20 +65,6 @@ class PersonneService
     public function update(Personne $personne, array $body)
     {
         $personne->update($body);
-        return $personne;
-    }
-
-    public function createScout(array $body): Personne
-    {
-        $personne = $this->create(collect($body)->except("organisation_id")->all());
-
-        $this->attributinService->create([
-            'personne_id' => $personne->id,
-            'organisation_id' => collect($body)->get("organisation_id"),
-            'role_id' => Fonction::where('code', 'scout')->firstOrFailed()->id,
-            'date_debut' => now(),
-        ]);
-
         return $personne;
     }
 }

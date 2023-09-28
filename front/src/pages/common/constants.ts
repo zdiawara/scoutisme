@@ -10,6 +10,7 @@ export const ICONS = {
   formation: "uil-graduation-hat",
   direction: "mdi mdi-shield-account",
   detail: "uil uil-bookmark",
+  add: "uil-plus",
 };
 
 export const Header = {

@@ -97,12 +97,6 @@ class PersonneController extends Controller
         return new PersonneResource($personne);
     }
 
-    public function createScout(Request $request)
-    {
-        $personne = $this->personneService->createScout($request->all());
-        return new PersonneResource($personne);
-    }
-
     /**
      * Display the specified resource.
      */

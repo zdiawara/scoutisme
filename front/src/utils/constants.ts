@@ -20,3 +20,8 @@ export const NATURE = {
   region: "region",
   national: "national",
 };
+
+export const TYPE_PERSONNES = {
+  SCOUT: "scout",
+  ADULTE: "adulte",
+};

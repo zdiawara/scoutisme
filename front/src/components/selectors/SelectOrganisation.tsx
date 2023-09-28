@@ -15,7 +15,7 @@ export const SelectOrganisation: FC<SelectProps> = ({
         const { data } = await organisationApi.findAll<OrganisationResource>(
           requestParams
         );
-        return data.map((item) => ({ label: item.nom, value: item.id }));
+        return data.map((item) => ({ label: item.nom, value: item.id, item }));
       }}
     />
   );

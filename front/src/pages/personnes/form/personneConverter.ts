@@ -22,6 +22,13 @@ const toBody = (data: Record<string, any>) => {
     body.niveau_formation_id = selectHelper.getValue(data.niveau_formation);
   }
 
+  if (data.attribution) {
+    body.attribution = {
+      organisation_id: selectHelper.getValue(data.attribution.organisation),
+      fonction_id: selectHelper.getValue(data.attribution.fonction),
+    };
+  }
+
   return body;
 };
 const toInput = (data: PersonneResource) => {

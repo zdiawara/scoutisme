@@ -1,7 +1,7 @@
 import { View } from "components";
 import { ICONS } from "pages/common";
 import { FC } from "react";
-import { Card, Stack } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import { OrganisationResource } from "types/organisation.type";
 import { attributionApi } from "api";
 import { QUERY_KEY } from "utils/constants";
@@ -85,14 +85,9 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
                       </span>
                     )}
                   </div>
-                  <Stack className="fw-semibold">
-                    <span className="text-primary">
-                      {attribution.personne.prenom}
-                    </span>
-                    <span className="text-muted text-capitalize">
-                      {attribution.personne.nom}
-                    </span>
-                  </Stack>
+                  <span className="text-primary fw-semibold">
+                    {attribution.personne.prenom} {attribution.personne.nom}
+                  </span>
                 </Link>
               </td>
               <td className="text-black">{attribution.fonction.nom}</td>

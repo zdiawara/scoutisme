@@ -13,4 +13,16 @@ class FonctionFilter extends ModelFilter
                 ->orWhereNull('nature_id');
         });
     }
+
+    public function code($value)
+    {
+        return $this->where('code', $value);
+    }
+
+    public function codeNature($value)
+    {
+        return $this->whereHas('nature', function ($q) use ($value) {
+            $q->whereIn('code', explode(";", $value));
+        });
+    }
 }

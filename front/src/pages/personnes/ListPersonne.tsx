@@ -17,6 +17,7 @@ import { FilterContext } from "context/FIlterContext";
 import { View } from "components";
 import { FilterPersonne } from "./FilterPersonne";
 import { selectHelper } from "utils/functions";
+import { ListPersonneActions } from "./common/ListPersonneActions";
 
 const columns: Columns<PersonneResource>[] = [
   {
@@ -134,6 +135,7 @@ const ListPersonne: FC = () => {
         villeId: selectHelper.getValue(params.ville),
         fonctionId: selectHelper.getValue(params.fonction),
         organisationId: selectHelper.getValue(params.organisation),
+        search: params.search,
       });
     },
   });
@@ -146,9 +148,7 @@ const ListPersonne: FC = () => {
         icon={ICONS.personne}
         right={
           <>
-            <Link to="/personnes/create" className="btn btn-primary">
-              Ajouter un adulte
-            </Link>
+            <ListPersonneActions />
           </>
         }
         className="my-4"

@@ -3,7 +3,9 @@ import { Button, Card, Col, Row } from "react-bootstrap";
 import { Header, PageHeader } from "pages/common";
 import {
   DatePicker,
+  SelectFonction,
   SelectGenre,
+  SelectOrganisation,
   SelectRefFormation,
   SelectVille,
   TextInput,
@@ -13,11 +15,14 @@ import { WrapperProps, withForm } from "hoc";
 import { personneSchema } from "./personneSchema";
 import { useFormContext } from "react-hook-form";
 import { PersonneBox } from "../view";
-import { MASK } from "utils/constants";
+import { MASK, NATURE, TYPE_PERSONNES } from "utils/constants";
 
 export const PersonneFormInputs = () => {
   const { setValue, watch } = useFormContext();
   const typePersonne = watch("type")?.value;
+  const showAttributionForm = watch("attributionForm") === "1";
+
+  const organisationSelected = watch("attribution.organisation");
 
   const loadFiles = async (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -30,6 +35,17 @@ export const PersonneFormInputs = () => {
     reader.readAsDataURL(e.target.files?.[0] as File);
   };
 
+  const buildFonctionRequest = () => {
+    if (typePersonne === TYPE_PERSONNES.ADULTE) {
+      return {
+        nature: organisationSelected?.item?.nature?.id || "",
+      };
+    }
+    return {
+      code: "scout",
+    };
+  };
+
   return (
     <>
       <Row>
@@ -37,13 +53,13 @@ export const PersonneFormInputs = () => {
           <PersonneBox source={watch("photo")}>
             <div className="text-center mt-3">
               <Button
-                variant="danger"
+                variant="text"
                 className="me-2"
                 onClick={() => setValue("photo", null)}
               >
                 Effacer
               </Button>
-              <Button as="label" variant="primary">
+              <Button as="label" variant="outline-primary">
                 Choisir
                 <input
                   hidden
@@ -54,6 +70,56 @@ export const PersonneFormInputs = () => {
               </Button>
             </div>
           </PersonneBox>
+          {!!showAttributionForm && (
+            <Card>
+              <Card.Body className="p-2">
+                <View.Header
+                  label="Fonction"
+                  description="Ajouter la fonction de la personne"
+                />
+                <Row className="g-2">
+                  <Col xs={12}>
+                    <SelectOrganisation
+                      name="attribution.organisation"
+                      label="Organisation"
+                      isClearable
+                      requestParams={{
+                        codeNature: (typePersonne === TYPE_PERSONNES.ADULTE
+                          ? [NATURE.national, NATURE.groupe, NATURE.region]
+                          : [NATURE.unite]
+                        ).join(";"),
+                      }}
+                    />
+                  </Col>
+                  <Col xs={12}>
+                    <SelectFonction
+                      name="attribution.fonction"
+                      label="Fonction"
+                      isClearable
+                      requestParams={buildFonctionRequest()}
+                      isDisabled={!organisationSelected}
+                    />
+                  </Col>
+                  {/* <Col sm={6}>
+                    <DatePicker
+                      name="attribution.date_debut"
+                      label="Date début"
+                      useHookForm
+                      required
+                    />
+                  </Col>
+
+                  <Col sm={6}>
+                    <DatePicker
+                      name="attribution.date_fin"
+                      label="Date fin"
+                      useHookForm
+                    />
+                  </Col> */}
+                </Row>
+              </Card.Body>
+            </Card>
+          )}
         </Col>
         <Col xl={9} lg={9} className="mx-auto">
           <Card className="shadow-sm">
@@ -63,6 +129,7 @@ export const PersonneFormInputs = () => {
                 description="Informations générales de la personne"
                 className="mb-3"
               />
+
               <Row className="g-3">
                 <Col sm={6}>
                   <TextInput
@@ -111,7 +178,7 @@ export const PersonneFormInputs = () => {
               <View.Header
                 {...Header.contact}
                 description="Email et numéro de la personne et de son representant"
-                className="my-3"
+                className="mb-3 mt-3"
               />
 
               <Row className="g-3">
@@ -158,7 +225,7 @@ export const PersonneFormInputs = () => {
               <View.Header
                 {...Header.adresse}
                 description="Ville et lieu de résidence de la personne"
-                className="my-3"
+                className="mb-3 mt-3"
               />
 
               <Row className="g-3">
@@ -181,7 +248,7 @@ export const PersonneFormInputs = () => {
               </Row>
             </Card.Body>
           </Card>
-          {typePersonne === "adulte" && (
+          {typePersonne === TYPE_PERSONNES.ADULTE && (
             <Card className="shadow-sm">
               <Card.Body>
                 <View.Header
@@ -204,6 +271,7 @@ export const PersonneFormInputs = () => {
                         name="niveau_formation"
                         label="Formation"
                         placeholder="Niveau formation"
+                        isClearable
                       />
                     </Col>
                   </Fragment>

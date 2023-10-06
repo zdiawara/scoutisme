@@ -1,27 +1,20 @@
-import { FC, useContext } from "react";
-import { Badge, Col, Stack } from "react-bootstrap";
+import { FC } from "react";
+import { Badge, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import {
-  Columns,
-  ICONS,
-  ListResult,
-  PageFilter,
-  PageHeader,
-} from "pages/common";
-import { FilterContext } from "context/FIlterContext";
-import { OrganisationFilter, RequestParam } from "types/request.type";
+import { Columns, ICONS, ListResult, PageHeader } from "pages/common";
+import { RequestParam } from "types/request.type";
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "utils/constants";
 import { organisationApi } from "api";
 import { OrganisationResource } from "types/organisation.type";
 import { LINKS } from "utils";
 
-const ListOrganisation: FC = () => {
-  const { filter, setFilter } = useContext(FilterContext);
-  const { search } = filter as OrganisationFilter;
+const ListEvent: FC = () => {
+  /*   const { filter, setFilter } = useContext(FilterContext);
+  const { search } = filter as OrganisationFilter; */
 
   const { data: organisations, isLoading } = useQuery({
-    queryKey: [QUERY_KEY.organisations, filter],
+    queryKey: [QUERY_KEY.organisations, {}],
     keepPreviousData: true,
     networkMode: "offlineFirst",
     queryFn: ({ queryKey }) => {
@@ -86,18 +79,18 @@ const ListOrganisation: FC = () => {
   return (
     <>
       <PageHeader.List
-        title="Organisations"
-        subtitle="Consulter et gérer les organisations"
-        icon={ICONS.organisation}
+        title="Evenements"
+        subtitle="Consulter et gérer les évènements"
+        icon={ICONS.events}
         className="my-4"
         right={
           <Link to={LINKS.organisations.create} className="btn btn-primary">
-            <i className="uil-plus"></i> Ajouter une organisation
+            Ajouter un évènement
           </Link>
         }
       />
 
-      <PageFilter.Container>
+      {/*       <PageFilter.Container>
         <Col sm={5}>
           <PageFilter.Search
             onChange={(v) => {
@@ -106,7 +99,7 @@ const ListOrganisation: FC = () => {
             initialValue={search}
           />
         </Col>
-      </PageFilter.Container>
+      </PageFilter.Container> */}
 
       <ListResult.Container isLoading={isLoading}>
         <ListResult.Table<OrganisationResource>
@@ -123,4 +116,4 @@ const ListOrganisation: FC = () => {
   );
 };
 
-export default ListOrganisation;
+export default ListEvent;

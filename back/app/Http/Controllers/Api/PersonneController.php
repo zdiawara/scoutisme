@@ -11,7 +11,6 @@ use App\Models\Attribution;
 use App\Models\Personne;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class PersonneController extends Controller
 {
@@ -63,9 +62,6 @@ class PersonneController extends Controller
             'data' => PersonneResource::collection($data),
             'total' => $total,
         ];
-
-
-        return $this->personneService->readPersonnes($request->all());
     }
 
     private function buildQuery(Request $request)

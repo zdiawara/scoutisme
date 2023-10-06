@@ -10,6 +10,7 @@ import { RefFormationModal } from "./RefFormationModal";
 const ListRefFormation: FC = () => {
   const { data: refFormations } = useQuery({
     queryKey: [QUERY_KEY.refFormations],
+    networkMode: "offlineFirst",
     queryFn: () => {
       return refFormationApi.findAll<RefFormationResource>();
     },

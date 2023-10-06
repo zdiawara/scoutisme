@@ -26,6 +26,7 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
     error,
   } = useQuery({
     queryKey: [QUERY_KEY.attributions, organisation.id],
+    networkMode: "offlineFirst",
     queryFn: () =>
       attributionApi.findAll<AttributionResource>({
         organisationId: organisation.id,

@@ -52,12 +52,13 @@ export const PageHeader = {
         left={
           <>
             <Button
-              variant="light"
-              size="sm"
-              className="mt-1"
+              variant="default"
+              className="text-dark"
+              //size="sm"
+              //className="mt-1"
               onClick={() => navigation(-1)}
             >
-              <i className="uil-arrow-left fs-5 me-2"></i>
+              <i className="uil-arrow-left fs-5 me-1"></i>
               Retour
             </Button>
             {left}

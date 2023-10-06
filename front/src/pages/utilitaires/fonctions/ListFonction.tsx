@@ -23,6 +23,7 @@ const ListFonction: FC = () => {
   const { data: personnes } = useQuery({
     queryKey: [QUERY_KEY.fonctions, filter],
     keepPreviousData: true,
+    networkMode: "offlineFirst",
     queryFn: ({ queryKey }) => {
       const params = { ...(queryKey[1] as RequestParam) };
       params.nature = selectHelper.getValue(params.nature);

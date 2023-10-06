@@ -25,6 +25,7 @@ const Form: FC<WrapperV2Props> = (props) => {
 
   const { data: natures, isLoading } = useQuery({
     queryKey: [QUERY_KEY.natures],
+    networkMode: "offlineFirst",
     queryFn: () => natureApi.findAll<NatureResource>(),
   });
 

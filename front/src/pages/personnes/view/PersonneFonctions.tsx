@@ -22,6 +22,7 @@ export const PersonneFonctions: FC<PersonneFonctionsProps> = ({
     error,
   } = useQuery({
     queryKey: [QUERY_KEY.attributions, { personneId }],
+    networkMode: "offlineFirst",
     queryFn: ({ queryKey }) => {
       return attributionApi.findAll<AttributionResource>({
         personneId: (queryKey[1] as any).personneId,

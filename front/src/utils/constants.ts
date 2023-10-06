@@ -7,6 +7,7 @@ export const QUERY_KEY = {
   refFormations: "ref-formations",
   typesUnites: "types-unites",
   natures: "natures",
+  messages: "messages",
 };
 
 export const MASK = {

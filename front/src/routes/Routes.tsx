@@ -49,6 +49,18 @@ const ViewOrganisation = Loadable(
   lazy(() => import("pages/organisations/ViewOrganisation"))
 );
 
+const ListInstance = Loadable(
+  lazy(() => import("pages/instances/ListInstance"))
+);
+
+const ListMessage = Loadable(lazy(() => import("pages/messages/ListMessage")));
+const CreateMessage = Loadable(
+  lazy(() => import("pages/messages/CreateMessage"))
+);
+const ViewMessage = Loadable(lazy(() => import("pages/messages/ViewMessage")));
+
+const ListEvent = Loadable(lazy(() => import("pages/events/ListEvent")));
+
 const ListFonction = Loadable(
   lazy(() => import("pages/utilitaires/fonctions/ListFonction"))
 );
@@ -85,6 +97,17 @@ export const router = createBrowserRouter(
             return organisationApi.findById(params.id!);
           }}
         />
+      </Route>
+      <Route path={LINKS.events.base} element={<Outlet />}>
+        <Route index element={<ListEvent />} />
+      </Route>
+      <Route path={LINKS.instances.base} element={<Outlet />}>
+        <Route index element={<ListInstance />} />
+      </Route>
+      <Route path={LINKS.messages.base} element={<Outlet />}>
+        <Route index element={<ListMessage />} />
+        <Route path="create" element={<CreateMessage />} />
+        <Route path=":id" element={<ViewMessage />} />
       </Route>
       <Route path={LINKS.fonctions.base} element={<FonctionOutlet />}>
         <Route index element={<ListFonction />} />

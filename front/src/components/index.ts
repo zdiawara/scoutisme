@@ -1,4 +1,5 @@
 export * from "./forms/TextInput";
+export * from "./forms/CheckBox";
 export * from "./forms/Select";
 export * from "./forms/DatePicker";
 export * from "./forms/HookModalForm";

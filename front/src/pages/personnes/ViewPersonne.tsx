@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { Badge, Card, Col, Dropdown, ListGroup, Row } from "react-bootstrap";
+import { Badge, Card, Col, ListGroup, Row } from "react-bootstrap";
 import { ICONS, PageHeader } from "pages/common";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -29,6 +29,7 @@ const ViewPersonne: FC = () => {
 
   const { data: personne, isLoading } = useQuery({
     queryKey: [QUERY_KEY.personnes, id],
+    networkMode: "offlineFirst",
     queryFn: ({ queryKey }) => {
       return personneApi.findById<PersonneResource>(queryKey[1] as string);
     },
@@ -36,6 +37,7 @@ const ViewPersonne: FC = () => {
 
   const { data: attribution } = useQuery({
     queryKey: [QUERY_KEY.attribution_active, { personneId: id }],
+    networkMode: "offlineFirst",
     queryFn: async ({ queryKey }) => {
       const { data } = await attributionApi.findAll<AttributionResource>({
         personneId: (queryKey[1] as any).personneId,
@@ -58,7 +60,7 @@ const ViewPersonne: FC = () => {
         >
           <i className="uil-edit-alt"></i> Modifier
         </Link>
-
+        {/* 
         <Dropdown className="ms-2">
           <Dropdown.Toggle variant="secondary">Actions</Dropdown.Toggle>
           <Dropdown.Menu className="topbar-dropdown-menu mt-2">
@@ -92,7 +94,7 @@ const ViewPersonne: FC = () => {
               </Dropdown.Item>
             </div>
           </Dropdown.Menu>
-        </Dropdown>
+        </Dropdown> */}
       </div>
     );
   };

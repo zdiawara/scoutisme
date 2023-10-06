@@ -11,6 +11,9 @@ export const ICONS = {
   direction: "mdi mdi-shield-account",
   detail: "uil uil-bookmark",
   add: "uil-plus",
+  instance: "uil-meeting-board",
+  events: "uil-calender",
+  message: "uil-comment-alt",
 };
 
 export const Header = {

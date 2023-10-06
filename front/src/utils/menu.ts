@@ -17,6 +17,20 @@ export const MENU_ITEMS = [
     icon: ICONS.organisation,
     url: LINKS.organisations.base,
   },
+  {
+    key: "message",
+    label: "Messages",
+    isTitle: false,
+    icon: ICONS.message,
+    url: LINKS.messages.base,
+  },
+  {
+    key: "evenements",
+    label: "Evenements",
+    isTitle: false,
+    icon: ICONS.events,
+    url: LINKS.events.base,
+  },
   { key: "params", label: "Parametres", isTitle: true },
   {
     key: "fonction",
@@ -39,6 +53,13 @@ export const MENU_ITEMS = [
     isTitle: false,
     icon: ICONS.formation,
     url: LINKS.ref_formations.base,
+  },
+  {
+    key: "instances",
+    label: "Instances",
+    isTitle: false,
+    icon: ICONS.instance,
+    url: LINKS.instances.base,
   },
 ];
 

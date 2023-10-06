@@ -14,6 +14,7 @@ type IAction = {
 
 const ListTypeUnite: FC = () => {
   const { data: results } = useQuery({
+    networkMode: "offlineFirst",
     queryKey: [QUERY_KEY.typesUnites],
     queryFn: () => typeOrganisationApi.findAll<TypeOrganisationResource>(),
   });

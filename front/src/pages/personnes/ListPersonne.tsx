@@ -138,6 +138,7 @@ const ListPersonne: FC = () => {
   const { data: personnes, isLoading } = useQuery({
     queryKey: ["personnes", filter],
     keepPreviousData: true,
+    networkMode: "offlineFirst",
     queryFn: ({ queryKey }) => {
       const params = { ...(queryKey[1] as RequestParam) };
       return personneApi.findAll<PersonneResource>(buildRequestParams(params));

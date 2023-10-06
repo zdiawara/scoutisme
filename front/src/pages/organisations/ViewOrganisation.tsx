@@ -32,6 +32,7 @@ const ViewOrganisation: FC = () => {
 
   const { data: organisation, isLoading } = useQuery({
     queryKey: [QUERY_KEY.organisations, id],
+    networkMode: "offlineFirst",
     queryFn: ({ queryKey }) => {
       return organisationApi.findById<OrganisationResource>(
         queryKey[1] as string

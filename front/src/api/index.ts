@@ -28,3 +28,6 @@ export const attributionApi = new AttributionApi("attributions");
 
 class GenreApi extends CrudService {}
 export const genreApi = new GenreApi("genres");
+
+class MessageApi extends CrudService {}
+export const messageApi = new MessageApi("messages");

@@ -25,4 +25,9 @@ class OrganisationFilter extends ModelFilter
             $q->whereIn('code', explode(";", $value));
         });
     }
+
+    public function natureId($value)
+    {
+        return $this->where('nature_id', $value);
+    }
 }

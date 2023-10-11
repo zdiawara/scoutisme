@@ -1,5 +1,5 @@
-import { FC, useContext } from "react";
-import { Badge, Col, Stack } from "react-bootstrap";
+import { FC, useContext, useState } from "react";
+import { Badge, Button, Col, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import {
   Columns,
@@ -15,19 +15,30 @@ import { QUERY_KEY } from "utils/constants";
 import { organisationApi } from "api";
 import { OrganisationResource } from "types/organisation.type";
 import { LINKS } from "utils";
+import { FilterOrganisation } from "./form/FilterOrganisation";
+import { selectHelper } from "utils/functions";
+
+const buildRequestParams = (filter: Record<string, any>) => {
+  return {
+    natureId: selectHelper.getValue(filter.nature),
+    etat: selectHelper.getValue(filter.etat),
+    search: filter.search,
+  };
+};
 
 const ListOrganisation: FC = () => {
   const { filter, setFilter } = useContext(FilterContext);
-  const { search } = filter as OrganisationFilter;
+  const { search, ...restFilter } = filter as OrganisationFilter;
+  const [show, setShow] = useState<boolean>(false);
 
   const { data: organisations, isLoading } = useQuery({
     queryKey: [QUERY_KEY.organisations, filter],
     keepPreviousData: true,
     networkMode: "offlineFirst",
     queryFn: ({ queryKey }) => {
-      const params = { ...(queryKey[1] as RequestParam) };
-      params.etat = params.etat === "tous" ? null : params.etat;
-      return organisationApi.findAll<OrganisationResource>(params);
+      return organisationApi.findAll<OrganisationResource>(
+        buildRequestParams(queryKey[1] as RequestParam)
+      );
     },
   });
 
@@ -106,6 +117,19 @@ const ListOrganisation: FC = () => {
             initialValue={search}
           />
         </Col>
+        <Col>
+          <div className="text-sm-end">
+            <Button
+              variant="secondary"
+              className="ms-2"
+              onClick={() => {
+                setShow(true);
+              }}
+            >
+              <i className="uil-filter"></i> Filtre avancé
+            </Button>
+          </div>
+        </Col>
       </PageFilter.Container>
 
       <ListResult.Container isLoading={isLoading}>
@@ -120,6 +144,16 @@ const ListOrganisation: FC = () => {
           pageActive={1}
         /> */}
       </ListResult.Container>
+
+      <FilterOrganisation
+        applyFiler={(data) => {
+          setFilter((prev) => ({ ...prev, ...data }));
+          setShow(false);
+        }}
+        defaultValues={restFilter}
+        show={show}
+        close={() => setShow(false)}
+      />
     </>
   );
 };

@@ -18,6 +18,7 @@ type HocCompomentProps = {
   onFinished?: (data: any) => void;
   onExit?: () => void;
   defaultValues?: Record<string, any>;
+  meta?: Record<string, any>;
   title: string;
   subtitle?: string;
   onSuccess?: (data: any) => void;
@@ -36,6 +37,7 @@ export type WrapperV2Props = {
   subtitle?: string;
   modalProps?: ModalProps;
   modalBodyClassName?: string;
+  meta: Record<string, any>;
 };
 
 export function withMutationForm(
@@ -48,6 +50,7 @@ export function withMutationForm(
     defaultValues,
     onSuccess,
     onExit,
+    meta,
     ...rest
   }) => {
     const methods = useForm({
@@ -130,6 +133,7 @@ export function withMutationForm(
             onSubmit={methods.handleSubmit(onSubmit, onError)}
             renderGeneralError={renderGeneralError}
             {...rest}
+            meta={meta || {}}
           />
         </Form>
       </FormProvider>

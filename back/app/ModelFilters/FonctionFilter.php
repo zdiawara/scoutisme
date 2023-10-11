@@ -19,6 +19,11 @@ class FonctionFilter extends ModelFilter
         return $this->where('code', $value);
     }
 
+    public function codeExclude($value)
+    {
+        return $this->whereNotIn('code', explode(";", $value));
+    }
+
     public function codeNature($value)
     {
         return $this->whereHas('nature', function ($q) use ($value) {

@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+//import { useMemo } from "react";
 import { Form, FormCheckProps } from "react-bootstrap";
 import { BsPrefixRefForwardingComponent } from "react-bootstrap/esm/helpers";
 import { useFormContext, Controller } from "react-hook-form";
@@ -7,14 +7,14 @@ export const Radio: BsPrefixRefForwardingComponent<"input", FormCheckProps> = (
   props
 ) => {
   const {
-    formState: { errors },
+    //  formState: { errors },
     setValue,
     control,
   } = useFormContext();
 
-  const error = useMemo(() => {
+  /*   const error = useMemo(() => {
     return props.name && errors[props.name];
-  }, [errors, props.name]);
+  }, [errors, props.name]); */
 
   return (
     <>
@@ -25,8 +25,14 @@ export const Radio: BsPrefixRefForwardingComponent<"input", FormCheckProps> = (
           return (
             <Form.Check
               {...props}
+              id={props.name}
               onChange={(e) => {
-                setValue(props.name || "", e.target.value);
+                if (e.target.checked) {
+                  console.log(e.target.checked);
+                  setValue(props.name || "", e.target.value);
+                } else {
+                  setValue(props.name || "", undefined);
+                }
               }}
               defaultChecked={value === props.value}
               //value={watch(props.name || "mode")}

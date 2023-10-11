@@ -18,6 +18,7 @@ import { View } from "components";
 import { FilterPersonne } from "./FilterPersonne";
 import { selectHelper } from "utils/functions";
 import { ListPersonneActions } from "./common/ListPersonneActions";
+import { ExportPersonneModal } from "./modal";
 
 const columns: Columns<PersonneResource>[] = [
   {
@@ -134,7 +135,7 @@ const ListPersonne: FC = () => {
   const { filter, setFilter, setFilterByKey } = useContext(FilterContext);
   const { search, ...restFilter } = filter as PersonneFilter;
   const [show, setShow] = useState<boolean>(false);
-
+  const [exportModal, setExportModal] = useState<boolean>(false);
   const { data: personnes, isLoading } = useQuery({
     queryKey: ["personnes", filter],
     keepPreviousData: true,
@@ -151,11 +152,7 @@ const ListPersonne: FC = () => {
         title="Personnes"
         subtitle="Consulter et gérer les personnes"
         icon={ICONS.personne}
-        right={
-          <>
-            <ListPersonneActions />
-          </>
-        }
+        right={<ListPersonneActions />}
         className="my-4"
       />
 
@@ -173,11 +170,7 @@ const ListPersonne: FC = () => {
             <Button
               variant="outline-primary"
               onClick={() => {
-                personneApi
-                  .download("exports/csv", buildRequestParams(filter))
-                  .then(() => {
-                    console.log("i");
-                  });
+                setExportModal(true);
               }}
             >
               Exporter
@@ -223,6 +216,12 @@ const ListPersonne: FC = () => {
           />
         )} */}
       </ListResult.Container>
+      {exportModal && (
+        <ExportPersonneModal
+          filter={buildRequestParams(filter)}
+          closeModal={() => setExportModal(false)}
+        />
+      )}
     </>
   );
 };

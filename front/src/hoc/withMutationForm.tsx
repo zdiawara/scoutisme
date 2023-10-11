@@ -65,10 +65,10 @@ export function withMutationForm(
       mutationFn: (data: any) => {
         return onSave(data);
       },
-      onSuccess: ({ data }) => {
-        onSuccess && onSuccess(data);
+      onSuccess: (r) => {
+        onSuccess && onSuccess(r?.data);
         toast("Vos modifications ont bien été enregistrées !", {
-          type: toast.TYPE.SUCCESS,
+          type: toast.TYPE.INFO,
           autoClose: 5000,
         });
       },

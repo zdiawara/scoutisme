@@ -10,7 +10,6 @@ use App\Http\Services\PersonneService;
 use App\ModelFilters\PersonneFilter;
 use App\Models\Attribution;
 use App\Models\Personne;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class PersonneController extends Controller
@@ -98,15 +97,35 @@ class PersonneController extends Controller
 
         $query = $this->buildQuery($request);
 
-        $data = $query
+        $fields = collect(explode(";", $request->get('fields', "")));
+
+        $personnes = $query
+            ->select('personnes.*')
             ->orderBy('nom', 'asc')
             ->with([
                 'genre',
                 'attributions.fonction',
                 'attributions.organisation',
-                'attributions'  => $this->attributionActive
+                'attributions' => $this->attributionActive
             ])
-            ->get();
+            ->get()
+            ->map(function ($personne) {
+                $attribution = $personne->attributions[0] ?? null;
+                $organisation = $attribution != null ? $attribution->organisation : null;
+                $fonction = $attribution != null ? $attribution->fonction : null;
+                return [
+                    "p_code" => $personne->code,
+                    "p_nom" => $personne->nom,
+                    "p_prenom" => $personne->prenom,
+                    "p_genre" => $personne->genre->nom,
+                    "p_date_naissance" => $personne->date_naissance,
+                    "p_lieu_naissance" => $personne->lieu_naissance,
+                    "o_code" => $organisation->code ?? "",
+                    "o_nom" => $organisation->nom ?? "",
+                    "f_code" => $fonction->code ?? "",
+                    "f_nom" => $fonction->nom ?? "",
+                ];
+            });
 
         $fileName = 'personnes.csv';
 
@@ -118,18 +137,41 @@ class PersonneController extends Controller
             "Expires"             => "0"
         );
 
-        $columns = array('Nom', 'Prénom', 'Organisation', 'Fonction', 'Lieu naissance', 'Date naissance', 'Email');
+        $MAPPER = collect([
+            "p_code" => "Code",
+            "p_nom" => "Nom",
+            "p_prenom" => "Prénom",
+            "p_genre" => "Genre",
+            "p_date_naissance" => "Date naissance",
+            "p_lieu_naissance" => "Lieu naissance",
+            "f_code" => "Code fonction",
+            "f_nom" => "Nom fonction",
+            "o_code" => "Code organisation",
+            "o_nom" => "Nom organisation",
+        ]);
 
-        $callback = function () use ($data, $columns) {
+        $callback = function () use ($personnes, $fields, $MAPPER) {
+
             $file = fopen('php://output', 'w');
-            fputcsv($file, $columns, ";");
-            foreach ($data as $personne) {
-                fputcsv(
-                    $file,
-                    array($personne->nom, $personne->prenom, '', '', $personne->lieu_naissance, $personne->date_naissance, $personne->email),
-                    ";"
-                );
-            }
+            $headers = $MAPPER
+                ->filter(function ($item, $key) use ($fields) {
+                    return $fields->contains($key);
+                })
+                ->values()
+                ->toArray();
+
+            fputcsv($file, $headers, ";");
+
+            $personnes->each(function ($personne) use ($file, $MAPPER, $fields) {
+                $line = collect($personne)
+                    ->filter(function ($item, $key) use ($fields) {
+                        return $fields->contains($key);
+                    })
+                    ->only($MAPPER->keys())
+                    ->values()
+                    ->toArray();
+                fputcsv($file, $line, ";");
+            });
             fclose($file);
         };
 

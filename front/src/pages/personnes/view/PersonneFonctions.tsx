@@ -1,14 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { attributionApi } from "api";
 import { View } from "components";
-import { ICONS } from "pages/common";
+import { AttributionActions } from "pages/attributions/common";
+import { Columns, ICONS, ListResult } from "pages/common";
+import { isBefore, isAfter } from "date-fns";
 import { FC } from "react";
-import { Card } from "react-bootstrap";
+import { Badge, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { AttributionResource } from "types/personne.type";
 import { LINKS } from "utils";
 import { QUERY_KEY } from "utils/constants";
-import { dateFormater } from "utils/functions";
+import { dateFormater, dateParser } from "utils/functions";
 
 type PersonneFonctionsProps = {
   personneId: string;
@@ -21,15 +23,83 @@ export const PersonneFonctions: FC<PersonneFonctionsProps> = ({
     isLoading,
     error,
   } = useQuery({
-    queryKey: [QUERY_KEY.attributions, { personneId }],
+    queryKey: [QUERY_KEY.attributions, personneId],
     networkMode: "offlineFirst",
-    queryFn: ({ queryKey }) => {
+    queryFn: () => {
       return attributionApi.findAll<AttributionResource>({
-        personneId: (queryKey[1] as any).personneId,
-        projection: "organisation.nature;fonction",
+        personneId,
+        projection: "organisation.nature;fonction;personne",
       });
     },
   });
+
+  const columns: Columns<AttributionResource>[] = [
+    {
+      name: "fonction",
+      label: "Fonction",
+      Cell: ({ fonction }) => (
+        <span className="text-primary">{fonction.nom}</span>
+      ),
+    },
+    {
+      name: "organisation",
+      label: "Organisation",
+      Cell: ({ organisation }) => (
+        <Link
+          to={LINKS.organisations.view(organisation.id)}
+          className="text-decoration-underline text-primary fw-bold"
+        >
+          {organisation.nom}
+        </Link>
+      ),
+    },
+    {
+      name: "date_debut",
+      label: "Date début",
+      Cell: ({ date_debut }) =>
+        date_debut ? dateFormater.formatStr(date_debut) : <View.Empty />,
+    },
+    {
+      name: "date_fin",
+      label: "Date fin",
+      Cell: ({ date_fin }) =>
+        date_fin ? dateFormater.formatStr(date_fin) : <View.Empty />,
+    },
+    {
+      name: "etat",
+      label: "Etat",
+      Cell: ({ date_fin, date_debut }) => {
+        const dateDebut = dateParser.toDateTime(date_debut);
+        if (!dateDebut) {
+          return <Badge>Inactif</Badge>;
+        }
+        const dateFin = dateParser.toDateTime(date_fin);
+        const today = new Date();
+
+        const isActive =
+          isAfter(today, dateDebut) &&
+          (dateFin ? isBefore(today, dateFin) : true);
+
+        return (
+          <Badge bg={isActive ? "success" : "danger"}>
+            {isActive ? "Actif" : "Inactif"}
+          </Badge>
+        );
+      },
+    },
+    {
+      name: "actions",
+      label: "Actions",
+      headClassName: "text-end",
+      Cell: (attribution) => {
+        return (
+          <div className="text-end">
+            <AttributionActions attribution={attribution} />
+          </div>
+        );
+      },
+    },
+  ];
 
   const renderContent = () => {
     if (isLoading) {
@@ -41,34 +111,12 @@ export const PersonneFonctions: FC<PersonneFonctionsProps> = ({
     if (!attributions?.data?.length) {
       return <View.Empty label="Pas de fonctions trouvées" />;
     }
-    return (
-      <table className="table mt-3 mb-0">
-        <thead className="text-black">
-          <tr>
-            <th>Fonction</th>
-            <th>Organisation</th>
-            <th>Date début</th>
-            <th>Date fin</th>
-          </tr>
-        </thead>
 
-        <tbody>
-          {attributions?.data.map((attribution) => (
-            <tr key={attribution.id}>
-              <td className="text-primary">{attribution.fonction.nom}</td>
-              <td className="text-primary text-decoration-underline">
-                <Link
-                  to={LINKS.organisations.view(attribution.organisation.id)}
-                >
-                  {attribution.organisation.nom}
-                </Link>
-              </td>
-              <td>{dateFormater.formatStr(attribution.date_debut)}</td>
-              <td>{dateFormater.formatStr(attribution.date_fin)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    return (
+      <ListResult.Table<AttributionResource>
+        columns={columns}
+        data={attributions?.data || []}
+      />
     );
   };
 

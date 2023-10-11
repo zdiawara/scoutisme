@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import { LINKS } from "utils";
 import classNames from "classnames";
 import { PersonneCard, PersonneDetails, PersonneFonctions } from "./view";
+import { ViewPersonneActions } from "./common/ViewPersonneActions";
 
 const TABS = [
   { label: "Fiche détaillée", code: "fiche", icon: "uil uil-bookmark" },
@@ -24,11 +25,11 @@ const TABS = [
 ];
 
 const ViewPersonne: FC = () => {
-  const id = useParams().id!;
+  const personneId = useParams().id!;
   const [page, setPage] = useState<string>("fiche");
 
   const { data: personne, isLoading } = useQuery({
-    queryKey: [QUERY_KEY.personnes, id],
+    queryKey: [QUERY_KEY.personnes, personneId],
     networkMode: "offlineFirst",
     queryFn: ({ queryKey }) => {
       return personneApi.findById<PersonneResource>(queryKey[1] as string);
@@ -36,11 +37,11 @@ const ViewPersonne: FC = () => {
   });
 
   const { data: attribution } = useQuery({
-    queryKey: [QUERY_KEY.attribution_active, { personneId: id }],
+    queryKey: [QUERY_KEY.attribution_active, personneId],
     networkMode: "offlineFirst",
     queryFn: async ({ queryKey }) => {
       const { data } = await attributionApi.findAll<AttributionResource>({
-        personneId: (queryKey[1] as any).personneId,
+        personneId,
         actif: true,
         projection: "organisation.nature;fonction",
       });
@@ -53,48 +54,14 @@ const ViewPersonne: FC = () => {
       return null;
     }
     return (
-      <div className="ms-auto d-flex">
+      <div className="ms-auto d-flex align-items-center">
         <Link
           className="rounded-corner btn btn-primary"
           to={LINKS.personnes.edit(personne.id)}
         >
           <i className="uil-edit-alt"></i> Modifier
         </Link>
-        {/* 
-        <Dropdown className="ms-2">
-          <Dropdown.Toggle variant="secondary">Actions</Dropdown.Toggle>
-          <Dropdown.Menu className="topbar-dropdown-menu mt-2">
-            <Dropdown.Header>Options sur le scout</Dropdown.Header>
-            <div>
-              {[
-                {
-                  label: "Affecter",
-                  icon: "uil-link",
-                  description: "Affecter le scout à une organisation",
-                },
-                {
-                  label: "Carte adhésion",
-                  icon: "uil-down-arrow",
-                  description: "Telecharger la carte d'adhésion",
-                },
-              ].map((item, i) => {
-                return (
-                  <Dropdown.Item as="button" key={i + "-profile-menu"}>
-                    <i className={`${item.icon} text-black me-2`}></i>
-                    <span className="text-black fw-semibold">{item.label}</span>
-                    <div className="text-secondary">{item.description}</div>
-                  </Dropdown.Item>
-                );
-              })}
-              <Dropdown.Divider />
-              <Dropdown.Item as="button">
-                <i className={`uil-padlock text-black me-2`}></i>
-                <span className="text-black fw-semibold">Désactiver</span>
-                <div className="text-secondary">Rendre inactif le scout</div>
-              </Dropdown.Item>
-            </div>
-          </Dropdown.Menu>
-        </Dropdown> */}
+        <ViewPersonneActions personne={personne} />
       </div>
     );
   };
@@ -111,7 +78,7 @@ const ViewPersonne: FC = () => {
       case "carte":
         return <PersonneCard />;
       case "fonctions":
-        return <PersonneFonctions personneId={id} />;
+        return <PersonneFonctions personneId={personneId} />;
       default:
         return <PersonneDetails personne={personne} />;
     }

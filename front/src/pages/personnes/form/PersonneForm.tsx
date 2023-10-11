@@ -3,9 +3,7 @@ import { Button, Card, Col, Row } from "react-bootstrap";
 import { Header, PageHeader } from "pages/common";
 import {
   DatePicker,
-  SelectFonction,
   SelectGenre,
-  SelectOrganisation,
   SelectRefFormation,
   SelectVille,
   TextInput,
@@ -15,7 +13,7 @@ import { WrapperProps, withForm } from "hoc";
 import { personneSchema } from "./personneSchema";
 import { useFormContext } from "react-hook-form";
 import { PersonneBox } from "../view";
-import { MASK, NATURE, TYPE_PERSONNES } from "utils/constants";
+import { MASK, TYPE_PERSONNES } from "utils/constants";
 
 export const PersonneFormInputs = () => {
   const { setValue, watch } = useFormContext();
@@ -70,56 +68,6 @@ export const PersonneFormInputs = () => {
               </Button>
             </div>
           </PersonneBox>
-          {!!showAttributionForm && (
-            <Card>
-              <Card.Body className="p-2">
-                <View.Header
-                  label="Fonction"
-                  description="Ajouter la fonction de la personne"
-                />
-                <Row className="g-2">
-                  <Col xs={12}>
-                    <SelectOrganisation
-                      name="attribution.organisation"
-                      label="Organisation"
-                      isClearable
-                      requestParams={{
-                        codeNature: (typePersonne === TYPE_PERSONNES.ADULTE
-                          ? [NATURE.national, NATURE.groupe, NATURE.region]
-                          : [NATURE.unite]
-                        ).join(";"),
-                      }}
-                    />
-                  </Col>
-                  <Col xs={12}>
-                    <SelectFonction
-                      name="attribution.fonction"
-                      label="Fonction"
-                      isClearable
-                      requestParams={buildFonctionRequest()}
-                      isDisabled={!organisationSelected}
-                    />
-                  </Col>
-                  {/* <Col sm={6}>
-                    <DatePicker
-                      name="attribution.date_debut"
-                      label="Date début"
-                      useHookForm
-                      required
-                    />
-                  </Col>
-
-                  <Col sm={6}>
-                    <DatePicker
-                      name="attribution.date_fin"
-                      label="Date fin"
-                      useHookForm
-                    />
-                  </Col> */}
-                </Row>
-              </Card.Body>
-            </Card>
-          )}
         </Col>
         <Col xl={9} lg={9} className="mx-auto">
           <Card className="shadow-sm">

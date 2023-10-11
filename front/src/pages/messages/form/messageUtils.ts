@@ -12,16 +12,14 @@ const toBody = (data: Record<string, any>) => {
   switch (critere.mode) {
     case "profil":
       critere.value = {
-        role_id: selectHelper.getValue(data.critere.profil.role),
-        organisation_id: selectHelper.getValue(
-          data.critere.profil.organisation
-        ),
-        nature_id: selectHelper.getValue(data.critere.profil.nature),
+        fonction_id: selectHelper.getValue(data.critere.value.fonction),
+        organisation_id: selectHelper.getValue(data.critere.value.organisation),
+        nature_id: selectHelper.getValue(data.critere.value.nature),
       };
       break;
     case "personne":
       critere.value = {
-        type: selectHelper.getValue(data.critere.personne.type),
+        type: selectHelper.getValue(data.critere.value.type),
       };
       break;
     default:
@@ -30,7 +28,10 @@ const toBody = (data: Record<string, any>) => {
   return {
     titre: data.titre,
     content: data.content,
-    critere,
+    critere: {
+      ...critere,
+      value: Object.entries(critere.value).filter((e) => !!e[1]),
+    },
   };
 };
 

@@ -27,6 +27,14 @@ export type PersonneResource = {
   attributions?: AttributionResource[];
 };
 
+export type PersonneSansFonctionResource = {
+  id: string;
+  nom: string;
+  code: string;
+  prenom: string;
+  type: string;
+};
+
 export type NiveauFormationResource = {
   id: string;
   nom: string;
@@ -45,6 +53,22 @@ export type AttributionResource = {
   organisation: OrganisationResource;
   fonction: FonctionResource;
   date_debut: string;
+  date_fin?: string;
+};
+
+export type OrganisationPersonne = {
+  nom: string;
+  prenom: string;
+  id: string;
+  photo?: string;
+};
+export type OrganisationFonction = { nom: string; id: string };
+
+export type OrganisationAttribution = {
+  id?: string;
+  personne?: OrganisationPersonne;
+  fonction: OrganisationFonction;
+  date_debut?: string;
   date_fin?: string;
 };
 

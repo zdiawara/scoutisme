@@ -6,6 +6,7 @@ import { messageConverter } from "./form/messageUtils";
 const CreateMessage: FC = () => {
   const create = (input: any) => {
     console.log(input);
+    debugger;
     return messageApi.create(messageConverter.toBody(input));
   };
   return (

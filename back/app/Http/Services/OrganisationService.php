@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Models\Organisation;
+use Illuminate\Support\Facades\DB;
 
 class OrganisationService
 {
@@ -25,5 +26,31 @@ class OrganisationService
     {
         $organisation->update($body);
         return $organisation;
+    }
+
+    public function readDirection(string $organisationId)
+    {
+        return collect(DB::select(
+            'SELECT a.id, a.date_debut, a.date_fin,
+
+                IF(p.id is not null, 
+                    JSON_OBJECT("id", CAST(p.id AS CHAR(200)), "nom", p.nom, "prenom", p.prenom, "photo" , null), 
+                    null
+                ) as personne,
+
+                JSON_OBJECT("id", CAST(f.id AS CHAR(200)), "nom", f.nom) as fonction
+
+            FROM fonctions f 
+                INNER JOIN organisations o on o.nature_id = f.nature_id
+                LEFT JOIN attributions a on (a.fonction_id = f.id and a.organisation_id = o.id and a.date_fin is null )
+                LEFT JOIN personnes p on p.id = a.personne_id
+            WHERE o.id = :organisationId and f.code != "scout";
+            ',
+            ['organisationId' => $organisationId]
+        ))->map(function ($item) {
+            $item->personne = json_decode($item->personne);
+            $item->fonction = json_decode($item->fonction);
+            return $item;
+        });
     }
 }

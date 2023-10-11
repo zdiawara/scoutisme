@@ -48,15 +48,6 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
       setSaving(true);
       onSave(data)
         .then((element) => {
-          /*onFinished(element);
-          showSuccessNotification &&
-            notification.success({
-              title: "Modifications enregistrées",
-            });
-
-          if (onReset) {
-            methods.reset(onReset(data));
-          }*/
           if (onFinished) {
             onFinished(element);
           } else {
@@ -131,10 +122,7 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
 
     return (
       <FormProvider {...methods}>
-        <Form
-          //validated={methods.formState.isValid}
-          onSubmit={methods.handleSubmit(onSubmit)}
-        >
+        <Form onSubmit={methods.handleSubmit(onSubmit)}>
           <Wrapper
             isEditMode={isEditMode}
             renderButtons={renderButtons}

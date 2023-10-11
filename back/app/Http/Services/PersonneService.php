@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Http\Resources\PersonneCollection;
 use App\ModelFilters\PersonneFilter;
+use App\Models\Attribution;
 use App\Models\Fonction;
 use App\Models\Personne;
 use Illuminate\Support\Facades\DB;
@@ -66,5 +67,46 @@ class PersonneService
     {
         $personne->update($body);
         return $personne;
+    }
+
+    public function readPersonnesSansFonction($params)
+    {
+        return Personne::select('personnes.nom', 'personnes.prenom', 'personnes.id')
+            ->leftJoin('attributions', function ($query) {
+                $query->on('attributions.personne_id', 'personnes.id');
+            })
+            ->whereNull('attributions.id')
+            ->where(function ($query) use ($params) {
+                $query->where('personnes.type', $params['type']);
+            })
+            ->get();
+    }
+
+    public function affecter(string $personneId, array $body): Attribution
+    {
+        Attribution::where('fonction_id', $body['fonction_id'])
+            ->where('organisation_id', $body['organisation_id'])
+            ->where('date_debut', '<=', now())
+            ->where(function ($q) {
+                $q->whereNull('date_fin')
+                    ->orWhere('date_fin', '>=', now());
+            })
+            ->update([
+                'date_fin' => now()
+            ]);
+
+        Attribution::where('personne_id', $personneId)
+            ->where('date_debut', '<=', now())
+            ->where(function ($q) {
+                $q->whereNull('date_fin')
+                    ->orWhere('date_fin', '>=', now());
+            })
+            ->update([
+                'date_fin' => now()
+            ]);
+
+        return $this->attributinService->create(array_merge($body, [
+            'personne_id' => $personneId
+        ]));
     }
 }

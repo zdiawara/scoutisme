@@ -53,6 +53,10 @@ const ListInstance = Loadable(
   lazy(() => import("pages/instances/ListInstance"))
 );
 
+const CreateInstance = Loadable(
+  lazy(() => import("pages/instances/CreateInstance"))
+);
+
 const ListMessage = Loadable(lazy(() => import("pages/messages/ListMessage")));
 const CreateMessage = Loadable(
   lazy(() => import("pages/messages/CreateMessage"))
@@ -103,6 +107,7 @@ export const router = createBrowserRouter(
       </Route>
       <Route path={LINKS.instances.base} element={<Outlet />}>
         <Route index element={<ListInstance />} />
+        <Route path="create" element={<CreateInstance />} />
       </Route>
       <Route path={LINKS.messages.base} element={<Outlet />}>
         <Route index element={<ListMessage />} />

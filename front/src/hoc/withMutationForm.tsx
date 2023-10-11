@@ -20,7 +20,7 @@ type HocCompomentProps = {
   defaultValues?: Record<string, any>;
   title: string;
   subtitle?: string;
-  onSuccess?: () => void;
+  onSuccess?: (data: any) => void;
   modalProps?: ModalProps;
   modalBodyClassName?: string;
   modalHeaderProps?: ModalHeaderProps;
@@ -58,11 +58,12 @@ export function withMutationForm(
     });
 
     const { mutate, isLoading } = useMutation({
+      networkMode: "offlineFirst",
       mutationFn: (data: any) => {
         return onSave(data);
       },
-      onSuccess: () => {
-        onSuccess && onSuccess();
+      onSuccess: ({ data }) => {
+        onSuccess && onSuccess(data);
         toast("Vos modifications ont bien été enregistrées !", {
           type: toast.TYPE.SUCCESS,
           autoClose: 5000,

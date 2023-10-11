@@ -61,6 +61,7 @@ export const AttributionActions: FC<AttributionActionsProps> = ({
               className="py-2 px-3"
               onClick={onSelect(item.code)}
               key={item.code}
+              disabled={!attribution.id}
             >
               <i className={`${item.icon} text-primary me-2`}></i>
               <span className="text-primary fs-5 fw-semibold">

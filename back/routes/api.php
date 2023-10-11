@@ -31,9 +31,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('personnes', PersonneController::class);
 
 Route::get('/personnes/{personneId}/attributions', [PersonneController::class, 'readAttribiutions']);
+Route::post('/personnes/{personneId}/affecter', [PersonneController::class, 'affecter']);
 Route::get('/personnes/exports/csv', [PersonneController::class, 'exportPersonnes']);
+Route::get('/personnes_sans_fonction', [PersonneController::class, 'readPersonnesSansFonction']);
 
 Route::apiResource('organisations', OrganisationController::class);
+Route::get('/organisations/{organisationId}/direction', [OrganisationController::class, 'readDirection']);
 Route::apiResource('fonctions', FonctionController::class);
 Route::apiResource('type_organisations', TypeOrganisationController::class);
 Route::apiResource('natures', NatureController::class);

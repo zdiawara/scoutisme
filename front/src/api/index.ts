@@ -1,9 +1,39 @@
+import {
+  AttributionResource,
+  OrganisationAttribution,
+  PersonneResource,
+} from "types/personne.type";
 import { CrudService } from "./crudService";
+import { requestGet, requestPost } from "./request";
+import { RequestParam } from "types/request.type";
+import { requestParams } from "utils/functions";
 
-class PersonneApi extends CrudService {}
+class PersonneApi extends CrudService {
+  public async findPersonnesSansFonction(params?: RequestParam) {
+    const response = await requestGet<{ data: PersonneResource[] }>(
+      "personnes_sans_fonction" + requestParams(params)
+    );
+    return response;
+  }
+  public async affecter(personneId: string, body: any) {
+    const response = await requestPost<{ data: AttributionResource }>(
+      `${this.base}/${personneId}/affecter`,
+      body
+    );
+    return response;
+  }
+}
+
 export const personneApi = new PersonneApi("personnes");
 
-class OrganisationApi extends CrudService {}
+class OrganisationApi extends CrudService {
+  public async findDirection(id: string) {
+    const { data } = await requestGet<{ data: OrganisationAttribution[] }>(
+      `${this.base}/${id}/direction`
+    );
+    return data;
+  }
+}
 export const organisationApi = new OrganisationApi("organisations");
 
 class TypeOrganisationApi extends CrudService {}

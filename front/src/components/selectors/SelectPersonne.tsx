@@ -24,6 +24,26 @@ export const SelectPersonne: FC<SelectProps> = ({
   );
 };
 
+export const SelectPersonneSansFonction: FC<SelectProps> = ({
+  requestParams,
+  ...props
+}) => {
+  return (
+    <AsyncSelect
+      {...props}
+      fetchOptions={async () => {
+        const { data } = await personneApi.findPersonnesSansFonction(
+          requestParams
+        );
+        return data.map((item) => ({
+          label: `${item.prenom} ${item.nom}`,
+          value: item.id,
+        }));
+      }}
+    />
+  );
+};
+
 export const SelectGenre: FC<SelectProps> = ({ requestParams, ...props }) => {
   return (
     <AsyncSelect

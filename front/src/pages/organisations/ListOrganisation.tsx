@@ -92,7 +92,7 @@ const ListOrganisation: FC = () => {
         className="my-4"
         right={
           <Link to={LINKS.organisations.create} className="btn btn-primary">
-            <i className="uil-plus"></i> Ajouter une organisation
+            Ajouter une organisation
           </Link>
         }
       />
@@ -112,6 +112,7 @@ const ListOrganisation: FC = () => {
         <ListResult.Table<OrganisationResource>
           columns={columns}
           data={organisations?.data || []}
+          headerClassName="bg-light"
         />
         {/* <ListResult.Paginate
           pageCount={2}

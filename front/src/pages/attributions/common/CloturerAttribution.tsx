@@ -69,7 +69,7 @@ export const CloturerAttribution: FC<CloturerAttributionProps> = ({
       modalBodyClassName="bg-light"
       onSuccess={() => {
         query.invalidateQueries([
-          QUERY_KEY.attributions,
+          QUERY_KEY.direction,
           attribution.organisation.id,
         ]);
         closeModal();

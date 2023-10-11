@@ -85,7 +85,7 @@ const ListInstance: FC = () => {
         icon={ICONS.instance}
         className="my-4"
         right={
-          <Link to={LINKS.organisations.create} className="btn btn-primary">
+          <Link to={LINKS.instances.create} className="btn btn-primary">
             Ajouter une instance
           </Link>
         }

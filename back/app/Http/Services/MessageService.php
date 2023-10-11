@@ -2,16 +2,22 @@
 
 namespace App\Http\Services;
 
+use App\Exceptions\BadRequestException;
 use App\Models\Message;
 use App\Models\Personne;
 use Error;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class MessageService
 {
     public function create(array $body)
     {
+        $destinataires = collect($this->computeDestinataires($body['critere']));
+        if ($destinataires->isEmpty()) {
+            throw new BadRequestException("Pas de destinataires trouvés");
+        }
         return Message::create(array_merge($body, [
             'destinataires' => $this->computeDestinataires($body['critere'])
         ]));
@@ -27,7 +33,7 @@ class MessageService
 
         $criteres = collect($critere['value'] ?? null);
 
-        $query = Personne::select(['nom', 'prenom', 'email']);
+        $query = Personne::select(['personnes.nom', 'personnes.prenom', 'personnes.email']);
 
         switch ($mode) {
             case 'personne':
@@ -55,28 +61,34 @@ class MessageService
 
     private function filterByProfil(Collection $criteres, Builder $query)
     {
+        DB::enableQueryLog();
         if ($criteres->hasAny('organisation_id', 'nature_id', 'fonction_id')) {
-            $query->whereHas('attributions', function (Builder $builder) use ($criteres) {
-                if ($criteres->contains('fonction_id')) {
-                    $builder->where('fonction_id', $criteres->get('fonction_id'));
-                }
-                if ($criteres->contains(['organisation_id', 'nature_id'])) {
-                    $builder->whereHas('organisation', function ($subQuery) use ($criteres) {
-                        if ($criteres->contains('organisation_id')) {
-                            $subQuery->where('id', $criteres->get('organisation_id'));
-                        }
-                        if ($criteres->contains('nature_id')) {
-                            $subQuery->where('nature_id', $criteres->get('nature_id'));
-                        }
-                    });
-                }
-                $builder->where('date_debut', '<=', now())
-                    ->where(function ($subQuery) {
-                        $subQuery->whereNull('date_fin')
-                            ->orWhere('date_fin', '>=', now());
-                    });
+
+            $query->join('attributions as a', function ($builder) {
+                $builder->on('a.personne_id', 'personnes.id');
             });
+
+
+            if ($criteres->has('fonction_id')) {
+                $query->where('a.fonction_id', $criteres->get('fonction_id'));
+            }
+
+            if ($criteres->hasAny(['organisation_id', 'nature_id'])) {
+
+                $query->join('organisations as o', function ($builder) {
+                    $builder->on('o.id', 'a.organisation_id');
+                });
+
+                if ($criteres->has('organisation_id')) {
+                    $query->where('o.id', $criteres->get('organisation_id'));
+                }
+                if ($criteres->has('nature_id')) {
+                    $query->where('o.nature_id', $criteres->get('nature_id'));
+                }
+            }
         }
+        dd($query->get()->toArray());
+        dd(DB::getQueryLog());
         return $query;
     }
 }

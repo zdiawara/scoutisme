@@ -23,7 +23,7 @@ class PersonneFilter extends ModelFilter
 
     public function type($value)
     {
-        return $this->where('type', $value);
+        return $this->where('personnes.type', $value);
     }
 
     public function villeId($value)
@@ -34,5 +34,12 @@ class PersonneFilter extends ModelFilter
     public function niveauFormationId($value)
     {
         return $this->where('niveau_formation_id', $value);
+    }
+
+    public function pasFonction($value)
+    {
+        return $this->leftJoin('attributions', function ($q) {
+            $q->on('attributions.personne_id', 'personnes.id');
+        })->whereNull('attributions.id');
     }
 }

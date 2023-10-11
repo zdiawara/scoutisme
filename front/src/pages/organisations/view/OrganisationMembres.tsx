@@ -1,17 +1,20 @@
-import { View } from "components";
-import { ICONS } from "pages/common";
-import { FC } from "react";
-import { Card } from "react-bootstrap";
+import { PersonneAvatar, View } from "components";
+import { Columns, ICONS, ListResult } from "pages/common";
+import { FC, useState } from "react";
+import { Button, Card } from "react-bootstrap";
 import { OrganisationResource } from "types/organisation.type";
-import { attributionApi } from "api";
+import { organisationApi } from "api";
 import { QUERY_KEY } from "utils/constants";
-import { AttributionResource } from "types/personne.type";
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
-import { LINKS } from "utils";
-import { OrganisationMembreActions } from "../common";
-import { AttributionActions } from "pages/attributions/common";
+import {
+  AttributionResource,
+  FonctionResource,
+  OrganisationAttribution,
+  PersonneResource,
+} from "types/personne.type";
 import { dateFormater } from "utils/functions";
+import { AttributionActions } from "pages/attributions/common";
+import { AddOrganisationMembreModal } from "pages/attributions/common/AddOrganisationMembreModal";
 
 type OrganisationMembresProps = {
   organisation: OrganisationResource;
@@ -25,14 +28,75 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
     isLoading,
     error,
   } = useQuery({
-    queryKey: [QUERY_KEY.attributions, organisation.id],
+    queryKey: [QUERY_KEY.direction, organisation.id],
     networkMode: "offlineFirst",
-    queryFn: () =>
-      attributionApi.findAll<AttributionResource>({
-        organisationId: organisation.id,
-        type: "direction",
-      }),
+    queryFn: () => organisationApi.findDirection(organisation.id),
   });
+
+  const [attributionSelected, setAttributionSelected] = useState<
+    OrganisationAttribution | undefined
+  >();
+
+  const columns: Columns<OrganisationAttribution>[] = [
+    {
+      name: "fonction",
+      label: "Fonction",
+      Cell: ({ fonction }) => fonction.nom,
+    },
+    {
+      name: "personne",
+      label: "Personne",
+      Cell: (attribution) => {
+        if (!attribution.personne) {
+          return (
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={() => {
+                setAttributionSelected(attribution);
+              }}
+            >
+              Choisir une personne
+            </Button>
+          );
+        }
+        return <PersonneAvatar {...attribution.personne} />;
+      },
+    },
+    {
+      name: "date_debut",
+      label: "Date début",
+      Cell: ({ date_debut }) =>
+        date_debut ? dateFormater.formatStr(date_debut) : <View.Empty />,
+    },
+    {
+      name: "date_fin",
+      label: "Date fin",
+      Cell: ({ date_fin }) =>
+        date_fin ? dateFormater.formatStr(date_fin) : <View.Empty />,
+    },
+    {
+      name: "actions",
+      label: "Actions",
+      headClassName: "text-end",
+      Cell: (attribution) => {
+        return (
+          <div className="text-end">
+            <AttributionActions
+              attribution={
+                {
+                  ...attribution,
+                  fonction: attribution.fonction as FonctionResource,
+                  organisation,
+                  personne: attribution.personne as PersonneResource,
+                } as AttributionResource
+              }
+            />
+          </div>
+        );
+      },
+    },
+  ];
 
   const renderContent = () => {
     if (isLoading) {
@@ -41,66 +105,14 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
     if (error) {
       return <span>error</span>;
     }
-    if (!attributions?.data?.length) {
+    if (!attributions?.length) {
       return <View.Empty label="Pas de membres" />;
     }
     return (
-      <table className="table mt-3 mb-0">
-        <thead className="text-black">
-          <tr>
-            <th>Nom</th>
-            <th>Fonction</th>
-            <th>Date début</th>
-            <th>Date fin</th>
-            <th style={{ width: "100px" }}>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {attributions?.data.map((attribution) => (
-            <tr key={attribution.id}>
-              <td>
-                <Link
-                  to={LINKS.personnes.view(attribution.personne.id)}
-                  className="text-black table-user d-flex"
-                >
-                  <div className="avatar-sm me-2">
-                    {attribution.personne.photo ? (
-                      <img
-                        src={attribution.personne.photo}
-                        alt=""
-                        className="rounded-circle"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          textAlign: "center",
-                          objectFit: "cover",
-                          color: "transparent",
-                          textIndent: "10000px",
-                        }}
-                      />
-                    ) : (
-                      <span className="avatar-title bg-secondary-lighten text-secondary fs-4 rounded-circle">
-                        {attribution.personne.prenom[0]}
-                        {attribution.personne.nom[0]}
-                      </span>
-                    )}
-                  </div>
-                  <span className="text-primary fw-semibold">
-                    {attribution.personne.prenom} {attribution.personne.nom}
-                  </span>
-                </Link>
-              </td>
-              <td className="text-black">{attribution.fonction.nom}</td>
-              <td>{dateFormater.formatStr(attribution.date_debut)}</td>
-              <td>{dateFormater.formatStr(attribution.date_fin)}</td>
-              <td>
-                <AttributionActions attribution={attribution} />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <ListResult.Table<OrganisationAttribution>
+        columns={columns}
+        data={attributions || []}
+      />
     );
   };
 
@@ -112,9 +124,15 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
           label="Organe de direction"
           description="Membres de l'organe de direction"
           className="mb-2"
-          right={<OrganisationMembreActions organisation={organisation} />}
         />
         {renderContent()}
+        {attributionSelected && (
+          <AddOrganisationMembreModal
+            fonction={attributionSelected.fonction as FonctionResource}
+            organisation={organisation}
+            closeModal={() => setAttributionSelected(undefined)}
+          />
+        )}
       </Card.Body>
     </Card>
   );

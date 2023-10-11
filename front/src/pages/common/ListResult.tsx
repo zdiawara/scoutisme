@@ -40,13 +40,14 @@ export type Columns<T> = {
 type TableProps<T> = {
   columns: Columns<T>[];
   data: Array<T>;
+  headerClassName?: string;
 };
 
-function Table<T>({ columns, data }: TableProps<T>) {
+function Table<T>({ columns, data, headerClassName }: TableProps<T>) {
   return (
     <>
       <BsTable hover className="table-centered">
-        <thead className="text-black bg-light">
+        <thead className={`text-black ${headerClassName}`}>
           <tr>
             {columns.map((col) => (
               <th key={col.name} className={col.headClassName}>

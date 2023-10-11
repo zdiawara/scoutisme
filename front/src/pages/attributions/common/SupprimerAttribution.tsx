@@ -17,14 +17,24 @@ export const SupprimerAttribution: FC<SupprimerAttributionProps> = ({
   const query = useQueryClient();
 
   const { mutate, isLoading } = useMutation({
+    networkMode: "offlineFirst",
     mutationFn: () => {
       return attributionApi.delete(attribution.id);
     },
     onSuccess: () => {
       query.invalidateQueries([
-        QUERY_KEY.attributions,
+        QUERY_KEY.direction,
         attribution.organisation.id,
       ]);
+      query.invalidateQueries([
+        QUERY_KEY.attributions,
+        attribution.personne.id,
+      ]);
+      query.invalidateQueries([
+        QUERY_KEY.attribution_active,
+        attribution.personne.id,
+      ]);
+
       closeModal();
     },
   });

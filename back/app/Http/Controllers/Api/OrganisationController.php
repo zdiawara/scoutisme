@@ -7,6 +7,7 @@ use App\Http\Resources\OrganisationResource;
 use App\Http\Services\OrganisationService;
 use App\ModelFilters\OrganisationFilter;
 use App\Models\Organisation;
+use Illuminate\Console\View\Components\Warn;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -96,6 +97,13 @@ class OrganisationController extends Controller
         // })->first();
 
         return new OrganisationResource($organisation);
+    }
+
+    public function readDirection(Request $request)
+    {
+        return [
+            'data' => $this->organisationService->readDirection($request->route('organisationId'))
+        ];
     }
 
     /**

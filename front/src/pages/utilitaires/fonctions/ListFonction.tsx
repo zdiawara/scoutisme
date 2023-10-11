@@ -82,9 +82,6 @@ const ListFonction: FC = () => {
             >
               <i className="uil-edit-alt fs-4 text-primary"></i>
             </Button>
-            {/* <Button variant="link" className="action-icon">
-              <i className="mdi mdi-delete fs-4 text-danger"></i>
-            </Button> */}
           </>
         );
       },
@@ -100,7 +97,7 @@ const ListFonction: FC = () => {
         className="my-4"
         right={
           <Button onClick={() => setAction({ code: "create" })}>
-            <i className="uil-plus"></i> Ajouter une fonction
+            Ajouter une fonction
           </Button>
         }
       />

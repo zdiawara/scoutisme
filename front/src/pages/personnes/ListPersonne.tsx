@@ -171,17 +171,7 @@ const ListPersonne: FC = () => {
         <Col>
           <div className="text-sm-end">
             <Button
-              variant="secondary"
-              className="ms-2"
-              onClick={() => {
-                setShow(true);
-              }}
-            >
-              <i className="uil-filter"></i> Filtre avancé
-            </Button>
-            <Button
               variant="outline-primary"
-              className="ms-2"
               onClick={() => {
                 personneApi
                   .download("exports/csv", buildRequestParams(filter))
@@ -191,6 +181,15 @@ const ListPersonne: FC = () => {
               }}
             >
               Exporter
+            </Button>
+            <Button
+              variant="secondary"
+              className="ms-2"
+              onClick={() => {
+                setShow(true);
+              }}
+            >
+              <i className="uil-filter"></i> Filtre avancé
             </Button>
           </div>
         </Col>
@@ -209,6 +208,7 @@ const ListPersonne: FC = () => {
         <ListResult.Table<PersonneResource>
           columns={columns}
           data={personnes?.data || []}
+          headerClassName="bg-light"
         />
         {/* {personnes && (
           <ListResult.Paginate

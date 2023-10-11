@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AttributionResource;
 use App\Http\Resources\PersonneResource;
+use App\Http\Services\AttributionService;
 use App\Http\Services\PersonneService;
 use App\ModelFilters\PersonneFilter;
 use App\Models\Attribution;
@@ -15,12 +16,14 @@ use Illuminate\Http\Request;
 class PersonneController extends Controller
 {
     private PersonneService $personneService;
+    private AttributionService $attributionService;
 
     private $attributionActive;
 
-    public function __construct(PersonneService $personneService)
+    public function __construct(PersonneService $personneService, AttributionService $attributionService)
     {
         $this->personneService = $personneService;
+        $this->attributionService = $attributionService;
 
         $this->attributionActive = function ($query) {
             $query->where('date_debut', '<=', now())
@@ -46,6 +49,7 @@ class PersonneController extends Controller
             $page = $request->get('page', 1);
             $size = $request->get('size', 100);
             $data = $query
+                ->select('personnes.*')
                 ->offset(($page - 1) * $size)
                 ->limit($size)
                 ->orderBy('nom', 'asc')
@@ -71,14 +75,20 @@ class PersonneController extends Controller
         if ($request->has('fonctionId') || $request->has('organisationId')) {
             $fonctionId = $request->input('fonctionId', null);
             $organisationId = $request->input('organisationId', null);
-            $query->whereHas('attributions', function (Builder $q) use ($fonctionId, $organisationId) {
-                if (isset($fonctionId)) {
-                    $q->where('fonction_id', $fonctionId);
-                }
-                if (isset($organisationId)) {
-                    $q->where('organisation_id', $organisationId);
-                }
+            $query->join('attributions as a', function ($builder) {
+                $builder->on('a.personne_id', 'personnes.id');
             });
+            if (isset($fonctionId)) {
+                $query->where('a.fonction_id', $fonctionId);
+            }
+            if (isset($organisationId)) {
+                $query->where('a.organisation_id', $organisationId);
+            }
+            $query->where('a.date_debut', '<=', now())
+                ->where(function ($q) {
+                    $q->whereNull('a.date_fin')
+                        ->orWhere('a.date_fin', '>=', now());
+                });
         }
         return $query;
     }
@@ -137,6 +147,13 @@ class PersonneController extends Controller
         ];
     }
 
+    public function readPersonnesSansFonction(Request $request)
+    {
+        return [
+            'data' => $this->personneService->readPersonnesSansFonction($request->all())
+        ];
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -153,6 +170,15 @@ class PersonneController extends Controller
     {
         $personne->load(['ville', 'niveauFormation', 'genre']);
         return new PersonneResource($personne);
+    }
+
+    public function affecter(Request $request)
+    {
+        $attribution = $this->personneService->affecter($request->route('personneId'), $request->all());
+
+        $attribution->load(['personne', 'organisation', 'fonction']);
+
+        return new AttributionResource($attribution);
     }
 
     /**

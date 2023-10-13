@@ -49,6 +49,7 @@ return new class extends Migration
             $table->uuid('type_id')->nullable();
             $table->uuid('nature_id');
             $table->uuid('ville_id')->nullable();
+            $table->json('parents')->nullable();
             $table->timestamps();
 
             $table->foreign('type_id')->references('id')->on('types_organisations');
@@ -98,6 +99,7 @@ return new class extends Migration
             $table->uuid('organisation_id');
             $table->uuid('personne_id');
             $table->uuid('fonction_id');
+            $table->string('type');
             $table->dateTime('date_debut');
             $table->dateTime('date_fin')->nullable();
             $table->timestamps();
@@ -105,6 +107,15 @@ return new class extends Migration
             $table->foreign('organisation_id')->references('id')->on('organisations');
             $table->foreign('personne_id')->references('id')->on('personnes');
             $table->foreign('fonction_id')->references('id')->on('fonctions');
+        });
+
+        Schema::create('messages', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('titre');
+            $table->string('content');
+            $table->json('destinataires')->nullable();
+            $table->json('critere');
+            $table->timestamps();
         });
     }
 

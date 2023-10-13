@@ -11,6 +11,7 @@ use App\ModelFilters\PersonneFilter;
 use App\Models\Attribution;
 use App\Models\Personne;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PersonneController extends Controller
 {
@@ -82,6 +83,10 @@ class PersonneController extends Controller
             }
             if (isset($organisationId)) {
                 $query->where('a.organisation_id', $organisationId);
+                /*                 $query->join('organisations as o', function ($q) {
+                    $q->on('o.id', 'a.organisation_id');
+                });
+                $query->where(DB::raw("JSON_CONTAINS(JSON_EXTRACT(o.parents, '$[*].id') , '\"" . $organisationId . "\"')"), '=', 1); */
             }
             $query->where('a.date_debut', '<=', now())
                 ->where(function ($q) {

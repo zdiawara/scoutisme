@@ -72,17 +72,21 @@ const ListFonction: FC = () => {
     {
       name: "actions",
       label: "Actions",
+      headClassName: "text-end",
       Cell: (fonction) => {
         return (
-          <>
+          <div className="text-end">
             <Button
-              className="action-icon"
+              className="action-icon me-1"
               variant="link"
               onClick={() => setAction({ code: "edit", fonction })}
             >
               <i className="uil-edit-alt fs-4 text-primary"></i>
             </Button>
-          </>
+            <Button variant="link" className="action-icon">
+              <i className="mdi mdi-delete fs-4 text-danger"></i>
+            </Button>
+          </div>
         );
       },
     },

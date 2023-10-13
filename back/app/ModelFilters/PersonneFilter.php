@@ -21,6 +21,11 @@ class PersonneFilter extends ModelFilter
         return $this->where('etat', $value);
     }
 
+    public function genreId($value)
+    {
+        return $this->where('genre_id', $value);
+    }
+
     public function type($value)
     {
         return $this->where('personnes.type', $value);

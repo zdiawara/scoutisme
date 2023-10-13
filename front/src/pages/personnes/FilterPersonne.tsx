@@ -1,9 +1,9 @@
 import {
-  SelectEtat,
+  Radio,
   SelectFonction,
+  SelectGenre,
   SelectOrganisation,
   SelectRefFormation,
-  SelectTypePersonne,
   SelectVille,
 } from "components";
 import { withFilterForm } from "hoc";
@@ -14,11 +14,28 @@ const FilterPersonneForm: FC = () => {
   return (
     <>
       <Col xs={6}>
-        <SelectTypePersonne name="type" label="Type personne" isClearable />
+        <SelectGenre name="genre" label="Genre" isClearable />
+      </Col>
+      <Col xs={12}>
+        <SelectFonction name="fonction" label="Fonction" isClearable />
       </Col>
 
-      <Col xs={6}>
-        <SelectEtat name="etat" label="Etat" isClearable />
+      <Col xs={12}>
+        <SelectOrganisation
+          name="organisation"
+          label="Organisation"
+          isClearable
+        />
+      </Col>
+
+      <Col>
+        <Radio
+          name="inclureSousOrganisation"
+          label="Inclure les sous organisations"
+          type="switch"
+          inline
+          value="true"
+        />
       </Col>
 
       <Col xs={12}>
@@ -31,18 +48,6 @@ const FilterPersonneForm: FC = () => {
 
       <Col xs={12}>
         <SelectVille name="ville" label="Ville de résidence" isClearable />
-      </Col>
-
-      <Col xs={12}>
-        <SelectFonction name="fonction" label="Fonction" isClearable />
-      </Col>
-
-      <Col xs={12}>
-        <SelectOrganisation
-          name="organisation"
-          label="Organisation"
-          isClearable
-        />
       </Col>
     </>
   );

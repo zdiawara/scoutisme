@@ -13,6 +13,8 @@ class Organisation extends Model
 
     protected $fillable = ['nom', 'code', 'adresse', 'nature_id', 'ville_id', 'type_id', 'parent_id', 'etat'];
 
+    protected $casts = ['parents' => 'array'];
+
     public function type()
     {
         return $this->belongsTo(TypeOrganisation::class);

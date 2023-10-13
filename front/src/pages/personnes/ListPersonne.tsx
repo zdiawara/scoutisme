@@ -14,11 +14,12 @@ import { LINKS } from "utils";
 import { useQuery } from "@tanstack/react-query";
 import { PersonneFilter, RequestParam } from "types/request.type";
 import { FilterContext } from "context/FIlterContext";
-import { View } from "components";
+import { TooltipHelper } from "components";
 import { FilterPersonne } from "./FilterPersonne";
 import { selectHelper } from "utils/functions";
 import { ListPersonneActions } from "./common/ListPersonneActions";
 import { ExportPersonneModal } from "./modal";
+import { NATURE } from "utils/constants";
 
 const columns: Columns<PersonneResource>[] = [
   {
@@ -67,7 +68,27 @@ const columns: Columns<PersonneResource>[] = [
     label: "Organisation",
     Cell: ({ attributions }) => {
       if (attributions?.length) {
-        return <span>{attributions[0].organisation.nom}</span>;
+        const organisation = attributions[0].organisation;
+        const natures = [NATURE.unite, NATURE.groupe];
+        return (
+          <>
+            <span className="text-muted">{organisation.nature.nom}</span>&nbsp;
+            <Link to={LINKS.organisations.view(organisation.id)}>
+              {organisation.nom}
+            </Link>
+            {natures.includes(organisation.nature.code) && (
+              <TooltipHelper
+                description={
+                  <>
+                    {organisation?.parents?.reverse()?.map((e) => (
+                      <div key={e.id}>{e.nom}</div>
+                    ))}
+                  </>
+                }
+              />
+            )}
+          </>
+        );
       }
       return null;
     },
@@ -91,11 +112,11 @@ const columns: Columns<PersonneResource>[] = [
     label: "Date naissance",
   },
   { name: "email", label: "Email" },
-  {
+  /*   {
     name: "etat",
     label: "Etat",
     Cell: ({ etat }) => <View.Etat value={etat} />,
-  },
+  }, */
   {
     name: "actions",
     label: "Actions",
@@ -125,8 +146,10 @@ const buildRequestParams = (filter: Record<string, any>) => {
     etat: selectHelper.getValue(filter.etat),
     niveauFormationId: selectHelper.getValue(filter.niveauFormation),
     villeId: selectHelper.getValue(filter.ville),
+    genreId: selectHelper.getValue(filter.genre),
     fonctionId: selectHelper.getValue(filter.fonction),
     organisationId: selectHelper.getValue(filter.organisation),
+    inclureSousOrganisation: filter.inclureSousOrganisation,
     search: filter.search,
   };
 };

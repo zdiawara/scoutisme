@@ -56,7 +56,7 @@ class PersonneController extends Controller
                 ->with([
                     'genre',
                     'attributions.fonction',
-                    'attributions.organisation',
+                    'attributions.organisation.nature',
                     'attributions'  => $this->attributionActive
                 ])
                 ->get();
@@ -82,12 +82,20 @@ class PersonneController extends Controller
                 $query->where('a.fonction_id', $fonctionId);
             }
             if (isset($organisationId)) {
-                $query->where('a.organisation_id', $organisationId);
-                /*                 $query->join('organisations as o', function ($q) {
-                    $q->on('o.id', 'a.organisation_id');
-                });
-                $query->where(DB::raw("JSON_CONTAINS(JSON_EXTRACT(o.parents, '$[*].id') , '\"" . $organisationId . "\"')"), '=', 1); */
+                $inclureSousOrganisation = $request->input('inclureSousOrganisation', null);
+                if ($inclureSousOrganisation === 'true') {
+                    $query->join('organisations as o', function ($q) {
+                        $q->on('o.id', 'a.organisation_id');
+                    });
+                    $query->where(function ($q) use ($organisationId) {
+                        $q->where(DB::raw("JSON_CONTAINS(JSON_EXTRACT(o.parents, '$[*].id') , '\"" . $organisationId . "\"')"), '=', 1)
+                            ->orWhere('o.id', $organisationId);
+                    });
+                } else {
+                    $query->where('a.organisation_id', $organisationId);
+                }
             }
+
             $query->where('a.date_debut', '<=', now())
                 ->where(function ($q) {
                     $q->whereNull('a.date_fin')
@@ -117,6 +125,7 @@ class PersonneController extends Controller
             ->map(function ($personne) {
                 $attribution = $personne->attributions[0] ?? null;
                 $organisation = $attribution != null ? $attribution->organisation : null;
+                $nature = $organisation != null ? $organisation->nature : null;
                 $fonction = $attribution != null ? $attribution->fonction : null;
                 return [
                     "p_code" => $personne->code,
@@ -125,10 +134,11 @@ class PersonneController extends Controller
                     "p_genre" => $personne->genre->nom,
                     "p_date_naissance" => $personne->date_naissance,
                     "p_lieu_naissance" => $personne->lieu_naissance,
-                    "o_code" => $organisation->code ?? "",
-                    "o_nom" => $organisation->nom ?? "",
                     "f_code" => $fonction->code ?? "",
                     "f_nom" => $fonction->nom ?? "",
+                    "o_code" => $organisation->code ?? "",
+                    "o_nom" => $organisation->nom ?? "",
+                    "o_nature" => $nature->nom ?? "",
                 ];
             });
 
@@ -153,6 +163,7 @@ class PersonneController extends Controller
             "f_nom" => "Nom fonction",
             "o_code" => "Code organisation",
             "o_nom" => "Nom organisation",
+            "o_nature" => "Nature organisation"
         ]);
 
         $callback = function () use ($personnes, $fields, $MAPPER) {

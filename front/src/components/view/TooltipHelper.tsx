@@ -1,7 +1,8 @@
+import React from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 type TooltipHelperProps = {
-  description: string;
+  description: React.ReactNode;
 };
 
 export function TooltipHelper({ description }: TooltipHelperProps) {

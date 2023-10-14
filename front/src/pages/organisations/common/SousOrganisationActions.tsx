@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { Dropdown } from "react-bootstrap";
+import { Button, Dropdown } from "react-bootstrap";
 import { OrganisationResource } from "types/organisation.type";
 import { SousOrganisationModal } from "./SousOrganisationModal";
 
@@ -37,25 +37,12 @@ export const SousOrganisationActions: FC<SousOrganisationActionsProps> = ({
 
   return (
     <>
-      <Dropdown className="ms-2">
-        <Dropdown.Toggle variant="outline-primary">Actions</Dropdown.Toggle>
-        <Dropdown.Menu className="topbar-dropdown-menu mt-2">
-          {ACTIONS.map((item) => (
-            <Dropdown.Item
-              as="button"
-              className="py-2 px-3"
-              onClick={onSelect(item.code)}
-              key={item.code}
-            >
-              <i className={`${item.icon} text-black me-2`}></i>
-              <span className="text-primary fs-5 fw-semibold">
-                {item.label}
-              </span>
-              <div className="text-muted">{item.description}</div>
-            </Dropdown.Item>
-          ))}
-        </Dropdown.Menu>
-      </Dropdown>
+      <Button
+        onClick={onSelect("ajouter_sous_organisation")}
+        variant="secondary"
+      >
+        Ajouter sous orga.
+      </Button>
       {action === "ajouter_sous_organisation" && (
         <SousOrganisationModal
           closeModal={closeModal}

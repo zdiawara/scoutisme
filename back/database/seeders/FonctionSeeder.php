@@ -2,12 +2,20 @@
 
 namespace Database\Seeders;
 
+use App\Http\Services\FonctionService;
 use App\Models\Nature;
-use App\Models\Fonction;
 use Illuminate\Database\Seeder;
 
 class FonctionSeeder extends Seeder
 {
+
+    private FonctionService $fonctionService;
+
+    public function __construct(FonctionService $fonctionService)
+    {
+        $this->fonctionService = $fonctionService;
+    }
+
     /**
      * Run the database seeds.
      */
@@ -15,14 +23,56 @@ class FonctionSeeder extends Seeder
     {
         $groupe = Nature::where('code', 'groupe')
             ->firstOrFail();
+
         $unite = Nature::where('code', 'unite')
             ->firstOrFail();
 
-        Fonction::create(['nom' => "Chef d'unité", 'code' => 'chef_unite', 'nature_id' => $unite->id]);
-        Fonction::create(['nom' => "Adjoint au chef d'unité", 'code' => 'adj_chef_unite', 'nature_id' => $unite->id]);
-        Fonction::create(['nom' => "Chargé de la trésorerie", 'code' => 'charge_tresorie', 'nature_id' => $unite->id]);
-        Fonction::create(['nom' => "Chargé de l'information", 'code' => 'charge_info', 'nature_id' => $unite->id]);
-        Fonction::create(['nom' => "Secrétaire", 'code' => 'secretaire', 'nature_id' => $unite->id]);
-        Fonction::create(['nom' => "Conseiller de groupe", 'code' => 'conseiller_groupe', 'nature_id' => $groupe->id]);
+        $region = Nature::where('code', 'region')
+            ->firstOrFail();
+
+        $national = Nature::where('code', 'national')
+            ->firstOrFail();
+
+
+        collect([
+            "Chef d'unité",
+            "Adj. chef d'unité",
+            "Chargé de la trésorerie",
+            "Chargé de l'information",
+            "Secrétaire",
+        ])->each(function ($item) use ($unite) {
+            $this->fonctionService->create(['nom' => $item, 'nature_id' => $unite->id]);
+        });
+
+        collect([
+            "Chef de groupe",
+            "Conseiller de groupe",
+        ])->each(function ($item) use ($groupe) {
+            $this->fonctionService->create(['nom' => $item, 'nature_id' => $groupe->id]);
+        });
+
+        collect([
+            'Commissaire régional',
+            'Com. rég. adj. chargé du secrétariat',
+            'Com. rég. gestion financière et du patrimoine',
+            'Com. rég. communication',
+            'Com. rég. programme des jeunes',
+            'Com. rég. formation et aux ressources adultes',
+            'Com. rég. scoutismes confessionnels'
+        ])->each(function ($item) use ($region) {
+            $this->fonctionService->create(['nom' => $item, 'nature_id' => $region->id]);
+        });
+
+        collect([
+            "Commissaire général",
+            "Commissaire général adjoint. chargé des relations internationales",
+            "Commissaire national à la gestion financière et du patrimoine",
+            "Commissaire national au programme des jeunes",
+            "Commissaire national à la formation et aux ressources adultes",
+            "Commissaire national au secrétariat et à la communication",
+            "Commissaire national aux scoutismes confessionnels"
+        ])->each(function ($item) use ($national) {
+            $this->fonctionService->create(['nom' => $item, 'nature_id' => $national->id]);
+        });
     }
 }

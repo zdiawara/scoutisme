@@ -7,9 +7,7 @@ use App\Http\Resources\OrganisationResource;
 use App\Http\Services\OrganisationService;
 use App\ModelFilters\OrganisationFilter;
 use App\Models\Organisation;
-use Illuminate\Console\View\Components\Warn;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class OrganisationController extends Controller
 {
@@ -62,7 +60,7 @@ class OrganisationController extends Controller
      */
     public function show(Organisation $organisation)
     {
-        $organisation->load(['nature', 'type', 'parent', 'ville', 'enfants.nature']);
+        $organisation->load(['nature', 'type', 'parent', 'ville', 'enfants.nature', 'enfants.type']);
         // $organisation['parents'] = collect(DB::select(
         //     'WITH RECURSIVE cte AS (
         //             SELECT

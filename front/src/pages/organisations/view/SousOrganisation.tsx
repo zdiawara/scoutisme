@@ -31,7 +31,8 @@ export const SousOrganisation: FC<SousOrganisationProps> = ({
                 <Col sm={4} key={org.id}>
                   <Card className="m-0 border border-light">
                     <Card.Body className="text-center p-2">
-                      <span>{org.nature.nom}</span>&nbsp;/&nbsp;
+                      <span>{org.type ? org.type.nom : org.nature.nom}</span>
+                      &nbsp;- &nbsp;
                       <Link
                         to={LINKS.organisations.view(org.id)}
                         className="mb-2 fw-semibold text-black"
@@ -42,9 +43,9 @@ export const SousOrganisation: FC<SousOrganisationProps> = ({
                     <Card.Footer className="px-2 pt-0 border-0 text-right d-flex">
                       <Link
                         to={LINKS.organisations.view(org.id)}
-                        className="btn btn-sm btn-secondary mx-auto"
+                        className="btn btn-sm btn-light mx-auto"
                       >
-                        Voir la fiche
+                        Ouvrir
                       </Link>
                     </Card.Footer>
                   </Card>

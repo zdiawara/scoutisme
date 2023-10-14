@@ -22,12 +22,10 @@ class PersonneFactory extends Factory
             'id' => Str::uuid(),
             'nom' => fake()->lastName(),
             'prenom' => fake()->firstName(),
-            'etat' => 1,
+            'etat' => fake()->numberBetween(0, 1),
+            'type' => fake()->numberBetween(0, 1) === 0 ? 'scout' : 'adulte',
             'code' => fake()->unique()->numerify('#####'),
-            'email' => fake()->unique()->safeEmail(),
-            //'telephones' => ,
-            'date_naissance' => now(),
-            'lieu_naissance' => 'Bobo Dioulasso',
+            'email' => fake()->unique()->safeEmail()
         ];
     }
 }

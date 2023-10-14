@@ -30,4 +30,9 @@ class OrganisationFilter extends ModelFilter
     {
         return $this->where('nature_id', $value);
     }
+
+    public function typeId($value)
+    {
+        return $this->where('type_id', $value);
+    }
 }

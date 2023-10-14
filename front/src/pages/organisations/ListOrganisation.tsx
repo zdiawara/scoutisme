@@ -21,6 +21,7 @@ import { selectHelper } from "utils/functions";
 const buildRequestParams = (filter: Record<string, any>) => {
   return {
     natureId: selectHelper.getValue(filter.nature),
+    typeId: selectHelper.getValue(filter.type),
     etat: selectHelper.getValue(filter.etat),
     search: filter.search,
   };

@@ -75,6 +75,10 @@ const ListTypeUnite = Loadable(
   lazy(() => import("pages/utilitaires/types-unites/ListTypeUnite"))
 );
 
+const OrganisationDashBord = Loadable(
+  lazy(() => import("pages/dashbords/organisations/OrganisationDashBord"))
+);
+
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
@@ -122,6 +126,10 @@ export const router = createBrowserRouter(
       </Route>
       <Route path={LINKS.types_unites.base} element={<Outlet />}>
         <Route index element={<ListTypeUnite />} />
+      </Route>
+
+      <Route path={LINKS.dashbords.base} element={<Outlet />}>
+        <Route path="organisations" element={<OrganisationDashBord />} />
       </Route>
     </Route>
   )

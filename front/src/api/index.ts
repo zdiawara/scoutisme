@@ -8,6 +8,8 @@ import { requestGet, requestPost } from "./request";
 import { RequestParam } from "types/request.type";
 import { requestParams } from "utils/functions";
 
+export * from "./stats";
+
 class PersonneApi extends CrudService {
   public async findPersonnesSansFonction(params?: RequestParam) {
     const response = await requestGet<{ data: PersonneResource[] }>(

@@ -7,7 +7,9 @@ export const messageSchema = yup.object({
 });
 
 const toBody = (data: Record<string, any>) => {
-  const critere: Record<string, any> = {};
+  const critere: Record<string, any> = {
+    value: {},
+  };
   critere.mode = data.critere.mode;
   switch (critere.mode) {
     case "profil":
@@ -30,7 +32,12 @@ const toBody = (data: Record<string, any>) => {
     content: data.content,
     critere: {
       ...critere,
-      value: Object.entries(critere.value).filter((e) => !!e[1]),
+      value: Object.entries(critere.value)
+        .filter((e) => !!e[1])
+        .reduce((prev, curr) => {
+          prev[curr[0]] = curr[1];
+          return prev;
+        }, {} as any),
     },
   };
 };

@@ -95,6 +95,7 @@ const ListInstance: FC = () => {
         <ListResult.Table<any>
           columns={columns}
           data={organisations?.data || []}
+          headerClassName="bg-light"
         />
       </ListResult.Container>
     </>

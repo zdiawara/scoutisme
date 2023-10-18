@@ -8,7 +8,6 @@ use App\Models\Personne;
 use Error;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 
 class MessageService
 {
@@ -61,7 +60,6 @@ class MessageService
 
     private function filterByProfil(Collection $criteres, Builder $query)
     {
-        DB::enableQueryLog();
         if ($criteres->hasAny('organisation_id', 'nature_id', 'fonction_id')) {
 
             $query->join('attributions as a', function ($builder) {
@@ -87,8 +85,6 @@ class MessageService
                 }
             }
         }
-        dd($query->get()->toArray());
-        dd(DB::getQueryLog());
         return $query;
     }
 }

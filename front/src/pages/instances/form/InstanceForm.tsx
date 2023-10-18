@@ -1,23 +1,19 @@
-import { FC } from "react";
-import { Alert, Button, Card, Col, Row } from "react-bootstrap";
+import { FC, Fragment } from "react";
+import { Button, Card, Col, Row } from "react-bootstrap";
 import { PageHeader } from "pages/common";
-import {
-  Radio,
-  SelectFonction,
-  SelectNature,
-  SelectOrganisation,
-  SelectTypePersonne,
-  TextInput,
-  View,
-} from "components";
+import { SelectFonction, TextInput, View } from "components";
 import { WrapperProps, withForm } from "hoc";
-import { useFormContext } from "react-hook-form";
+import { useFieldArray, useFormContext } from "react-hook-form";
+import { instanceSchema } from "./instanceUtils";
 
 const FormContainer: FC<WrapperProps> = ({
   renderButtons,
   title,
   subtitle,
 }) => {
+  const { control } = useFormContext();
+  const fonctionArray = useFieldArray({ control, name: "composition" });
+
   return (
     <>
       <PageHeader.View
@@ -36,7 +32,12 @@ const FormContainer: FC<WrapperProps> = ({
           />
           <Row className="g-3">
             <Col xs={12}>
-              <TextInput name="nom" label="Nom" isRequired />
+              <TextInput
+                name="nom"
+                label="Nom"
+                placeholder="Nom de l'instance"
+                isRequired
+              />
             </Col>
           </Row>
         </Card.Body>
@@ -50,40 +51,47 @@ const FormContainer: FC<WrapperProps> = ({
             className="mb-4"
           />
           <Row className="g-3">
-            <Col xs={8}>
-              <SelectFonction
-                name="fonction1"
-                //label="Fonction"
-                placeholder=""
-                description="Fonction impactée"
-              />
-            </Col>
-            <Col xs={4}>
-              <TextInput
-                name="quato2"
-                //label="Quata"
-                description="Nombre de personnes maximum"
-              />
-            </Col>
-
-            <Col xs={8}>
-              <SelectFonction
-                name="fonction2"
-                //label="Fonction"
-                placeholder=""
-                description="Fonction impactée"
-              />
-            </Col>
-            <Col xs={4}>
-              <TextInput
-                name="quato2"
-                //label="Quata"
-                description="Nombre de personnes maximum"
-              />
-            </Col>
-
+            {fonctionArray.fields.map((field, i) => (
+              <Fragment key={field.id}>
+                <Col xs={4}>
+                  <SelectFonction
+                    name={`composition.${i}.fonction`}
+                    placeholder="Fonction de la personne"
+                    description="Fonction impactée"
+                    //label="Fonction"
+                  />
+                </Col>
+                <Col xs={2}>
+                  <TextInput
+                    name={`composition.${i}.quota`}
+                    placeholder="Quota"
+                    //label="Quota"
+                  />
+                </Col>
+                <Col xs={5}>
+                  <TextInput
+                    name={`composition.${i}.commentaire`}
+                    //placeholder="Fonction de la personne"
+                    placeholder="Commentaire"
+                    //label="Commentaire"
+                  />
+                </Col>
+                <Col xs={1} className="align-self-end">
+                  <Button variant="danger">Supprimer</Button>
+                </Col>
+              </Fragment>
+            ))}
             <Col xs={12}>
-              <Button>Ajouter une </Button>
+              <Button
+                onClick={() => {
+                  fonctionArray.append({
+                    fonction: null,
+                    quota: "",
+                  });
+                }}
+              >
+                Ajouter une fonction
+              </Button>
             </Col>
           </Row>
         </Card.Body>
@@ -92,4 +100,4 @@ const FormContainer: FC<WrapperProps> = ({
   );
 };
 
-export const InstanceForm = withForm(FormContainer);
+export const InstanceForm = withForm(FormContainer, instanceSchema);

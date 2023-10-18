@@ -117,6 +117,15 @@ return new class extends Migration
             $table->json('critere');
             $table->timestamps();
         });
+
+        Schema::create('instances', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('nom');
+            $table->integer('type_frequence');
+            $table->integer('valeur_frequence');
+            $table->json('composition');
+            $table->timestamps();
+        });
     }
 
     /**

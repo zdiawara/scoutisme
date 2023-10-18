@@ -71,15 +71,14 @@ class PersonneService
 
     public function readPersonnesSansFonction($params)
     {
-        return Personne::select('personnes.nom', 'personnes.prenom', 'personnes.id')
-            ->leftJoin('attributions', function ($query) {
-                $query->on('attributions.personne_id', 'personnes.id');
-            })
-            ->whereNull('attributions.id')
-            ->where(function ($query) use ($params) {
-                $query->where('personnes.type', $params['type']);
-            })
-            ->get();
+        return DB::select(
+            'SELECT p.nom, p.prenom, p.id FROM personnes p WHERE p.type = :type and p.id not in (
+                SELECT p.id FROM personnes p 
+                INNER JOIN attributions a on a.personne_id = p.id
+                WHERE (a.date_fin is null or a.date_fin >= now())
+            )',
+            ['type' => $params['type'] ?? null]
+        );
     }
 
     public function affecter(string $personneId, array $body): Attribution

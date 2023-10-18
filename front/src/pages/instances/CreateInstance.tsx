@@ -1,8 +1,10 @@
 import { FC } from "react";
 import { InstanceForm } from "./form";
+import { instanceConverter } from "./form/instanceUtils";
 
 const CreateInstance: FC = () => {
   const create = (input: any) => {
+    console.log(instanceConverter.toBody(input));
     return Promise.resolve();
   };
   return (
@@ -10,9 +12,7 @@ const CreateInstance: FC = () => {
       onSave={create}
       title="Créer une instance"
       defaultValues={{
-        critere: {
-          mode: "all",
-        },
+        composition: [{ fonctions: null, quota: "" }],
       }}
     />
   );

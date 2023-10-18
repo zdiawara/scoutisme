@@ -62,7 +62,7 @@ class PersonneSeeder extends Seeder
                                 ->count(1)
                                 ->make()
                                 ->each(function ($personne) use ($organisation, $fonction) {
-                                    $personne->type = 'scout';
+                                    $personne->type = 'adulte';
                                     $personne->genre_id = Genre::all()->random()->id;
                                     $personneCreated = $this->personneService->create($personne->toArray());
                                     $this->attributionService->create([
@@ -76,33 +76,5 @@ class PersonneSeeder extends Seeder
                         });
                 }
             });
-
-        /* Personne::factory()
-            ->count(1000)
-            ->create()
-            ->each(function ($personne) use ($natures, $fonctions) {
-
-                $body = collect([
-                    'personne_id' => $personne->id,
-                    'date_debut' => now()
-                ]);
-
-                $nature
-
-                if ($personne->type === 'adulte') {
-                    $body->push(['fonction_id' => Fonction::all()->random()->id]);
-
-                    $body = [
-                        'fonction_id' => Fonction::all()->random()->id,
-                        'organisation_id' => Organisation::whereHas('nature', function ($q) {
-                            $q->where('code', '<>', 'unite');
-                        })->get()->random()->id,
-                    ];
-                } else {
-                    $body = []
-                }
-
-                $this->attributionService->create($body);
-            }); */
     }
 }

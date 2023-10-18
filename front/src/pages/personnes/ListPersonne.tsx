@@ -107,10 +107,6 @@ const columns: Columns<PersonneResource>[] = [
     name: "lieu_naissance",
     label: "Lieu naissance",
   },
-  {
-    name: "date_naissance",
-    label: "Date naissance",
-  },
   { name: "email", label: "Email" },
   /*   {
     name: "etat",

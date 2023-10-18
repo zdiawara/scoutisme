@@ -47,4 +47,10 @@ export const LINKS = {
   ref_formations: {
     base: REF_FORMATIONS,
   },
+
+  dashbords: {
+    base: "dashbords",
+    personnes: "/dashbords/personnes",
+    organisations: "/dashbords/organisations",
+  },
 };

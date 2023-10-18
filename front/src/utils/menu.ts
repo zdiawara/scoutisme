@@ -4,6 +4,26 @@ import { LINKS } from "./links";
 
 export const MENU_ITEMS = [
   {
+    key: "dash",
+    label: "Dashbords",
+    isTitle: false,
+    icon: "uil-home-alt",
+    children: [
+      {
+        key: "personnes_1",
+        label: "Personnes",
+        isTitle: false,
+        url: LINKS.dashbords.personnes,
+      },
+      {
+        key: "organisation_1",
+        label: "Organisations",
+        isTitle: false,
+        url: LINKS.dashbords.organisations,
+      },
+    ],
+  },
+  {
     key: "personnes",
     label: "Personnes",
     isTitle: false,

@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Http\Services\OrganisationService;
 use App\Models\Nature;
-use App\Models\Organisation;
 use App\Models\TypeOrganisation;
 use Illuminate\Database\Seeder;
 
@@ -29,13 +28,6 @@ class OrganisationSeeder extends Seeder
 
         $natureRegion = Nature::where('code', 'region')
             ->firstOrFail();
-
-        $natureUnite = Nature::where('code', 'unite')
-            ->firstOrFail();
-
-        $natureGroupe = Nature::where('code', 'groupe')
-            ->firstOrFail();
-
 
         $conseilNational = $this->organisationService->create([
             'nom' => 'Conseil national',
@@ -63,58 +55,40 @@ class OrganisationSeeder extends Seeder
             'Sahel',
             'Sud-Ouest',
         ])->each(function ($item) use ($equipeNational, $natureRegion) {
-            $equipeNational = $this->organisationService->create([
+            $region = $this->organisationService->create([
                 'nom' => $item,
                 'nature_id' => $natureRegion->id,
                 'parent_id' => $equipeNational->id
             ]);
+
+            $types = TypeOrganisation::all();
+
+            $natureGroupe = Nature::where('code', 'groupe')
+                ->firstOrFail();
+
+            $nb = fake()->numberBetween(4, 10);
+
+            for ($i = 0; $i <= $nb; $i++) {
+                $groupe = $this->organisationService->create([
+                    'nom' => 'G - ' . fake()->unique(true, 100000)->word(),
+                    'nature_id' => $natureGroupe->id,
+                    'parent_id' => $region->id
+                ]);
+
+                $nbUnite = fake()->numberBetween(2, 6);
+
+                $natureUnite = Nature::where('code', 'unite')
+                    ->firstOrFail();
+
+                for ($j = 0; $j <= $nbUnite; $j++) {
+                    $this->organisationService->create([
+                        'nom' => 'U - ' . fake()->unique(true, 100000)->word(),
+                        'nature_id' => $natureUnite->id,
+                        'parent_id' => $groupe->id,
+                        'type_id' => $types->random()->id,
+                    ]);
+                }
+            }
         });
-
-        $regionHautBassin = Organisation::where('nom', 'Hauts-Bassins')
-            ->firstOrFail();
-
-
-
-        $groupe1 = $this->organisationService->create([
-            'nom' => 'Nelson M.',
-            'nature_id' => $natureGroupe->id,
-            'parent_id' => $regionHautBassin->id
-        ]);
-
-        $groupe2 = $this->organisationService->create([
-            'nom' => 'Luteur King',
-            'nature_id' => $natureGroupe->id,
-            'parent_id' => $regionHautBassin->id
-        ]);
-
-        $types = TypeOrganisation::all();
-
-        $this->organisationService->create([
-            'nom' => 'Fama',
-            'type_id' => $types->random()->id,
-            'nature_id' => $natureUnite->id,
-            'parent_id' => $groupe1->id,
-        ]);
-
-        $this->organisationService->create([
-            'nom' => 'Tagafet',
-            'nature_id' => $natureUnite->id,
-            'parent_id' => $groupe2->id,
-            'type_id' => $types->random()->id,
-        ]);
-
-        $this->organisationService->create([
-            'nom' => 'Balaie',
-            'nature_id' => $natureUnite->id,
-            'parent_id' => $groupe1->id,
-            'type_id' => $types->random()->id,
-        ]);
-
-        $this->organisationService->create([
-            'nom' => 'Zama',
-            'nature_id' => $natureUnite->id,
-            'parent_id' => $regionHautBassin->id,
-            'type_id' => $types->random()->id,
-        ]);
     }
 }

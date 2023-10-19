@@ -39,7 +39,7 @@ class PersonneSeeder extends Seeder
                         ->get()
                         ->each(function ($organisation) use ($fonction) {
                             Personne::factory()
-                                ->count(rand(10, 30))
+                                ->count(rand(3, 30))
                                 ->make()
                                 ->each(function ($personne) use ($organisation, $fonction) {
                                     $personne->type = 'scout';

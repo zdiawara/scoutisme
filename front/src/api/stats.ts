@@ -9,4 +9,12 @@ export const statApi = {
     countAll: () =>
       requestGet<{ data: StatOrgaNature[] }>(`${base}/organisations`),
   },
+
+  personnes: {
+    byRegion: () =>
+      requestGet<{
+        data: Array<Record<string, any>>;
+        headers: Array<{ nom: string; code: string }>;
+      }>(`${base}/scouts/regions`),
+  },
 };

@@ -10,16 +10,22 @@ export const MENU_ITEMS = [
     icon: "uil-home-alt",
     children: [
       {
-        key: "personnes_1",
-        label: "Personnes",
-        isTitle: false,
-        url: LINKS.dashbords.personnes,
-      },
-      {
         key: "organisation_1",
         label: "Organisations",
         isTitle: false,
         url: LINKS.dashbords.organisations,
+      },
+      {
+        key: "personnes_1",
+        label: "Scouts",
+        isTitle: false,
+        url: LINKS.dashbords.scouts,
+      },
+      {
+        key: "personnes_1",
+        label: "Adultes",
+        isTitle: false,
+        url: LINKS.dashbords.adultes,
       },
     ],
   },

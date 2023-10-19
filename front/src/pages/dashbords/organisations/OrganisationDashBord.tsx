@@ -71,16 +71,18 @@ const OrganisationDashBord = () => {
   const byRegionQuery = useQuery({
     queryKey: ["dash_organisation_regions"],
     networkMode: "offlineFirst",
-    queryFn: () => {
-      return statApi.organisations.byRegion().then((e) => e.data);
+    queryFn: async () => {
+      const { data } = await statApi.organisations.byRegion();
+      return data;
     },
   });
 
   const coutAllQuery = useQuery({
     queryKey: ["dash_organisation"],
     networkMode: "offlineFirst",
-    queryFn: () => {
-      return statApi.organisations.countAll().then((e) => e.data);
+    queryFn: async () => {
+      const { data } = await statApi.organisations.countAll();
+      return data;
     },
   });
 

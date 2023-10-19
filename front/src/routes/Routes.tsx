@@ -79,6 +79,10 @@ const OrganisationDashBord = Loadable(
   lazy(() => import("pages/dashbords/organisations/OrganisationDashBord"))
 );
 
+const ScoutDashbord = Loadable(
+  lazy(() => import("pages/dashbords/personnes/ScoutDashbord"))
+);
+
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
@@ -130,6 +134,7 @@ export const router = createBrowserRouter(
 
       <Route path={LINKS.dashbords.base} element={<Outlet />}>
         <Route path="organisations" element={<OrganisationDashBord />} />
+        <Route path="scouts" element={<ScoutDashbord />} />
       </Route>
     </Route>
   )

@@ -50,7 +50,8 @@ export const LINKS = {
 
   dashbords: {
     base: "dashbords",
-    personnes: "/dashbords/personnes",
+    scouts: "/dashbords/scouts",
+    adultes: "/dashbords/adultes",
     organisations: "/dashbords/organisations",
   },
 };

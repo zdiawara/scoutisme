@@ -112,7 +112,10 @@ export const AffecterPersonneModal: FC<AffecterPersonneModalProps> = ({
   const ajouterMembre = (data: Record<string, any>) => {
     const { personne_id, ...rest } = attributionConverter.toBody(data);
 
-    const body = { ...rest, type: "direction" };
+    const body = {
+      ...rest,
+      type: personne.type === "adulte" ? "direction" : "scout",
+    };
 
     return personneApi.affecter(personne.id, body);
   };
@@ -120,8 +123,6 @@ export const AffecterPersonneModal: FC<AffecterPersonneModalProps> = ({
   if (isLoading || !fonctionScout) {
     return null;
   }
-
-  console.log(fonctionScout.data[0]);
 
   return (
     <OrganisationMembreForm

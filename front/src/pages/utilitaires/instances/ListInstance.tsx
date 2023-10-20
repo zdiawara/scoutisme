@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { Columns, ICONS, ListResult, PageHeader } from "pages/common";
@@ -8,6 +8,7 @@ import { LINKS } from "utils";
 import { instanceApi } from "api";
 import { View } from "components";
 import { InstanceResource } from "types/events.type";
+import { InstanceModal } from "./InstanceModal";
 
 const ListInstance: FC = () => {
   /*   const { filter, setFilter } = useContext(FilterContext);
@@ -21,6 +22,14 @@ const ListInstance: FC = () => {
       return instanceApi.findAll<any>();
     },
   });
+
+  const [action, setAction] = useState<
+    | {
+        code: "create" | "edit";
+        item?: InstanceResource;
+      }
+    | undefined
+  >();
 
   const columns: Columns<InstanceResource>[] = [
     {
@@ -60,10 +69,14 @@ const ListInstance: FC = () => {
       name: "actions",
       label: "Actions",
       headClassName: "text-end",
-      Cell: (fonction) => {
+      Cell: (item) => {
         return (
           <div className="text-end">
-            <Button className="action-icon" variant="link">
+            <Button
+              className="action-icon"
+              variant="link"
+              onClick={() => setAction({ code: "edit", item })}
+            >
               <i className="uil-edit-alt fs-4 text-primary"></i>
             </Button>
             {/* <Button variant="link" className="action-icon">
@@ -83,9 +96,12 @@ const ListInstance: FC = () => {
         icon={ICONS.instance}
         className="my-4"
         right={
-          <Link to={LINKS.instances.create} className="btn btn-primary">
+          <Button
+            onClick={() => setAction({ code: "create" })}
+            className="btn btn-primary"
+          >
             Ajouter une instance
-          </Link>
+          </Button>
         }
       />
 
@@ -96,6 +112,13 @@ const ListInstance: FC = () => {
           headerClassName="bg-light"
         />
       </ListResult.Container>
+
+      {action && (
+        <InstanceModal
+          closeModal={() => setAction(undefined)}
+          selected={action.item}
+        />
+      )}
     </>
   );
 };

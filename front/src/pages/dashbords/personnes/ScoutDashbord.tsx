@@ -1,9 +1,28 @@
 import { useQuery } from "@tanstack/react-query";
 import { statApi } from "api";
+import classNames from "classnames";
 import { useMemo } from "react";
-import { Card, Table, ProgressBar, Row, Col } from "react-bootstrap";
+import { Card, Table, ProgressBar, Row, Col, ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { LINKS } from "utils";
+
+const TABS = [
+  {
+    label: "Région",
+    code: "fiche",
+    description: "Repartition des scouts par région",
+  },
+  {
+    label: "Confession",
+    code: "direction",
+    description: "Effectif des scouts par confession réligieuse",
+  },
+  {
+    label: "Genre",
+    code: "scouts",
+    description: "Nombre de scouts par genre",
+  },
+];
 
 const Channels = () => {
   const byRegionQuery = useQuery({
@@ -24,11 +43,51 @@ const Channels = () => {
   }, [byRegionQuery.data?.data]);
 
   return (
-    <Row>
-      <Col xs={3}></Col>
+    <Row className="mt-3">
+      <Col xs={3}>
+        <Card>
+          <Card.Header className="bg-light">SCOUTS</Card.Header>
+          <Card.Body className="p-1">
+            <ListGroup defaultActiveKey="#link1">
+              {TABS.map((item) => (
+                <ListGroup.Item
+                  key={item.code}
+                  className={classNames("border-0 rounded", {
+                    //active: item.code === page,
+                  })}
+                  action
+                  //onClick={onSelectPage(item.code)}
+                >
+                  <span className="text-black">{item.label}</span>
+                  <div>{item.description}</div>
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          </Card.Body>
+        </Card>
+        <Card className="text-black">
+          <Card.Header className="bg-light">ADULTES</Card.Header>
+          <Card.Body className="p-1">
+            <ListGroup defaultActiveKey="#link1">
+              {TABS.map((item) => (
+                <ListGroup.Item
+                  key={item.code}
+                  className={classNames("border-0 rounded", {
+                    //active: item.code === page,
+                  })}
+                  action
+                  //onClick={onSelectPage(item.code)}
+                >
+                  {item.label}
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          </Card.Body>
+        </Card>
+      </Col>
 
       <Col xs={9}>
-        <Card className="mt-3">
+        <Card>
           <Card.Body>
             <Link to="#" className="p-0 float-end">
               Export <i className="mdi mdi-download ms-1"></i>
@@ -43,7 +102,6 @@ const Channels = () => {
                   {byRegionQuery.data?.headers?.map((item) => (
                     <th key={item.code}>{item.nom}</th>
                   ))}
-                  <th style={{ width: "35%" }}>&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -65,13 +123,6 @@ const Channels = () => {
                         }
                         return <td key={i}>{item[header.code]}</td>;
                       })}
-                      <td>
-                        <ProgressBar
-                          variant="info"
-                          now={total > 0 ? (item.cumul / total) * 100 : 0}
-                          style={{ height: "5px" }}
-                        />
-                      </td>
                     </tr>
                   );
                 })}
@@ -81,7 +132,6 @@ const Channels = () => {
                     TOTAL
                   </td>
                   <td>{total}</td>
-                  <td></td>
                 </tr>
               </tbody>
             </Table>

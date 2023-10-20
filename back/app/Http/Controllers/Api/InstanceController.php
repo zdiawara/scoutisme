@@ -57,6 +57,14 @@ class InstanceController extends Controller
     }
 
     /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Instance $instance)
+    {
+        return new InstanceResource($this->instanceService->update($instance, $request->all()));
+    }
+
+    /**
      * Display the specified resource.
      */
     public function show(Instance $instance)

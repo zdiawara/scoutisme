@@ -10,4 +10,10 @@ class InstanceService
     {
         return Instance::create($body);
     }
+
+    public function update(Instance $instance, array $body)
+    {
+        $instance->update($body);
+        return $instance;
+    }
 }

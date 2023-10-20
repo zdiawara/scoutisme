@@ -22,7 +22,14 @@ const toBody = (data: Record<string, any>) => {
 };
 
 const toInput = (data: any) => {
-  return {};
+  return {
+    nom: data.nom,
+    compositions: data.compositions.map((item: any) => ({
+      fonction: item.fonction,
+      quota: item.quota,
+      commentaire: item.commentaire,
+    })),
+  };
 };
 export const instanceConverter = {
   toBody,

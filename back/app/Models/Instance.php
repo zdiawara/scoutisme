@@ -11,8 +11,8 @@ class Instance extends Model
     use UUID, Filterable;
 
     protected $fillable = [
-        'nom', 'composition'
+        'nom', 'compositions'
     ];
 
-    protected $casts = ['composition' => 'array'];
+    protected $casts = ['compositions' => 'array'];
 }

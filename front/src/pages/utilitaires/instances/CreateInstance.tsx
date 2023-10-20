@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { InstanceForm } from "./form";
-import { instanceConverter } from "./form/instanceUtils";
+import { instanceConverter } from "./instanceUtils";
 import { instanceApi } from "api";
 
 const CreateInstance: FC = () => {

@@ -9,5 +9,5 @@ class Genre extends Model
 {
     use UUID;
 
-    protected $fillable = ['nom'];
+    protected $fillable = ['nom', 'code'];
 }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AttributionController;
 use App\Http\Controllers\Api\FonctionController;
 use App\Http\Controllers\Api\GenreController;
+use App\Http\Controllers\Api\InstanceController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\NatureController;
 use App\Http\Controllers\Api\OrganisationController;
@@ -48,7 +49,8 @@ Route::apiResource('fonctions', FonctionController::class);
 Route::apiResource('attributions', AttributionController::class);
 Route::apiResource('genres', GenreController::class);
 Route::apiResource('messages',  MessageController::class);
-Route::apiResource('instances',  MessageController::class);
+Route::apiResource('instances',  InstanceController::class);
 Route::get('/stats/organisations/regions', [OrganisationStatController::class, 'statByRegion']);
 Route::get('/stats/organisations', [OrganisationStatController::class, 'countAll']);
 Route::get('/stats/scouts/regions', [ScoutStatController::class, 'statByRegion']);
+Route::get('/stats/scouts/genre', [ScoutStatController::class, 'scoutByGenre']);

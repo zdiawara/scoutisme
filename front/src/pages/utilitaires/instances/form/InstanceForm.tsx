@@ -4,7 +4,7 @@ import { PageHeader } from "pages/common";
 import { SelectFonction, TextInput, View } from "components";
 import { WrapperProps, withForm } from "hoc";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { instanceSchema } from "./instanceUtils";
+import { instanceSchema } from "../instanceUtils";
 
 const FormContainer: FC<WrapperProps> = ({
   renderButtons,
@@ -58,22 +58,18 @@ const FormContainer: FC<WrapperProps> = ({
                     name={`compositions.${i}.fonction`}
                     placeholder="Fonction de la personne"
                     description="Fonction impactée"
-                    //label="Fonction"
                   />
                 </Col>
                 <Col xs={2}>
                   <TextInput
                     name={`compositions.${i}.quota`}
                     placeholder="Quota"
-                    //label="Quota"
                   />
                 </Col>
                 <Col xs={5}>
                   <TextInput
                     name={`compositions.${i}.commentaire`}
-                    //placeholder="Fonction de la personne"
                     placeholder="Commentaire"
-                    //label="Commentaire"
                   />
                 </Col>
                 <Col xs={1} className="align-self-end">

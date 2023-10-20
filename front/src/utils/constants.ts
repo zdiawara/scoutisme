@@ -9,6 +9,7 @@ export const QUERY_KEY = {
   typesUnites: "types-unites",
   natures: "natures",
   messages: "messages",
+  instances: "instances",
 };
 
 export const MASK = {

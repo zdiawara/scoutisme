@@ -20,8 +20,8 @@ return new class extends Migration
         Nature::create(['nom' => 'National', 'code' => 'national']);
 
         // Insertion des genres
-        Genre::create(['nom' => 'Homme']);
-        Genre::create(['nom' => 'Femme']);
+        Genre::create(['nom' => 'Homme', 'code' => 'h']);
+        Genre::create(['nom' => 'Femme', 'code' => 'f']);
 
         // Insertion des villes 
         $villes = json_decode(file_get_contents(storage_path() . "/bf.json"), true);

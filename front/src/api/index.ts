@@ -63,3 +63,6 @@ export const genreApi = new GenreApi("genres");
 
 class MessageApi extends CrudService {}
 export const messageApi = new MessageApi("messages");
+
+class InstanceApi extends CrudService {}
+export const instanceApi = new InstanceApi("instances");

@@ -27,6 +27,7 @@ return new class extends Migration
         Schema::create('genres', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nom');
+            $table->string('code')->unique();
             $table->timestamps();
         });
         Schema::create('ref_formations', function (Blueprint $table) {
@@ -121,9 +122,7 @@ return new class extends Migration
         Schema::create('instances', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nom');
-            $table->integer('type_frequence');
-            $table->integer('valeur_frequence');
-            $table->json('composition');
+            $table->json('compositions');
             $table->timestamps();
         });
     }

@@ -50,7 +50,7 @@ const ViewOrganisation = Loadable(
 );
 
 const ListInstance = Loadable(
-  lazy(() => import("pages/instances/ListInstance"))
+  lazy(() => import("pages/utilitaires/instances/ListInstance"))
 );
 
 const CreateInstance = Loadable(

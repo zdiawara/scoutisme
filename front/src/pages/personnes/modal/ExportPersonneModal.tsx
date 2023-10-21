@@ -64,7 +64,7 @@ const Form: FC<WrapperV2Props> = (props) => {
             value="1"
           />
         </Col>
-        <Col>
+        {/* <Col>
           <Radio
             name="o_parent"
             label="Inclure les parents"
@@ -72,7 +72,7 @@ const Form: FC<WrapperV2Props> = (props) => {
             inline
             value="1"
           />
-        </Col>
+        </Col> */}
         <Col xs={12}>
           <label className="text-dark  fw-bold me-2 mb-2">
             Fonction &nbsp;

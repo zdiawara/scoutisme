@@ -105,6 +105,7 @@ const ListEvent: FC = () => {
         <ListResult.Table<OrganisationResource>
           columns={columns}
           data={organisations?.data || []}
+          headerClassName="bg-light"
         />
         {/* <ListResult.Paginate
           pageCount={2}

@@ -98,6 +98,7 @@ const ListMessage: FC = () => {
         <ListResult.Table<MessageResource>
           columns={columns}
           data={organisations?.data || []}
+          headerClassName="bg-light"
         />
       </ListResult.Container>
     </>

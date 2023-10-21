@@ -69,6 +69,7 @@ const ListTypeUnite: FC = () => {
         <ListResult.Table<TypeOrganisationResource>
           columns={columns}
           data={results?.data || []}
+          headerClassName="bg-light"
         />
       </ListResult.Container>
       {action && (

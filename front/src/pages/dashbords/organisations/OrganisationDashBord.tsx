@@ -36,7 +36,7 @@ const Item: FC<ItemProps> = ({ title, rows, nature }) => {
             <tr>
               <th>Région</th>
               <th>Nombre {nature === "groupe" ? "de groupe" : "d'unité"}</th>
-              <th style={{ width: "40%" }}>&nbsp;</th>
+              <th style={{ width: "200px" }}>&nbsp;</th>
             </tr>
           </thead>
           <tbody>
@@ -137,18 +137,6 @@ const OrganisationDashBord = () => {
               </Card>
             </Col>
           ))}
-
-        <Col xs={6}>
-          <Item
-            title="Nombre de Groupe par region"
-            rows={byRegionQuery.data.map((item: any) => ({
-              id: item.id,
-              region: item.nom,
-              nombre: parseInt(item.nombre_groupe),
-            }))}
-            nature={NATURE.groupe}
-          />
-        </Col>
         <Col xs={6}>
           <Item
             title="Nombre d'Unite par region"
@@ -158,6 +146,17 @@ const OrganisationDashBord = () => {
               nombre: parseInt(item.nombre_unite),
             }))}
             nature={NATURE.unite}
+          />
+        </Col>
+        <Col xs={6}>
+          <Item
+            title="Nombre de Groupe par region"
+            rows={byRegionQuery.data.map((item: any) => ({
+              id: item.id,
+              region: item.nom,
+              nombre: parseInt(item.nombre_groupe),
+            }))}
+            nature={NATURE.groupe}
           />
         </Col>
       </Row>

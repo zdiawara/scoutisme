@@ -109,7 +109,13 @@ export const InstanceModal: FC<InstanceModalProps> = ({
     <InstanceForm
       onSave={save}
       title={`${selected?.id ? "Modifier" : "Ajouter"} une instance`}
-      defaultValues={selected?.id ? instanceConverter.toInput(selected) : {}}
+      defaultValues={
+        selected?.id
+          ? instanceConverter.toInput(selected)
+          : {
+              compositions: [{ fonctions: null, quota: "" }],
+            }
+      }
       onSuccess={() => {
         query.invalidateQueries([QUERY_KEY.instances]);
         closeModal();

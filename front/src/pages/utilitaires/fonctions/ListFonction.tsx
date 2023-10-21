@@ -124,6 +124,7 @@ const ListFonction: FC = () => {
         <ListResult.Table<FonctionResource>
           columns={columns}
           data={personnes?.data || []}
+          headerClassName="bg-light"
         />
         {/*         {personnes && (
           <ListResult.Paginate

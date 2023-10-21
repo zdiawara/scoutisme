@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { statApi } from "api";
 import classNames from "classnames";
 import { useMemo } from "react";
-import { Card, Table, ProgressBar, Row, Col, ListGroup } from "react-bootstrap";
+import { Card, Table, Row, Col, ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { LINKS } from "utils";
 

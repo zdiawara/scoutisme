@@ -125,6 +125,13 @@ return new class extends Migration
             $table->json('compositions');
             $table->timestamps();
         });
+
+        /*         Schema::create('events', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('nom');
+            $table->json('compositions');
+            $table->timestamps();
+        }); */
     }
 
     /**

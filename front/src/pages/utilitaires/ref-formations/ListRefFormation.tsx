@@ -72,6 +72,7 @@ const ListRefFormation: FC = () => {
         <ListResult.Table<RefFormationResource>
           columns={columns}
           data={refFormations?.data || []}
+          headerClassName="bg-light"
         />
       </ListResult.Container>
       {action && (

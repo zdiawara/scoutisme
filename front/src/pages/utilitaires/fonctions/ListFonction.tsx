@@ -18,9 +18,11 @@ import { FilterContext } from "context";
 import { FonctionFilter, RequestParam } from "types/request.type";
 
 const ListFonction: FC = () => {
-  const { filter, setFilter } = useContext(FilterContext);
-  const { nature } = filter as FonctionFilter;
-  const { data: personnes } = useQuery({
+  const filterContext = useContext(FilterContext);
+  const { setFilter } = filterContext;
+  const filter = filterContext.filter as FonctionFilter;
+
+  const { data: result } = useQuery({
     queryKey: [QUERY_KEY.fonctions, filter],
     keepPreviousData: true,
     networkMode: "offlineFirst",
@@ -66,7 +68,11 @@ const ListFonction: FC = () => {
       name: "duree_mandat",
       label: "Durée mandat",
       Cell: ({ duree_mandat }) => {
-        return duree_mandat ? <span>{duree_mandat} ans</span> : <View.Empty />;
+        return duree_mandat ? (
+          <span>{duree_mandat} an(s)</span>
+        ) : (
+          <View.Empty />
+        );
       },
     },
     {
@@ -107,15 +113,24 @@ const ListFonction: FC = () => {
       />
 
       <PageFilter.Container>
-        <Col sm={6}>
+        <Col sm={5}>
+          <PageFilter.Search
+            onChange={(search) => {
+              setFilter((prev) => ({ ...prev, search, page: 1 }));
+            }}
+            initialValue={filter.search}
+          />
+        </Col>
+
+        <Col className="ms-auto" sm={3}>
           <SelectNatureSimple
             placeholder="Nature de l'organisation"
             name="nature"
             isClearable
             onChange={(nature) => {
-              setFilter((prev) => ({ ...prev, nature }));
+              setFilter((prev) => ({ ...prev, nature, page: 1 }));
             }}
-            value={nature}
+            value={filter.nature}
           />
         </Col>
       </PageFilter.Container>
@@ -123,22 +138,25 @@ const ListFonction: FC = () => {
       <ListResult.Container isLoading={false}>
         <ListResult.Table<FonctionResource>
           columns={columns}
-          data={personnes?.data || []}
+          data={result?.data || []}
           headerClassName="bg-light"
         />
-        {/*         {personnes && (
+        {result?.data && (
           <ListResult.Paginate
-            pageCount={2}
-            pageActive={1}
-            onPageChange={(page) => {}}
+            pageCount={result.meta.total_page}
+            pageActive={result.meta.page - 1}
+            total={result.meta.total}
+            onPageChange={(page) => {
+              setFilter((old) => ({ ...old, page: page + 1 }));
+            }}
           />
-        )} */}
+        )}
       </ListResult.Container>
       {action && (
         <FonctionModal
           closeModal={() => setAction(undefined)}
           fonction={action.fonction}
-          nature={nature}
+          nature={filter.nature}
         />
       )}
     </>

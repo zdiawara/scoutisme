@@ -19,7 +19,7 @@ import { FilterPersonne } from "./FilterPersonne";
 import { selectHelper } from "utils/functions";
 import { ListPersonneActions } from "./common/ListPersonneActions";
 import { ExportPersonneModal } from "./modal";
-import { NATURE } from "utils/constants";
+import { NATURE, QUERY_KEY } from "utils/constants";
 
 const columns: Columns<PersonneResource>[] = [
   {
@@ -156,7 +156,7 @@ const ListPersonne: FC = () => {
   const [show, setShow] = useState<boolean>(false);
   const [exportModal, setExportModal] = useState<boolean>(false);
   const { data: personnes, isLoading } = useQuery({
-    queryKey: ["personnes", filter],
+    queryKey: [QUERY_KEY.personnes, filter],
     keepPreviousData: true,
     networkMode: "offlineFirst",
     queryFn: ({ queryKey }) => {

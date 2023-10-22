@@ -14,6 +14,13 @@ class FonctionFilter extends ModelFilter
         });
     }
 
+    public function search($search)
+    {
+        return $this->where(function ($q) use ($search) {
+            return $q->where('nom', 'LIKE', "%$search%");
+        });
+    }
+
     public function code($value)
     {
         return $this->where('code', $value);

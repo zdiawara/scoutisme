@@ -8,11 +8,16 @@ export interface ListPaginated<T> {
   meta: {
     total: number;
     last_page: number;
+    total_page: number;
+    page: number;
     current_page: number;
   };
 }
 
-export interface Filter {}
+export interface Filter {
+  page: number;
+  size: number;
+}
 
 export type FilterParam = {
   filter: Filter;

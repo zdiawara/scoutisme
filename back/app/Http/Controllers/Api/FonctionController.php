@@ -24,10 +24,28 @@ class FonctionController extends Controller
     public function index(Request $request)
     {
         $query = Fonction::filter($request->all(), FonctionFilter::class);
+
+        $meta = [];
+
+        if ($request->has('page')) {
+            $size = $request->get('size', 10);
+            $page = $request->get('page', 1);
+            $total = $query->count();
+            $query = $query->offset(($page - 1) * $size)
+                ->limit($size);
+            $meta = [
+                'size' => $size,
+                'page' => $page,
+                'total' => $total,
+                'total_page' => ceil($total / $size)
+            ];
+        }
+
         return [
             "data" => $query->with(['nature'])
                 ->orderBy('nom', 'asc')
-                ->get()
+                ->get(),
+            "meta" => $meta
         ];
     }
 

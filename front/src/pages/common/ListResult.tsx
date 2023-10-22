@@ -83,16 +83,18 @@ function Table<T>({ columns, data, headerClassName }: TableProps<T>) {
 type PaginateProps = {
   pageCount: number;
   pageActive: number;
+  total: number;
   onPageChange: (page: number) => void;
 };
 
 const Paginate: FC<PaginateProps> = ({
   pageCount,
   pageActive,
+  total,
   onPageChange,
 }) => {
   return (
-    <Stack direction="horizontal" className="aligns-items-center ">
+    <Stack direction="horizontal" className="aligns-items-center m-2">
       <div style={{ width: "80px" }}>
         <Select
           className="react-select"
@@ -106,6 +108,7 @@ const Paginate: FC<PaginateProps> = ({
           ]}
         />
       </div>
+      <div className="ms-auto me-auto">{total} résultat(s) au total</div>
       <ReactPaginate
         breakLabel="..."
         nextLabel={<i className="uil-angle-right"></i>}
@@ -124,7 +127,7 @@ const Paginate: FC<PaginateProps> = ({
         nextLinkClassName="page-link"
         breakClassName="page-item"
         breakLinkClassName="page-link"
-        containerClassName="pagination pagination-rounded m-0 ms-auto"
+        containerClassName="pagination pagination-rounded m-0"
         activeClassName="active"
       />
     </Stack>

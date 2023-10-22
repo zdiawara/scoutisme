@@ -16,7 +16,7 @@ const Container: FC<PageFilterProps> = ({ children }) => {
 };
 
 type SearchProps = {
-  initialValue: string | null;
+  initialValue?: string | null;
   onChange: (value: string) => void;
 };
 const Search: FC<SearchProps> = ({ initialValue, onChange }) => {

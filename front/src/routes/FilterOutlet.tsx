@@ -23,6 +23,8 @@ export const PersonneOutlet = () => {
 export const OrganisationOutlet = () => {
   const filter: OrganisationFilter = {
     search: "",
+    page: 1,
+    size: 10,
   };
   return (
     <FilterProvider initial={filter}>
@@ -34,6 +36,8 @@ export const OrganisationOutlet = () => {
 export const FonctionOutlet = () => {
   const filter: FonctionFilter = {
     search: "",
+    page: 1,
+    size: 10,
   };
   return (
     <FilterProvider initial={filter}>

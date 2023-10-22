@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('nom');
             $table->string('code')->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
         Schema::create('natures', function (Blueprint $table) {
             $table->uuid('id')->primary();
@@ -40,6 +41,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('nom');
             $table->timestamps();
+            $table->softDeletes();
         });
         Schema::create('organisations', function (Blueprint $table) {
             $table->uuid('id')->primary();
@@ -92,6 +94,7 @@ return new class extends Migration
             $table->integer('duree_mandat')->nullable();
             $table->uuid('nature_id');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('nature_id')->references('id')->on('natures');
         });
@@ -124,6 +127,7 @@ return new class extends Migration
             $table->string('nom');
             $table->json('compositions');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         /*         Schema::create('events', function (Blueprint $table) {

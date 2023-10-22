@@ -108,7 +108,7 @@ const Paginate: FC<PaginateProps> = ({
           ]}
         />
       </div>
-      <div className="ms-auto me-auto">{total} résultat(s) au total</div>
+      <div className="ms-auto me-auto">{total} résultat(s)</div>
       <ReactPaginate
         breakLabel="..."
         nextLabel={<i className="uil-angle-right"></i>}

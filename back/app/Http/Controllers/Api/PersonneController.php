@@ -42,29 +42,22 @@ class PersonneController extends Controller
 
         $query = $this->buildQuery($request);
 
-        $total = $query->count();
-        $data = collect([]);
+        $result = $this->addPaging($request, $query);
 
-        if ($total > 0) {
-            $page = $request->get('page', 1);
-            $size = $request->get('size', 100);
-            $data = $query
-                ->select('personnes.*')
-                ->offset(($page - 1) * $size)
-                ->limit($size)
-                ->orderBy('nom', 'asc')
-                ->with([
-                    'genre',
-                    'attributions.fonction',
-                    'attributions.organisation.nature',
-                    'attributions'  => $this->attributionActive
-                ])
-                ->get();
-        }
+        $data = $result['query']
+            ->select('personnes.*')
+            ->orderBy('nom', 'asc')
+            ->with([
+                'genre',
+                'attributions.fonction',
+                'attributions.organisation.nature',
+                'attributions'  => $this->attributionActive
+            ])
+            ->get();
 
         return [
             'data' => PersonneResource::collection($data),
-            'total' => $total,
+            'meta' => $result['meta'],
         ];
     }
 

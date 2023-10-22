@@ -120,16 +120,9 @@ const columns: Columns<PersonneResource>[] = [
     Cell: () => {
       return (
         <div className="text-end">
-          <Button
-            className="action-icon"
-            variant="link"
-            //onClick={() => setAction({ code: "edit", fonction })}
-          >
+          <Button className="action-icon" variant="link">
             <i className="uil-edit-alt fs-4 text-primary"></i>
           </Button>
-          {/* <Button variant="link" className="action-icon">
-            <i className="mdi mdi-delete fs-4 text-danger"></i>
-          </Button> */}
         </div>
       );
     },
@@ -147,15 +140,17 @@ const buildRequestParams = (filter: Record<string, any>) => {
     organisationId: selectHelper.getValue(filter.organisation),
     inclureSousOrganisation: filter.inclureSousOrganisation,
     search: filter.search,
+    page: filter.page,
+    size: filter.size,
   };
 };
 
 const ListPersonne: FC = () => {
-  const { filter, setFilter, setFilterByKey } = useContext(FilterContext);
-  const { search, ...restFilter } = filter as PersonneFilter;
+  const filterContext = useContext(FilterContext);
+  const filter = filterContext.filter as PersonneFilter;
   const [show, setShow] = useState<boolean>(false);
   const [exportModal, setExportModal] = useState<boolean>(false);
-  const { data: personnes, isLoading } = useQuery({
+  const { data: result, isLoading } = useQuery({
     queryKey: [QUERY_KEY.personnes, filter],
     keepPreviousData: true,
     networkMode: "offlineFirst",
@@ -179,10 +174,10 @@ const ListPersonne: FC = () => {
       <PageFilter.Container>
         <Col sm={5}>
           <PageFilter.Search
-            onChange={(v) => {
-              setFilterByKey("search", v);
+            onChange={(search) => {
+              filterContext.setFilter((prev) => ({ ...prev, search, page: 1 }));
             }}
-            initialValue={search}
+            initialValue={filter.search}
           />
         </Col>
         <Col>
@@ -208,10 +203,10 @@ const ListPersonne: FC = () => {
         </Col>
         <FilterPersonne
           applyFiler={(data) => {
-            setFilter((prev) => ({ ...prev, ...data }));
+            filterContext.setFilter((prev) => ({ ...prev, ...data, page: 1 }));
             setShow(false);
           }}
-          defaultValues={restFilter}
+          defaultValues={filterContext.filter}
           show={show}
           close={() => setShow(false)}
         />
@@ -220,21 +215,19 @@ const ListPersonne: FC = () => {
       <ListResult.Container isLoading={isLoading}>
         <ListResult.Table<PersonneResource>
           columns={columns}
-          data={personnes?.data || []}
+          data={result?.data || []}
           headerClassName="bg-light"
         />
-        {/* {personnes && (
+        {result?.data && (
           <ListResult.Paginate
-            pageCount={personnes.meta.last_page}
-            pageActive={personnes.meta.current_page - 1}
-            pageCount={2}
-            pageActive={1}
+            pageCount={result.meta.total_page}
+            pageActive={result.meta.page - 1}
+            total={result.meta.total}
             onPageChange={(page) => {
-              console.log(page);
-              setFilter((old) => ({ ...old, page }));
+              filterContext.setFilter((old) => ({ ...old, page: page + 1 }));
             }}
           />
-        )} */}
+        )}
       </ListResult.Container>
       {exportModal && (
         <ExportPersonneModal

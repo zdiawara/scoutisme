@@ -108,28 +108,33 @@ const Paginate: FC<PaginateProps> = ({
           ]}
         />
       </div>
-      <div className="ms-auto me-auto">{total} résultat(s)</div>
-      <ReactPaginate
-        breakLabel="..."
-        nextLabel={<i className="uil-angle-right"></i>}
-        onPageChange={({ selected }) => onPageChange(selected)}
-        pageRangeDisplayed={3}
-        marginPagesDisplayed={2}
-        pageCount={pageCount}
-        forcePage={pageActive}
-        previousLabel={<i className="uil-angle-left"></i>}
-        renderOnZeroPageCount={null}
-        pageClassName="page-item"
-        previousClassName="page-item"
-        pageLinkClassName="page-link"
-        previousLinkClassName="page-link"
-        nextClassName="page-item"
-        nextLinkClassName="page-link"
-        breakClassName="page-item"
-        breakLinkClassName="page-link"
-        containerClassName="pagination pagination-rounded m-0"
-        activeClassName="active"
-      />
+      {!!total && (
+        <>
+          <div className="ms-auto me-auto">{total} résultat(s)</div>
+
+          <ReactPaginate
+            breakLabel="..."
+            nextLabel={<i className="uil-angle-right"></i>}
+            onPageChange={({ selected }) => onPageChange(selected)}
+            pageRangeDisplayed={3}
+            marginPagesDisplayed={2}
+            pageCount={pageCount}
+            forcePage={pageActive}
+            previousLabel={<i className="uil-angle-left"></i>}
+            renderOnZeroPageCount={null}
+            pageClassName="page-item"
+            previousClassName="page-item"
+            pageLinkClassName="page-link"
+            previousLinkClassName="page-link"
+            nextClassName="page-item"
+            nextLinkClassName="page-link"
+            breakClassName="page-item"
+            breakLinkClassName="page-link"
+            containerClassName="pagination pagination-rounded m-0"
+            activeClassName="active"
+          />
+        </>
+      )}
     </Stack>
   );
 };

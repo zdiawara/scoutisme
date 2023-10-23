@@ -60,7 +60,7 @@ const ListTypeUnite: FC = () => {
         className="my-4"
         right={
           <Button onClick={() => setAction({ code: "create" })}>
-            <i className="uil-plus"></i> Ajouter un type d'unité
+            Ajouter un type d'unité
           </Button>
         }
       />

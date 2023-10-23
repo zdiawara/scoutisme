@@ -40,3 +40,7 @@ export interface FonctionFilter extends Filter {
   search?: string;
   nature?: SelectItem;
 }
+
+export interface MessageFilter extends Filter {
+  search: string | null;
+}

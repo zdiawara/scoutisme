@@ -65,7 +65,7 @@ const Channels = () => {
             </ListGroup>
           </Card.Body>
         </Card>
-        <Card className="text-black">
+        {/*         <Card className="text-black">
           <Card.Header className="bg-light">ADULTES</Card.Header>
           <Card.Body className="p-1">
             <ListGroup defaultActiveKey="#link1">
@@ -83,7 +83,7 @@ const Channels = () => {
               ))}
             </ListGroup>
           </Card.Body>
-        </Card>
+        </Card> */}
       </Col>
 
       <Col xs={9}>

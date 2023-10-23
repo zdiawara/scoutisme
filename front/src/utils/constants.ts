@@ -10,6 +10,7 @@ export const QUERY_KEY = {
   natures: "natures",
   messages: "messages",
   instances: "instances",
+  events: "events",
 };
 
 export const MASK = {

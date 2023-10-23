@@ -63,7 +63,7 @@ const ListRefFormation: FC = () => {
         className="my-4"
         right={
           <Button onClick={() => setAction({ code: "create" })}>
-            <i className="uil-plus"></i> Ajouter une formation
+            Ajouter une formation
           </Button>
         }
       />

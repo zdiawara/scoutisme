@@ -19,22 +19,20 @@ class MessageController extends Controller
     {
         $query = Message::query();
 
-        $total = $query->count();
-        $data = collect([]);
-
-        if ($total > 0) {
-            $page = $request->get('page', 1);
-            $size = $request->get('size', 100);
-            $data = $query
-                ->offset(($page - 1) * $size)
-                ->limit($size)
-                ->orderBy('created_at', 'desc')
-                ->get();
+        if ($request->has('search')) {
+            $query->where('titre', 'LIKE', "%" . $request->get('search') . "%");
         }
+
+        $result = $this->addPaging($request, $query);
+
+        $data = $result['query']
+            //->orderBy('created_at', 'desc')
+            ->get();
+
 
         return [
             'data' => MessageResource::collection($data),
-            'total' => $total,
+            'meta' => $result['meta'],
         ];
     }
 

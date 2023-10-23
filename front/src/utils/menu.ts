@@ -17,15 +17,9 @@ export const MENU_ITEMS = [
       },
       {
         key: "personnes_1",
-        label: "Scouts",
+        label: "Personnes",
         isTitle: false,
         url: LINKS.dashbords.scouts,
-      },
-      {
-        key: "personnes_1",
-        label: "Adultes",
-        isTitle: false,
-        url: LINKS.dashbords.adultes,
       },
     ],
   },

@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import { FilterProvider } from "context/FIlterContext";
 import {
   FonctionFilter,
+  MessageFilter,
   OrganisationFilter,
   PersonneFilter,
 } from "types/request.type";
@@ -35,6 +36,19 @@ export const OrganisationOutlet = () => {
 
 export const FonctionOutlet = () => {
   const filter: FonctionFilter = {
+    search: "",
+    page: 1,
+    size: 10,
+  };
+  return (
+    <FilterProvider initial={filter}>
+      <Outlet />
+    </FilterProvider>
+  );
+};
+
+export const MessageOutlet = () => {
+  const filter: MessageFilter = {
     search: "",
     page: 1,
     size: 10,

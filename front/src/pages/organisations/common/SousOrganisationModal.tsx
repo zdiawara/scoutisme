@@ -54,6 +54,7 @@ const Form: FC<WrapperV2Props> = (props) => {
       setValue("nature", {
         label: listNatures[0].nom,
         value: listNatures[0].id,
+        item: listNatures[0],
       });
     }
   }, [naturesAuthorized, props.isEditMode, natures?.data, setValue]);

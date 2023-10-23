@@ -9,6 +9,7 @@ import { Layout } from "layout";
 import { LINKS } from "utils";
 import {
   FonctionOutlet,
+  MessageOutlet,
   OrganisationOutlet,
   PersonneOutlet,
 } from "./FilterOutlet";
@@ -112,7 +113,7 @@ export const router = createBrowserRouter(
       <Route path={LINKS.instances.base} element={<Outlet />}>
         <Route index element={<ListInstance />} />
       </Route>
-      <Route path={LINKS.messages.base} element={<Outlet />}>
+      <Route path={LINKS.messages.base} element={<MessageOutlet />}>
         <Route index element={<ListMessage />} />
         <Route path="create" element={<CreateMessage />} />
         <Route path=":id" element={<ViewMessage />} />

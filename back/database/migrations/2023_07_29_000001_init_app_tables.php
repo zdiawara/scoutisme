@@ -36,6 +36,7 @@ return new class extends Migration
             $table->string('nom');
             $table->string('code')->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
         Schema::create('villes', function (Blueprint $table) {
             $table->uuid('id')->primary();

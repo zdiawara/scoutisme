@@ -24,15 +24,69 @@ const buildRequestParams = (filter: Record<string, any>) => {
     typeId: selectHelper.getValue(filter.type),
     etat: selectHelper.getValue(filter.etat),
     search: filter.search,
+    page: filter.page,
+    size: filter.size,
   };
 };
 
+const columns: Columns<OrganisationResource>[] = [
+  {
+    name: "nom",
+    label: "Nom",
+    Cell: (organisation) => {
+      return (
+        <Stack className="fw-semibold">
+          <Link
+            className="text-primary"
+            to={LINKS.organisations.view(organisation.id)}
+          >
+            {organisation.nom}
+          </Link>
+          <span className="text-muted ">{organisation.nature.nom}</span>
+        </Stack>
+      );
+    },
+  },
+  {
+    name: "code",
+    label: "Code",
+  },
+
+  {
+    name: "type",
+    label: "Type",
+    Cell: ({ type }) => {
+      return type?.nom ? <span>{type?.nom}</span> : null;
+    },
+  },
+  {
+    name: "parent",
+    label: "Parent",
+    Cell: ({ parent }) => {
+      return parent?.nom ? (
+        <Link
+          className="text-primary fw-semibold"
+          to={LINKS.organisations.view(parent.id)}
+        >
+          {parent.nom}
+        </Link>
+      ) : null;
+    },
+  },
+
+  {
+    name: "etat",
+    label: "Etat",
+    Cell: () => <Badge bg="success">Actif</Badge>,
+  },
+];
+
 const ListOrganisation: FC = () => {
-  const { filter, setFilter } = useContext(FilterContext);
-  const { search, ...restFilter } = filter as OrganisationFilter;
+  const filterContext = useContext(FilterContext);
+  const filter = filterContext.filter as OrganisationFilter;
   const [show, setShow] = useState<boolean>(false);
 
-  const { data: organisations, isLoading } = useQuery({
+  const { data: result, isLoading } = useQuery({
     queryKey: [QUERY_KEY.organisations, filter],
     keepPreviousData: true,
     networkMode: "offlineFirst",
@@ -42,58 +96,6 @@ const ListOrganisation: FC = () => {
       );
     },
   });
-
-  const columns: Columns<OrganisationResource>[] = [
-    {
-      name: "nom",
-      label: "Nom",
-      Cell: (organisation) => {
-        return (
-          <Stack className="fw-semibold">
-            <Link
-              className="text-primary"
-              to={LINKS.organisations.view(organisation.id)}
-            >
-              {organisation.nom}
-            </Link>
-            <span className="text-muted ">{organisation.nature.nom}</span>
-          </Stack>
-        );
-      },
-    },
-    {
-      name: "code",
-      label: "Code",
-    },
-
-    {
-      name: "type",
-      label: "Type",
-      Cell: ({ type }) => {
-        return type?.nom ? <span>{type?.nom}</span> : null;
-      },
-    },
-    {
-      name: "parent",
-      label: "Parent",
-      Cell: ({ parent }) => {
-        return parent?.nom ? (
-          <Link
-            className="text-primary fw-semibold"
-            to={LINKS.organisations.view(parent.id)}
-          >
-            {parent.nom}
-          </Link>
-        ) : null;
-      },
-    },
-
-    {
-      name: "etat",
-      label: "Etat",
-      Cell: () => <Badge bg="success">Actif</Badge>,
-    },
-  ];
 
   return (
     <>
@@ -113,9 +115,9 @@ const ListOrganisation: FC = () => {
         <Col sm={5}>
           <PageFilter.Search
             onChange={(v) => {
-              setFilter((prev) => ({ ...prev, search: v }));
+              filterContext.setFilter((prev) => ({ ...prev, search: v }));
             }}
-            initialValue={search}
+            initialValue={filter.search}
           />
         </Col>
         <Col>
@@ -136,22 +138,27 @@ const ListOrganisation: FC = () => {
       <ListResult.Container isLoading={isLoading}>
         <ListResult.Table<OrganisationResource>
           columns={columns}
-          data={organisations?.data || []}
+          data={result?.data || []}
           headerClassName="bg-light"
         />
-        {/* <ListResult.Paginate
-          pageCount={2}
-          onPageChange={() => {}}
-          pageActive={1}
-        /> */}
+        {result?.data && (
+          <ListResult.Paginate
+            pageCount={result.meta.total_page}
+            pageActive={result.meta.page - 1}
+            total={result.meta.total}
+            onPageChange={(page) => {
+              filterContext.setFilter((old) => ({ ...old, page: page + 1 }));
+            }}
+          />
+        )}
       </ListResult.Container>
 
       <FilterOrganisation
         applyFiler={(data) => {
-          setFilter((prev) => ({ ...prev, ...data }));
+          filterContext.setFilter((prev) => ({ ...prev, ...data, page: 1 }));
           setShow(false);
         }}
-        defaultValues={restFilter}
+        defaultValues={filterContext.filter}
         show={show}
         close={() => setShow(false)}
       />

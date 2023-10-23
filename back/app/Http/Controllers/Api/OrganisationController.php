@@ -25,23 +25,18 @@ class OrganisationController extends Controller
     {
         $query = Organisation::filter($request->all(), OrganisationFilter::class);
 
-        $total = $query->count();
         $data = collect([]);
 
-        if ($total > 0) {
-            $page = $request->get('page', 1);
-            $size = $request->get('size', 100);
-            $data = $query
-                ->offset(($page - 1) * $size)
-                ->limit($size)
-                ->orderBy('nom', 'asc')
-                ->with(['nature', 'type', 'parent'])
-                ->get();
-        }
+        $result = $this->addPaging($request, $query);
+
+        $data = $result['query']
+            ->orderBy('nom', 'asc')
+            ->with(['nature', 'type', 'parent'])
+            ->get();
 
         return [
             'data' => OrganisationResource::collection($data),
-            'total' => $total,
+            'meta' => $result['meta'],
         ];
     }
 

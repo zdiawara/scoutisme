@@ -3,6 +3,7 @@
 use App\Models\Fonction;
 use App\Models\Genre;
 use App\Models\Nature;
+use App\Models\TypeOrganisation;
 use App\Models\Ville;
 use Illuminate\Database\Migrations\Migration;
 
@@ -30,6 +31,11 @@ return new class extends Migration
         });
 
         Fonction::create(['nom' => 'Scout', 'code' => 'scout', 'nature_id' => Nature::where('code', 'unite')->first()->id]);
+
+        TypeOrganisation::create(['nom' => 'Meute', 'code' => 'meute', 'position' => 1, 'membre' => 'Louveteaux']);
+        TypeOrganisation::create(['nom' => 'Troupe', 'code' => 'troupe', 'position' => 2, 'membre' => 'Eclaireurs']);
+        TypeOrganisation::create(['nom' => 'Communauté', 'code' => 'communaute', 'position' => 3, 'membre' => 'Sinkiés']);
+        TypeOrganisation::create(['nom' => 'Dièklou', 'code' => 'dieklou', 'position' => 4, 'membre' => 'Routiers']);
     }
 
     /**

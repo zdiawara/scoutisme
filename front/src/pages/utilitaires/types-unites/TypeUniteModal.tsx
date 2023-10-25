@@ -4,7 +4,7 @@ import { FC } from "react";
 import { Col, Row } from "react-bootstrap";
 import { typeOrganisationApi } from "api";
 import { useQueryClient } from "@tanstack/react-query";
-import { QUERY_KEY } from "utils/constants";
+import { MASK, QUERY_KEY } from "utils/constants";
 import { typeUniteSchema, typeUniteConverter } from "./typeUniteUtils";
 import { TypeOrganisationResource } from "types/organisation.type";
 
@@ -21,8 +21,19 @@ const Form: FC<WrapperV2Props> = (props) => {
       onClose={props.onExit}
     >
       <Row className="g-2">
-        <Col sm={12}>
+        <Col sm={9}>
           <TextInput label="Nom" name="nom" isRequired />
+        </Col>
+        <Col sm={3}>
+          <TextInput
+            label="Position"
+            name="position"
+            mask={MASK.number}
+            isRequired
+          />
+        </Col>
+        <Col sm={12}>
+          <TextInput label="Nom membre" name="membre" isRequired />
         </Col>
       </Row>
     </HookModalForm>

@@ -13,6 +13,6 @@ class TypeOrganisation extends Model
     protected $table = 'types_organisations';
 
     protected $fillable = [
-        'code', 'nom',
+        'code', 'nom', 'position', 'membre'
     ];
 }

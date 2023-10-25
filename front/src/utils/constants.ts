@@ -16,6 +16,7 @@ export const QUERY_KEY = {
 export const MASK = {
   telephone: [/\d/, /\d/, " ", /\d/, /\d/, " ", /\d/, /\d/, " ", /\d/, /\d/],
   number: [/^\d+/],
+  numbers: [/^\d+/],
 };
 
 export const NATURE = {

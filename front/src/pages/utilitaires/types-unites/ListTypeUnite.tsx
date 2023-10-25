@@ -33,19 +33,29 @@ const ListTypeUnite: FC = () => {
         return <span className="text-primary fw-semibold">{nom}</span>;
       },
     },
-
+    {
+      name: "membre",
+      label: "Membre",
+    },
+    {
+      name: "position",
+      label: "Position",
+    },
     {
       name: "actions",
       label: "Actions",
+      headClassName: "text-end",
       Cell: (selected) => {
         return (
-          <Button
-            className="action-icon"
-            variant="link"
-            onClick={() => setAction({ code: "edit", selected })}
-          >
-            <i className="uil-edit-alt fs-4 text-primary"></i>
-          </Button>
+          <div className="text-end">
+            <Button
+              className="action-icon"
+              variant="link"
+              onClick={() => setAction({ code: "edit", selected })}
+            >
+              <i className="uil-edit-alt fs-4 text-primary"></i>
+            </Button>
+          </div>
         );
       },
     },

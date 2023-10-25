@@ -25,6 +25,8 @@ export type TypeOrganisationResource = {
   id: string;
   nom: string;
   code: string;
+  position: number;
+  membre: string;
 };
 
 export type RefFormationResource = {

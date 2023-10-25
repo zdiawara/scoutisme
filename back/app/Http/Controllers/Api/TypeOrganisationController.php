@@ -23,7 +23,7 @@ class TypeOrganisationController extends Controller
     {
         return [
             'data' => TypeOrganisation::query()
-                ->orderBy('nom', 'asc')
+                ->orderBy('position', 'asc')
                 ->get()
         ];
     }

@@ -49,7 +49,8 @@ class ScoutStatController extends Controller
             parent.id,
             nb_scouts.type_id", []));
 
-        $typesOrganisations = TypeOrganisation::all();
+        $typesOrganisations = TypeOrganisation::orderBy('position', 'asc')
+            ->get();
 
         $items = Organisation::whereHas('nature', function ($q) {
             $q->where('code', 'region');
@@ -87,7 +88,7 @@ class ScoutStatController extends Controller
                 ]],
                 $typesOrganisations->map(function ($item) {
                     return [
-                        'nom' => $item->nom,
+                        'nom' => $item->membre,
                         'code' => $item->code
                     ];
                 })->toArray(),

@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { TooltipHelper } from "components/view";
 import { FC, useMemo } from "react";
 import { Form } from "react-bootstrap";
@@ -50,7 +51,9 @@ export const TextInput: FC<TextInputProps> = ({
               <MaskedInput
                 mask={mask}
                 id={name}
-                className="form-control text-black fw-semibold"
+                className={classNames("form-control text-black fw-semibold", {
+                  "is-invalid": !!error,
+                })}
                 {...field}
                 placeholder={rest.placeholder}
               />

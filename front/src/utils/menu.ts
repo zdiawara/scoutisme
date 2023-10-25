@@ -51,35 +51,39 @@ export const MENU_ITEMS = [
     icon: ICONS.events,
     url: LINKS.events.base,
   },
-  { key: "params", label: "Parametres", isTitle: true },
   {
-    key: "fonction",
-    label: "Fonctions",
+    key: "params",
+    label: "Paramètres",
     isTitle: false,
-    icon: ICONS.fonction,
-    url: LINKS.fonctions.base,
-  },
+    icon: ICONS.setting,
 
-  {
-    key: "types-unites",
-    label: "Types d'unités",
-    isTitle: false,
-    icon: ICONS.type_unite,
-    url: LINKS.types_unites.base,
-  },
-  {
-    key: "ref-formation",
-    label: "Réf. formations",
-    isTitle: false,
-    icon: ICONS.formation,
-    url: LINKS.ref_formations.base,
-  },
-  {
-    key: "instances",
-    label: "Instances",
-    isTitle: false,
-    icon: ICONS.instance,
-    url: LINKS.instances.base,
+    children: [
+      {
+        key: "fonction",
+        label: "Fonctions",
+        isTitle: false,
+        url: LINKS.fonctions.base,
+      },
+
+      {
+        key: "types-unites",
+        label: "Types d'unités",
+        isTitle: false,
+        url: LINKS.types_unites.base,
+      },
+      {
+        key: "ref-formation",
+        label: "Réf. formations",
+        isTitle: false,
+        url: LINKS.ref_formations.base,
+      },
+      {
+        key: "instances",
+        label: "Instances",
+        isTitle: false,
+        url: LINKS.instances.base,
+      },
+    ],
   },
 ];
 

@@ -6,9 +6,10 @@ import { Button } from "react-bootstrap";
 import { QUERY_KEY } from "utils/constants";
 import { TypeUniteModal } from "./TypeUniteModal";
 import { TypeOrganisationResource } from "types/organisation.type";
+import { DeleteTypeUniteModal } from "./DeleteTypeUniteModal";
 
 type IAction = {
-  code: "create" | "edit";
+  code: "create" | "edit" | "delete";
   selected?: TypeOrganisationResource;
 };
 
@@ -55,6 +56,14 @@ const ListTypeUnite: FC = () => {
             >
               <i className="uil-edit-alt fs-4 text-primary"></i>
             </Button>
+
+            <Button
+              className="action-icon"
+              variant="link"
+              onClick={() => setAction({ code: "delete", selected })}
+            >
+              <i className="mdi mdi-delete fs-4 text-danger"></i>
+            </Button>
           </div>
         );
       },
@@ -82,10 +91,17 @@ const ListTypeUnite: FC = () => {
           headerClassName="bg-light"
         />
       </ListResult.Container>
-      {action && (
+      {action && ["create", "edit"].includes(action.code) && (
         <TypeUniteModal
           closeModal={() => setAction(undefined)}
           selected={action.selected}
+        />
+      )}
+
+      {action && "delete" === action.code && (
+        <DeleteTypeUniteModal
+          selected={action.selected!}
+          closeModal={() => setAction(undefined)}
         />
       )}
     </>

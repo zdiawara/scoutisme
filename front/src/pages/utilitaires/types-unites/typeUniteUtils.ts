@@ -24,6 +24,6 @@ export const typeUniteConverter = {
 
 export const typeUniteSchema = yup.object({
   nom: yup.string().required(),
-  position: yup.number().required(),
+  position: yup.string().required().nullable(),
   membre: yup.string().required(),
 });

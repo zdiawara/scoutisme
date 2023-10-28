@@ -57,6 +57,6 @@ class TypeOrganisationController extends Controller
      */
     public function destroy(TypeOrganisation $typeOrganisation)
     {
-        //
+        $typeOrganisation->delete();
     }
 }

@@ -128,7 +128,10 @@ const Channels = () => {
                 })}
 
                 <tr className="fs-4 text-primary fw-bold">
-                  <td colSpan={5} className="text-center">
+                  <td
+                    colSpan={(byRegionQuery.data?.headers?.length || 1) - 1}
+                    className="text-center"
+                  >
                     TOTAL
                   </td>
                   <td>{total}</td>

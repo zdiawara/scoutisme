@@ -1,17 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { typeOrganisationApi } from "api";
-import { Columns, ICONS, ListResult, PageHeader } from "pages/common";
-import { FC, useState } from "react";
+import {
+  Columns,
+  DeleteConfirmationActions,
+  ICONS,
+  ListResult,
+  PageHeader,
+} from "pages/common";
+import { FC } from "react";
 import { Button } from "react-bootstrap";
 import { QUERY_KEY } from "utils/constants";
 import { TypeUniteModal } from "./TypeUniteModal";
 import { TypeOrganisationResource } from "types/organisation.type";
 import { DeleteTypeUniteModal } from "./DeleteTypeUniteModal";
-
-type IAction = {
-  code: "create" | "edit" | "delete";
-  selected?: TypeOrganisationResource;
-};
+import { useCrudModal } from "hooks/useCrudModal";
 
 const ListTypeUnite: FC = () => {
   const { data: results } = useQuery({
@@ -20,7 +22,7 @@ const ListTypeUnite: FC = () => {
     queryFn: () => typeOrganisationApi.findAll<TypeOrganisationResource>(),
   });
 
-  const [action, setAction] = useState<IAction | undefined>();
+  const crudModal = useCrudModal<TypeOrganisationResource>();
 
   const columns: Columns<TypeOrganisationResource>[] = [
     {
@@ -46,27 +48,13 @@ const ListTypeUnite: FC = () => {
       name: "actions",
       label: "Actions",
       headClassName: "text-end",
-      Cell: (selected) => {
-        return (
-          <div className="text-end">
-            <Button
-              className="action-icon"
-              variant="link"
-              onClick={() => setAction({ code: "edit", selected })}
-            >
-              <i className="uil-edit-alt fs-4 text-primary"></i>
-            </Button>
-
-            <Button
-              className="action-icon"
-              variant="link"
-              onClick={() => setAction({ code: "delete", selected })}
-            >
-              <i className="mdi mdi-delete fs-4 text-danger"></i>
-            </Button>
-          </div>
-        );
-      },
+      Cell: (element) => (
+        <DeleteConfirmationActions
+          element={element}
+          onDelete={crudModal.onDelete}
+          onUpdate={crudModal.onUpdate}
+        />
+      ),
     },
   ];
 
@@ -78,7 +66,7 @@ const ListTypeUnite: FC = () => {
         icon={ICONS.type_unite}
         className="my-4"
         right={
-          <Button onClick={() => setAction({ code: "create" })}>
+          <Button onClick={crudModal.onCreate()}>
             Ajouter un type d'unité
           </Button>
         }
@@ -91,17 +79,18 @@ const ListTypeUnite: FC = () => {
           headerClassName="bg-light"
         />
       </ListResult.Container>
-      {action && ["create", "edit"].includes(action.code) && (
+
+      {crudModal.isCreateOrUpdate && (
         <TypeUniteModal
-          closeModal={() => setAction(undefined)}
-          selected={action.selected}
+          closeModal={crudModal.reset}
+          selected={crudModal.action?.element!}
         />
       )}
 
-      {action && "delete" === action.code && (
+      {crudModal.isDelete && (
         <DeleteTypeUniteModal
-          selected={action.selected!}
-          closeModal={() => setAction(undefined)}
+          element={crudModal.action?.element!}
+          closeModal={crudModal.reset}
         />
       )}
     </>

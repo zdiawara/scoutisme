@@ -1,27 +1,27 @@
 import { FC } from "react";
-import { typeOrganisationApi } from "api";
-import { TypeOrganisationResource } from "types/organisation.type";
+import { fonctionApi } from "api";
 import { QUERY_KEY } from "utils/constants";
 import { DeleteConfirmationModal } from "pages/common";
+import { FonctionResource } from "types/personne.type";
 
 type ModalProps = {
   closeModal: () => void;
-  element: TypeOrganisationResource;
+  element: FonctionResource;
 };
 
-export const DeleteTypeUniteModal: FC<ModalProps> = ({
+export const DeleteFonctionModal: FC<ModalProps> = ({
   closeModal,
   element,
 }) => {
   const deleteTypeUnite = () => {
-    return typeOrganisationApi.delete(element.id);
+    return fonctionApi.delete(element.id);
   };
 
   return (
     <DeleteConfirmationModal
       closeModal={closeModal}
       onDelete={deleteTypeUnite}
-      query_key={QUERY_KEY.typesUnites}
+      query_key={QUERY_KEY.fonctions}
     />
   );
 };

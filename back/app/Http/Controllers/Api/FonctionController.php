@@ -62,6 +62,6 @@ class FonctionController extends Controller
      */
     public function destroy(Fonction $fonction)
     {
-        //
+        $fonction->delete();
     }
 }

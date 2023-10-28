@@ -27,7 +27,7 @@ class Attribution extends Model
 
     public function fonction()
     {
-        return $this->belongsTo(Fonction::class);
+        return $this->belongsTo(Fonction::class)->withTrashed();
     }
 
     public function modelFilter()

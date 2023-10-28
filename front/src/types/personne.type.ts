@@ -43,6 +43,7 @@ export type NiveauFormationResource = {
 export type FonctionResource = {
   id: string;
   nom: string;
+  code: string;
   duree_mandat: string;
   nature: NatureResource;
 };

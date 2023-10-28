@@ -2,12 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import { fonctionApi } from "api";
 import {
   Columns,
+  DeleteConfirmationActions,
   ICONS,
   ListResult,
   PageFilter,
   PageHeader,
 } from "pages/common";
-import { FC, useContext, useState } from "react";
+import { FC, useContext } from "react";
 import { Badge, Button, Col } from "react-bootstrap";
 import { FonctionResource } from "types/personne.type";
 import { QUERY_KEY } from "utils/constants";
@@ -16,6 +17,8 @@ import { buildNatureColor, selectHelper } from "utils/functions";
 import { SelectNatureSimple, View } from "components";
 import { FilterContext } from "context";
 import { FonctionFilter, RequestParam } from "types/request.type";
+import { useCrudModal } from "hooks/useCrudModal";
+import { DeleteFonctionModal } from "./DeleteFonctionModal";
 
 const ListFonction: FC = () => {
   const filterContext = useContext(FilterContext);
@@ -33,13 +36,7 @@ const ListFonction: FC = () => {
     },
   });
 
-  const [action, setAction] = useState<
-    | {
-        code: "create" | "edit";
-        fonction?: FonctionResource;
-      }
-    | undefined
-  >();
+  const crudModal = useCrudModal<FonctionResource>();
 
   const columns: Columns<FonctionResource>[] = [
     {
@@ -79,22 +76,14 @@ const ListFonction: FC = () => {
       name: "actions",
       label: "Actions",
       headClassName: "text-end",
-      Cell: (fonction) => {
-        return (
-          <div className="text-end">
-            <Button
-              className="action-icon me-1"
-              variant="link"
-              onClick={() => setAction({ code: "edit", fonction })}
-            >
-              <i className="uil-edit-alt fs-4 text-primary"></i>
-            </Button>
-            <Button variant="link" className="action-icon">
-              <i className="mdi mdi-delete fs-4 text-danger"></i>
-            </Button>
-          </div>
-        );
-      },
+      Cell: (element) =>
+        element.code !== "scout" ? (
+          <DeleteConfirmationActions
+            element={element}
+            onDelete={crudModal.onDelete}
+            onUpdate={crudModal.onUpdate}
+          />
+        ) : null,
     },
   ];
 
@@ -106,9 +95,7 @@ const ListFonction: FC = () => {
         icon={ICONS.fonction}
         className="my-4"
         right={
-          <Button onClick={() => setAction({ code: "create" })}>
-            Ajouter une fonction
-          </Button>
+          <Button onClick={crudModal.onCreate()}>Ajouter une fonction</Button>
         }
       />
 
@@ -152,11 +139,19 @@ const ListFonction: FC = () => {
           />
         )}
       </ListResult.Container>
-      {action && (
+
+      {crudModal.isCreateOrUpdate && (
         <FonctionModal
-          closeModal={() => setAction(undefined)}
-          fonction={action.fonction}
+          closeModal={crudModal.reset}
+          fonction={crudModal.action?.element!}
           nature={filter.nature}
+        />
+      )}
+
+      {crudModal.isDelete && (
+        <DeleteFonctionModal
+          element={crudModal.action?.element!}
+          closeModal={crudModal.reset}
         />
       )}
     </>

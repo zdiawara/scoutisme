@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AttributionResource;
 use App\Http\Resources\PersonneResource;
-use App\Http\Services\AttributionService;
 use App\Http\Services\PersonneService;
 use App\ModelFilters\PersonneFilter;
 use App\Models\Attribution;
@@ -16,14 +15,11 @@ use Illuminate\Support\Facades\DB;
 class PersonneController extends Controller
 {
     private PersonneService $personneService;
-    private AttributionService $attributionService;
-
     private $attributionActive;
 
-    public function __construct(PersonneService $personneService, AttributionService $attributionService)
+    public function __construct(PersonneService $personneService)
     {
         $this->personneService = $personneService;
-        $this->attributionService = $attributionService;
 
         $this->attributionActive = function ($query) {
             $query->where('date_debut', '<=', now())

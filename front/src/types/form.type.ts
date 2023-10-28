@@ -22,3 +22,8 @@ export type SelectProps = {
   resetDeps?: string[];
   description?: string;
 };
+
+export type CrudAction<T> = {
+  code: "c" | "u" | "d";
+  element?: T;
+};

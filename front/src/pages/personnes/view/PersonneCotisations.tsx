@@ -64,7 +64,17 @@ export const PersonneCotisations: FC<PersonneCotisationsProps> = ({
       label: "Etat",
       Cell: ({ etat }) => {
         return (
-          <Badge bg={etat === "valide" ? "success" : "warning"}>{etat}</Badge>
+          <Badge
+            bg={
+              etat === "valide"
+                ? "success"
+                : etat === "rejet"
+                ? "danger"
+                : "warning"
+            }
+          >
+            {etat}
+          </Badge>
         );
       },
     },
@@ -89,9 +99,11 @@ export const PersonneCotisations: FC<PersonneCotisationsProps> = ({
       return <View.Empty label="Pas de paiements trouvés" />;
     }
 
-    const montantPaye = results.data.reduce((prev, curr) => {
-      return curr.montant + prev;
-    }, 0);
+    const montantPaye = results.data
+      .filter((e) => e.etat !== "rejet")
+      .reduce((prev, curr) => {
+        return curr.montant + prev;
+      }, 0);
 
     return (
       <>

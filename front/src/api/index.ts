@@ -87,5 +87,13 @@ class PaiementApi extends CrudService {
     );
     return response;
   }
+
+  public async rejeter(paiementId: string, body: any) {
+    const response = await requestPut<{ data: PaiementResource }>(
+      `${this.base}/${paiementId}/rejeter`,
+      body
+    );
+    return response;
+  }
 }
 export const paiementApi = new PaiementApi("paiements");

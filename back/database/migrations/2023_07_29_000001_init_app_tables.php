@@ -152,7 +152,8 @@ return new class extends Migration
             $table->string('numero')->unique();
             $table->string('etat')->default('en_attente'); // en_attente ; annuler ; valider
             $table->integer('montant');
-            $table->dateTime('date_validation')->nullable();
+            $table->dateTime('date_traitement')->nullable();
+            $table->string('commentaire')->nullable();
             //$table->uuid('valideur_id'); // User validation
             $table->timestamps();
 

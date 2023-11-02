@@ -56,7 +56,29 @@ class PaiementService
 
         $paiement->update([
             'etat' => 'valide',
-            'date_validation' => now(),
+            'date_traitement' => now(),
+            //'valideur_id' => ''
+        ]);
+
+        DB::commit();
+
+        return $paiement;
+    }
+
+
+    public function rejeter(Paiement $paiement, array $body)
+    {
+
+        if ($paiement->etat != 'en_attente') {
+            throw new BadRequestException("Impossible de rejeter ce paiement");
+        }
+
+        DB::beginTransaction();
+
+        $paiement->update([
+            'etat' => 'rejet',
+            'date_traitement' => now(),
+            'commentaire' => collect($body)->get('commentaire', null)
             //'valideur_id' => ''
         ]);
 

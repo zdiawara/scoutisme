@@ -1,37 +1,41 @@
 import { useQuery } from "@tanstack/react-query";
 import { attributionApi } from "api";
 import { View } from "components";
-import { AttributionActions } from "pages/attributions/common";
+import {
+  AffecterPersonneModal,
+  AttributionActions,
+} from "pages/attributions/common";
 import { Columns, ICONS, ListResult } from "pages/common";
 import { isBefore, isAfter } from "date-fns";
 import { FC } from "react";
-import { Badge, Card } from "react-bootstrap";
+import { Badge, Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { AttributionResource } from "types/personne.type";
+import { AttributionResource, PersonneResource } from "types/personne.type";
 import { LINKS } from "utils";
 import { QUERY_KEY } from "utils/constants";
 import { dateFormater, dateParser } from "utils/functions";
+import { useModalAction } from "hooks";
 
 type PersonneFonctionsProps = {
-  personneId: string;
+  personne: PersonneResource;
 };
-export const PersonneFonctions: FC<PersonneFonctionsProps> = ({
-  personneId,
-}) => {
+export const PersonneFonctions: FC<PersonneFonctionsProps> = ({ personne }) => {
   const {
     data: attributions,
     isLoading,
     error,
   } = useQuery({
-    queryKey: [QUERY_KEY.attributions, personneId],
+    queryKey: [QUERY_KEY.attributions, personne.id],
     networkMode: "offlineFirst",
     queryFn: () => {
       return attributionApi.findAll<AttributionResource>({
-        personneId,
+        personneId: personne.id,
         projection: "organisation.nature;fonction;personne",
       });
     },
   });
+
+  const modalAction = useModalAction();
 
   const columns: Columns<AttributionResource>[] = [
     {
@@ -121,16 +125,30 @@ export const PersonneFonctions: FC<PersonneFonctionsProps> = ({
   };
 
   return (
-    <Card>
-      <Card.Body>
-        <View.Header
-          icon={ICONS.fonction}
-          label="Fonctions"
-          description="Toutes les fonctions occupées par la personne"
-          className="mb-2"
+    <>
+      <Card>
+        <Card.Body>
+          <View.Header
+            icon={ICONS.fonction}
+            label="Fonctions"
+            description="Toutes les fonctions occupées par la personne"
+            className="mb-2"
+            right={
+              <Button size="sm" onClick={modalAction.change("affecter")}>
+                <i className={`uil-link me-1`}></i>Affecter
+              </Button>
+            }
+          />
+          {renderContent()}
+        </Card.Body>
+      </Card>
+
+      {modalAction.action === "affecter" && (
+        <AffecterPersonneModal
+          closeModal={modalAction.close}
+          personne={personne}
         />
-        {renderContent()}
-      </Card.Body>
-    </Card>
+      )}
+    </>
   );
 };

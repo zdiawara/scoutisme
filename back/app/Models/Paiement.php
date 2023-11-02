@@ -11,7 +11,7 @@ class Paiement extends Model
     use UUID, Filterable;
 
     protected $fillable = [
-        'cotisation_id', 'etat', 'montant', 'date_validation', 'numero'
+        'cotisation_id', 'etat', 'montant', 'date_traitement', 'numero', 'commentaire'
     ];
 
     //protected $casts = ['paiements' => 'array'];

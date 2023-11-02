@@ -17,7 +17,7 @@ const Form: FC<WrapperV2Props> = (props) => {
       <Row className="g-2">
         <Col sm={12}>
           <TextInput
-            name="motif"
+            name="commentaire"
             label="Motif du rejet"
             placeholder="Renseignez le motif"
             description="Il s'agit du montant payé par la personne"
@@ -43,8 +43,8 @@ export const RejeterPaiementModal: FC<PersonneCotisationModalProps> = ({
 }) => {
   const query = useQueryClient();
 
-  const rejeterPaiement = async () => {
-    await paiementApi.valider(paiement.id);
+  const rejeterPaiement = async (data: any) => {
+    await paiementApi.rejeter(paiement.id, data);
     closeModal();
     query.invalidateQueries([QUERY_KEY.paiements, personne.id]);
   };

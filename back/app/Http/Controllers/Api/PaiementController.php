@@ -94,4 +94,10 @@ class PaiementController extends Controller
         $paiement = $this->paiementService->valider($paiement);
         return new PaiementResource($paiement);
     }
+
+    public function rejeter(Paiement $paiement, Request $request)
+    {
+        $paiement = $this->paiementService->rejeter($paiement, $request->all());
+        return new PaiementResource($paiement);
+    }
 }

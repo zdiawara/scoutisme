@@ -83,7 +83,7 @@ const ViewPersonne: FC = () => {
       case "carte":
         return <PersonneCard />;
       case "fonctions":
-        return <PersonneFonctions personneId={personneId} />;
+        return <PersonneFonctions personne={personne} />;
       case "cotisations":
         return <PersonneCotisations personne={personne} />;
       default:

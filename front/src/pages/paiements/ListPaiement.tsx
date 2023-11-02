@@ -63,7 +63,17 @@ const columns: Columns<PaiementResource>[] = [
     label: "Etat",
     Cell: ({ etat }) => {
       return (
-        <Badge bg={etat === "valide" ? "success" : "warning"}>{etat}</Badge>
+        <Badge
+          bg={
+            etat === "valide"
+              ? "success"
+              : etat === "rejet"
+              ? "danger"
+              : "warning"
+          }
+        >
+          {etat}
+        </Badge>
       );
     },
   },

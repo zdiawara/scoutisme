@@ -14,6 +14,8 @@ export const ICONS = {
   instance: "uil-meeting-board",
   events: "uil-calender",
   message: "uil-comment-alt",
+  cotisation: "uil-euro-circle",
+  paiement: "uil-euro-circle",
 };
 
 export const Header = {

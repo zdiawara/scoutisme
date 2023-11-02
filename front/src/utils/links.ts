@@ -6,6 +6,7 @@ const TYPES_UNITES = "/types-unites";
 const REF_FORMATIONS = "/ref-formations";
 const EVENTS = "/events";
 const MESSAGES = "/messages";
+const PAIEMENTS = "/paiements";
 
 export const LINKS = {
   personnes: {
@@ -47,7 +48,9 @@ export const LINKS = {
   ref_formations: {
     base: REF_FORMATIONS,
   },
-
+  paiements: {
+    base: PAIEMENTS,
+  },
   dashbords: {
     base: "dashbords",
     scouts: "/dashbords/scouts",

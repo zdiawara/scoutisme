@@ -41,12 +41,18 @@ type TableProps<T> = {
   columns: Columns<T>[];
   data: Array<T>;
   headerClassName?: string;
+  hover?: boolean;
 };
 
-function Table<T>({ columns, data, headerClassName }: TableProps<T>) {
+function Table<T>({
+  columns,
+  data,
+  hover = false,
+  headerClassName,
+}: TableProps<T>) {
   return (
     <>
-      <BsTable hover className="table-centered">
+      <BsTable hover={hover} className="table-centered">
         <thead className={`text-black ${headerClassName}`}>
           <tr>
             {columns.map((col) => (

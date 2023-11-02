@@ -1,10 +1,12 @@
 import {
   AttributionResource,
+  CotisationResource,
   OrganisationAttribution,
+  PaiementResource,
   PersonneResource,
 } from "types/personne.type";
 import { CrudService } from "./crudService";
-import { requestGet, requestPost } from "./request";
+import { requestGet, requestPost, requestPut } from "./request";
 import { RequestParam } from "types/request.type";
 import { requestParams } from "utils/functions";
 
@@ -20,6 +22,14 @@ class PersonneApi extends CrudService {
   public async affecter(personneId: string, body: any) {
     const response = await requestPost<{ data: AttributionResource }>(
       `${this.base}/${personneId}/affecter`,
+      body
+    );
+    return response;
+  }
+
+  public async cotiser(personneId: string, body: any) {
+    const response = await requestPost<{ data: CotisationResource }>(
+      `${this.base}/${personneId}/cotiser`,
       body
     );
     return response;
@@ -66,3 +76,16 @@ export const messageApi = new MessageApi("messages");
 
 class InstanceApi extends CrudService {}
 export const instanceApi = new InstanceApi("instances");
+
+class CotisationApi extends CrudService {}
+export const cotisationApi = new CotisationApi("cotisations");
+
+class PaiementApi extends CrudService {
+  public async valider(paiementId: string) {
+    const response = await requestPut<{ data: PaiementResource }>(
+      `${this.base}/${paiementId}/valider`
+    );
+    return response;
+  }
+}
+export const paiementApi = new PaiementApi("paiements");

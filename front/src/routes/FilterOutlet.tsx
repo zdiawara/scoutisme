@@ -4,6 +4,7 @@ import {
   FonctionFilter,
   MessageFilter,
   OrganisationFilter,
+  PaiementFilter,
   PersonneFilter,
 } from "types/request.type";
 
@@ -52,6 +53,19 @@ export const MessageOutlet = () => {
     search: "",
     page: 1,
     size: 10,
+  };
+  return (
+    <FilterProvider initial={filter}>
+      <Outlet />
+    </FilterProvider>
+  );
+};
+
+export const PaiementOutlet = () => {
+  const filter: PaiementFilter = {
+    page: 1,
+    size: 10,
+    etat: null,
   };
   return (
     <FilterProvider initial={filter}>

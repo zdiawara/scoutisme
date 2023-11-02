@@ -31,6 +31,13 @@ export const MENU_ITEMS = [
     url: LINKS.personnes.base,
   },
   {
+    key: "paiements",
+    label: "Paiements",
+    isTitle: false,
+    icon: ICONS.paiement,
+    url: LINKS.paiements.base,
+  },
+  {
     key: "organisations",
     label: "Organisations",
     isTitle: false,
@@ -83,6 +90,12 @@ export const MENU_ITEMS = [
         isTitle: false,
         url: LINKS.instances.base,
       },
+      /*       {
+        key: "cotisations",
+        label: "Cotisations",
+        isTitle: false,
+        url: LINKS.instances.base,
+      }, */
     ],
   },
 ];

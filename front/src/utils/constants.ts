@@ -11,6 +11,8 @@ export const QUERY_KEY = {
   messages: "messages",
   instances: "instances",
   events: "events",
+  cotisations: "cotisations",
+  paiements: "paiements",
 };
 
 export const MASK = {
@@ -29,4 +31,9 @@ export const NATURE = {
 export const TYPE_PERSONNES = {
   SCOUT: "scout",
   ADULTE: "adulte",
+};
+
+export const DATE_PATTERN = {
+  dd_mm_yyyy_hh_mm_ss: "dd/MM/yyyy à HH:mm:ss",
+  dd_mm_yyyy_hh_mm: "dd/MM/yyyy à HH:mm",
 };

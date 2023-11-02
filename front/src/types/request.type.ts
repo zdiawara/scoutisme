@@ -44,3 +44,9 @@ export interface FonctionFilter extends Filter {
 export interface MessageFilter extends Filter {
   search: string | null;
 }
+
+export interface PaiementFilter extends Filter {
+  etat: string | null;
+  page: number;
+  size: number;
+}

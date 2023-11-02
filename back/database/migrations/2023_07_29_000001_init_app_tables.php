@@ -133,6 +133,32 @@ return new class extends Migration
             $table->softDeletes();
         });
 
+        Schema::create('cotisations', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->year('annee');
+            $table->uuid('personne_id');
+            $table->integer('montant_total');
+            $table->integer('montant_paye')->nullable();
+            $table->integer('montant_restant')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('personne_id')->references('id')->on('personnes');
+        });
+
+        Schema::create('paiements', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('cotisation_id');
+            $table->string('numero')->unique();
+            $table->string('etat')->default('en_attente'); // en_attente ; annuler ; valider
+            $table->integer('montant');
+            $table->dateTime('date_validation')->nullable();
+            //$table->uuid('valideur_id'); // User validation
+            $table->timestamps();
+
+            $table->foreign('cotisation_id')->references('id')->on('cotisations');
+        });
+
         /*         Schema::create('events', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nom');

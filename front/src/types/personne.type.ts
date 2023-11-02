@@ -77,3 +77,20 @@ export type GenreResource = {
   id: string;
   nom: string;
 };
+
+export type CotisationResource = {
+  id: string;
+  annee: number;
+  montant_total: number;
+  montant_restant: number;
+  montant_paye: number;
+  personne?: PersonneResource;
+};
+
+export type PaiementResource = {
+  id: string;
+  etat: string;
+  montant: number;
+  cotisation: CotisationResource;
+  created_at: string;
+};

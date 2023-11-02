@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AttributionResource;
 use App\Http\Resources\PersonneResource;
+use App\Http\Services\CotisationService;
 use App\Http\Services\PersonneService;
 use App\ModelFilters\PersonneFilter;
 use App\Models\Attribution;
@@ -15,12 +16,13 @@ use Illuminate\Support\Facades\DB;
 class PersonneController extends Controller
 {
     private PersonneService $personneService;
+    private CotisationService $cotisationService;
     private $attributionActive;
 
-    public function __construct(PersonneService $personneService)
+    public function __construct(PersonneService $personneService, CotisationService $cotisationService)
     {
         $this->personneService = $personneService;
-
+        $this->cotisationService = $cotisationService;
         $this->attributionActive = function ($query) {
             $query->where('date_debut', '<=', now())
                 ->where(function ($subQuery) {
@@ -226,6 +228,21 @@ class PersonneController extends Controller
         $attribution->load(['personne', 'organisation', 'fonction']);
 
         return new AttributionResource($attribution);
+    }
+
+    public function cotiser(Request $request)
+    {
+        /*         $body = collect($request->all())
+            ->merge([
+                'personne_id' => $request->route('personneId')
+            ])
+            ->all();
+
+        $cotisation = $this->cotisationService->create($body);
+
+        $cotisation->load(['personne']);
+
+        return new CotisationResource($cotisation); */
     }
 
     /**

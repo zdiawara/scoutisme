@@ -48,7 +48,7 @@ export const dateParser = {
     return dateParser.parse(date, "yyyy-MM-dd");
   },
   toDateTime: (date?: string) => {
-    return dateParser.parse(date, "yyyy-MM-dd HH:mm:ss");
+    return dateParser.parse(date);
   },
   parse: (date?: string, pattern?: string) => {
     return toDate(pattern || "yyyy-MM-dd HH:mm:ss", date);

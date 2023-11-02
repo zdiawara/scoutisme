@@ -11,11 +11,16 @@ import { View } from "components";
 import { Link } from "react-router-dom";
 import { LINKS } from "utils";
 import classNames from "classnames";
-import { PersonneCard, PersonneDetails, PersonneFonctions } from "./view";
-import { ViewPersonneActions } from "./common/ViewPersonneActions";
+import {
+  PersonneCard,
+  PersonneCotisations,
+  PersonneDetails,
+  PersonneFonctions,
+} from "./view";
 
 const TABS = [
   { label: "Fiche détaillée", code: "fiche", icon: "uil uil-bookmark" },
+  { label: "Paiements", code: "cotisations", icon: ICONS.cotisation },
   {
     label: "Carte membres",
     code: "carte",
@@ -56,12 +61,12 @@ const ViewPersonne: FC = () => {
     return (
       <div className="ms-auto d-flex align-items-center">
         <Link
-          className="rounded-corner btn btn-primary"
+          className="rounded-corner btn btn-danger"
           to={LINKS.personnes.edit(personne.id)}
         >
           <i className="uil-edit-alt"></i> Modifier
         </Link>
-        <ViewPersonneActions personne={personne} />
+        {/* <ViewPersonneActions personne={personne} /> */}
       </div>
     );
   };
@@ -79,6 +84,8 @@ const ViewPersonne: FC = () => {
         return <PersonneCard />;
       case "fonctions":
         return <PersonneFonctions personneId={personneId} />;
+      case "cotisations":
+        return <PersonneCotisations personne={personne} />;
       default:
         return <PersonneDetails personne={personne} />;
     }

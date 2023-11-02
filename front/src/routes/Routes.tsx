@@ -11,6 +11,7 @@ import {
   FonctionOutlet,
   MessageOutlet,
   OrganisationOutlet,
+  PaiementOutlet,
   PersonneOutlet,
 } from "./FilterOutlet";
 import { organisationApi, personneApi } from "api";
@@ -80,6 +81,10 @@ const ScoutDashbord = Loadable(
   lazy(() => import("pages/dashbords/personnes/ScoutDashbord"))
 );
 
+const ListPaiement = Loadable(
+  lazy(() => import("pages/paiements/ListPaiement"))
+);
+
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
@@ -117,6 +122,9 @@ export const router = createBrowserRouter(
         <Route index element={<ListMessage />} />
         <Route path="create" element={<CreateMessage />} />
         <Route path=":id" element={<ViewMessage />} />
+      </Route>
+      <Route path={LINKS.paiements.base} element={<PaiementOutlet />}>
+        <Route index element={<ListPaiement />} />
       </Route>
       <Route path={LINKS.fonctions.base} element={<FonctionOutlet />}>
         <Route index element={<ListFonction />} />

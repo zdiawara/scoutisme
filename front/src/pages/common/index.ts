@@ -5,3 +5,4 @@ export * from "./PageAriane";
 export * from "./constants";
 export * from "./delete/DeleteConfirmationModal";
 export * from "./delete/DeleteConfirmationActions";
+export * from "./delete/ConfirmationModal";

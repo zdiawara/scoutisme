@@ -4,12 +4,19 @@ import { ScoutModal } from "../modal";
 import { OrganisationResource } from "types/organisation.type";
 import { AffecterPersonneModal } from "pages/attributions/common";
 import { PersonneResource } from "types/personne.type";
+import { ICONS } from "pages/common";
 
 type ViewPersonneActionsProps = {
   personne: PersonneResource;
 };
 
 const ACTIONS = [
+  {
+    label: "Cotisation",
+    icon: ICONS.cotisation,
+    description: "Payer la cotisation de la personne",
+    code: "cotisation",
+  },
   {
     label: "Affecter",
     icon: "uil-link",

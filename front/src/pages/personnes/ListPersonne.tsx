@@ -63,6 +63,18 @@ const columns: Columns<PersonneResource>[] = [
       );
     },
   },
+
+  {
+    name: "fonction",
+    label: "Fonction",
+    Cell: ({ attributions }) => {
+      if (attributions?.length) {
+        return <span>{attributions[0].fonction.nom}</span>;
+      }
+      return null;
+    },
+  },
+
   {
     name: "organisation",
     label: "Organisation",
@@ -93,26 +105,12 @@ const columns: Columns<PersonneResource>[] = [
       return null;
     },
   },
+
   {
-    name: "fonction",
-    label: "Fonction",
-    Cell: ({ attributions }) => {
-      if (attributions?.length) {
-        return <span>{attributions[0].fonction.nom}</span>;
-      }
-      return null;
-    },
+    name: "genre",
+    label: "Genre",
+    Cell: ({ genre }) => <span>{genre?.nom}</span>,
   },
-  {
-    name: "lieu_naissance",
-    label: "Lieu naissance",
-  },
-  { name: "email", label: "Email" },
-  /*   {
-    name: "etat",
-    label: "Etat",
-    Cell: ({ etat }) => <View.Etat value={etat} />,
-  }, */
   {
     name: "actions",
     label: "Actions",

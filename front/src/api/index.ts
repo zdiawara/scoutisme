@@ -39,9 +39,9 @@ class PersonneApi extends CrudService {
 export const personneApi = new PersonneApi("personnes");
 
 class OrganisationApi extends CrudService {
-  public async findDirection(id: string) {
+  public async findDirection(id: string, body?: Record<string, any>) {
     const { data } = await requestGet<{ data: OrganisationAttribution[] }>(
-      `${this.base}/${id}/direction`
+      `${this.base}/${id}/direction` + requestParams(body)
     );
     return data;
   }

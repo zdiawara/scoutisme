@@ -37,4 +37,9 @@ class FonctionFilter extends ModelFilter
             $q->whereIn('code', explode(";", $value));
         });
     }
+
+    public function typeId($value)
+    {
+        return $this->where('type_id', $value);
+    }
 }

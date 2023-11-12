@@ -4,7 +4,7 @@ import { FC, useState } from "react";
 import { Button, Card } from "react-bootstrap";
 import { OrganisationResource } from "types/organisation.type";
 import { organisationApi } from "api";
-import { QUERY_KEY } from "utils/constants";
+import { NATURE, QUERY_KEY } from "utils/constants";
 import { useQuery } from "@tanstack/react-query";
 import {
   AttributionResource,
@@ -30,7 +30,13 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
   } = useQuery({
     queryKey: [QUERY_KEY.direction, organisation.id],
     networkMode: "offlineFirst",
-    queryFn: () => organisationApi.findDirection(organisation.id),
+    queryFn: () =>
+      organisationApi.findDirection(organisation.id, {
+        typeId:
+          organisation.nature.code === NATURE.national
+            ? organisation.type?.id
+            : null,
+      }),
   });
 
   const [attributionSelected, setAttributionSelected] = useState<

@@ -55,7 +55,7 @@ const Item: FC<ItemProps> = ({ title, rows, nature }) => {
                   <ProgressBar
                     variant="info"
                     now={total > 0 ? (row.nombre / total) * 100 : 0}
-                    style={{ height: "5px" }}
+                    style={{ height: "6px" }}
                   />
                 </td>
               </tr>

@@ -12,20 +12,23 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('natures', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('nom');
+            $table->string('code')->unique();
+            $table->timestamps();
+        });
         Schema::create('types_organisations', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nom');
             $table->string('code')->unique();
             $table->integer('position');
             $table->string('membre');
+            $table->uuid('nature_id');
             $table->timestamps();
             $table->softDeletes();
-        });
-        Schema::create('natures', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('nom');
-            $table->string('code')->unique();
-            $table->timestamps();
+
+            $table->foreign('nature_id')->references('id')->on('natures');
         });
         Schema::create('genres', function (Blueprint $table) {
             $table->uuid('id')->primary();
@@ -96,10 +99,12 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->integer('duree_mandat')->nullable();
             $table->uuid('nature_id');
+            $table->uuid('type_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('nature_id')->references('id')->on('natures');
+            $table->foreign('type_id')->references('id')->on('types_organisations');
         });
         Schema::create('attributions', function (Blueprint $table) {
             $table->uuid('id')->primary();
@@ -160,12 +165,17 @@ return new class extends Migration
             $table->foreign('cotisation_id')->references('id')->on('cotisations');
         });
 
-        /*         Schema::create('events', function (Blueprint $table) {
+        Schema::create('montants_cotisations', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('nom');
-            $table->json('compositions');
+            $table->string('type'); // direction or scout
+            $table->string('profil'); // tous,fonction,type_organisation
+            $table->uuid('nature_id');
+            $table->integer('montant')->nullable();
+            $table->json('montants')->nullable();
             $table->timestamps();
-        }); */
+
+            $table->foreign('nature_id')->references('id')->on('natures');
+        });
     }
 
     /**

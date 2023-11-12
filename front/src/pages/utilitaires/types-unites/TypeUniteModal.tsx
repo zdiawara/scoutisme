@@ -2,11 +2,14 @@ import { HookModalForm, TextInput } from "components";
 import { WrapperV2Props, withMutationForm } from "hoc";
 import { FC } from "react";
 import { Col, Row } from "react-bootstrap";
-import { typeOrganisationApi } from "api";
-import { useQueryClient } from "@tanstack/react-query";
-import { MASK, QUERY_KEY } from "utils/constants";
+import { natureApi, typeOrganisationApi } from "api";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { MASK, NATURE, QUERY_KEY } from "utils/constants";
 import { typeUniteSchema, typeUniteConverter } from "./typeUniteUtils";
-import { TypeOrganisationResource } from "types/organisation.type";
+import {
+  NatureResource,
+  TypeOrganisationResource,
+} from "types/organisation.type";
 
 /**
  * Formulaire d'ajout et de modification d'un type d'unité
@@ -57,14 +60,29 @@ export const TypeUniteModal: FC<TypeUniteModalProps> = ({
   selected,
 }) => {
   const query = useQueryClient();
+  const { data: results } = useQuery({
+    networkMode: "offlineFirst",
+    queryKey: [QUERY_KEY.natures],
+    queryFn: () =>
+      natureApi
+        .findAll<NatureResource>()
+        .then((e) => e.data.filter((e) => e.code === NATURE.unite)),
+  });
 
   const save = (data: Record<string, any>) => {
     const body = typeUniteConverter.toBody(data);
     if (selected?.id) {
       return typeOrganisationApi.update(selected.id, body);
     }
-    return typeOrganisationApi.create(body);
+    return typeOrganisationApi.create({
+      ...body,
+      nature_id: results ? results[0].id : "",
+    });
   };
+
+  if (!results?.length) {
+    return null;
+  }
 
   return (
     <TypeUniteForm

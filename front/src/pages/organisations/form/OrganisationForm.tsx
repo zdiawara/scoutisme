@@ -74,8 +74,14 @@ const FormContainer: FC<WrapperProps> = ({
                 name="type"
                 label="Type"
                 isClearable
-                isRequired={codeNature === "unite"}
-                isDisabled={codeNature !== "unite"}
+                isRequired={[NATURE.national, NATURE.national].includes(
+                  codeNature
+                )}
+                requestParams={{ nature_code: codeNature }}
+                resetDeps={[watch("nature")?.value]}
+                isDisabled={
+                  ![NATURE.national, NATURE.national].includes(codeNature)
+                }
               />
             </Col>
             <Col sm={4}>

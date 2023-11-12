@@ -7,6 +7,7 @@ const REF_FORMATIONS = "/ref-formations";
 const EVENTS = "/events";
 const MESSAGES = "/messages";
 const PAIEMENTS = "/paiements";
+const COTISATIONS = "/cotisations";
 
 export const LINKS = {
   personnes: {
@@ -50,6 +51,9 @@ export const LINKS = {
   },
   paiements: {
     base: PAIEMENTS,
+  },
+  cotisations: {
+    base: COTISATIONS,
   },
   dashbords: {
     base: "dashbords",

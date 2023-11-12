@@ -19,11 +19,24 @@ class TypeOrganisationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $query = TypeOrganisation::query();
+
+        if ($request->has("nature_id")) {
+            $query->where('nature_id', $request->get('nature_id'));
+        }
+
+        if ($request->has("nature_code")) {
+            $query->join('natures as n', function ($builder) {
+                $builder->on('n.id', 'types_organisations.nature_id');
+            });
+            $query->where('n.code', $request->get('nature_code'));
+        }
+
+
         return [
-            'data' => TypeOrganisation::query()
-                ->orderBy('position', 'asc')
+            'data' => $query->select('types_organisations.*')->orderBy('position', 'asc')
                 ->get()
         ];
     }

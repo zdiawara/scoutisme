@@ -7,6 +7,7 @@ use App\Http\Resources\AttributionResource;
 use App\Http\Resources\PersonneResource;
 use App\Http\Services\CotisationService;
 use App\Http\Services\PersonneService;
+use App\Jobs\ProcessPodcast;
 use App\ModelFilters\PersonneFilter;
 use App\Models\Attribution;
 use App\Models\Personne;

@@ -37,6 +37,7 @@ class ScoutStatController extends Controller
                 WHERE
                     n.code = 'unite'
                     AND a.type = 'scout'
+                    AND tuo.nature_id = n.id
                 GROUP BY
                     o.id,
                     tuo.id
@@ -49,7 +50,9 @@ class ScoutStatController extends Controller
             parent.id,
             nb_scouts.type_id", []));
 
-        $typesOrganisations = TypeOrganisation::orderBy('position', 'asc')
+        $typesOrganisations = TypeOrganisation::whereHas('nature', function ($q) {
+            $q->where('code', 'unite');
+        })->orderBy('position', 'asc')
             ->get();
 
         $items = Organisation::whereHas('nature', function ($q) {

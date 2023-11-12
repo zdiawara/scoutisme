@@ -13,7 +13,7 @@ import { Badge, Button, Col } from "react-bootstrap";
 import { FonctionResource } from "types/personne.type";
 import { QUERY_KEY } from "utils/constants";
 import { FonctionModal } from "./FonctionModal";
-import { buildNatureColor, selectHelper } from "utils/functions";
+import { selectHelper } from "utils/functions";
 import { SelectNatureSimple, View } from "components";
 import { FilterContext } from "context";
 import { FonctionFilter, RequestParam } from "types/request.type";
@@ -53,11 +53,13 @@ const ListFonction: FC = () => {
     {
       name: "etat",
       label: "Nature organisation",
-      Cell: ({ nature }) => {
+      Cell: ({ nature, type }) => {
         return (
-          <Badge className={`bg-${buildNatureColor(nature.code)}`}>
-            {nature.nom}
-          </Badge>
+          <>
+            <Badge className={`bg-primary`}>
+              {type ? type.nom : nature.nom}
+            </Badge>
+          </>
         );
       },
     },

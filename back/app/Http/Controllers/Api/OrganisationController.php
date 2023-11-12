@@ -95,7 +95,7 @@ class OrganisationController extends Controller
     public function readDirection(Request $request)
     {
         return [
-            'data' => $this->organisationService->readDirection($request->route('organisationId'))
+            'data' => $this->organisationService->readDirection($request->route('organisationId'), $request->all())
         ];
     }
 

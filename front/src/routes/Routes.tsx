@@ -72,6 +72,9 @@ const ListRefFormation = Loadable(
 const ListTypeUnite = Loadable(
   lazy(() => import("pages/utilitaires/types-unites/ListTypeUnite"))
 );
+const ListCotisation = Loadable(
+  lazy(() => import("pages/utilitaires/cotisations/ListCotisation"))
+);
 
 const OrganisationDashBord = Loadable(
   lazy(() => import("pages/dashbords/organisations/OrganisationDashBord"))
@@ -134,6 +137,9 @@ export const router = createBrowserRouter(
       </Route>
       <Route path={LINKS.types_unites.base} element={<Outlet />}>
         <Route index element={<ListTypeUnite />} />
+      </Route>
+      <Route path={LINKS.cotisations.base} element={<Outlet />}>
+        <Route index element={<ListCotisation />} />
       </Route>
 
       <Route path={LINKS.dashbords.base} element={<Outlet />}>

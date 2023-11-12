@@ -1,6 +1,7 @@
 import {
   NatureResource,
   OrganisationResource,
+  TypeOrganisationResource,
   VilleResource,
 } from "./organisation.type";
 
@@ -46,6 +47,7 @@ export type FonctionResource = {
   code: string;
   duree_mandat: string;
   nature: NatureResource;
+  type?: TypeOrganisationResource;
 };
 
 export type AttributionResource = {

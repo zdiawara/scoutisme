@@ -61,7 +61,9 @@ class OrganisationSeeder extends Seeder
                 'parent_id' => $equipeNational->id
             ]);
 
-            $types = TypeOrganisation::all();
+            $types = TypeOrganisation::whereHas('nature', function ($q) {
+                $q->where('code', 'unite');
+            })->get();
 
             $natureGroupe = Nature::where('code', 'groupe')
                 ->firstOrFail();

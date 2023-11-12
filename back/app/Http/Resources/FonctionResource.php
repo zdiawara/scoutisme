@@ -15,9 +15,10 @@ class FonctionResource extends JsonResource
     public function toArray(Request $request): array
     {
 
-        return collect(parent::toArray($request))->except(['nature'])
+        return collect(parent::toArray($request))->except(['nature_id', 'type_id'])
             ->merge([
                 'nature' => new NatureResource($this->whenLoaded('nature')),
+                'type' => new TypeOrganisationResource($this->whenLoaded('type')),
             ])->all();
     }
 }

@@ -10,7 +10,9 @@ export const SelectTypeOrganisation: FC<SelectProps> = (props) => {
       {...props}
       fetchOptions={async () => {
         const { data } =
-          await typeOrganisationApi.findAll<TypeOrganisationResource>();
+          await typeOrganisationApi.findAll<TypeOrganisationResource>(
+            props.requestParams
+          );
         return data.map((item) => ({ label: item.nom, value: item.id }));
       }}
     />

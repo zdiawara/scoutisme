@@ -27,6 +27,7 @@ export type TypeOrganisationResource = {
   code: string;
   position: number;
   membre: string;
+  nature: NatureResource;
 };
 
 export type RefFormationResource = {

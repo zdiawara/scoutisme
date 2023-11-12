@@ -15,14 +15,11 @@ import { TypeOrganisationResource } from "types/organisation.type";
 import { DeleteTypeUniteModal } from "./DeleteTypeUniteModal";
 import { useCrudModal } from "hooks/useCrudModal";
 
-const ListTypeUnite: FC = () => {
+const ListCotisation: FC = () => {
   const { data: results } = useQuery({
     networkMode: "offlineFirst",
     queryKey: [QUERY_KEY.typesUnites],
-    queryFn: () =>
-      typeOrganisationApi.findAll<TypeOrganisationResource>({
-        nature_code: "unite",
-      }),
+    queryFn: () => typeOrganisationApi.findAll<TypeOrganisationResource>(),
   });
 
   const crudModal = useCrudModal<TypeOrganisationResource>();
@@ -64,14 +61,12 @@ const ListTypeUnite: FC = () => {
   return (
     <>
       <PageHeader.List
-        title="Types d'unités"
-        subtitle="Consulter et gérer les types d'unités"
-        icon={ICONS.type_unite}
+        title="Cotisations"
+        subtitle="Paramètrer montants des cotisations"
+        icon={ICONS.cotisation}
         className="my-4"
         right={
-          <Button onClick={crudModal.onCreate()}>
-            Ajouter un type d'unité
-          </Button>
+          <Button onClick={crudModal.onCreate()}>Ajouter un montant</Button>
         }
       />
 
@@ -100,4 +95,4 @@ const ListTypeUnite: FC = () => {
   );
 };
 
-export default ListTypeUnite;
+export default ListCotisation;

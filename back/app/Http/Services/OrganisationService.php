@@ -28,11 +28,12 @@ class OrganisationService
         return $organisation;
     }
 
-    public function readDirection(string $organisationId)
+    public function readDirection(string $organisationId, $body)
     {
-        return collect(DB::select(
-            'SELECT a.id, a.date_debut, a.date_fin,
+        $typeId = collect($body)->get('typeId', null);
 
+        $data = collect(DB::select(
+            'SELECT a.id, a.date_debut, a.date_fin, f.type_id,
                 IF(p.id is not null, 
                     JSON_OBJECT("id", CAST(p.id AS CHAR(200)), "nom", p.nom, "prenom", p.prenom, "photo" , null), 
                     null
@@ -52,5 +53,12 @@ class OrganisationService
             $item->fonction = json_decode($item->fonction);
             return $item;
         });
+
+        if ($typeId != null) {
+            return $data->filter(function ($item) use ($typeId) {
+                return $item->type_id == $typeId;
+            })->values();
+        }
+        return $data->values();
     }
 }

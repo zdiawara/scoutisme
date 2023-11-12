@@ -13,7 +13,7 @@ class Fonction extends Model
     use UUID, Filterable, SoftDeletes;
 
     protected $fillable = [
-        'code', 'nom', 'nature_id', 'duree_mandat'
+        'code', 'nom', 'nature_id', 'duree_mandat', 'type_id'
     ];
 
     public function modelFilter()
@@ -24,5 +24,10 @@ class Fonction extends Model
     public function nature()
     {
         return $this->belongsTo(Nature::class);
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(TypeOrganisation::class);
     }
 }

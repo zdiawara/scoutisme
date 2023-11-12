@@ -1,14 +1,19 @@
-import { HookModalForm, SelectNature, TextInput } from "components";
+import {
+  HookModalForm,
+  SelectNature,
+  SelectTypeOrganisation,
+  TextInput,
+} from "components";
 import { WrapperV2Props, withMutationForm } from "hoc";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 import { Col, Row } from "react-bootstrap";
 import { fonctionApi } from "api";
 import { FonctionResource } from "types/personne.type";
 import { useQueryClient } from "@tanstack/react-query";
-import { fonctionConverter } from "./fonctionConverter";
-import { QUERY_KEY } from "utils/constants";
-import { fonctionSchema } from "./fonctionSchema";
+import { NATURE, QUERY_KEY } from "utils/constants";
+import { fonctionConverter, fonctionSchema } from "./fonctionUtils";
 import { SelectItem } from "types/form.type";
+import { useFormContext } from "react-hook-form";
 
 /**
  * Formulaire d'ajout et de modification d'une fonction
@@ -16,6 +21,9 @@ import { SelectItem } from "types/form.type";
  * @returns
  */
 const Form: FC<WrapperV2Props> = (props) => {
+  const { watch } = useFormContext();
+  const codeNature = watch("nature")?.item?.code;
+
   return (
     <HookModalForm
       {...props}
@@ -23,15 +31,41 @@ const Form: FC<WrapperV2Props> = (props) => {
       onClose={props.onExit}
     >
       <Row className="g-2">
-        <Col sm={12}>
-          <SelectNature
-            label="Nature organisation"
-            name="nature"
-            isClearable
-            isRequired
-            description="Une fonction est associée à la nature de l'organisation"
-          />
-        </Col>
+        {[NATURE.national].includes(codeNature) ? (
+          <Fragment key="nature_and_type_organisation">
+            <Col sm={6}>
+              <SelectNature
+                label="Nature organisation"
+                name="nature"
+                isClearable
+                isRequired
+                description="Une fonction est associée à la nature de l'organisation"
+              />
+            </Col>
+            <Col sm={6}>
+              <SelectTypeOrganisation
+                label="Type organisation"
+                name="type"
+                requestParams={{ nature_code: NATURE.national }}
+                isClearable
+                isRequired
+                //description="Une fonction est associée à la nature de l'organisation"
+              />
+            </Col>
+          </Fragment>
+        ) : (
+          <Fragment key="only_nature">
+            <Col sm={12}>
+              <SelectNature
+                label="Nature organisation"
+                name="nature"
+                isClearable
+                isRequired
+                description="Une fonction est associée à la nature de l'organisation"
+              />
+            </Col>
+          </Fragment>
+        )}
         <Col sm={12}>
           <TextInput label="Nom fonction" name="nom" isRequired />
         </Col>

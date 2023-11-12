@@ -19,11 +19,14 @@ const Form: FC<WrapperV2Props> = (props) => {
 
   const isScout = props.meta.typePersonne === "scout";
 
-  const natureId = watch("organisation")?.item?.nature?.id;
+  const organisation = watch("organisation");
+  const natureId = organisation?.item?.nature?.id;
+  const codeNature = organisation?.item?.nature?.code;
+  const typeOrganisation = organisation?.item?.type?.id;
 
   const depNatures = useMemo(() => {
-    return [natureId];
-  }, [natureId]);
+    return [natureId, typeOrganisation];
+  }, [natureId, typeOrganisation]);
 
   return (
     <HookModalForm
@@ -55,8 +58,11 @@ const Form: FC<WrapperV2Props> = (props) => {
               name="fonction"
               isClearable
               isRequired
+              isDisabled={!organisation}
               requestParams={{
                 nature: natureId,
+                typeId:
+                  codeNature === NATURE.national ? typeOrganisation : null,
                 codeExclude: isScout ? undefined : "scout",
               }}
               resetDeps={depNatures}

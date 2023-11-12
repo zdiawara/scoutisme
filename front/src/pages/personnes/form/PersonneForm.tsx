@@ -18,9 +18,6 @@ import { MASK, TYPE_PERSONNES } from "utils/constants";
 export const PersonneFormInputs = () => {
   const { setValue, watch } = useFormContext();
   const typePersonne = watch("type")?.value;
-  const showAttributionForm = watch("attributionForm") === "1";
-
-  const organisationSelected = watch("attribution.organisation");
 
   const loadFiles = async (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -31,17 +28,6 @@ export const PersonneFormInputs = () => {
       }
     };
     reader.readAsDataURL(e.target.files?.[0] as File);
-  };
-
-  const buildFonctionRequest = () => {
-    if (typePersonne === TYPE_PERSONNES.ADULTE) {
-      return {
-        nature: organisationSelected?.item?.nature?.id || "",
-      };
-    }
-    return {
-      code: "scout",
-    };
   };
 
   return (

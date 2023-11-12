@@ -90,6 +90,12 @@ export const MENU_ITEMS = [
         isTitle: false,
         url: LINKS.instances.base,
       },
+      {
+        key: "cotisations",
+        label: "Cotisations",
+        isTitle: false,
+        url: LINKS.cotisations.base,
+      },
       /*       {
         key: "cotisations",
         label: "Cotisations",

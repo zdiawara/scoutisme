@@ -13,6 +13,11 @@ class TypeOrganisation extends Model
     protected $table = 'types_organisations';
 
     protected $fillable = [
-        'code', 'nom', 'position', 'membre'
+        'code', 'nom', 'position', 'membre', 'nature_id'
     ];
+
+    public function nature()
+    {
+        return $this->belongsTo(Nature::class);
+    }
 }

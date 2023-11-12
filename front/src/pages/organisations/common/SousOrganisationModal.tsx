@@ -7,7 +7,7 @@ import {
   View,
 } from "components";
 import { WrapperV2Props, withMutationForm } from "hoc";
-import { FC, useEffect, useMemo } from "react";
+import { FC, Fragment, useEffect, useMemo } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useFormContext } from "react-hook-form";
 import { natureApi, organisationApi } from "api";
@@ -59,6 +59,19 @@ const Form: FC<WrapperV2Props> = (props) => {
     }
   }, [naturesAuthorized, props.isEditMode, natures?.data, setValue]);
 
+  const selectNatureComponent = (
+    <SelectNature
+      name="nature"
+      label="Nature"
+      isClearable
+      isRequired
+      requestParams={{
+        code: naturesAuthorized.join(";"),
+      }}
+      isDisabled={isLoading}
+    />
+  );
+
   return (
     <HookModalForm {...props} onClose={props.onExit}>
       <Row className="g-2">
@@ -67,28 +80,27 @@ const Form: FC<WrapperV2Props> = (props) => {
           className="mb-0"
           description="Les informations générales de l'organisation"
         />
-        <Col sm={6}>
-          <SelectNature
-            name="nature"
-            label="Nature"
-            isClearable
-            isRequired
-            requestParams={{
-              code: naturesAuthorized.join(";"),
-            }}
-            isDisabled={isLoading}
-          />
-        </Col>
 
-        <Col sm={6}>
-          <SelectTypeOrganisation
-            name="type"
-            label="Type"
-            isClearable
-            isRequired={codeNature === NATURE.unite}
-            isDisabled={codeNature !== NATURE.unite}
-          />
-        </Col>
+        {[NATURE.unite].includes(codeNature) ? (
+          <Fragment>
+            <Col sm={6}>{selectNatureComponent}</Col>
+
+            <Col sm={6}>
+              <SelectTypeOrganisation
+                name="type"
+                label="Type"
+                isClearable
+                isRequired={codeNature === NATURE.unite}
+                isDisabled={codeNature !== NATURE.unite}
+                requestParams={{ nature_code: codeNature }}
+              />
+            </Col>
+          </Fragment>
+        ) : (
+          <Fragment>
+            <Col xs={12}>{selectNatureComponent}</Col>
+          </Fragment>
+        )}
         <Col sm={12}>
           <TextInput
             name="nom"
@@ -102,10 +114,10 @@ const Form: FC<WrapperV2Props> = (props) => {
       <View.Header
         {...Header.adresse}
         description="Ville et lieu de l'organisation"
-        className="my-3"
+        className="mt-3"
       />
 
-      <Row className="mb-3">
+      <Row className="g-2">
         <Col>
           <SelectVille
             name="ville"

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\FonctionResource;
 use App\Http\Services\FonctionService;
 use App\ModelFilters\FonctionFilter;
 use App\Models\Fonction;
@@ -25,10 +26,11 @@ class FonctionController extends Controller
     {
         $query = Fonction::filter($request->all(), FonctionFilter::class);
         $result = $this->addPaging($request, $query);
+        $data = $result['query']->with(['nature', 'type'])
+            ->orderBy('nom', 'asc')
+            ->get();
         return [
-            "data" => $result['query']->with(['nature'])
-                ->orderBy('nom', 'asc')
-                ->get(),
+            "data" => FonctionResource::collection($data),
             "meta" => $result['meta']
         ];
     }

@@ -26,7 +26,8 @@ export const organisationSchema = yup.object({
     .when(["nature"], {
       is: (nature: any) => {
         return (
-          !!nature?.item?.code && [NATURE.unite].includes(nature.item.code)
+          !!nature?.item?.code &&
+          [NATURE.unite, NATURE.national].includes(nature.item.code)
         );
       },
       then: () => {

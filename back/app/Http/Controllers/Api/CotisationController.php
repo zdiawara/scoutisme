@@ -27,7 +27,7 @@ class CotisationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request): array
     {
         $query = Cotisation::filter($request->all(), CotisationFilter::class);
         $result = $this->addPaging($request, $query);

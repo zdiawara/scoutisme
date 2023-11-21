@@ -49,7 +49,7 @@ export const AttributionActions: FC<AttributionActionsProps> = ({
         <Dropdown.Toggle
           as={Button}
           size="sm"
-          variant="outline-light"
+          variant="light"
           className="arrow-none card-drop"
         >
           <i className="mdi mdi-dots-vertical" />

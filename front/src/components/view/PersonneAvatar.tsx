@@ -8,12 +8,14 @@ type PersonneAvatarProps = {
   nom: string;
   prenom: string;
   photo?: string;
+  subtitle?: string;
 };
 export const PersonneAvatar: FC<PersonneAvatarProps> = ({
   id,
   nom,
   prenom,
   photo,
+  subtitle,
 }) => {
   return (
     <Link to={LINKS.personnes.view(id)} className="table-user d-flex">
@@ -43,7 +45,9 @@ export const PersonneAvatar: FC<PersonneAvatarProps> = ({
         <span className="text-primary fw-semibold">
           {prenom} {nom}
         </span>
-        {/* <span className="text-muted text-capitalize">{type}</span> */}
+        {subtitle && (
+          <span className="text-muted text-capitalize">{subtitle}</span>
+        )}
       </Stack>
     </Link>
   );

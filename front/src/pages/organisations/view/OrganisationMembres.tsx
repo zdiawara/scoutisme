@@ -1,7 +1,7 @@
 import { View } from "components";
-import { Columns, ICONS, ListResult } from "pages/common";
+import { Columns, ICONS, StaticTable } from "pages/common";
 import { FC, useState } from "react";
-import { Button, Card } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { OrganisationResource } from "types/organisation.type";
 import { organisationApi } from "api";
 import { NATURE, QUERY_KEY } from "utils/constants";
@@ -22,23 +22,28 @@ type OrganisationMembresProps = {
   organisation: OrganisationResource;
 };
 
+const searchByCriteres = (
+  term: string,
+  attributions: OrganisationAttribution[]
+) => {
+  return attributions.filter(({ personne, fonction }) => {
+    return [personne?.nom, personne?.prenom, fonction.nom]
+      .filter(Boolean)
+      .join(" ")
+      .match(new RegExp(term, "gi"));
+  });
+};
+
 export const OrganisationMembres: FC<OrganisationMembresProps> = ({
   organisation,
 }) => {
-  const {
-    data: attributions,
-    isLoading,
-    error,
-  } = useQuery({
+  const typeId =
+    organisation.nature.code === NATURE.national ? organisation.type?.id : null;
+
+  const query = useQuery({
     queryKey: [QUERY_KEY.direction, organisation.id],
     networkMode: "offlineFirst",
-    queryFn: () =>
-      organisationApi.findDirection(organisation.id, {
-        typeId:
-          organisation.nature.code === NATURE.national
-            ? organisation.type?.id
-            : null,
-      }),
+    queryFn: () => organisationApi.findDirection(organisation.id, { typeId }),
   });
 
   const [attributionSelected, setAttributionSelected] = useState<
@@ -95,12 +100,12 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
           <div className="text-end d-flex justify-content-end">
             {!attribution.personne ? (
               <Button
-                variant="primary"
+                variant="outline-primary"
                 onClick={() => {
                   setAttributionSelected(attribution);
                 }}
               >
-                Ajouter
+                <i className="uil-link"></i> Affecter
               </Button>
             ) : (
               <AttributionActions
@@ -120,96 +125,28 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
     },
   ];
 
-  const renderContent = () => {
-    if (isLoading) {
-      return <span>chargement ...</span>;
-    }
-    if (error) {
-      return <span>error</span>;
-    }
-    if (!attributions?.length) {
-      return <View.Empty label="Pas de membres" />;
-    }
-    return (
-      <ListResult.Table<OrganisationAttribution>
-        columns={columns}
-        data={attributions || []}
-      />
-    );
-
-    /*     console.log(attributions);
-
-    return (
-      <>
-        <Row className="g-2 mt-1">
-          {(attributions || []).map((attribution) => (
-            <Col sm={12} key={attribution.id}>
-              <Card>
-                <Card.Header>
-                 
-                  <p className="m-0 fw-normal text-primary">
-                    {attribution.fonction.nom}
-                  </p>
-                </Card.Header>
-                <Card.Body>
-                  <div className="d-flex align-items-center">
-                    {attribution.personne ? (
-                      <PersonneAvatar
-                        nom={attribution.personne?.nom || ""}
-                        prenom={attribution.personne?.prenom || ""}
-                        id="test"
-                      />
-                    ) : (
-                      <Button
-                        size="sm"
-                        variant="primary"
-                        onClick={() => {
-                          setAttributionSelected(attribution);
-                        }}
-                      >
-                        Ajouter
-                      </Button>
-                    )}
-                    <div className="ms-auto">
-                      <AttributionActions
-                        attribution={
-                          {
-                            ...attribution,
-                            fonction: attribution.fonction as FonctionResource,
-                            organisation,
-                            personne: attribution.personne as PersonneResource,
-                          } as AttributionResource
-                        }
-                      />
-                    </div>
-                  </div>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-      </>
-    ); */
-  };
-
   return (
-    <Card>
-      <Card.Body>
-        <View.Header
-          icon={ICONS.direction}
-          label="Organe de direction"
-          description="Membres de l'organe de direction"
-          className="mb-2"
+    <>
+      <StaticTable
+        header={{
+          icon: ICONS.direction,
+          label: "Organe de direction",
+          description: "Membres de l'organe de direction",
+        }}
+        data={query.data}
+        columns={columns}
+        isLoading={query.isLoading}
+        error={query.error}
+        onSearch={searchByCriteres}
+      />
+
+      {attributionSelected && (
+        <AddOrganisationMembreModal
+          fonction={attributionSelected.fonction as FonctionResource}
+          organisation={organisation}
+          closeModal={() => setAttributionSelected(undefined)}
         />
-        {renderContent()}
-        {attributionSelected && (
-          <AddOrganisationMembreModal
-            fonction={attributionSelected.fonction as FonctionResource}
-            organisation={organisation}
-            closeModal={() => setAttributionSelected(undefined)}
-          />
-        )}
-      </Card.Body>
-    </Card>
+      )}
+    </>
   );
 };

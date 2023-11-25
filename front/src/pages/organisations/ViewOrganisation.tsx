@@ -56,7 +56,7 @@ const ViewOrganisation: FC = () => {
     return (
       <div className="ms-auto d-flex">
         <Link
-          className="rounded-corner btn btn-primary"
+          className="rounded-corner btn btn-danger"
           to={LINKS.organisations.edit(organisation.id)}
         >
           <i className="uil-edit-alt"></i> Modifier

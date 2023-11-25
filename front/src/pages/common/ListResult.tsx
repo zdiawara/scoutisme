@@ -89,15 +89,19 @@ function Table<T>({
 type PaginateProps = {
   pageCount: number;
   pageActive: number;
+  pageSize?: number;
   total: number;
   onPageChange: (page: number) => void;
+  onSizeChange?: (size: number) => void;
 };
 
 const Paginate: FC<PaginateProps> = ({
   pageCount,
   pageActive,
+  pageSize,
   total,
   onPageChange,
+  onSizeChange,
 }) => {
   return (
     <Stack direction="horizontal" className="aligns-items-center m-2">
@@ -105,13 +109,20 @@ const Paginate: FC<PaginateProps> = ({
         <Select
           className="react-select"
           classNamePrefix="react-select"
-          placeholder="10"
+          placeholder={pageSize || "10"}
+          value={{
+            label: pageSize?.toString() || "10",
+            value: pageSize?.toString() || "10",
+          }}
           options={[
             { value: "5", label: "5" },
             { value: "10", label: "10" },
             { value: "20", label: "20" },
             { value: "50", label: "50" },
           ]}
+          onChange={(item) => {
+            if (onSizeChange) onSizeChange(parseInt(item?.value || ""));
+          }}
         />
       </div>
       {!!total && (

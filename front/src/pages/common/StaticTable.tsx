@@ -79,8 +79,8 @@ export function StaticTable<T>({
   };
 
   const right = (
-    <div className="d-flex">
-      <InputGroup className="mb-3">
+    <div className="d-flex align-items-center">
+      <InputGroup>
         <Form.Control
           placeholder="Rechercher"
           aria-label="Text input with checkbox"

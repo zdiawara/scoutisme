@@ -21,12 +21,12 @@ export const SousOrganisationActions: FC<SousOrganisationActionsProps> = ({
   };
 
   return (
-    <>
+    <div className="ms-1">
       <Button
         onClick={onSelect("ajouter_sous_organisation")}
         variant="secondary"
       >
-        Ajouter sous orga.
+        Ajouter
       </Button>
       {action === "ajouter_sous_organisation" && (
         <SousOrganisationModal
@@ -34,6 +34,6 @@ export const SousOrganisationActions: FC<SousOrganisationActionsProps> = ({
           organisation={organisation}
         />
       )}
-    </>
+    </div>
   );
 };

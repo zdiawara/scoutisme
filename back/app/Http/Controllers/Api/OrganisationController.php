@@ -55,7 +55,7 @@ class OrganisationController extends Controller
      */
     public function show(Organisation $organisation)
     {
-        $organisation->load(['nature', 'type', 'parent', 'ville', 'enfants.nature', 'enfants.type']);
+        $organisation->load(['nature', 'type', 'parent', 'ville']);
         // $organisation['parents'] = collect(DB::select(
         //     'WITH RECURSIVE cte AS (
         //             SELECT

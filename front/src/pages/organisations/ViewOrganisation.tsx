@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { Card, Col, ListGroup, Row } from "react-bootstrap";
 import { ICONS, PageHeader } from "pages/common";
 import { Link, useParams } from "react-router-dom";
@@ -40,6 +40,18 @@ const ViewOrganisation: FC = () => {
     },
   });
 
+  const menus = useMemo(() => {
+    if (!organisation) {
+      return [];
+    }
+    return TABS.filter((item) => {
+      if (organisation.nature.code !== NATURE.unite) {
+        return item.code !== "scouts";
+      }
+      return true;
+    });
+  }, [organisation]);
+
   useEffect(() => {
     setPage("fiche");
   }, [id]);
@@ -47,6 +59,33 @@ const ViewOrganisation: FC = () => {
   const onSelectPage = (pageSelected: string) => () => {
     setPage(pageSelected);
   };
+
+  const renderContent = () => {
+    if (!organisation) {
+      return null;
+    }
+    switch (page) {
+      case "direction":
+        return <OrganisationMembres organisation={organisation} />;
+      case "scouts":
+        return <OrganisationScouts organisation={organisation} />;
+      case "sous_organisation":
+        return <SousOrganisation organisation={organisation} />;
+      default:
+        return (
+          <>
+            <DetailOrganisation organisation={organisation} />
+            {organisation.nature.code !== NATURE.unite && (
+              <SousOrganisation organisation={organisation} />
+            )}
+          </>
+        );
+    }
+  };
+
+  if (isLoading || !organisation) {
+    return <span>chargement ...</span>;
+  }
 
   const actions = () => {
     if (!organisation) {
@@ -65,60 +104,8 @@ const ViewOrganisation: FC = () => {
     );
   };
 
-  const renderContent = () => {
-    if (!organisation) {
-      return null;
-    }
-    switch (page) {
-      case "direction":
-        return <OrganisationMembres organisation={organisation} />;
-      case "scouts":
-        return <OrganisationScouts organisation={organisation} />;
-      default:
-        return (
-          <>
-            <DetailOrganisation organisation={organisation} />
-            {organisation.nature.code !== NATURE.unite && (
-              <SousOrganisation organisation={organisation} />
-            )}
-          </>
-        );
-    }
-  };
-
-  if (isLoading || !organisation) {
-    return <span>chargement ...</span>;
-  }
-
-  /*   const hasParent =
-    organisation.parents?.length && organisation.parents?.length > 1; */
-
   return (
     <>
-      {/* {hasParent && (
-        <>
-          <nav className="mb-0 fs-4">
-            <ol className="breadcrumb">
-              {organisation.parents?.map((parent) => (
-                <li
-                  key={parent.id}
-                  className={classNames("breadcrumb-item", {
-                    active: parent.id === organisation.id,
-                  })}
-                >
-                  {parent.id === organisation.id ? (
-                    parent.nom
-                  ) : (
-                    <Link to={LINKS.organisations.view(parent.id)}>
-                      {parent.nom}
-                    </Link>
-                  )}
-                </li>
-              ))}
-            </ol>
-          </nav>
-        </>
-      )} */}
       <PageHeader.View
         title={organisation.nom}
         subtitle={`Code : ${organisation.code}`}
@@ -142,12 +129,7 @@ const ViewOrganisation: FC = () => {
           <Card className="text-black">
             <Card.Body className="p-1">
               <ListGroup defaultActiveKey="#link1">
-                {TABS.filter((item) => {
-                  if (organisation.nature.code !== NATURE.unite) {
-                    return item.code !== "scouts";
-                  }
-                  return true;
-                }).map((item) => (
+                {menus.map((item) => (
                   <ListGroup.Item
                     key={item.code}
                     className={classNames("border-0 rounded", {

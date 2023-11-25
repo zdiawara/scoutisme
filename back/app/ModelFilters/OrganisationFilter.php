@@ -35,4 +35,9 @@ class OrganisationFilter extends ModelFilter
     {
         return $this->where('type_id', $value);
     }
+
+    public function parentId($value)
+    {
+        return $this->where('parent_id', $value);
+    }
 }

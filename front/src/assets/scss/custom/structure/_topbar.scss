@@ -246,18 +246,18 @@
   text-align: left !important;
   position: relative;
   background-color: #{lighten(map-get($grays, "100"), 2.5%)};
-  border: #{($border-width) solid map-get($grays, "100")};
-  border-width: 0 1px;
+  //border: #{($border-width) solid map-get($grays, "100")};
+  //border-width: 0 1px;
   min-height: $topbar-height;
 
   .account-user-avatar {
     position: absolute;
-    top: calc(#{$topbar-height - 32px} * 0.5);
-    left: 15px;
+    top: calc(#{$topbar-height - 45px} * 0.5);
+    left: 0px;
 
     img {
-      height: 32px;
-      width: 32px;
+      height: 45px;
+      width: 45px;
     }
   }
   .account-position {

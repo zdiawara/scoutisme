@@ -70,6 +70,7 @@ export function withMutationForm(
         toast("Vos modifications ont bien été enregistrées !", {
           type: toast.TYPE.INFO,
           autoClose: 5000,
+          position: "bottom-right",
         });
       },
     });

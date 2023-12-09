@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import "./assets/scss/Saas.scss";
 
 import "react-toastify/dist/ReactToastify.css";
+import { AuthProvider } from "context/AuthContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,7 +22,9 @@ function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+        <AuthProvider>
+          <RouterProvider router={router} />
+        </AuthProvider>
         <ReactQueryDevtools initialIsOpen={false} />
         <ToastContainer theme="colored" />
       </QueryClientProvider>

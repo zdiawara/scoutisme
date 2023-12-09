@@ -53,8 +53,6 @@ const buildOptions = (options: RequestInit, type: string, token?: string) => {
 
   newOptions.headers = {
     Accept: "application/json",
-    //credentials: "include",
-    //"Access-Control-Allow-Origin": "http://localhost:3000/",
   };
 
   if (!options.method) {

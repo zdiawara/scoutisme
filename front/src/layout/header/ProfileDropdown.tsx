@@ -41,11 +41,11 @@ const ProfileDropdown = ({
         onClick={toggleDropdown}
         className="nav-link dropdown-toggle nav-user arrow-none me-0"
       >
-        <span className="account-user-avatar">
+        {/*         <span className="account-user-avatar">
           <img src={userImage} className="rounded-circle" alt="user" />
-        </span>
+        </span> */}
         <span>
-          <span className="account-user-name">{username}</span>
+          <span className="account-user-name text-primary">{username}</span>
           <span className="account-position">{userTitle}</span>
         </span>
       </Dropdown.Toggle>

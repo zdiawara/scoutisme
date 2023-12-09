@@ -10,6 +10,7 @@ const PAIEMENTS = "/paiements";
 const COTISATIONS = "/cotisations";
 
 export const LINKS = {
+  home: "/",
   personnes: {
     base: PERSONNES,
     view: (id: string) => `${PERSONNES}/${id}`,

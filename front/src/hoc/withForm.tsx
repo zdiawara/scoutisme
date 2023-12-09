@@ -54,30 +54,32 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
             goBack ? goBack() : _goBack();
           }
           toast("Vos modifications ont bien été enregistrées !", {
-            type: toast.TYPE.SUCCESS,
+            type: toast.TYPE.INFO,
             autoClose: 5000,
+            position: "bottom-right",
           });
         })
         .catch((e) => {
-          /*if (e.status === 422) {
+          let message = "";
+          if (e.status === 422) {
             Object.keys(e.errors || {}).forEach((key) => {
               methods.setError(key, { message: e.errors[key] });
             });
-            notification.error({
-              title: "Les données soumises ne sont pas valides",
-            });
+            message = "Les données soumises ne sont pas valides";
           } else if (e.status === 400) {
-            notification.error({
-              title: e.message,
-            });
+            message = e.message;
           } else {
             console.error(e);
-            notification.error({
-              title: "Erreur technique",
-              message:
-                "Une erreur technique est survenue lors de l'enregistrement",
-            });
-          }*/
+            message =
+              "Une erreur technique est survenue lors de l'enregistrement";
+          }
+
+          toast(message, {
+            type: toast.TYPE.ERROR,
+            autoClose: 5000,
+            position: "bottom-right",
+            hideProgressBar: true,
+          });
         })
         .finally(() => {
           setSaving(false);

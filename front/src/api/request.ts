@@ -46,7 +46,7 @@ export const requestJson = async <T>(
   };
 
   if (auth) {
-    params.token = localStorage.getItem("@burval.token") || undefined;
+    params.token = localStorage.getItem("@token") || undefined;
   }
   return fetchApi<T>(params).catch(dispatchError);
 };
@@ -98,7 +98,7 @@ export const requestBlob = async (
   };
 
   if (auth) {
-    params.token = localStorage.getItem("@burval.token") || undefined;
+    params.token = localStorage.getItem("@token") || undefined;
   }
   return fetchApi<any>(params).catch(dispatchError);
 };

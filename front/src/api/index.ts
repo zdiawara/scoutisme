@@ -9,6 +9,7 @@ import { CrudService } from "./crudService";
 import { requestGet, requestPost, requestPut } from "./request";
 import { RequestParam } from "types/request.type";
 import { requestParams } from "utils/functions";
+import { UserData } from "pages/auth/Login";
 
 export * from "./stats";
 
@@ -97,3 +98,20 @@ class PaiementApi extends CrudService {
   }
 }
 export const paiementApi = new PaiementApi("paiements");
+
+class AuthApi extends CrudService {
+  public async login(data: UserData) {
+    const response = await requestPost<{ access_token: string }>(
+      `${this.base}/login`,
+      data
+    );
+    return response;
+  }
+
+  public async userInfo() {
+    const response = await requestPost<any>(`${this.base}/me`, {});
+    return response;
+  }
+}
+
+export const userApi = new AuthApi("auth");

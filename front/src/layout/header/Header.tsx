@@ -1,10 +1,11 @@
 import classNames from "classnames";
-/* import ProfileDropdown from "./ProfileDropdown";
+import ProfileDropdown from "./ProfileDropdown";
 import userImage from "assets/images/users/avatar-1.jpg";
+/* import ProfileDropdown from "./ProfileDropdown";
 import { ProfileOption } from "layout/types"; */
 
 // get the profilemenu
-/* const profileMenus: ProfileOption[] = [
+const profileMenus: any[] = [
   {
     label: "My Account",
     icon: "mdi mdi-account-circle",
@@ -30,7 +31,7 @@ import { ProfileOption } from "layout/types"; */
     icon: "mdi mdi-logout",
     redirectTo: "/account/logout",
   },
-]; */
+];
 
 type TopbarProps = {
   hideLogo?: boolean;
@@ -53,12 +54,12 @@ export const Header = ({
         <div className={containerCssClasses}>
           <ul className="list-unstyled topbar-menu float-end mb-0">
             <li className="dropdown notification-list">
-              {/* <ProfileDropdown
+              <ProfileDropdown
                 userImage={userImage}
                 menuItems={profileMenus}
-                username={"Dominic Keller"}
+                username={"Zakaridia DIAWARA"}
                 userTitle={"Founder"}
-              /> */}
+              />
             </li>
           </ul>
         </div>

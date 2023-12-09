@@ -88,64 +88,69 @@ const ListPaiement = Loadable(
   lazy(() => import("pages/paiements/ListPaiement"))
 );
 
+const Login = Loadable(lazy(() => import("pages/auth/Login")));
+
 export const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<Layout />}>
-      <Route path={LINKS.personnes.base} element={<PersonneOutlet />}>
-        <Route index element={<ListPersonne />} />
-        <Route element={<CreatePersonne />} path="create" />
-        <Route element={<ViewPersonne />} path=":id" />
-        <Route
-          element={<EditPersonne />}
-          path=":id/edit"
-          loader={({ params }) => {
-            return personneApi.findById(params.id!);
-          }}
-        />
-      </Route>
-      <Route path={LINKS.organisations.base} element={<OrganisationOutlet />}>
-        <Route index element={<ListOrganisation />} />
-        <Route element={<CreateOrganisation />} path="create" />
-        <Route element={<ViewOrganisation />} path=":id" />
-        <Route
-          element={<EditOrganisation />}
-          path=":id/edit"
-          loader={({ params }) => {
-            return organisationApi.findById(params.id!);
-          }}
-        />
-      </Route>
-      <Route path={LINKS.events.base} element={<Outlet />}>
-        <Route index element={<ListEvent />} />
-      </Route>
-      <Route path={LINKS.instances.base} element={<Outlet />}>
-        <Route index element={<ListInstance />} />
-      </Route>
-      <Route path={LINKS.messages.base} element={<MessageOutlet />}>
-        <Route index element={<ListMessage />} />
-        <Route path="create" element={<CreateMessage />} />
-        <Route path=":id" element={<ViewMessage />} />
-      </Route>
-      <Route path={LINKS.paiements.base} element={<PaiementOutlet />}>
-        <Route index element={<ListPaiement />} />
-      </Route>
-      <Route path={LINKS.fonctions.base} element={<FonctionOutlet />}>
-        <Route index element={<ListFonction />} />
-      </Route>
-      <Route path={LINKS.ref_formations.base} element={<Outlet />}>
-        <Route index element={<ListRefFormation />} />
-      </Route>
-      <Route path={LINKS.types_unites.base} element={<Outlet />}>
-        <Route index element={<ListTypeUnite />} />
-      </Route>
-      <Route path={LINKS.cotisations.base} element={<Outlet />}>
-        <Route index element={<ListCotisation />} />
-      </Route>
+    <>
+      <Route path="login" element={<Login />} />
+      <Route path="/" element={<Layout />}>
+        <Route path={LINKS.personnes.base} element={<PersonneOutlet />}>
+          <Route index element={<ListPersonne />} />
+          <Route element={<CreatePersonne />} path="create" />
+          <Route element={<ViewPersonne />} path=":id" />
+          <Route
+            element={<EditPersonne />}
+            path=":id/edit"
+            loader={({ params }) => {
+              return personneApi.findById(params.id!);
+            }}
+          />
+        </Route>
+        <Route path={LINKS.organisations.base} element={<OrganisationOutlet />}>
+          <Route index element={<ListOrganisation />} />
+          <Route element={<CreateOrganisation />} path="create" />
+          <Route element={<ViewOrganisation />} path=":id" />
+          <Route
+            element={<EditOrganisation />}
+            path=":id/edit"
+            loader={({ params }) => {
+              return organisationApi.findById(params.id!);
+            }}
+          />
+        </Route>
+        <Route path={LINKS.events.base} element={<Outlet />}>
+          <Route index element={<ListEvent />} />
+        </Route>
+        <Route path={LINKS.instances.base} element={<Outlet />}>
+          <Route index element={<ListInstance />} />
+        </Route>
+        <Route path={LINKS.messages.base} element={<MessageOutlet />}>
+          <Route index element={<ListMessage />} />
+          <Route path="create" element={<CreateMessage />} />
+          <Route path=":id" element={<ViewMessage />} />
+        </Route>
+        <Route path={LINKS.paiements.base} element={<PaiementOutlet />}>
+          <Route index element={<ListPaiement />} />
+        </Route>
+        <Route path={LINKS.fonctions.base} element={<FonctionOutlet />}>
+          <Route index element={<ListFonction />} />
+        </Route>
+        <Route path={LINKS.ref_formations.base} element={<Outlet />}>
+          <Route index element={<ListRefFormation />} />
+        </Route>
+        <Route path={LINKS.types_unites.base} element={<Outlet />}>
+          <Route index element={<ListTypeUnite />} />
+        </Route>
+        <Route path={LINKS.cotisations.base} element={<Outlet />}>
+          <Route index element={<ListCotisation />} />
+        </Route>
 
-      <Route path={LINKS.dashbords.base} element={<Outlet />}>
-        <Route path="organisations" element={<OrganisationDashBord />} />
-        <Route path="scouts" element={<ScoutDashbord />} />
+        <Route path={LINKS.dashbords.base} element={<Outlet />}>
+          <Route path="organisations" element={<OrganisationDashBord />} />
+          <Route path="scouts" element={<ScoutDashbord />} />
+        </Route>
       </Route>
-    </Route>
+    </>
   )
 );

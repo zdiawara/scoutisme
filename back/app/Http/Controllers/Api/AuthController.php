@@ -55,7 +55,17 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        $user = auth()->user();
+
+        if (!isset($user)) {
+            return response()->json([
+                'message' => 'Utilisateur non connecté',
+            ], 401);
+        }
+        return response()->json([
+            "user" => $user,
+            "roles" => []
+        ]);
     }
 
     /**

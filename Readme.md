@@ -28,3 +28,8 @@ Pour demarrer le projet il faut utiliser la commande `npm start` à condition d'
 ## Déploiement
 
 Le déploiement du front et du back se fait via github Actions
+
+## User de test
+
+email : admin@asbf.bf
+pwd : secret

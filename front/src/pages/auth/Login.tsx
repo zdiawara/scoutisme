@@ -3,7 +3,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import AccountLayout from "./common/AccountLayout";
 import { VerticalForm } from "./common/VerticalForm";
 import FormInput from "./common/FormInput";
-import { userApi } from "api";
+import { authApi } from "api";
 import { useAuth } from "hooks";
 import { LINKS } from "utils";
 
@@ -26,7 +26,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const logUser = async (body: UserData) => {
-    userApi.login(body).then(({ access_token }) => {
+    authApi.login(body).then(({ access_token }) => {
       localStorage.setItem("@token", access_token);
       navigate(LINKS.home, {
         replace: true,

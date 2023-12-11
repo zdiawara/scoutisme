@@ -114,4 +114,24 @@ class AuthApi extends CrudService {
   }
 }
 
-export const userApi = new AuthApi("auth");
+export const authApi = new AuthApi("auth");
+
+class UserApi extends CrudService {}
+export const userApi = new UserApi("users");
+
+class RoleApi extends CrudService {
+  public async updateFonctionnalites(roleId: string, body: any) {
+    const response = await requestPut<{ data: PaiementResource }>(
+      `${this.base}/${roleId}/fonctionnalites`,
+      body
+    );
+    return response;
+  }
+}
+export const roleApi = new RoleApi("roles");
+
+class HabilitationApi extends CrudService {}
+export const habilitationApi = new HabilitationApi("habilitations");
+
+class ModuleApi extends CrudService {}
+export const moduleApi = new ModuleApi("modules");

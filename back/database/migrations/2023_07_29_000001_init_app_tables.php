@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->timestamps();
         });
+
         Schema::create('types_organisations', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nom');
@@ -30,12 +31,14 @@ return new class extends Migration
 
             $table->foreign('nature_id')->references('id')->on('natures');
         });
+
         Schema::create('genres', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nom');
             $table->string('code')->unique();
             $table->timestamps();
         });
+
         Schema::create('ref_formations', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nom');
@@ -43,12 +46,14 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
         Schema::create('villes', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nom');
             $table->timestamps();
             $table->softDeletes();
         });
+
         Schema::create('organisations', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nom');
@@ -65,10 +70,12 @@ return new class extends Migration
             $table->foreign('nature_id')->references('id')->on('natures');
             $table->foreign('ville_id')->references('id')->on('villes');
         });
+
         Schema::table('organisations', function (Blueprint $table) {
             $table->uuid('parent_id')->nullable();
             $table->foreign('parent_id')->references('id')->on('organisations');
         });
+
         Schema::create('personnes', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nom');
@@ -92,7 +99,9 @@ return new class extends Migration
             $table->foreign('niveau_formation_id')->references('id')->on('ref_formations');
             $table->foreign('genre_id')->references('id')->on('genres');
         });
+
         DB::statement("ALTER TABLE personnes ADD photo MEDIUMBLOB NULL AFTER prenom");
+
         Schema::create('fonctions', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nom');
@@ -106,6 +115,7 @@ return new class extends Migration
             $table->foreign('nature_id')->references('id')->on('natures');
             $table->foreign('type_id')->references('id')->on('types_organisations');
         });
+
         Schema::create('attributions', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('organisation_id');
@@ -176,6 +186,35 @@ return new class extends Migration
 
             $table->foreign('nature_id')->references('id')->on('natures');
         });
+
+        Schema::create('modules', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('nom');
+            $table->string('code');
+            $table->timestamps();
+        });
+
+        Schema::create('fonctionnalites', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('nom');
+            $table->string('code');
+            $table->uuid('module_id');
+            $table->uuid('sous_module_id');
+            $table->timestamps();
+
+            $table->foreign('module_id')->references('id')->on('modules');
+            $table->foreign('sous_module_id')->references('id')->on('modules');
+        });
+
+        Schema::create('habilitations', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('role_id');
+            $table->uuid('fonctionnalite_id');
+            $table->timestamps();
+
+            $table->foreign('role_id')->references('id')->on('roles');
+            $table->foreign('fonctionnalite_id')->references('id')->on('fonctionnalites');
+        });
     }
 
     /**
@@ -183,7 +222,17 @@ return new class extends Migration
      */
     public function down(): void
     {
-        collect(['attributions', 'fonctions', 'personnes', 'organisations', 'types_organisations', 'villes', 'natures', 'ref_formations', 'genres'])
+        collect([
+            'attributions',
+            'fonctions',
+            'personnes',
+            'organisations',
+            'types_organisations',
+            'villes',
+            'natures',
+            'ref_formations',
+            'genres', 'habilitations', 'roles', 'fonctionnalites', 'modules'
+        ])
             ->each(function ($table) {
                 Schema::dropIfExists($table);
             });

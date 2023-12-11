@@ -5,18 +5,22 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CotisationController;
 use App\Http\Controllers\Api\FonctionController;
 use App\Http\Controllers\Api\GenreController;
+use App\Http\Controllers\Api\HabilitationController;
 use App\Http\Controllers\Api\InstanceController;
 use App\Http\Controllers\Api\MessageController;
+use App\Http\Controllers\Api\ModuleController;
 use App\Http\Controllers\Api\NatureController;
 use App\Http\Controllers\Api\OrganisationController;
 use App\Http\Controllers\Api\OrganisationStatController;
 use App\Http\Controllers\Api\PaiementController;
 use App\Http\Controllers\Api\PersonneController;
 use App\Http\Controllers\Api\RefFormationController;
+use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\ScoutStatController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TypeOrganisationController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\VilleController;
 
 /*
@@ -74,3 +78,10 @@ Route::get('/stats/organisations/regions', [OrganisationStatController::class, '
 Route::get('/stats/organisations', [OrganisationStatController::class, 'countAll']);
 Route::get('/stats/scouts/regions', [ScoutStatController::class, 'statByRegion']);
 Route::get('/stats/scouts/genre', [ScoutStatController::class, 'scoutByGenre']);
+
+Route::apiResource('users',  UserController::class);
+Route::apiResource('roles',  RoleController::class);
+Route::apiResource('habilitations',  HabilitationController::class);
+Route::apiResource('modules',  ModuleController::class);
+
+Route::put('/roles/{role}/fonctionnalites',  [RoleController::class, 'updateFonctionnalites']);

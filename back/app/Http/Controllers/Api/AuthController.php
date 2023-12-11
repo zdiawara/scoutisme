@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
+use App\Http\Services\UserService;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -53,7 +55,7 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function me()
+    public function me(UserService $userService)
     {
         $user = auth()->user();
 
@@ -62,10 +64,9 @@ class AuthController extends Controller
                 'message' => 'Utilisateur non connecté',
             ], 401);
         }
-        return response()->json([
-            "user" => $user,
-            "roles" => []
-        ]);
+        $user['fonctionnalites'] = $userService->findFonctionnalites($user);
+        $user->load('role');
+        return new UserResource($user);
     }
 
     /**

@@ -3,15 +3,15 @@ import { Container } from "react-bootstrap";
 import { Sidebar } from "./sidbar";
 import { Header } from "./header";
 import { useQuery } from "@tanstack/react-query";
-import { userApi } from "api";
+import { authApi } from "api";
 
 export const Layout = () => {
   const query = useQuery({
-    queryKey: ["ok"],
+    queryKey: ["user-info"],
     cacheTime: 0,
     retry: 0,
     queryFn: () => {
-      return userApi.userInfo();
+      return authApi.userInfo();
     },
   });
 

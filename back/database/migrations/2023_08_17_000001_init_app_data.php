@@ -1,11 +1,16 @@
 <?php
 
+use App\Helpers\Modules;
 use App\Http\Services\FonctionService;
 use App\Models\Fonction;
+use App\Models\Fonctionnalite;
 use App\Models\Genre;
+use App\Models\Module;
 use App\Models\Nature;
 use App\Models\NatureCotisation;
+use App\Models\Role;
 use App\Models\TypeOrganisation;
+use App\Models\User;
 use App\Models\Ville;
 use Illuminate\Database\Migrations\Migration;
 
@@ -131,6 +136,30 @@ return new class extends Migration
                     'value' => 0
                 ])->all()
         ]);
+
+        collect([Modules::PERSONNE, Modules::ORGANISATION])
+            ->each(function ($item) {
+                $this->createModuleWithFonctionnalities($item);
+            });
+
+        $roleAdmin = Role::create(['nom' => 'Administrateur', 'code' => 'admin', 'perimetres' => []]);
+
+        User::create([
+            'name' => 'Administrateur',
+            'email' => 'admin@asbf.bf',
+            'password' => bcrypt('secret'),
+            'role_id' => $roleAdmin->id
+        ]);
+    }
+
+    private function createModuleWithFonctionnalities(array $body): void
+    {
+        $module = Module::create(collect($body)->except('fonctionnalites')->toArray());
+        collect($body["fonctionnalites"])->each(function ($item) use ($module) {
+            Fonctionnalite::create(array_merge($item, [
+                'module_id' => $module->id
+            ]));
+        });
     }
 
     /**

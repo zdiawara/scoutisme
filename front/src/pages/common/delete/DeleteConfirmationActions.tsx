@@ -1,14 +1,17 @@
+import { ReactNode } from "react";
 import { Button } from "react-bootstrap";
 
 type Props<T> = {
   onUpdate: (element: T) => () => void;
   onDelete: (element: T) => () => void;
   element: T;
+  children?: ReactNode;
 };
 
 export function DeleteConfirmationActions<T>(props: Props<T>) {
   return (
     <div className="text-end">
+      {props.children}
       <Button
         className="action-icon"
         variant="link"

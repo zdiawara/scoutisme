@@ -6,3 +6,4 @@ export * from "./SelectRefFormation";
 export * from "./SelectFonction";
 export * from "./SelectPersonne";
 export * from "./SelectEtat";
+export * from "./SelectRole";

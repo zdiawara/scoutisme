@@ -56,6 +56,9 @@ export const LINKS = {
   cotisations: {
     base: COTISATIONS,
   },
+  acces: {
+    base: "/acces",
+  },
   dashbords: {
     base: "dashbords",
     scouts: "/dashbords/scouts",

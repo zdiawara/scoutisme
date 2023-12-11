@@ -15,6 +15,7 @@ import {
   PersonneOutlet,
 } from "./FilterOutlet";
 import { organisationApi, personneApi } from "api";
+import { Acces } from "pages/utilitaires/acces/Acces";
 
 const loading = () => <div className=""></div>;
 
@@ -149,6 +150,10 @@ export const router = createBrowserRouter(
         <Route path={LINKS.dashbords.base} element={<Outlet />}>
           <Route path="organisations" element={<OrganisationDashBord />} />
           <Route path="scouts" element={<ScoutDashbord />} />
+        </Route>
+
+        <Route path={LINKS.acces.base} element={<Outlet />}>
+          <Route index element={<Acces />} />
         </Route>
       </Route>
     </>

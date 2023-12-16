@@ -27,8 +27,8 @@ class RoleController extends Controller
         $query = Role::query();
 
         return [
-            'data' => $query->orderBy('nom', 'asc')
-                ->get()
+            'data' =>  RoleResource::collection($query->with('habilitations.fonctionnalite')->orderBy('nom', 'asc')
+                ->get())
         ];
     }
 
@@ -65,7 +65,7 @@ class RoleController extends Controller
         Habilitation::where('role_id', $role->id)
             ->delete();
 
-        collect($request->all())
+        collect($request->get('fonctionnalites'))
             ->each(function ($fonctionnaliteId) use ($role) {
                 Habilitation::create([
                     'role_id' => $role->id,

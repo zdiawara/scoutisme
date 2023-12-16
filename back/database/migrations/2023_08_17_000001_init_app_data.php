@@ -137,7 +137,7 @@ return new class extends Migration
                 ])->all()
         ]);
 
-        collect([Modules::PERSONNE, Modules::ORGANISATION])
+        collect([Modules::MODULE_PERSONNE, Modules::MODULE_ORGANISATION])
             ->each(function ($item) {
                 $this->createModuleWithFonctionnalities($item);
             });
@@ -154,11 +154,24 @@ return new class extends Migration
 
     private function createModuleWithFonctionnalities(array $body): void
     {
-        $module = Module::create(collect($body)->except('fonctionnalites')->toArray());
-        collect($body["fonctionnalites"])->each(function ($item) use ($module) {
-            Fonctionnalite::create(array_merge($item, [
-                'module_id' => $module->id
-            ]));
+        $module = Module::create(collect($body)->except('sous_modules')->toArray());
+
+        collect($body["sous_modules"])->each(function ($item) use ($module) {
+
+            $sousModule = Module::create(collect($item)
+                ->except('fonctionnalites')
+                ->merge([
+                    'parent_id' => $module->id
+                ])
+                ->toArray());
+
+            collect(collect($item)
+                ->get('fonctionnalites'))
+                ->each(function ($fonctionnalite) use ($sousModule) {
+                    Fonctionnalite::create(array_merge($fonctionnalite, [
+                        'module_id' => $sousModule->id
+                    ]));
+                });
         });
     }
 

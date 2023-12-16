@@ -11,6 +11,7 @@ export type RoleResource = {
   nom: string;
   code: string;
   perimetres: string[];
+  habilitations: HabilitationResource[];
 };
 
 export type FonctionnaliteResource = {
@@ -30,5 +31,7 @@ export type ModuleResource = {
   id: string;
   nom: string;
   code: string;
+  sous_modules: ModuleResource[];
   fonctionnalites: FonctionnaliteResource[];
+  parent?: ModuleResource;
 };

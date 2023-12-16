@@ -18,6 +18,7 @@ class ModuleResource extends JsonResource
             'id' => $this->id,
             'nom' => $this->nom,
             'code' => $this->code,
+            'parent' =>  new ModuleResource($this->whenLoaded('parent')),
             'fonctionnalites' =>  FonctionnaliteResource::collection($this->whenLoaded('fonctionnalites')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

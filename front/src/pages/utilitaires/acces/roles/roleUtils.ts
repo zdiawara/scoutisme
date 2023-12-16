@@ -15,6 +15,9 @@ const toInput = (data: RoleResource) => {
   return {
     nom: data.nom,
     perimetres: data.perimetres,
+    fonctionnalites: data.habilitations.map(
+      ({ fonctionnalite }) => fonctionnalite.id
+    ),
   };
 };
 export const roleConverter = {

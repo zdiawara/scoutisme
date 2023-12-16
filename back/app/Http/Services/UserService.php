@@ -3,8 +3,8 @@
 namespace App\Http\Services;
 
 use App\Models\Fonctionnalite;
+use App\Models\Personne;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
 
 class UserService
 {
@@ -27,11 +27,21 @@ class UserService
     public function findFonctionnalites(User $user)
     {
         return Fonctionnalite::query()
-            ->with('module')
+            ->with('module.parent')
             ->join('habilitations as h', function ($builder) {
                 $builder->on('h.fonctionnalite_id', 'fonctionnalites.id');
             })
             ->where('h.role_id', $user->role_id)
             ->get();
+    }
+
+    public function createFromPersonne(Personne $personne, array $body)
+    {
+        return $this->create([
+            'name' => $personne->nom . ' ' . $personne->prenom,
+            'email' => $body['email'],
+            'role_id' => $body['role_id'],
+            'personne_id' => $personne->id
+        ]);
     }
 }

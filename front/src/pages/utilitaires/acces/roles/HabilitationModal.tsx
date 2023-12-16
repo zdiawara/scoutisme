@@ -19,7 +19,7 @@ const Form: FC<WrapperV2Props> = (props) => {
     keepPreviousData: true,
     networkMode: "offlineFirst",
     //select : (data) => data.data,
-    queryFn: async ({ queryKey }) => {
+    queryFn: async () => {
       const results = await moduleApi.findAll<ModuleResource>();
       return results.data;
     },
@@ -27,31 +27,6 @@ const Form: FC<WrapperV2Props> = (props) => {
 
   const onSelectPage = (pageSelected: string) => () => {
     setPage(pageSelected);
-  };
-
-  const renderContent = () => {
-    return (
-      <>
-        {/* <View.Header label="Test" description="description" className="mb-3" /> */}
-        <Row className="g-2">
-          {modules
-            ?.flatMap((e) => e.fonctionnalites)
-            .filter((e) => e.module.code === page)
-            .map((e) => (
-              <Col xs={6} key={e.id}>
-                <CheckBox
-                  name="fonctionnalites"
-                  id={e.id}
-                  label={e.nom}
-                  type="checkbox"
-                  inline
-                  value={e.id}
-                />
-              </Col>
-            ))}
-        </Row>
-      </>
-    );
   };
 
   return (
@@ -83,7 +58,25 @@ const Form: FC<WrapperV2Props> = (props) => {
           </Card>
         </Col>
         <Col xl={9} lg={9}>
-          <Card body>{renderContent()}</Card>
+          <Card body>
+            <Row className="g-2">
+              {modules
+                ?.flatMap((e) => e.fonctionnalites)
+                .filter((e) => e.module.code === page)
+                .map((e) => (
+                  <Col xs={6} key={e.id}>
+                    <CheckBox
+                      name="fonctionnalites"
+                      id={e.id}
+                      label={e.nom}
+                      type="checkbox"
+                      inline
+                      value={e.id}
+                    />
+                  </Col>
+                ))}
+            </Row>
+          </Card>
         </Col>
       </Row>
     </HookModalForm>

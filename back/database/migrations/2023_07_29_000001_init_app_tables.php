@@ -100,6 +100,29 @@ return new class extends Migration
             $table->foreign('genre_id')->references('id')->on('genres');
         });
 
+        Schema::create('roles', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('nom');
+            $table->uuid('code');
+            $table->json('perimetres');
+            $table->timestamps();
+        });
+
+        Schema::create('users', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->uuid('role_id');
+            $table->uuid('personne_id')->nullable();
+            $table->rememberToken();
+            $table->timestamps();
+
+            $table->foreign('role_id')->references('id')->on('roles');
+            $table->foreign('personne_id')->references('id')->on('personnes');
+        });
+
         DB::statement("ALTER TABLE personnes ADD photo MEDIUMBLOB NULL AFTER prenom");
 
         Schema::create('fonctions', function (Blueprint $table) {
@@ -194,16 +217,19 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::table('modules', function (Blueprint $table) {
+            $table->uuid('parent_id')->nullable();
+            $table->foreign('parent_id')->references('id')->on('modules');
+        });
+
         Schema::create('fonctionnalites', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nom');
             $table->string('code');
             $table->uuid('module_id');
-            $table->uuid('sous_module_id');
             $table->timestamps();
 
             $table->foreign('module_id')->references('id')->on('modules');
-            $table->foreign('sous_module_id')->references('id')->on('modules');
         });
 
         Schema::create('habilitations', function (Blueprint $table) {

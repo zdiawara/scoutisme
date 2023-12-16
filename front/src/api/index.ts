@@ -10,6 +10,7 @@ import { requestGet, requestPost, requestPut } from "./request";
 import { RequestParam } from "types/request.type";
 import { requestParams } from "utils/functions";
 import { UserData } from "pages/auth/Login";
+import { UserResource } from "types/auth.type";
 
 export * from "./stats";
 
@@ -31,6 +32,14 @@ class PersonneApi extends CrudService {
   public async cotiser(personneId: string, body: any) {
     const response = await requestPost<{ data: CotisationResource }>(
       `${this.base}/${personneId}/cotiser`,
+      body
+    );
+    return response;
+  }
+
+  public async convertir(personneId: string, body: any) {
+    const response = await requestPost<{ data: UserResource }>(
+      `${this.base}/${personneId}/convertir`,
       body
     );
     return response;

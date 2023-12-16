@@ -4,32 +4,71 @@ namespace App\Helpers;
 
 class Modules
 {
-    const PERSONNE =  [
+    const MODULE_PERSONNE =  [
         "nom" => 'Personnes',
         'code' => 'personnes',
-        'fonctionnalites' => [
-            ['nom' => 'Gérer scout', 'code' => 'gerer_scout'],
-            ['nom' => 'Gérer adulte', 'code' => 'gerer_adulte'],
+        'sous_modules' => [
 
-            ['nom' => 'Créer fonction', 'code' => 'creer_fonction'],
-            ['nom' => 'Côturer fonction', 'code' => 'cloturer_fonction'],
-            ['nom' => 'Supprimer fonction', 'code' => 'supprimer_fonction'],
+            [
+                'nom' => 'Scouts',
+                'code' => 'scouts',
+                'fonctionnalites' => [
+                    ['nom' => 'Créer', 'code' => 'creer'],
+                    ['nom' => 'Modifier', 'code' => 'modifier'],
+                    ['nom' => 'Consulter', 'code' => 'consulter']
+                ]
+            ],
 
-            ['nom' => 'Gérer paiement', 'code' => 'gerer_paiement'],
-            ['nom' => 'Valider paiement', 'code' => 'valider_paiement'],
-            ['nom' => 'Rejeter paiement', 'code' => 'rejeter_paiement'],
-            ['nom' => 'Télécharger récu', 'code' => 'telecharger_recu'],
+            [
+                'nom' => 'Adultes',
+                'code' => 'adultes',
+                'fonctionnalites' => [
+                    ['nom' => 'Créer', 'code' => 'creer'],
+                    ['nom' => 'Modifier', 'code' => 'modifier'],
+                    ['nom' => 'Consulter', 'code' => 'consulter']
+                ]
+            ],
+
+            [
+                'nom' => 'Fonctions',
+                'code' => 'fonctions',
+                'fonctionnalites' => [
+                    ['nom' => 'Affecter', 'code' => 'affecter'],
+                    ['nom' => 'Consulter', 'code' => 'consulter'],
+                    ['nom' => 'Supprimer', 'code' => 'supprimer'],
+                ]
+            ],
+
+            [
+                'nom' => 'Paiements',
+                'code' => 'paiements',
+                'fonctionnalites' => [
+                    ['nom' => 'Créer', 'code' => 'creer'],
+                    ['nom' => 'Modifier', 'code' => 'modifier'],
+                    ['nom' => 'Consulter', 'code' => 'consulter'],
+                    ['nom' => 'Supprimer', 'code' => 'supprimer'],
+                    ['nom' => 'Valider', 'code' => 'valider'],
+                    ['nom' => 'Rejeter', 'code' => 'rejeter'],
+                    ['nom' => 'Télécharger récu', 'code' => 'telecharger_recu'],
+                ]
+            ],
 
         ]
     ];
 
-    const ORGANISATION =  [
+    const MODULE_ORGANISATION =  [
         "nom" => 'Organisations',
         'code' => 'organisations',
-        'fonctionnalites' => [
-            ['nom' => 'Gérer organisation', 'code' => 'gerer_organisation'],
-            ['nom' => 'Gérer direction', 'code' => 'gerer_direction'],
-            ['nom' => 'Affecter scout', 'code' => 'affecter_scout'],
+        'sous_modules' => [
+            [
+                'nom' => 'Organisations',
+                'code' => 'organisations',
+                'fonctionnalites' => [
+                    ['nom' => 'Créer', 'code' => 'creer'],
+                    ['nom' => 'Modifier', 'code' => 'modifier'],
+                    ['nom' => 'Consulter', 'code' => 'consulter'],
+                ]
+            ],
         ]
     ];
 }

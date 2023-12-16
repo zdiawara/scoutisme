@@ -15,7 +15,11 @@ class ModuleController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Module::query()->with('fonctionnalites.module');
+        $query = Module::query()->with('sousModules.fonctionnalites.module');
+
+        if ($request->has("noParentId")) {
+            $query = $query->where('parent_id', null);
+        }
 
         return [
             'data' => $query->get()

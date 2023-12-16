@@ -53,6 +53,7 @@ Route::apiResource('personnes', PersonneController::class);
 
 Route::get('/personnes/{personneId}/attributions', [PersonneController::class, 'readAttribiutions']);
 Route::post('/personnes/{personneId}/affecter', [PersonneController::class, 'affecter']);
+Route::post('/personnes/{personne}/convertir', [PersonneController::class, 'convertir']);
 Route::post('/personnes/{personneId}/cotiser', [PersonneController::class, 'cotiser']);
 Route::get('/personnes/exports/csv', [PersonneController::class, 'exportPersonnes']);
 Route::get('/personnes_sans_fonction', [PersonneController::class, 'readPersonnesSansFonction']);

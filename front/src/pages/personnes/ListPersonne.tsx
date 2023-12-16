@@ -20,6 +20,7 @@ import { selectHelper } from "utils/functions";
 import { ListPersonneActions } from "./common/ListPersonneActions";
 import { ExportPersonneModal } from "./modal";
 import { NATURE, QUERY_KEY } from "utils/constants";
+import { PersonneActions } from "./common/PersonneActions";
 
 const columns: Columns<PersonneResource>[] = [
   {
@@ -57,7 +58,9 @@ const columns: Columns<PersonneResource>[] = [
             <span className="text-primary fw-semibold">
               {personne.prenom} {personne.nom}
             </span>
-            <span className="text-muted text-capitalize">{personne.type}</span>
+            <span className="text-muted text-capitalize">
+              {personne.genre?.nom}
+            </span>
           </Stack>
         </Link>
       );
@@ -107,20 +110,18 @@ const columns: Columns<PersonneResource>[] = [
   },
 
   {
-    name: "genre",
-    label: "Genre",
-    Cell: ({ genre }) => <span>{genre?.nom}</span>,
+    name: "email",
+    label: "Email",
+    Cell: ({ email }) => <span>{email}</span>,
   },
   {
     name: "actions",
     label: "Actions",
     headClassName: "text-end",
-    Cell: () => {
+    Cell: (personne) => {
       return (
         <div className="text-end">
-          <Button className="action-icon" variant="link">
-            <i className="uil-edit-alt fs-4 text-primary"></i>
-          </Button>
+          <PersonneActions personne={personne} />
         </div>
       );
     },

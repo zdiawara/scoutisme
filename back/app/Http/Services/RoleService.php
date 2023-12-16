@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Models\Habilitation;
 use App\Models\Role;
 
 class RoleService
@@ -18,12 +19,37 @@ class RoleService
 
         // shuffle the result
         $string = str_shuffle($pin);
-        return Role::create(array_merge($body, ['code' => $string]));
+        $role = Role::create(array_merge($body, ['code' => $string]));
+
+        collect($body['fonctionnalites'])
+            ->each(function ($fonctionnaliteId) use ($role) {
+                Habilitation::create([
+                    'role_id' => $role->id,
+                    'fonctionnalite_id' => $fonctionnaliteId
+                ]);
+            });
+
+        return $role;
     }
 
     public function update(Role $role, array $body): Role
     {
         $role->update($body);
+
+        $fonctionnalites = collect($body['fonctionnalites']);
+
+        if ($fonctionnalites->isNotEmpty()) {
+            Habilitation::where('role_id', $role->id)
+                ->delete();
+            $fonctionnalites->each(function ($fonctionnaliteId) use ($role) {
+                Habilitation::create([
+                    'role_id' => $role->id,
+                    'fonctionnalite_id' => $fonctionnaliteId
+                ]);
+            });
+        }
+
+
         return $role;
     }
 }

@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AttributionResource;
 use App\Http\Resources\PersonneResource;
+use App\Http\Resources\UserResource;
 use App\Http\Services\CotisationService;
 use App\Http\Services\PersonneService;
+use App\Http\Services\UserService;
 use App\Jobs\ProcessPodcast;
 use App\ModelFilters\PersonneFilter;
 use App\Models\Attribution;
@@ -19,11 +21,17 @@ class PersonneController extends Controller
     private PersonneService $personneService;
     private CotisationService $cotisationService;
     private $attributionActive;
+    private $userService;
 
-    public function __construct(PersonneService $personneService, CotisationService $cotisationService)
-    {
+    public function __construct(
+        PersonneService $personneService,
+        CotisationService $cotisationService,
+        UserService $userService
+    ) {
         $this->personneService = $personneService;
         $this->cotisationService = $cotisationService;
+        $this->userService = $userService;
+
         $this->attributionActive = function ($query) {
             $query->where('date_debut', '<=', now())
                 ->where(function ($subQuery) {
@@ -244,6 +252,13 @@ class PersonneController extends Controller
         $cotisation->load(['personne']);
 
         return new CotisationResource($cotisation); */
+    }
+
+    public function convertir(Personne $personne, Request $request)
+    {
+        $user = $this->userService->createFromPersonne($personne, $request->all());
+
+        return new UserResource($user);
     }
 
     /**

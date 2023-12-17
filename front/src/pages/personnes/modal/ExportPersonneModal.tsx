@@ -47,13 +47,9 @@ const Form: FC<WrapperV2Props> = (props) => {
         </Col>
       </Row>
 
-      <View.Header label="Attribution" className="ps-0 mt-3" />
+      <View.Header label="Organisation" className="ps-0 mt-3" />
       <Row className="g-3">
         <Col xs={12}>
-          <label className="text-dark fw-bold me-2 mb-2">
-            Organisation &nbsp;
-          </label>
-          <br />
           <Radio name="o_code" label="Code" type="checkbox" inline value="1" />
           <Radio name="o_nom" label="Nom" type="checkbox" inline value="1" />
           <Radio
@@ -64,15 +60,10 @@ const Form: FC<WrapperV2Props> = (props) => {
             value="1"
           />
         </Col>
-        {/* <Col>
-          <Radio
-            name="o_parent"
-            label="Inclure les parents"
-            type="switch"
-            inline
-            value="1"
-          />
-        </Col> */}
+      </Row>
+
+      <View.Header label="Fonction" className="ps-0 mt-3" />
+      <Row className="g-3">
         <Col xs={12}>
           <label className="text-dark  fw-bold me-2 mb-2">
             Fonction &nbsp;

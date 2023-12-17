@@ -6,7 +6,7 @@ import {
 import { WrapperV2Props, withMutationForm } from "hoc";
 import { FC } from "react";
 import { Col, Row } from "react-bootstrap";
-import { attributionApi } from "api";
+import { personneApi } from "api";
 import { OrganisationResource } from "types/organisation.type";
 import { attributionConverter, organisationMembreSchema } from "../form";
 import { FonctionResource } from "types/personne.type";
@@ -51,7 +51,7 @@ const Form: FC<WrapperV2Props> = (props) => {
 
 const OrganisationMembreForm = withMutationForm(Form, organisationMembreSchema);
 
-type AddOrganisationMembreModalProps = {
+type OrganisationMembreModalProps = {
   organisation: OrganisationResource;
   fonction: FonctionResource;
   closeModal: () => void;
@@ -62,19 +62,20 @@ type AddOrganisationMembreModalProps = {
  * @param param0
  * @returns
  */
-export const AddOrganisationMembreModal: FC<
-  AddOrganisationMembreModalProps
-> = ({ organisation, fonction, closeModal }) => {
+export const OrganisationMembreModal: FC<OrganisationMembreModalProps> = ({
+  organisation,
+  fonction,
+  closeModal,
+}) => {
   const query = useQueryClient();
 
   const ajouterMembre = (data: Record<string, any>) => {
-    const body = {
+    const { personne_id, ...body } = {
       ...attributionConverter.toBody(data),
       organisation_id: organisation.id,
       fonction_id: fonction.id,
-      type: "direction",
     };
-    return attributionApi.create(body);
+    return personneApi.createAttribution(personne_id!, body);
   };
 
   return (

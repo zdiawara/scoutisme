@@ -14,6 +14,7 @@ export const QUERY_KEY = {
   events: "events",
   cotisations: "cotisations",
   paiements: "paiements",
+  scouts: "scouts",
 };
 
 export const MASK = {

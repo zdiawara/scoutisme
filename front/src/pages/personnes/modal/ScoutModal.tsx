@@ -62,7 +62,7 @@ export const ScoutModal: FC<ScoutModalProps> = ({
         type: { value: "scout" },
       }}
       onSuccess={() => {
-        query.invalidateQueries([QUERY_KEY.attributions, organisation.id]);
+        query.invalidateQueries([QUERY_KEY.scouts, organisation.id]);
         closeModal();
       }}
       onExit={closeModal}

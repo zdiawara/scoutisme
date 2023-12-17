@@ -14,7 +14,7 @@ import {
 } from "types/personne.type";
 import { dateFormater } from "utils/functions";
 import { AttributionActions } from "pages/attributions/common";
-import { AddOrganisationMembreModal } from "pages/attributions/common/AddOrganisationMembreModal";
+import { OrganisationMembreModal } from "pages/attributions/common";
 import { Link } from "react-router-dom";
 import { LINKS } from "utils";
 
@@ -141,7 +141,7 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
       />
 
       {attributionSelected && (
-        <AddOrganisationMembreModal
+        <OrganisationMembreModal
           fonction={attributionSelected.fonction as FonctionResource}
           organisation={organisation}
           closeModal={() => setAttributionSelected(undefined)}

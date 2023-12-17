@@ -4,8 +4,8 @@ import { ICONS, PageHeader } from "pages/common";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "utils/constants";
-import { attributionApi, personneApi } from "api";
-import { AttributionResource, PersonneResource } from "types/personne.type";
+import { personneApi } from "api";
+import { PersonneResource } from "types/personne.type";
 import { PersonneBox } from "./view/PersonneBox";
 import { View } from "components";
 import { Link } from "react-router-dom";
@@ -38,19 +38,6 @@ const ViewPersonne: FC = () => {
     networkMode: "offlineFirst",
     queryFn: ({ queryKey }) => {
       return personneApi.findById<PersonneResource>(queryKey[1] as string);
-    },
-  });
-
-  const { data: attribution } = useQuery({
-    queryKey: [QUERY_KEY.attribution_active, personneId],
-    networkMode: "offlineFirst",
-    queryFn: async ({ queryKey }) => {
-      const { data } = await attributionApi.findAll<AttributionResource>({
-        personneId,
-        actif: true,
-        projection: "organisation.nature;fonction",
-      });
-      return data.length ? data[0] : null;
     },
   });
 
@@ -124,24 +111,24 @@ const ViewPersonne: FC = () => {
                 <i className={`${ICONS.fonction} me-1`}></i>
                 Fonction
               </div>
-              <View.Item>{attribution?.fonction?.nom}</View.Item>
+              <View.Item>{personne.fonction?.nom}</View.Item>
               <hr />
               <div className="font-13">
                 <i className={`${ICONS.organisation} me-1`}></i>
                 Organisation
               </div>
               <View.Item>
-                {attribution?.organisation ? (
+                {personne?.organisation ? (
                   <>
                     <span className="text-muted">
-                      {attribution.organisation.nature.nom}
+                      {personne.organisation.nature.nom}
                       &nbsp;/&nbsp;
                     </span>
                     <Link
-                      to={LINKS.organisations.view(attribution.organisation.id)}
+                      to={LINKS.organisations.view(personne.organisation.id)}
                       className="text-decoration-underline"
                     >
-                      {attribution.organisation.nom}
+                      {personne.organisation.nom}
                     </Link>
                   </>
                 ) : null}

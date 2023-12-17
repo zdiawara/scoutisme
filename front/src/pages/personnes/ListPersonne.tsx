@@ -22,91 +22,95 @@ import { ExportPersonneModal } from "./modal";
 import { NATURE, QUERY_KEY } from "utils/constants";
 import { PersonneActions } from "./common/PersonneActions";
 
+const renderOrganisation = ({ organisation }: PersonneResource) => {
+  if (organisation) {
+    const natures = [NATURE.unite, NATURE.groupe];
+    return (
+      <>
+        <span className="text-muted">{organisation.nature.nom}</span>&nbsp;
+        <Link to={LINKS.organisations.view(organisation.id)}>
+          {organisation.nom}
+        </Link>
+        {natures.includes(organisation.nature.code) && (
+          <TooltipHelper
+            description={
+              <>
+                {organisation?.parents?.reverse()?.map((e) => (
+                  <div key={e.id}>{e.nom}</div>
+                ))}
+              </>
+            }
+          />
+        )}
+      </>
+    );
+  }
+  return <span>-</span>;
+};
+
+const renderPersonne = ({
+  id,
+  nom,
+  prenom,
+  genre,
+  photo,
+}: PersonneResource) => {
+  return (
+    <Link to={LINKS.personnes.view(id)} className="table-user d-flex">
+      <div className="avatar-sm me-2">
+        {photo ? (
+          <img
+            src={photo}
+            alt=""
+            className="rounded-circle"
+            style={{
+              width: "100%",
+              height: "100%",
+              textAlign: "center",
+              objectFit: "cover",
+              color: "transparent",
+              textIndent: "10000px",
+            }}
+          />
+        ) : (
+          <span className="avatar-title bg-secondary-lighten text-secondary fs-4 rounded-circle">
+            {prenom[0]}
+            {nom[0]}
+          </span>
+        )}
+      </div>
+      <Stack>
+        <span className="text-primary fw-semibold">
+          {prenom} {nom}
+        </span>
+        <span className="text-muted text-capitalize">{genre?.nom}</span>
+      </Stack>
+    </Link>
+  );
+};
+
 const columns: Columns<PersonneResource>[] = [
   {
     name: "nom",
     label: "Nom",
-    Cell: (personne: PersonneResource, i) => {
-      return (
-        <Link
-          to={LINKS.personnes.view(personne.id)}
-          className="table-user d-flex"
-        >
-          <div className="avatar-sm me-2">
-            {personne.photo ? (
-              <img
-                src={personne.photo}
-                alt=""
-                className="rounded-circle"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  textAlign: "center",
-                  objectFit: "cover",
-                  color: "transparent",
-                  textIndent: "10000px",
-                }}
-              />
-            ) : (
-              <span className="avatar-title bg-secondary-lighten text-secondary fs-4 rounded-circle">
-                {personne.prenom[0]}
-                {personne.nom[0]}
-              </span>
-            )}
-          </div>
-          <Stack>
-            <span className="text-primary fw-semibold">
-              {personne.prenom} {personne.nom}
-            </span>
-            <span className="text-muted text-capitalize">
-              {personne.genre?.nom}
-            </span>
-          </Stack>
-        </Link>
-      );
-    },
+    Cell: renderPersonne,
   },
 
   {
     name: "fonction",
     label: "Fonction",
-    Cell: ({ attributions }) => {
-      if (attributions?.length) {
-        return <span>{attributions[0].fonction.nom}</span>;
+    Cell: ({ fonction }) => {
+      if (fonction) {
+        return <span>{fonction.nom}</span>;
       }
-      return null;
+      return <span>-</span>;
     },
   },
 
   {
     name: "organisation",
     label: "Organisation",
-    Cell: ({ attributions }) => {
-      if (attributions?.length) {
-        const organisation = attributions[0].organisation;
-        const natures = [NATURE.unite, NATURE.groupe];
-        return (
-          <>
-            <span className="text-muted">{organisation.nature.nom}</span>&nbsp;
-            <Link to={LINKS.organisations.view(organisation.id)}>
-              {organisation.nom}
-            </Link>
-            {natures.includes(organisation.nature.code) && (
-              <TooltipHelper
-                description={
-                  <>
-                    {organisation?.parents?.reverse()?.map((e) => (
-                      <div key={e.id}>{e.nom}</div>
-                    ))}
-                  </>
-                }
-              />
-            )}
-          </>
-        );
-      }
-      return null;
-    },
+    Cell: renderOrganisation,
   },
 
   {

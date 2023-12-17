@@ -59,7 +59,7 @@ const Login = () => {
           onSubmit={logUser}
           //resolver={}
           defaultValues={{
-            email: "zakaridia.diawara@gmail.com",
+            email: "admin@asbf.bf",
             password: "secret",
           }}
         >

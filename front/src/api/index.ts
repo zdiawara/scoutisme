@@ -6,7 +6,7 @@ import {
   PersonneResource,
 } from "types/personne.type";
 import { CrudService } from "./crudService";
-import { requestGet, requestPost, requestPut } from "./request";
+import { requestDelete, requestGet, requestPost, requestPut } from "./request";
 import { RequestParam } from "types/request.type";
 import { requestParams } from "utils/functions";
 import { UserData } from "pages/auth/Login";
@@ -40,6 +40,29 @@ class PersonneApi extends CrudService {
   public async convertir(personneId: string, body: any) {
     const response = await requestPost<{ data: UserResource }>(
       `${this.base}/${personneId}/convertir`,
+      body
+    );
+    return response;
+  }
+
+  public async deleteAttribution(personneId: string) {
+    const response = await requestDelete(
+      `${this.base}/${personneId}/attributions`
+    );
+    return response;
+  }
+
+  public async cloturerAttribution(personneId: string, body: any) {
+    const response = await requestPut<{ data: PersonneResource }>(
+      `${this.base}/${personneId}/cloturer_attributions`,
+      body
+    );
+    return response;
+  }
+
+  public async createAttribution(personneId: string, body: any) {
+    const response = await requestPost<{ data: PersonneResource }>(
+      `${this.base}/${personneId}/attributions`,
       body
     );
     return response;

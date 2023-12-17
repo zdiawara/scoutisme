@@ -15,7 +15,8 @@ class Personne extends Model
 
     protected $fillable = [
         'nom', 'prenom', 'photo', 'code', 'adresse', 'email', 'telephone', 'etat', 'personne_a_contacter',
-        'profession', 'date_naissance', 'lieu_naissance', 'type', 'genre_id', 'ville_id', 'niveau_formation_id'
+        'profession', 'date_naissance', 'lieu_naissance', 'type', 'genre_id', 'ville_id', 'niveau_formation_id',
+        'organisation_id', 'fonction_id', 'date_fin', 'date_debut'
     ];
 
     protected $casts = ['personne_a_contacter' => 'array'];
@@ -28,6 +29,16 @@ class Personne extends Model
     public function genre()
     {
         return $this->belongsTo(Genre::class);
+    }
+
+    public function fonction()
+    {
+        return $this->belongsTo(Fonction::class);
+    }
+
+    public function organisation()
+    {
+        return $this->belongsTo(Organisation::class);
     }
 
     public function ville()

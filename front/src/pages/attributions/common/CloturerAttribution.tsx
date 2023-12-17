@@ -6,7 +6,7 @@ import { Col, Row } from "react-bootstrap";
 import { useFormContext } from "react-hook-form";
 import { AttributionResource } from "types/personne.type";
 import { attributionConverter } from "../form";
-import { attributionApi } from "api";
+import { personneApi } from "api";
 import { QUERY_KEY } from "utils/constants";
 
 const Form: FC<WrapperV2Props> = (props) => {
@@ -51,7 +51,9 @@ export const CloturerAttribution: FC<CloturerAttributionProps> = ({
 
   const cloturerAttribution = (data: Record<string, any>) => {
     const body = attributionConverter.toBody(data);
-    return attributionApi.update(attribution.id, { date_fin: body.date_fin });
+    return personneApi.cloturerAttribution(attribution.personne.id, {
+      date_fin: body.date_fin,
+    });
   };
 
   return (

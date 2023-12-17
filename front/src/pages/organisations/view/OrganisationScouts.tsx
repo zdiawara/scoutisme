@@ -2,9 +2,9 @@ import { View } from "components";
 import { Columns, ICONS, StaticTable } from "pages/common";
 import { FC } from "react";
 import { OrganisationResource } from "types/organisation.type";
-import { attributionApi } from "api";
+import { personneApi } from "api";
 import { QUERY_KEY } from "utils/constants";
-import { AttributionResource } from "types/personne.type";
+import { PersonneResource } from "types/personne.type";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { LINKS } from "utils";
@@ -16,12 +16,9 @@ type OrganisationScoutsProps = {
   organisation: OrganisationResource;
 };
 
-const searchByCriteres = (
-  term: string,
-  attributions: AttributionResource[]
-) => {
-  return attributions.filter(({ personne }) =>
-    `${personne.nom} ${personne.prenom}`.match(new RegExp(term, "gi"))
+const searchByCriteres = (term: string, personnes: PersonneResource[]) => {
+  return personnes.filter(({ nom, prenom }) =>
+    `${nom} ${prenom}`.match(new RegExp(term, "gi"))
   );
 };
 
@@ -29,32 +26,29 @@ export const OrganisationScouts: FC<OrganisationScoutsProps> = ({
   organisation,
 }) => {
   const query = useQuery({
-    queryKey: [QUERY_KEY.attributions, organisation.id],
+    queryKey: [QUERY_KEY.scouts, organisation.id],
     networkMode: "offlineFirst",
     queryFn: () =>
-      attributionApi
-        .findAll<AttributionResource>({
+      personneApi
+        .findAll<PersonneResource>({
           organisationId: organisation.id,
-          fonctionCode: "scout",
+          codeFonction: "scout",
           type: "scout",
         })
         .then((r) => r.data),
   });
 
-  const columns: Columns<AttributionResource>[] = [
+  const columns: Columns<PersonneResource>[] = [
     {
       name: "personne",
       label: "Personne",
-      Cell: (attribution) => {
-        if (!attribution.personne) {
-          return <View.Empty />;
-        }
+      Cell: (personne) => {
         return (
-          <Link to={LINKS.personnes.view(attribution.personne.id)}>
+          <Link to={LINKS.personnes.view(personne.id)}>
             <span className="text-primary fw-semibold">
-              {attribution.personne.prenom} {attribution.personne.nom}
+              {personne.prenom} {personne.nom}
             </span>
-            <div className="text-muted">{attribution.personne.code}</div>
+            <div className="text-muted">{personne.code}</div>
           </Link>
         );
       },
@@ -84,10 +78,19 @@ export const OrganisationScouts: FC<OrganisationScoutsProps> = ({
       name: "actions",
       label: "Actions",
       headClassName: "text-end",
-      Cell: (attribution) => {
+      Cell: (personne) => {
         return (
           <div className="text-end">
-            <AttributionActions attribution={attribution} />
+            <AttributionActions
+              attribution={{
+                id: personne.id,
+                personne,
+                fonction: personne.fonction!,
+                organisation: personne.organisation!,
+                date_debut: personne.date_debut!,
+                date_fin: personne.date_fin!,
+              }}
+            />
           </div>
         );
       },

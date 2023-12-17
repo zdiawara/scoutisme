@@ -76,6 +76,21 @@ return new class extends Migration
             $table->foreign('parent_id')->references('id')->on('organisations');
         });
 
+        Schema::create('fonctions', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('nom');
+            $table->string('code')->unique();
+            $table->integer('duree_mandat')->nullable();
+            $table->uuid('nature_id');
+            $table->uuid('type_id')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('nature_id')->references('id')->on('natures');
+            $table->foreign('type_id')->references('id')->on('types_organisations');
+        });
+
+
         Schema::create('personnes', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nom');
@@ -90,6 +105,12 @@ return new class extends Migration
             $table->string('type'); // scout; adulte
             $table->json('personne_a_contacter')->nullable();
             $table->uuid('niveau_formation_id')->nullable();
+
+            $table->uuid('organisation_id')->nullable();
+            $table->uuid('fonction_id')->nullable();
+            $table->dateTime('date_debut')->nullable();
+            $table->dateTime('date_fin')->nullable();
+
             $table->uuid('ville_id')->nullable();
             $table->uuid('genre_id');
             $table->string('adresse')->nullable();
@@ -98,6 +119,8 @@ return new class extends Migration
             $table->foreign('ville_id')->references('id')->on('villes');
             $table->foreign('niveau_formation_id')->references('id')->on('ref_formations');
             $table->foreign('genre_id')->references('id')->on('genres');
+            $table->foreign('organisation_id')->references('id')->on('organisations');
+            $table->foreign('fonction_id')->references('id')->on('fonctions');
         });
 
         Schema::create('roles', function (Blueprint $table) {
@@ -125,26 +148,11 @@ return new class extends Migration
 
         DB::statement("ALTER TABLE personnes ADD photo MEDIUMBLOB NULL AFTER prenom");
 
-        Schema::create('fonctions', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('nom');
-            $table->string('code')->unique();
-            $table->integer('duree_mandat')->nullable();
-            $table->uuid('nature_id');
-            $table->uuid('type_id')->nullable();
-            $table->timestamps();
-            $table->softDeletes();
-
-            $table->foreign('nature_id')->references('id')->on('natures');
-            $table->foreign('type_id')->references('id')->on('types_organisations');
-        });
-
         Schema::create('attributions', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('organisation_id');
             $table->uuid('personne_id');
             $table->uuid('fonction_id');
-            $table->string('type');
             $table->dateTime('date_debut');
             $table->dateTime('date_fin')->nullable();
             $table->timestamps();

@@ -19,13 +19,16 @@ export type PersonneResource = {
   niveau_formation?: NiveauFormationResource;
   email: string;
   telephone?: string;
-  fonction: string;
   etat: string;
   photo?: string;
   personne_a_contacter?: Record<string, any>;
   ville?: VilleResource;
   adresse?: string;
   attributions?: AttributionResource[];
+  organisation?: OrganisationResource;
+  fonction?: FonctionResource;
+  date_debut?: string;
+  date_fin?: string;
 };
 
 export type PersonneSansFonctionResource = {

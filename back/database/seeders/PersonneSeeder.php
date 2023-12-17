@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Http\Services\AttributionService;
 use App\Http\Services\PersonneService;
 use App\Models\Organisation;
 use App\Models\Personne;
@@ -13,12 +12,10 @@ use Illuminate\Database\Seeder;
 class PersonneSeeder extends Seeder
 {
 
-    private AttributionService $attributionService;
     private PersonneService $personneService;
 
-    public function __construct(AttributionService $attributionService, PersonneService $personneService)
+    public function __construct(PersonneService $personneService)
     {
-        $this->attributionService = $attributionService;
         $this->personneService = $personneService;
     }
 
@@ -45,12 +42,10 @@ class PersonneSeeder extends Seeder
                                     $personne->type = 'scout';
                                     $personne->genre_id = Genre::all()->random()->id;
                                     $personneCreated = $this->personneService->create($personne->toArray());
-                                    $this->attributionService->create([
+                                    $this->personneService->affecter($personneCreated, [
                                         'organisation_id' => $organisation->id,
-                                        'personne_id' => $personneCreated->id,
                                         'fonction_id' => $fonction->id,
                                         'date_debut' => now(),
-                                        'type' => 'scout'
                                     ]);
                                 });
                         });
@@ -65,12 +60,10 @@ class PersonneSeeder extends Seeder
                                     $personne->type = 'adulte';
                                     $personne->genre_id = Genre::all()->random()->id;
                                     $personneCreated = $this->personneService->create($personne->toArray());
-                                    $this->attributionService->create([
+                                    $this->personneService->affecter($personneCreated, [
                                         'organisation_id' => $organisation->id,
-                                        'personne_id' => $personneCreated->id,
                                         'fonction_id' => $fonction->id,
                                         'date_debut' => now(),
-                                        'type' => 'direction'
                                     ]);
                                 });
                         });

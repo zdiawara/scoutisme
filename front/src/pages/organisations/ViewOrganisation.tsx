@@ -19,6 +19,11 @@ import classNames from "classnames";
 const TABS = [
   { label: "Détails", code: "fiche", icon: ICONS.detail },
   {
+    label: "Sous organisation",
+    code: "sous_organisation",
+    icon: ICONS.organisation,
+  },
+  {
     label: "Direction",
     code: "direction",
     icon: ICONS.direction,
@@ -48,6 +53,9 @@ const ViewOrganisation: FC = () => {
       if (organisation.nature.code !== NATURE.unite) {
         return item.code !== "scouts";
       }
+      if (organisation.nature.code === NATURE.unite) {
+        return item.code !== "sous_organisation";
+      }
       return true;
     });
   }, [organisation]);
@@ -72,14 +80,7 @@ const ViewOrganisation: FC = () => {
       case "sous_organisation":
         return <SousOrganisation organisation={organisation} />;
       default:
-        return (
-          <>
-            <DetailOrganisation organisation={organisation} />
-            {organisation.nature.code !== NATURE.unite && (
-              <SousOrganisation organisation={organisation} />
-            )}
-          </>
-        );
+        return <DetailOrganisation organisation={organisation} />;
     }
   };
 

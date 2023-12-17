@@ -51,8 +51,11 @@ Route::group([
 
 Route::apiResource('personnes', PersonneController::class);
 
-Route::get('/personnes/{personneId}/attributions', [PersonneController::class, 'readAttribiutions']);
-Route::post('/personnes/{personneId}/affecter', [PersonneController::class, 'affecter']);
+Route::post('/personnes/{personne}/attributions', [PersonneController::class, 'createAttribution']);
+Route::get('/personnes/{personne}/attributions', [PersonneController::class, 'readAttributions']);
+Route::delete('/personnes/{personne}/attributions', [PersonneController::class, 'deleteAttribution']);
+Route::put('/personnes/{personne}/cloturer_attributions', [PersonneController::class, 'cloturerAttribution']);
+
 Route::post('/personnes/{personne}/convertir', [PersonneController::class, 'convertir']);
 Route::post('/personnes/{personneId}/cotiser', [PersonneController::class, 'cotiser']);
 Route::get('/personnes/exports/csv', [PersonneController::class, 'exportPersonnes']);

@@ -43,21 +43,23 @@ class PersonneService
 
         DB::beginTransaction();
 
-        $personne = Personne::create($bodyCollection->except("attribution")
-            ->merge(['code' => $string])->all());
+        $attribution = [];
 
         if ($bodyCollection->has('attribution')) {
-
             $attributionInput = collect($bodyCollection->get('attribution'));
-
-            $this->attributinService->create([
-                'personne_id' => $personne->id,
+            $attribution = [
                 'organisation_id' => $attributionInput->get("organisation_id"),
                 'date_debut' => now(),
-                'fonction_id' => $personne->type === "scout" ? Fonction::where('code', 'scout')->first()->id : $attributionInput->get('fonction_id'),
-                'type' => $personne->type === "scout" ? 'scout' : 'direction'
-            ]);
+                'fonction_id' => $body['type'] === "scout" ? Fonction::where('code', 'scout')->first()->id : $attributionInput->get('fonction_id'),
+                'type' => $body['type'] === "scout" ? 'scout' : 'direction'
+            ];
         }
+
+        $personne = Personne::create($bodyCollection->except("attribution")
+            ->merge(['code' => $string])
+            ->merge($attribution)
+            ->all());
+
         DB::commit();
 
         return $personne;
@@ -72,40 +74,18 @@ class PersonneService
     public function readPersonnesSansFonction($params)
     {
         return DB::select(
-            'SELECT p.nom, p.prenom, p.id FROM personnes p WHERE p.type = :type and p.id not in (
-                SELECT p.id FROM personnes p 
-                INNER JOIN attributions a on a.personne_id = p.id
-                WHERE (a.date_fin is null or a.date_fin >= now())
-            )',
+            'SELECT p.nom, p.prenom, p.id FROM personnes p WHERE p.type = :type and 
+                (p.organisation_id is null or p.fonction_id is null or p.date_fin < now())',
             ['type' => $params['type'] ?? null]
         );
     }
 
-    public function affecter(string $personneId, array $body): Attribution
+    public function affecter(Personne $personne, array $body): Personne
     {
-        Attribution::where('fonction_id', $body['fonction_id'])
-            ->where('organisation_id', $body['organisation_id'])
-            ->where('date_debut', '<=', now())
-            ->where(function ($q) {
-                $q->whereNull('date_fin')
-                    ->orWhere('date_fin', '>=', now());
-            })
-            ->update([
-                'date_fin' => now()
-            ]);
+        $personne->update(collect($body)->only([
+            'fonction_id', 'organisation_id', 'date_debut', 'date_fin'
+        ])->toArray());
 
-        Attribution::where('personne_id', $personneId)
-            ->where('date_debut', '<=', now())
-            ->where(function ($q) {
-                $q->whereNull('date_fin')
-                    ->orWhere('date_fin', '>=', now());
-            })
-            ->update([
-                'date_fin' => now()
-            ]);
-
-        return $this->attributinService->create(array_merge($body, [
-            'personne_id' => $personneId
-        ]));
+        return $personne;
     }
 }

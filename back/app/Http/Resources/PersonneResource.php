@@ -14,13 +14,14 @@ class PersonneResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return collect(parent::toArray($request))->except(['ville_id', 'niveau_formation_id', 'genre_id', 'attributions'])
+        return collect(parent::toArray($request))->except(['ville_id', 'niveau_formation_id', 'genre_id', 'fonction_id', 'organisation_id'])
             ->merge([
                 'ville' => new VilleResource($this->whenLoaded('ville')),
                 'niveau_formation' => new RefFormationResource($this->whenLoaded('niveauFormation')),
                 'etat' => (string)$this->etat,
                 'genre' => new GenreResource($this->whenLoaded('genre')),
-                'attributions' => AttributionResource::collection($this->whenLoaded('attributions'))
+                'organisation' => new OrganisationResource($this->whenLoaded('organisation')),
+                'fonction' => new FonctionResource($this->whenLoaded('fonction'))
             ])->all();
     }
 }

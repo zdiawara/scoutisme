@@ -1,6 +1,5 @@
 import { FC, useState } from "react";
 import { Button, Dropdown } from "react-bootstrap";
-import { EditAttributionOrganisationModal } from "./AttributionOrganisationModal";
 import { AttributionResource } from "types/personne.type";
 import { CloturerAttribution } from "./CloturerAttribution";
 import { SupprimerAttribution } from "./SupprimerAttribution";
@@ -67,13 +66,6 @@ export const AttributionActions: FC<AttributionActionsProps> = ({
           ))}
         </Dropdown.Menu>
       </Dropdown>
-      {action === "modifier" && (
-        <EditAttributionOrganisationModal
-          closeModal={closeModal}
-          attribution={attribution}
-        />
-      )}
-
       {action === "cloturer" && (
         <CloturerAttribution
           closeModal={closeModal}

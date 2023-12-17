@@ -13,42 +13,37 @@ class ScoutStatController extends Controller
     {
 
         $data = collect(DB::select("SELECT
-            parent.nom,
-            parent.id,
-            SUM(
-                CASE
-                    WHEN nb_scouts.nb IS NOT NULL THEN nb_scouts.nb
-                    ELSE 0
-                END
-            ) as nbscout,
-            nb_scouts.type_id
-        FROM organisations parent
+                parent.nom,
+                parent.id,
+                SUM(
+                    CASE
+                        WHEN nb_scouts.nb IS NOT NULL THEN nb_scouts.nb
+                        ELSE 0
+                    END
+                ) as nbscout,
+                nb_scouts.type_id
+            FROM organisations parent
             INNER JOIN natures n_parent on n_parent.id = parent.nature_id
             INNER JOIN (
                 SELECT
                     o.id AS orga_id,
                     tuo.id AS type_id,
-                    COUNT(a.id) AS nb,
+                    COUNT(p.id) AS nb,
                     o.parents
-                FROM attributions a
-                    INNER JOIN organisations o on o.id = a.organisation_id
+                FROM personnes p
+                    INNER JOIN organisations o on o.id = p.organisation_id
                     INNER JOIN types_organisations tuo on tuo.id = o.type_id
                     INNER JOIN natures n on n.id = o.nature_id
                 WHERE
                     n.code = 'unite'
-                    AND a.type = 'scout'
+                    AND p.type = 'scout'
                     AND tuo.nature_id = n.id
                 GROUP BY
                     o.id,
                     tuo.id
-            ) nb_scouts ON JSON_CONTAINS(
-                JSON_EXTRACT(nb_scouts.parents, '$[*].id'),
-                CONCAT('\"', parent.id, '\"')
-            ) = 1
-        WHERE n_parent.code = 'region'
-        GROUP BY
-            parent.id,
-            nb_scouts.type_id", []));
+            ) nb_scouts ON JSON_CONTAINS(JSON_EXTRACT(nb_scouts.parents, '$[*].id'), CONCAT('\"', parent.id, '\"') ) = 1
+            WHERE n_parent.code = 'region'
+            GROUP BY parent.id, nb_scouts.type_id", []));
 
         $typesOrganisations = TypeOrganisation::whereHas('nature', function ($q) {
             $q->where('code', 'unite');

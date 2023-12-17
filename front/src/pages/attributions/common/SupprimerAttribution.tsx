@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { attributionApi } from "api";
+import { personneApi } from "api";
 import { FC } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { AttributionResource } from "types/personne.type";
@@ -19,22 +19,14 @@ export const SupprimerAttribution: FC<SupprimerAttributionProps> = ({
   const { mutate, isLoading } = useMutation({
     networkMode: "offlineFirst",
     mutationFn: () => {
-      return attributionApi.delete(attribution.id);
+      return personneApi.deleteAttribution(attribution.personne.id);
     },
     onSuccess: () => {
       query.invalidateQueries([
         QUERY_KEY.direction,
         attribution.organisation.id,
       ]);
-      query.invalidateQueries([
-        QUERY_KEY.attributions,
-        attribution.personne.id,
-      ]);
-      query.invalidateQueries([
-        QUERY_KEY.attribution_active,
-        attribution.personne.id,
-      ]);
-
+      query.invalidateQueries([QUERY_KEY.scouts, attribution.organisation.id]);
       closeModal();
     },
   });

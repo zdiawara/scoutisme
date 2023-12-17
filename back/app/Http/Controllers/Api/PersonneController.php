@@ -6,10 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\AttributionResource;
 use App\Http\Resources\PersonneResource;
 use App\Http\Resources\UserResource;
-use App\Http\Services\CotisationService;
 use App\Http\Services\PersonneService;
 use App\Http\Services\UserService;
-use App\Jobs\ProcessPodcast;
 use App\ModelFilters\PersonneFilter;
 use App\Models\Attribution;
 use App\Models\Personne;
@@ -19,26 +17,14 @@ use Illuminate\Support\Facades\DB;
 class PersonneController extends Controller
 {
     private PersonneService $personneService;
-    private CotisationService $cotisationService;
-    private $attributionActive;
     private $userService;
 
     public function __construct(
         PersonneService $personneService,
-        CotisationService $cotisationService,
         UserService $userService
     ) {
         $this->personneService = $personneService;
-        $this->cotisationService = $cotisationService;
         $this->userService = $userService;
-
-        $this->attributionActive = function ($query) {
-            $query->where('date_debut', '<=', now())
-                ->where(function ($subQuery) {
-                    $subQuery->whereNull('date_fin')
-                        ->orWhere('date_fin', '>=', now());
-                });
-        };
     }
 
     /**
@@ -47,7 +33,7 @@ class PersonneController extends Controller
     public function index(Request $request)
     {
 
-        $query = $this->buildQuery($request);
+        $query = $this->buildSearchQuery($request);
 
         $result = $this->addPaging($request, $query);
 
@@ -56,9 +42,8 @@ class PersonneController extends Controller
             ->orderBy('nom', 'asc')
             ->with([
                 'genre',
-                'attributions.fonction',
-                'attributions.organisation.nature',
-                'attributions'  => $this->attributionActive
+                'fonction',
+                'organisation.nature',
             ])
             ->get();
 
@@ -68,38 +53,30 @@ class PersonneController extends Controller
         ];
     }
 
-    private function buildQuery(Request $request)
+    private function buildSearchQuery(Request $request)
     {
         $query = Personne::filter($request->all(), PersonneFilter::class);
 
-        if ($request->has('fonctionId') || $request->has('organisationId')) {
-            $fonctionId = $request->input('fonctionId', null);
-            $organisationId = $request->input('organisationId', null);
-            $query->join('attributions as a', function ($builder) {
-                $builder->on('a.personne_id', 'personnes.id');
-            });
-            if (isset($fonctionId)) {
-                $query->where('a.fonction_id', $fonctionId);
-            }
-            if (isset($organisationId)) {
-                $inclureSousOrganisation = $request->input('inclureSousOrganisation', null);
-                if ($inclureSousOrganisation === 'true') {
-                    $query->join('organisations as o', function ($q) {
-                        $q->on('o.id', 'a.organisation_id');
-                    });
-                    $query->where(function ($q) use ($organisationId) {
-                        $q->where(DB::raw("JSON_CONTAINS(JSON_EXTRACT(o.parents, '$[*].id') , '\"" . $organisationId . "\"')"), '=', 1)
-                            ->orWhere('o.id', $organisationId);
-                    });
-                } else {
-                    $query->where('a.organisation_id', $organisationId);
-                }
+        if ($request->has('organisationId')) {
+            $organisationId = $request->input('organisationId');
+            $inclureSousOrganisation = $request->input('inclureSousOrganisation', null);
+            if ($inclureSousOrganisation === 'true') {
+                $query->join('organisations as o', function ($q) {
+                    $q->on('o.id', 'personnes.organisation_id');
+                });
+                // Tenir compte d'une organisation et ses sous organisations
+                $query->where(function ($q) use ($organisationId) {
+                    $q->where(DB::raw("JSON_CONTAINS(JSON_EXTRACT(o.parents, '$[*].id') , '\"" . $organisationId . "\"')"), '=', 1)
+                        ->orWhere('o.id', $organisationId);
+                });
+            } else {
+                $query->where('personnes.organisation_id', $organisationId);
             }
 
-            $query->where('a.date_debut', '<=', now())
+            $query->where('personnes.date_debut', '<=', now())
                 ->where(function ($q) {
-                    $q->whereNull('a.date_fin')
-                        ->orWhere('a.date_fin', '>=', now());
+                    $q->whereNull('personnes.date_fin')
+                        ->orWhere('personnes.date_fin', '>=', now());
                 });
         }
         return $query;
@@ -108,25 +85,19 @@ class PersonneController extends Controller
     public function exportPersonnes(Request $request)
     {
 
-        $query = $this->buildQuery($request);
+        $query = $this->buildSearchQuery($request);
 
         $fields = collect(explode(";", $request->get('fields', "")));
 
         $personnes = $query
             ->select('personnes.*')
             ->orderBy('nom', 'asc')
-            ->with([
-                'genre',
-                'attributions.fonction',
-                'attributions.organisation',
-                'attributions' => $this->attributionActive
-            ])
+            ->with(['genre', 'fonction', 'organisation',])
             ->get()
             ->map(function ($personne) {
-                $attribution = $personne->attributions[0] ?? null;
-                $organisation = $attribution != null ? $attribution->organisation : null;
+                $organisation = $personne->organisation;
                 $nature = $organisation != null ? $organisation->nature : null;
-                $fonction = $attribution != null ? $attribution->fonction : null;
+                $fonction = $personne->fonction;
                 return [
                     "p_code" => $personne->code,
                     "p_nom" => $personne->nom,
@@ -194,7 +165,7 @@ class PersonneController extends Controller
         return response()->stream($callback, 200, $headers);
     }
 
-    public function readAttribiutions(Request $request)
+    public function readAttributions(Request $request)
     {
         return [
             'data' => AttributionResource::collection(
@@ -226,32 +197,16 @@ class PersonneController extends Controller
      */
     public function show(Personne $personne)
     {
-        $personne->load(['ville', 'niveauFormation', 'genre']);
+        $personne->load(['ville', 'niveauFormation', 'genre', 'fonction', 'organisation.nature']);
         return new PersonneResource($personne);
     }
 
-    public function affecter(Request $request)
+    public function createAttribution(Personne $personne, Request $request)
     {
-        $attribution = $this->personneService->affecter($request->route('personneId'), $request->all());
+        $personne = $this->personneService->affecter($personne, $request->all());
+        $personne->load(['ville', 'niveauFormation', 'genre', 'fonction', 'organisation']);
 
-        $attribution->load(['personne', 'organisation', 'fonction']);
-
-        return new AttributionResource($attribution);
-    }
-
-    public function cotiser(Request $request)
-    {
-        /*         $body = collect($request->all())
-            ->merge([
-                'personne_id' => $request->route('personneId')
-            ])
-            ->all();
-
-        $cotisation = $this->cotisationService->create($body);
-
-        $cotisation->load(['personne']);
-
-        return new CotisationResource($cotisation); */
+        return new PersonneResource($personne);
     }
 
     public function convertir(Personne $personne, Request $request)
@@ -276,5 +231,22 @@ class PersonneController extends Controller
     public function destroy(Personne $personne)
     {
         //
+    }
+
+    public function deleteAttribution(Personne $personne)
+    {
+        $personne->update([
+            'fonction_id' => null,
+            'organisation_id' => null,
+            'date_debut' => null,
+            'date_fin' => null
+        ]);
+    }
+
+    public function cloturerAttribution(Personne $personne, Request $request)
+    {
+        $personne->update($request->only([
+            'date_fin'
+        ]));
     }
 }

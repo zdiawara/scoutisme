@@ -1,9 +1,12 @@
+import { PersonneResource } from "./personne.type";
+
 export type UserResource = {
   id: string;
   name: string;
   email: string;
   role: RoleResource;
   fonctionnalites: FonctionnaliteResource[];
+  personne?: PersonneResource;
 };
 
 export type RoleResource = {

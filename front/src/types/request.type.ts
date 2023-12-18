@@ -27,9 +27,9 @@ export type FilterParam = {
 
 export interface PersonneFilter extends Filter {
   search: string | null;
-  etat: string | null;
   page: number;
   size: number;
+  organisation?: SelectItem;
 }
 
 export interface OrganisationFilter extends Filter {

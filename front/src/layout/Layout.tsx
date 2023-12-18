@@ -4,14 +4,19 @@ import { Sidebar } from "./sidbar";
 import { Header } from "./header";
 import { useQuery } from "@tanstack/react-query";
 import { authApi } from "api";
+import { useAuth } from "hooks";
 
 export const Layout = () => {
+  const { setUser } = useAuth();
   const query = useQuery({
     queryKey: ["user-info"],
     cacheTime: 0,
     retry: 0,
     queryFn: () => {
-      return authApi.userInfo();
+      return authApi.userInfo().then((s) => {
+        setUser(s.data);
+        return s;
+      });
     },
   });
 
@@ -19,6 +24,7 @@ export const Layout = () => {
     return <span>Loading ...</span>;
   }
   if (query.isError) {
+    setUser(undefined);
     return <Navigate to="login" />;
   }
   return (

@@ -46,7 +46,6 @@ export const Sidebar = () => {
     return getMenuItems().filter((menu) => modules.includes(menu.key));
   }, [query]);
 
-  console.log(menus);
   /*
    * layout defaults
    */

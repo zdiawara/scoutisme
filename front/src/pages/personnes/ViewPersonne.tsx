@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { Badge, Card, Col, ListGroup, Row } from "react-bootstrap";
 import { ICONS, PageHeader } from "pages/common";
 import { useParams } from "react-router-dom";
@@ -17,21 +17,41 @@ import {
   PersonneDetails,
   PersonneFonctions,
 } from "./view";
-
-const TABS = [
-  { label: "Fiche détaillée", code: "fiche", icon: "uil uil-bookmark" },
-  { label: "Paiements", code: "cotisations", icon: ICONS.cotisation },
-  {
-    label: "Carte membres",
-    code: "carte",
-    icon: "mdi mdi-card-account-details-outline",
-  },
-  { label: "Fonctions", code: "fonctions", icon: ICONS.fonction },
-];
+import { useDroits } from "hooks/useDroits";
 
 const ViewPersonne: FC = () => {
   const personneId = useParams().id!;
   const [page, setPage] = useState<string>("fiche");
+  const droits = useDroits();
+
+  const menus = useMemo(() => {
+    return [
+      {
+        label: "Informations",
+        code: "fiche",
+        icon: "uil uil-bookmark",
+        visible: true,
+      },
+      {
+        label: "Paiements",
+        code: "cotisations",
+        icon: ICONS.cotisation,
+        visible: droits.personne.paiements.consulter,
+      },
+      {
+        label: "Carte membres",
+        code: "carte",
+        icon: "mdi mdi-card-account-details-outline",
+        visible: false,
+      },
+      {
+        label: "Fonctions",
+        code: "fonctions",
+        icon: ICONS.fonction,
+        visible: droits.personne.fonctions.consulter,
+      },
+    ].filter((e) => e.visible);
+  }, [droits]);
 
   const { data: personne, isLoading } = useQuery({
     queryKey: [QUERY_KEY.personnes, personneId],
@@ -42,7 +62,7 @@ const ViewPersonne: FC = () => {
   });
 
   const actions = () => {
-    if (!personne) {
+    if (!personne || !droits.personne.modifier(personne)) {
       return null;
     }
     return (
@@ -139,7 +159,7 @@ const ViewPersonne: FC = () => {
           <Card>
             <Card.Body className="p-2">
               <ListGroup defaultActiveKey="#link1">
-                {TABS.map((item) => (
+                {menus.map((item) => (
                   <ListGroup.Item
                     key={item.code}
                     className={classNames("border-0 rounded", {

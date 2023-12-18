@@ -21,6 +21,7 @@ class UserResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'role' =>  new RoleResource($this->whenLoaded('role')),
+            'personne' =>  new PersonneResource($this->whenLoaded('personne')),
             'fonctionnalites' => isset($this->fonctionnalites) ? FonctionnaliteResource::collection($this->fonctionnalites) : null
         ];
     }

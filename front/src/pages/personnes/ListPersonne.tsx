@@ -153,6 +153,7 @@ const ListPersonne: FC = () => {
   const filter = filterContext.filter as PersonneFilter;
   const [show, setShow] = useState<boolean>(false);
   const [exportModal, setExportModal] = useState<boolean>(false);
+
   const { data: result, isLoading } = useQuery({
     queryKey: [QUERY_KEY.personnes, filter],
     keepPreviousData: true,

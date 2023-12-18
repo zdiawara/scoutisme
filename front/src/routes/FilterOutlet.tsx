@@ -7,13 +7,22 @@ import {
   PaiementFilter,
   PersonneFilter,
 } from "types/request.type";
+import { useAuth } from "hooks";
 
 export const PersonneOutlet = () => {
+  const auth = useAuth();
+
+  const organisation = auth.user?.personne?.organisation;
   const filter: PersonneFilter = {
-    etat: "tous",
     search: "",
     page: 1,
     size: 10,
+    organisation: organisation
+      ? {
+          value: organisation.id,
+          label: organisation.nom,
+        }
+      : undefined,
   };
   return (
     <FilterProvider initial={filter}>

@@ -141,7 +141,10 @@ class AuthApi extends CrudService {
   }
 
   public async userInfo() {
-    const response = await requestPost<any>(`${this.base}/me`, {});
+    const response = await requestPost<{ data: UserResource }>(
+      `${this.base}/me`,
+      {}
+    );
     return response;
   }
 }

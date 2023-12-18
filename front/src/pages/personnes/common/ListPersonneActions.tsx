@@ -1,30 +1,17 @@
 import { ICONS } from "pages/common";
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { Dropdown } from "react-bootstrap";
 import { ScoutModal } from "../modal";
 import { OrganisationResource } from "types/organisation.type";
 import { LINKS } from "utils";
 import { Link } from "react-router-dom";
+import { useDroits } from "hooks/useDroits";
 
 type ListPersonneActionsProps = {};
 
-const ACTIONS = [
-  {
-    label: "Adulte",
-    icon: ICONS.personne,
-    description: "Créer un nouvel adulte ",
-    code: "adulte",
-  },
-  {
-    label: "Scout",
-    icon: ICONS.add,
-    description: "Créer un nouveau scout dans une unité",
-    code: "scout",
-  },
-];
-
 export const ListPersonneActions: FC<ListPersonneActionsProps> = () => {
   const [action, setAction] = useState<string | undefined>();
+  const { personne } = useDroits();
 
   const onSelect = (code: string) => () => {
     setAction(code);
@@ -34,12 +21,35 @@ export const ListPersonneActions: FC<ListPersonneActionsProps> = () => {
     setAction(undefined);
   };
 
+  const menus = useMemo(() => {
+    return [
+      {
+        label: "Adulte",
+        icon: ICONS.personne,
+        description: "Créer un nouvel adulte ",
+        code: "adulte",
+        visible: personne.createAdulte(),
+      },
+      {
+        label: "Scout",
+        icon: ICONS.add,
+        description: "Créer un nouveau scout dans une unité",
+        code: "scout",
+        visible: personne.createScout(),
+      },
+    ].filter((e) => e.visible);
+  }, [personne]);
+
+  if (!personne.create()) {
+    return null;
+  }
+
   return (
     <>
       <Dropdown className="ms-2">
         <Dropdown.Toggle variant="primary">Ajouter personne</Dropdown.Toggle>
         <Dropdown.Menu className="topbar-dropdown-menu mt-2">
-          {ACTIONS.map((item) => (
+          {menus.map((item) => (
             <Dropdown.Item
               as={Link}
               to={`${LINKS.personnes.create}?type=${item.code}`}

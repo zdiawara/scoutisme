@@ -39,6 +39,9 @@ class PaiementService
 
     public function update(Paiement $paiement, array $body): Paiement
     {
+        if ($paiement->etat == "valide") {
+            throw new BadRequestException("Le paiement est déjà validé");
+        }
         $paiement->update($body);
         return $paiement;
     }
@@ -85,5 +88,15 @@ class PaiementService
         DB::commit();
 
         return $paiement;
+    }
+
+    public function delete(Paiement $paiement)
+    {
+
+        if ($paiement->etat == 'valide') {
+            throw new BadRequestException("Impossible de rejeter ce paiement");
+        }
+
+        $paiement->delete();
     }
 }

@@ -7,6 +7,7 @@ import {
   RejeterPaiementModal,
   ValiderPaiementModal,
 } from "pages/paiements/modal";
+import { DeletePaiementModal } from "pages/paiements/modal/DeletePaiementModal";
 
 type PaiementActionsProps = {
   personne: PersonneResource;
@@ -107,6 +108,12 @@ export const PaiementActions: FC<PaiementActionsProps> = ({
         <ModifierPaiementModal
           closeModal={modalAction.close}
           paiement={paiement}
+        />
+      )}
+      {modalAction.action === "supprimer" && (
+        <DeletePaiementModal
+          closeModal={modalAction.close}
+          element={paiement}
         />
       )}
     </>

@@ -202,6 +202,7 @@ return new class extends Migration
             $table->string('commentaire')->nullable();
             //$table->uuid('valideur_id'); // User validation
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('cotisation_id')->references('id')->on('cotisations');
         });

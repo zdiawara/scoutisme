@@ -100,4 +100,9 @@ class PaiementController extends Controller
         $paiement = $this->paiementService->rejeter($paiement, $request->all());
         return new PaiementResource($paiement);
     }
+
+    public function destroy(Paiement $paiement)
+    {
+        $this->paiementService->delete($paiement);
+    }
 }

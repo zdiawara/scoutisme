@@ -6,6 +6,13 @@ use App\Models\Cotisation;
 
 class CotisationService
 {
+    private MontantCotisationService $montantCotisationService;
+
+    public function __construct(MontantCotisationService $montantCotisationService)
+    {
+        $this->montantCotisationService = $montantCotisationService;
+    }
+
     public function findOrcreate(string $personneId, string $annee)
     {
         $cotisation = Cotisation::where('annee', $annee)
@@ -13,11 +20,10 @@ class CotisationService
             ->first();
 
         if ($cotisation == null) {
-            $montant_total = 4000;
             return Cotisation::create([
                 'annee' => $annee,
                 'personne_id' => $personneId,
-                'montant_total' => $montant_total,
+                'montant_total' => $this->montantCotisationService->findMontant($personneId),
                 'paiements' => []
             ]);
         }

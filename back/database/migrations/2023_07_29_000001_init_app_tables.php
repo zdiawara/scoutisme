@@ -208,14 +208,10 @@ return new class extends Migration
 
         Schema::create('montants_cotisations', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('type'); // direction or scout
+            $table->string('type'); // conseil_nation , equipe_nationale , direction_region , direction_groupe , direction_unite , scout
             $table->string('profil'); // tous,fonction,type_organisation
-            $table->uuid('nature_id');
-            $table->integer('montant')->nullable();
             $table->json('montants')->nullable();
             $table->timestamps();
-
-            $table->foreign('nature_id')->references('id')->on('natures');
         });
 
         Schema::create('modules', function (Blueprint $table) {

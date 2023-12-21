@@ -67,6 +67,13 @@ class PersonneApi extends CrudService {
     );
     return response;
   }
+
+  public async findCotisation(personneId: string, annee: string) {
+    const response = await requestGet<{ data: CotisationResource }>(
+      `${this.base}/${personneId}/cotisations${requestParams({ annee })}`
+    );
+    return response;
+  }
 }
 
 export const personneApi = new PersonneApi("personnes");
@@ -170,3 +177,8 @@ export const habilitationApi = new HabilitationApi("habilitations");
 
 class ModuleApi extends CrudService {}
 export const moduleApi = new ModuleApi("modules");
+
+class MontantCotisationApi extends CrudService {}
+export const montantCotisationApi = new MontantCotisationApi(
+  "montants-cotisations"
+);

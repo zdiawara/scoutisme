@@ -37,10 +37,10 @@ class PaiementService
         return $cotisation;
     }
 
-    public function update(Cotisation $cotisation, array $body)
+    public function update(Paiement $paiement, array $body): Paiement
     {
-        $cotisation->update($body);
-        return $cotisation;
+        $paiement->update($body);
+        return $paiement;
     }
 
     public function valider(Paiement $paiement)

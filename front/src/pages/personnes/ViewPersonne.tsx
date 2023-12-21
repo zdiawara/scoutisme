@@ -33,7 +33,7 @@ const ViewPersonne: FC = () => {
         visible: true,
       },
       {
-        label: "Paiements",
+        label: "Cotisations",
         code: "cotisations",
         icon: ICONS.cotisation,
         visible: droits.personne.paiements.consulter,

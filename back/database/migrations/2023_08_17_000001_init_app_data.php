@@ -7,7 +7,7 @@ use App\Models\Fonctionnalite;
 use App\Models\Genre;
 use App\Models\Module;
 use App\Models\Nature;
-use App\Models\NatureCotisation;
+use App\Models\MontantCotisation;
 use App\Models\Role;
 use App\Models\TypeOrganisation;
 use App\Models\User;
@@ -113,29 +113,47 @@ return new class extends Migration
         TypeOrganisation::create(['nom' => 'Equipe nationale', 'code' => 'equipe_nationale', 'position' => 2, 'membre' => 'Equipe national', 'nature_id' => $national->id]);
 
         // montants cotisations
-        NatureCotisation::create([
-            'nature_id' => $unite->id,
+        MontantCotisation::create([
             'type' => 'scout',
             'profil' => 'type_organisation',
             'montants' => [
-                ['id' => TypeOrganisation::where('code', 'meute')->first()->id, 'value' => 3000],
-                ['id' => TypeOrganisation::where('code', 'communaute')->first()->id, 'value' => 4000],
-                ['id' => TypeOrganisation::where('code', 'dieklou')->first()->id, 'value' => 5000],
-                ['id' => TypeOrganisation::where('code', 'troupe')->first()->id, 'value' => 2000],
+                ['id' => TypeOrganisation::where('code', 'meute')->first()->id, 'value' => 500],
+                ['id' => TypeOrganisation::where('code', 'troupe')->first()->id, 'value' => 1000],
+                ['id' => TypeOrganisation::where('code', 'communaute')->first()->id, 'value' => 2000],
+                ['id' => TypeOrganisation::where('code', 'dieklou')->first()->id, 'value' => 3000],
             ]
         ]);
 
-        NatureCotisation::create([
-            'nature_id' => $unite->id,
-            'type' => 'direction',
-            'profil' => 'fonction',
-            'montants' => Fonction::where('code', '!=', 'scout')
-                ->where('nature_id', $unite->id)
-                ->get()->map(fn ($fonction) => [
-                    'id' => $fonction->id,
-                    'value' => 0
-                ])->all()
+        MontantCotisation::create([
+            'type' => 'direction_unite',
+            'profil' => 'tous',
+            'montants' => [["value" => 3000]]
         ]);
+
+        MontantCotisation::create([
+            'type' => 'direction_groupe',
+            'profil' => 'tous',
+            'montants' => [["value" => 4000]]
+        ]);
+
+        MontantCotisation::create([
+            'type' => 'direction_region',
+            'profil' => 'tous',
+            'montants' => [["value" => 5000]]
+        ]);
+
+        MontantCotisation::create([
+            'type' => 'direction_equipe_nationale',
+            'profil' => 'tous',
+            'montants' => [["value" => 10000]]
+        ]);
+
+        MontantCotisation::create([
+            'type' => 'direction_conseil_national',
+            'profil' => 'tous',
+            'montants' => [["value" => 50000]]
+        ]);
+
 
         collect([Modules::MODULE_PERSONNE, Modules::MODULE_ORGANISATION])
             ->each(function ($item) {

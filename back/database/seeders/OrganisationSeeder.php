@@ -31,13 +31,19 @@ class OrganisationSeeder extends Seeder
 
         $conseilNational = $this->organisationService->create([
             'nom' => 'Conseil national',
-            'nature_id' => $natureConseil->id
+            'nature_id' => $natureConseil->id,
+            'type_id' => TypeOrganisation::where('code', 'conseil_national')
+                ->firstOrFail()
+                ->id
         ]);
 
         $equipeNational = $this->organisationService->create([
             'nom' => 'Equipe nationale',
             'nature_id' => $natureConseil->id,
-            'parent_id' => $conseilNational->id
+            'parent_id' => $conseilNational->id,
+            'type_id' => TypeOrganisation::where('code', 'equipe_nationale')
+                ->firstOrFail()
+                ->id
         ]);
 
         collect([

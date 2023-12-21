@@ -76,9 +76,9 @@ class PaiementController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Cotisation $cotisation)
+    public function update(Request $request, Paiement $paiement)
     {
-        //return new CotisationResource($this->cotisationService->update($cotisation, $request->all()));
+        $this->paiementService->update($paiement, $request->all());
     }
 
     /**

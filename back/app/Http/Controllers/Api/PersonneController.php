@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\AttributionResource;
 use App\Http\Resources\PersonneResource;
 use App\Http\Resources\UserResource;
+use App\Http\Services\CotisationService;
 use App\Http\Services\PersonneService;
 use App\Http\Services\UserService;
 use App\ModelFilters\PersonneFilter;
@@ -214,6 +215,13 @@ class PersonneController extends Controller
         $user = $this->userService->createFromPersonne($personne, $request->all());
 
         return new UserResource($user);
+    }
+
+    public function readCotisation(Personne $personne, Request $request, CotisationService $cotisationService)
+    {
+        return [
+            'data' => $cotisationService->findOrcreate($personne->id, $request->input("annee"))
+        ];
     }
 
     /**

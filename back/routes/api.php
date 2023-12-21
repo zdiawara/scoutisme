@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\HabilitationController;
 use App\Http\Controllers\Api\InstanceController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\ModuleController;
+use App\Http\Controllers\Api\MontantCotisationController;
 use App\Http\Controllers\Api\NatureController;
 use App\Http\Controllers\Api\OrganisationController;
 use App\Http\Controllers\Api\OrganisationStatController;
@@ -51,6 +52,8 @@ Route::group([
 
 Route::apiResource('personnes', PersonneController::class);
 
+Route::get('/personnes/{personne}/cotisations', [PersonneController::class, 'readCotisation']);
+
 Route::post('/personnes/{personne}/attributions', [PersonneController::class, 'createAttribution']);
 Route::get('/personnes/{personne}/attributions', [PersonneController::class, 'readAttributions']);
 Route::delete('/personnes/{personne}/attributions', [PersonneController::class, 'deleteAttribution']);
@@ -89,3 +92,5 @@ Route::apiResource('habilitations',  HabilitationController::class);
 Route::apiResource('modules',  ModuleController::class);
 
 Route::put('/roles/{role}/fonctionnalites',  [RoleController::class, 'updateFonctionnalites']);
+
+Route::get('/montants-cotisations', [MontantCotisationController::class, 'index']);

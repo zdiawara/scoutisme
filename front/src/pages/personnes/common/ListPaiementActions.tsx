@@ -1,15 +1,16 @@
 import { FC, useState } from "react";
 import { Button } from "react-bootstrap";
 import { PersonneResource } from "types/personne.type";
-import { AsyncSelectSimple } from "components";
-import { PaiementModal } from "pages/paiements/modal";
+import { CreerPaiementModal } from "pages/paiements/modal";
 
 type ListPaiementActionsProps = {
   personne: PersonneResource;
+  annee: string;
 };
 
 export const ListPaiementActions: FC<ListPaiementActionsProps> = ({
   personne,
+  annee,
 }) => {
   const [action, setAction] = useState<string | undefined>();
 
@@ -23,30 +24,21 @@ export const ListPaiementActions: FC<ListPaiementActionsProps> = ({
 
   return (
     <>
-      <div className="d-flex">
-        <AsyncSelectSimple
-          name="test"
-          onChange={() => {}}
-          fetchOptions={() => {
-            return Promise.resolve([
-              { label: "2023", value: "2023" },
-              { label: "2024", value: "2024" },
-            ]);
-          }}
-        />
-
-        <Button
-          onClick={onSelect("payer")}
-          size="sm"
-          className="ms-2"
-          variant="primary"
-        >
-          Payer
-        </Button>
-      </div>
+      <Button
+        onClick={onSelect("payer")}
+        size="sm"
+        className="ms-2"
+        variant="primary"
+      >
+        Payer
+      </Button>
 
       {action === "payer" && (
-        <PaiementModal closeModal={closeModal} personne={personne} />
+        <CreerPaiementModal
+          closeModal={closeModal}
+          personne={personne}
+          annee={annee}
+        />
       )}
     </>
   );

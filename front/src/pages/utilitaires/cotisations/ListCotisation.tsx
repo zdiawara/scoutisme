@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { typeOrganisationApi } from "api";
+import { montantCotisationApi } from "api";
 import {
   Columns,
   DeleteConfirmationActions,
@@ -8,41 +8,32 @@ import {
   PageHeader,
 } from "pages/common";
 import { FC } from "react";
-import { Button } from "react-bootstrap";
 import { QUERY_KEY } from "utils/constants";
-import { TypeUniteModal } from "./TypeUniteModal";
-import { TypeOrganisationResource } from "types/organisation.type";
-import { DeleteTypeUniteModal } from "./DeleteTypeUniteModal";
 import { useCrudModal } from "hooks/useCrudModal";
+import { MontantCotisationResource } from "types/cotisation.type";
 
 const ListCotisation: FC = () => {
   const { data: results } = useQuery({
     networkMode: "offlineFirst",
     queryKey: [QUERY_KEY.typesUnites],
-    queryFn: () => typeOrganisationApi.findAll<TypeOrganisationResource>(),
+    queryFn: () => montantCotisationApi.findAll<MontantCotisationResource>(),
   });
 
-  const crudModal = useCrudModal<TypeOrganisationResource>();
+  const crudModal = useCrudModal<MontantCotisationResource>();
 
-  const columns: Columns<TypeOrganisationResource>[] = [
+  const columns: Columns<MontantCotisationResource>[] = [
     {
-      name: "code",
-      label: "Code",
+      name: "type",
+      label: "Type",
     },
     {
-      name: "nom",
-      label: "Nom",
-      Cell: ({ nom }) => {
-        return <span className="text-primary fw-semibold">{nom}</span>;
-      },
+      name: "profil",
+      label: "Profil",
     },
     {
-      name: "membre",
-      label: "Membre",
-    },
-    {
-      name: "position",
-      label: "Position",
+      name: "montants",
+      label: "Montants",
+      Cell: ({ montants }) => <>{montants.map((e) => e.value).join(" , ")}</>,
     },
     {
       name: "actions",
@@ -65,20 +56,17 @@ const ListCotisation: FC = () => {
         subtitle="Paramètrer montants des cotisations"
         icon={ICONS.cotisation}
         className="my-4"
-        right={
-          <Button onClick={crudModal.onCreate()}>Ajouter un montant</Button>
-        }
       />
 
       <ListResult.Container isLoading={false}>
-        <ListResult.Table<TypeOrganisationResource>
+        <ListResult.Table<MontantCotisationResource>
           columns={columns}
           data={results?.data || []}
           headerClassName="bg-light"
         />
       </ListResult.Container>
 
-      {crudModal.isCreateOrUpdate && (
+      {/* {crudModal.isCreateOrUpdate && (
         <TypeUniteModal
           closeModal={crudModal.reset}
           selected={crudModal.action?.element!}
@@ -90,7 +78,7 @@ const ListCotisation: FC = () => {
           element={crudModal.action?.element!}
           closeModal={crudModal.reset}
         />
-      )}
+      )} */}
     </>
   );
 };

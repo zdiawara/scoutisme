@@ -116,14 +116,9 @@ export const AffecterPersonneModal: FC<AffecterPersonneModalProps> = ({
   });
 
   const ajouterMembre = (data: Record<string, any>) => {
-    const { personne_id, ...rest } = attributionConverter.toBody(data);
+    const { personne_id, ...body } = attributionConverter.toBody(data);
 
-    const body = {
-      ...rest,
-      type: personne.type === "adulte" ? "direction" : "scout",
-    };
-
-    return personneApi.affecter(personne.id, body);
+    return personneApi.createAttribution(personne.id, body);
   };
 
   if (isLoading || !fonctionScout) {

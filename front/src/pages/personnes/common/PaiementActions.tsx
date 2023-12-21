@@ -3,6 +3,7 @@ import { Button, Dropdown } from "react-bootstrap";
 import { PaiementResource, PersonneResource } from "types/personne.type";
 import { useModalAction } from "hooks";
 import {
+  ModifierPaiementModal,
   RejeterPaiementModal,
   ValiderPaiementModal,
 } from "pages/paiements/modal";
@@ -100,6 +101,12 @@ export const PaiementActions: FC<PaiementActionsProps> = ({
           closeModal={modalAction.close}
           paiement={paiement}
           personne={personne}
+        />
+      )}
+      {modalAction.action === "modifier" && (
+        <ModifierPaiementModal
+          closeModal={modalAction.close}
+          paiement={paiement}
         />
       )}
     </>

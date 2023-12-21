@@ -94,6 +94,7 @@ export type CotisationResource = {
 
 export type PaiementResource = {
   id: string;
+  code: string;
   etat: string;
   montant: number;
   cotisation: CotisationResource;

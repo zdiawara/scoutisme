@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
 
-class NatureCotisation extends Model
+class MontantCotisation extends Model
 {
     use UUID;
 

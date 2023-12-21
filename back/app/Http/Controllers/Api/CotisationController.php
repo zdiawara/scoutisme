@@ -66,7 +66,7 @@ class CotisationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Instance $instance)
+    public function show(Cotisation $instance)
     {
         return new CotisationResource($instance);
     }

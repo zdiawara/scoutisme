@@ -16,6 +16,7 @@ import {
   PersonneCotisations,
   PersonneDetails,
   PersonneFonctions,
+ PersonneFormations,
 } from "./view";
 
 const TABS = [
@@ -27,6 +28,7 @@ const TABS = [
     icon: "mdi mdi-card-account-details-outline",
   },
   { label: "Fonctions", code: "fonctions", icon: ICONS.fonction },
+  { label: "Formations", code: "formations", icon: ICONS.formation },
 ];
 
 const ViewPersonne: FC = () => {
@@ -86,6 +88,8 @@ const ViewPersonne: FC = () => {
         return <PersonneFonctions personne={personne} />;
       case "cotisations":
         return <PersonneCotisations personne={personne} />;
+        case "formations":
+          return <PersonneFormations personne={personne} />;
       default:
         return <PersonneDetails personne={personne} />;
     }

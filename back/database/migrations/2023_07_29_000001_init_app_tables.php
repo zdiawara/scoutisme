@@ -82,15 +82,25 @@ return new class extends Migration
             $table->string('profession')->nullable();
             $table->string('type'); // scout; adulte
             $table->json('personne_a_contacter')->nullable();
-            $table->uuid('niveau_formation_id')->nullable();
+            // $table->uuid('niveau_formation_id')->nullable();
             $table->uuid('ville_id')->nullable();
             $table->uuid('genre_id');
             $table->string('adresse')->nullable();
             $table->timestamps();
 
             $table->foreign('ville_id')->references('id')->on('villes');
-            $table->foreign('niveau_formation_id')->references('id')->on('ref_formations');
+            // $table->foreign('niveau_formation_id')->references('id')->on('ref_formations');
             $table->foreign('genre_id')->references('id')->on('genres');
+        });
+        Schema::create('personne_formations', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('personne_id');
+            $table->uuid('formation_id');
+            $table->dateTime('date')->nullable();
+            $table->timestamps();
+        
+            $table->foreign('formation_id')->references('id')->on('ref_formations');
+            $table->foreign('personne_id')->references('id')->on('personnes');
         });
         DB::statement("ALTER TABLE personnes ADD photo MEDIUMBLOB NULL AFTER prenom");
         Schema::create('fonctions', function (Blueprint $table) {

@@ -192,7 +192,7 @@ export const PersonneFormInputs = () => {
                 />
                 <Row className="g-3">
                   <Fragment key="adulte">
-                    <Col sm={6}>
+                    <Col sm={12}>
                       <TextInput
                         name="profession"
                         label="Profession"
@@ -205,6 +205,15 @@ export const PersonneFormInputs = () => {
                         name="niveau_formation"
                         label="Formation"
                         placeholder="Niveau formation"
+                        isClearable
+                      />
+                    </Col>
+                    <Col sm={6}>
+                      <DatePicker
+                        name="date_acquision"
+                        label="Date acquisition"
+                        useHookForm
+                        maxDate={new Date()}
                         isClearable
                       />
                     </Col>

@@ -26,6 +26,7 @@ export type PersonneResource = {
   ville?: VilleResource;
   adresse?: string;
   attributions?: AttributionResource[];
+  date_formation: string;
 };
 
 export type PersonneSansFonctionResource = {

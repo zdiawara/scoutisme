@@ -7,9 +7,9 @@ use App\Http\Resources\CotisationResource;
 use App\Http\Resources\PaiementResource;
 use App\Http\Services\CotisationService;
 use App\Http\Services\PaiementService;
-use App\Models\Cotisation;
 use App\Models\Instance;
 use App\Models\Paiement;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -104,5 +104,14 @@ class PaiementController extends Controller
     public function destroy(Paiement $paiement)
     {
         $this->paiementService->delete($paiement);
+    }
+
+    public function telechargerRecu(Paiement $paiement)
+    {
+        $data = $this->paiementService->telechargerRecu($paiement);
+        /*         return view("paiement-recu", $data); */
+        $filename = "paiement_" . $paiement->numero . ".pdf";
+        return Pdf::loadView('paiement-recu', $data)
+            ->stream($filename);
     }
 }

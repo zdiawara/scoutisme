@@ -80,6 +80,7 @@ Route::apiResource('cotisations',  CotisationController::class);
 Route::apiResource('paiements',  PaiementController::class);
 Route::put('/paiements/{paiement}/valider', [PaiementController::class, 'valider']);
 Route::put('/paiements/{paiement}/rejeter', [PaiementController::class, 'rejeter']);
+Route::get('/paiements/{paiement}/recus', [PaiementController::class, 'telechargerRecu']);
 
 Route::get('/stats/organisations/regions', [OrganisationStatController::class, 'statByRegion']);
 Route::get('/stats/organisations', [OrganisationStatController::class, 'countAll']);

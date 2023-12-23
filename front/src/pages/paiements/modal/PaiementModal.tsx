@@ -109,7 +109,7 @@ export const ModifierPaiementModal: FC<ModifierPaiementModalProps> = ({
   return (
     <PaiementForm
       onSave={modifier}
-      title={`Modifier le paiement ${paiement.code}`}
+      title={`Modifier le paiement N° ${paiement.numero}`}
       defaultValues={{
         montant: paiement.montant,
       }}

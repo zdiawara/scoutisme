@@ -1,0 +1,8 @@
+{
+    "opensans": {
+        "normal": "\/var\/www\/html\/storage\/fonts\/opensans_normal_4dbb97a4e62b3d2ec49a6d13c3733d5b",
+        "300": "\/var\/www\/html\/storage\/fonts\/opensans_300_78876d6933381917c20744eef5ef1f74",
+        "600": "\/var\/www\/html\/storage\/fonts\/opensans_600_0121c69dcaf34d7193b76c62dffdfd32",
+        "bold": "opensans_bold_5bcb85f03b2b16a3c8c9c8a64b9ace6e"
+    }
+}

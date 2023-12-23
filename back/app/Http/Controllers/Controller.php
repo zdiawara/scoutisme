@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
@@ -33,5 +34,13 @@ class Controller extends BaseController
             'query' => $_query,
             'meta' => $meta
         ];
+    }
+
+    protected function pdfResponse($output, $filename)
+    {
+        return response()->make($output, Response::HTTP_OK, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename=' . $filename . '',
+        ]);
     }
 }

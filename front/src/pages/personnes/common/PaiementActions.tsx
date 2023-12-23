@@ -8,6 +8,7 @@ import {
   ValiderPaiementModal,
 } from "pages/paiements/modal";
 import { DeletePaiementModal } from "pages/paiements/modal/DeletePaiementModal";
+import { paiementApi } from "api";
 
 type PaiementActionsProps = {
   personne: PersonneResource;
@@ -49,7 +50,7 @@ const ACTIONS = [
     label: "Récu",
     icon: "uil-file-check-alt",
     description: "Télécharger le récu du paiement",
-    code: "recu",
+    code: "telecharger_recu",
   },
 ];
 
@@ -76,7 +77,14 @@ export const PaiementActions: FC<PaiementActionsProps> = ({
               <Dropdown.Item
                 as="button"
                 className="py-2 px-3"
-                onClick={modalAction.change(item.code)}
+                onClick={() => {
+                  if (item.code === "telecharger_recu") {
+                    paiementApi
+                      .download(`${paiement.id}/recus`)
+                      .then(modalAction.close);
+                  }
+                  modalAction.change(item.code)();
+                }}
                 key={item.code}
                 //disabled={!attribution.id}
               >

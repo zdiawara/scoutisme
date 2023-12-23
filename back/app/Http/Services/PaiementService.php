@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Exceptions\BadRequestException;
 use App\Models\Cotisation;
 use App\Models\Paiement;
+use Barryvdh\DomPDF\Facade\Pdf;
 use sirajcse\UniqueIdGenerator\UniqueIdGenerator;
 use Illuminate\Support\Facades\DB;
 
@@ -92,11 +93,39 @@ class PaiementService
 
     public function delete(Paiement $paiement)
     {
-
         if ($paiement->etat == 'valide') {
             throw new BadRequestException("Impossible de rejeter ce paiement");
         }
-
         $paiement->delete();
+    }
+
+    public  function telechargerRecu(Paiement $paiement)
+    {
+        if ($paiement->etat != 'valide') {
+            throw new BadRequestException("Impossible de fournir le récu pour un paiement non validé");
+        }
+
+        return  [
+            'signataire' => [
+                'nom' => 'Barro Mohammed',
+            ],
+            'personne' => [
+                'nom' => 'Zakaridia DIAWARA',
+            ],
+            'montant' => [
+                'paye' => '3 000 Frs',
+                'reste' => '0 Frs'
+            ],
+            'paiement' => [
+                'numero' => $paiement->numero,
+                'date' => '20/10/2023',
+                'motif' => 'Cotisation 2023'
+
+            ],
+            'association' => [
+                'nom' => 'Association des scouts du Burkina Faso (ASBF)',
+                'adresse' => '01 BP 2548 Ouagadougou 01 - Burkina Faso'
+            ]
+        ];
     }
 }

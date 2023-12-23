@@ -4,6 +4,10 @@ RUN docker-php-ext-install pdo pdo_mysql sockets
 RUN curl -sS https://getcomposer.org/installer | php -- \
     --install-dir=/usr/local/bin --filename=composer
 
+RUN apk update && apk add libpng-dev
+RUN docker-php-ext-install gd
+
+
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html/

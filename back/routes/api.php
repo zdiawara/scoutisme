@@ -54,6 +54,7 @@ Route::apiResource('personnes', PersonneController::class);
 
 Route::get('/personnes/{personne}/cotisations', [PersonneController::class, 'readCotisation']);
 
+Route::post('/personnes/mails', [PersonneController::class, 'envoyerMail']);
 Route::post('/personnes/{personne}/attributions', [PersonneController::class, 'createAttribution']);
 Route::get('/personnes/{personne}/attributions', [PersonneController::class, 'readAttributions']);
 Route::delete('/personnes/{personne}/attributions', [PersonneController::class, 'deleteAttribution']);

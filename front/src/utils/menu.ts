@@ -46,7 +46,7 @@ export const MENU_ITEMS = [
   },
   {
     key: "message",
-    label: "Messages",
+    label: "Mails",
     isTitle: false,
     icon: ICONS.message,
     url: LINKS.messages.base,

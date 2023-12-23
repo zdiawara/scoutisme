@@ -21,6 +21,7 @@ import { ListPersonneActions } from "./common/ListPersonneActions";
 import { ExportPersonneModal } from "./modal";
 import { NATURE, QUERY_KEY } from "utils/constants";
 import { PersonneActions } from "./common/PersonneActions";
+import { EnvoyerMailModal } from "./modal/EnvoyerMailModal";
 
 const renderOrganisation = ({ organisation }: PersonneResource) => {
   if (organisation) {
@@ -89,49 +90,6 @@ const renderPersonne = ({
   );
 };
 
-const columns: Columns<PersonneResource>[] = [
-  {
-    name: "nom",
-    label: "Nom",
-    Cell: renderPersonne,
-  },
-
-  {
-    name: "fonction",
-    label: "Fonction",
-    Cell: ({ fonction }) => {
-      if (fonction) {
-        return <span>{fonction.nom}</span>;
-      }
-      return <span>-</span>;
-    },
-  },
-
-  {
-    name: "organisation",
-    label: "Organisation",
-    Cell: renderOrganisation,
-  },
-
-  {
-    name: "email",
-    label: "Email",
-    Cell: ({ email }) => <span>{email}</span>,
-  },
-  {
-    name: "actions",
-    label: "Actions",
-    headClassName: "text-end",
-    Cell: (personne) => {
-      return (
-        <div className="text-end">
-          <PersonneActions personne={personne} />
-        </div>
-      );
-    },
-  },
-];
-
 const buildRequestParams = (filter: Record<string, any>) => {
   return {
     type: selectHelper.getValue(filter.type),
@@ -153,6 +111,7 @@ const ListPersonne: FC = () => {
   const filter = filterContext.filter as PersonneFilter;
   const [show, setShow] = useState<boolean>(false);
   const [exportModal, setExportModal] = useState<boolean>(false);
+  const [mailModal, setMailModal] = useState<boolean>(false);
 
   const { data: result, isLoading } = useQuery({
     queryKey: [QUERY_KEY.personnes, filter],
@@ -164,6 +123,49 @@ const ListPersonne: FC = () => {
       );
     },
   });
+
+  const columns: Columns<PersonneResource>[] = [
+    {
+      name: "nom",
+      label: "Nom",
+      Cell: renderPersonne,
+    },
+
+    {
+      name: "fonction",
+      label: "Fonction",
+      Cell: ({ fonction }) => {
+        if (fonction) {
+          return <span>{fonction.nom}</span>;
+        }
+        return <span>-</span>;
+      },
+    },
+
+    {
+      name: "organisation",
+      label: "Organisation",
+      Cell: renderOrganisation,
+    },
+
+    {
+      name: "email",
+      label: "Email",
+      Cell: ({ email }) => <span>{email}</span>,
+    },
+    {
+      name: "actions",
+      label: "Actions",
+      headClassName: "text-end",
+      Cell: (personne) => {
+        return (
+          <div className="text-end">
+            <PersonneActions personne={personne} />
+          </div>
+        );
+      },
+    },
+  ];
 
   return (
     <>
@@ -192,7 +194,16 @@ const ListPersonne: FC = () => {
                 setExportModal(true);
               }}
             >
-              Exporter
+              <i className="uil-export"></i> Exporter
+            </Button>
+            <Button
+              variant="outline-primary"
+              className="ms-2"
+              onClick={() => {
+                setMailModal(true);
+              }}
+            >
+              <i className="uil-message"></i> Mail
             </Button>
             <Button
               variant="secondary"
@@ -237,6 +248,12 @@ const ListPersonne: FC = () => {
         <ExportPersonneModal
           filter={buildRequestParams(filter)}
           closeModal={() => setExportModal(false)}
+        />
+      )}
+      {mailModal && (
+        <EnvoyerMailModal
+          filter={buildRequestParams(filter)}
+          closeModal={() => setMailModal(false)}
         />
       )}
     </>

@@ -2,8 +2,8 @@ import { selectHelper } from "utils/functions";
 import * as yup from "yup";
 
 export const messageSchema = yup.object({
-  titre: yup.string().required().nullable(),
-  content: yup.string().required().nullable(),
+  objet: yup.string().required().nullable(),
+  contenu: yup.string().required().nullable(),
 });
 
 const toBody = (data: Record<string, any>) => {
@@ -28,8 +28,8 @@ const toBody = (data: Record<string, any>) => {
       break;
   }
   return {
-    titre: data.titre,
-    content: data.content,
+    objet: data.objet,
+    contenu: data.contenu,
     critere: {
       ...critere,
       value: Object.entries(critere.value)
@@ -42,16 +42,6 @@ const toBody = (data: Record<string, any>) => {
   };
 };
 
-const toInput = (data: any) => {
-  const { nature } = data;
-  return {
-    id: data.id,
-    nom: data.nom,
-    nature: { label: nature.nom, value: nature.id },
-    duree_mandat: data.duree_mandat,
-  };
-};
 export const messageConverter = {
   toBody,
-  toInput,
 };

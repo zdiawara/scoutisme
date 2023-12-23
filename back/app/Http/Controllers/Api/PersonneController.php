@@ -7,6 +7,8 @@ use App\Http\Resources\AttributionResource;
 use App\Http\Resources\PersonneResource;
 use App\Http\Resources\UserResource;
 use App\Http\Services\CotisationService;
+use App\Http\Services\MailService;
+use App\Http\Services\MessageService;
 use App\Http\Services\PersonneService;
 use App\Http\Services\UserService;
 use App\ModelFilters\PersonneFilter;
@@ -34,7 +36,7 @@ class PersonneController extends Controller
     public function index(Request $request)
     {
 
-        $query = $this->buildSearchQuery($request);
+        $query = $this->buildSearchQuery($request->all());
 
         $result = $this->addPaging($request, $query);
 
@@ -54,13 +56,13 @@ class PersonneController extends Controller
         ];
     }
 
-    private function buildSearchQuery(Request $request)
+    private function buildSearchQuery(array $params)
     {
-        $query = Personne::filter($request->all(), PersonneFilter::class);
-
+        $query = Personne::filter($params, PersonneFilter::class);
+        $request = collect($params);
         if ($request->has('organisationId')) {
-            $organisationId = $request->input('organisationId');
-            $inclureSousOrganisation = $request->input('inclureSousOrganisation', null);
+            $organisationId = $request->get('organisationId');
+            $inclureSousOrganisation = $request->get('inclureSousOrganisation', null);
             if ($inclureSousOrganisation === 'true') {
                 $query->join('organisations as o', function ($q) {
                     $q->on('o.id', 'personnes.organisation_id');
@@ -86,7 +88,7 @@ class PersonneController extends Controller
     public function exportPersonnes(Request $request)
     {
 
-        $query = $this->buildSearchQuery($request);
+        $query = $this->buildSearchQuery($request->all());
 
         $fields = collect(explode(";", $request->get('fields', "")));
 
@@ -223,6 +225,23 @@ class PersonneController extends Controller
             'data' => $cotisationService->findOrcreate($personne->id, $request->input("annee"))
         ];
     }
+
+    public function envoyerMail(Request $request, MessageService $messageService, MailService $mailService)
+    {
+        DB::beginTransaction();
+        $query = $this->buildSearchQuery($request->except(["mail", "page", "size"]))
+            ->select(['personnes.nom', 'personnes.prenom', 'personnes.email'])
+            ->whereNotNull('email');
+
+        $message = $messageService->create(array_merge($request->get('mail'), [
+            'destinataires' => $query->get()
+        ]));
+
+        $mailService->send($message->objet, $message->contenu, $message->destinataires);
+
+        DB::commit();
+    }
+
 
     /**
      * Update the specified resource in storage.

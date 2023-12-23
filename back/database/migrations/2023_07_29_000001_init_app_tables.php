@@ -164,10 +164,10 @@ return new class extends Migration
 
         Schema::create('messages', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('titre');
-            $table->string('content');
+            $table->string('objet');
+            $table->longText('contenu');
             $table->json('destinataires')->nullable();
-            $table->json('critere');
+            $table->json('critere')->nullable();
             $table->timestamps();
         });
 

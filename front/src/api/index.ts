@@ -74,6 +74,14 @@ class PersonneApi extends CrudService {
     );
     return response;
   }
+
+  public async envoyerMail(body: any, params?: RequestParam) {
+    const response = await requestPost(
+      `${this.base}/mails${requestParams(params)}`,
+      body
+    );
+    return response;
+  }
 }
 
 export const personneApi = new PersonneApi("personnes");

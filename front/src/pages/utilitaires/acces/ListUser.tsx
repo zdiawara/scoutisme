@@ -11,6 +11,12 @@ import { UserResource } from "types/auth.type";
 import { CreateUserModal } from "./users/CreateUserModal";
 import { Badge, Button } from "react-bootstrap";
 
+const searchByCriteres = (term: string, users: UserResource[]) => {
+  return users.filter(({ email, name, role }) =>
+    [email, name, role.nom].join(" ").match(new RegExp(term, "gi"))
+  );
+};
+
 export const ListUser = () => {
   const query = useQuery({
     queryKey: ["users"],
@@ -72,7 +78,7 @@ export const ListUser = () => {
           description: "Les personnes habilitées à accèder à l'application",
         }}
         data={query.data}
-        //onSearch={searchByCriteres}
+        onSearch={searchByCriteres}
         columns={columns}
         isLoading={query.isLoading}
         error={query.error}

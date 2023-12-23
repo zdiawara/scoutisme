@@ -8,10 +8,14 @@ const Form: FC<WrapperV2Props> = (props) => {
   return (
     <HookModalForm
       {...props}
-      modalBodyClassName="bg-light p-3"
+      modalBodyClassName="bg-white p-3"
       onClose={props.onExit}
     >
-      <View.Header label="Personne" className="ps-0" />
+      <View.Header
+        label="Personne"
+        description="Selectionner les critères à exporter"
+        className="mb-3"
+      />
       <Row>
         <Col xs={12}>
           <Radio name="p_code" label="Code" type="checkbox" inline value="1" />
@@ -47,7 +51,11 @@ const Form: FC<WrapperV2Props> = (props) => {
         </Col>
       </Row>
 
-      <View.Header label="Organisation" className="ps-0 mt-3" />
+      <View.Header
+        label="Organisation"
+        description="Selectionner les critères à exporter"
+        className="mb-3 mt-3"
+      />
       <Row className="g-3">
         <Col xs={12}>
           <Radio name="o_code" label="Code" type="checkbox" inline value="1" />
@@ -62,13 +70,13 @@ const Form: FC<WrapperV2Props> = (props) => {
         </Col>
       </Row>
 
-      <View.Header label="Fonction" className="ps-0 mt-3" />
+      <View.Header
+        label="Fonction"
+        description="Selectionner les critères à exporter"
+        className="mt-3 mb-3"
+      />
       <Row className="g-3">
         <Col xs={12}>
-          <label className="text-dark  fw-bold me-2 mb-2">
-            Fonction &nbsp;
-          </label>
-          <br />
           <Radio name="f_code" label="Code" type="checkbox" inline value="1" />
           <Radio name="f_nom" label="Nom" type="checkbox" inline value="1" />
         </Col>

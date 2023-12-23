@@ -11,7 +11,7 @@ class Message extends Model
     use UUID, Filterable;
 
     protected $fillable = [
-        'titre', 'content', 'destinataires', 'critere'
+        'objet', 'contenu', 'destinataires', 'critere'
     ];
 
     protected $casts = ['destinataires' => 'array', 'critere' => 'array'];

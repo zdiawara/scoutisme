@@ -5,7 +5,6 @@ namespace App\Http\Services;
 use App\Exceptions\BadRequestException;
 use App\Models\Message;
 use App\Models\Personne;
-use Error;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
@@ -13,12 +12,17 @@ class MessageService
 {
     public function create(array $body)
     {
-        $destinataires = collect($this->computeDestinataires($body['critere']));
-        if ($destinataires->isEmpty()) {
+        if (collect($body['destinataires'] ?? null)->isEmpty()) {
             throw new BadRequestException("Pas de destinataires trouvés");
         }
-        return Message::create(array_merge($body, [
-            'destinataires' => $this->computeDestinataires($body['critere'])
+        return Message::create($body);
+    }
+
+    public function createFromCriteres(array $body)
+    {
+        $destinataires = collect($this->computeDestinataires($body['critere']));
+        return $this->create(array_merge($body, [
+            'destinataires' => $destinataires
         ]));
     }
 
@@ -27,7 +31,7 @@ class MessageService
         $mode = $critere['mode'];
 
         if (!isset($mode)) {
-            throw new Error("Pas de mode");
+            throw new BadRequestException("Pas de mode");
         }
 
         $criteres = collect($critere['value'] ?? null);

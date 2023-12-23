@@ -13,7 +13,7 @@ export const ICONS = {
   add: "uil-plus",
   instance: "uil-meeting-board",
   events: "uil-calender",
-  message: "uil-comment-alt",
+  message: "uil-message",
   cotisation: "uil-euro-circle",
   paiement: "uil-euro-circle",
 };

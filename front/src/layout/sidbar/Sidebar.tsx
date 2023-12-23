@@ -32,17 +32,6 @@ export const Sidebar = () => {
       })
       .map((e) => e?.code || "");
 
-    console.log(
-      user.fonctionnalites.reduce((prev, curr) => {
-        if (prev[curr.module.code]) {
-          prev[curr.module.code].push(curr.code);
-        } else {
-          prev[curr.module.code] = [curr.code];
-        }
-        return prev;
-      }, {} as Record<string, string[]>)
-    );
-
     return getMenuItems().filter((menu) => modules.includes(menu.key));
   }, [query]);
 

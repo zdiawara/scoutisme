@@ -1,8 +1,15 @@
 export type MessageResource = {
   id: string;
-  titre: string;
-  content: string;
-  destinataires: Array<{ email: string; nom: string; prenom: string }>;
-  critere: any;
+  objet: string;
+  contenu: string;
+  nombre_destinataires?: string;
+  destinataires: Array<DestinataireResource>;
+  critere?: any;
   created_at: string;
+};
+
+export type DestinataireResource = {
+  email: string;
+  nom: string;
+  prenom: string;
 };

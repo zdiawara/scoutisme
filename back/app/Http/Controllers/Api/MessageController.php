@@ -20,13 +20,19 @@ class MessageController extends Controller
         $query = Message::query();
 
         if ($request->has('search')) {
-            $query->where('titre', 'LIKE', "%" . $request->get('search') . "%");
+            $query->where('objet', 'LIKE', "%" . $request->get('search') . "%");
         }
 
         $result = $this->addPaging($request, $query);
 
         $data = $result['query']
-            //->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->select([
+                'messages.id',
+                'messages.objet',
+                DB::raw('JSON_LENGTH(messages.destinataires) as nombre_destinataires'),
+                'created_at'
+            ])
             ->get();
 
 
@@ -39,13 +45,11 @@ class MessageController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, MessageService $messageService, MailService $mailService): Message
+    public function store(Request $request, MessageService $messageService, MailService $mailService)
     {
         DB::beginTransaction();
-
-        $message = $messageService->create($request->all());
-        $mailService->send($message->titre, $message->content, $message->destinataires);
-
+        $message = $messageService->createFromCriteres($request->all());
+        $mailService->send($message->objet, $message->contenu, $message->destinataires);
         DB::commit();
 
         return $message;

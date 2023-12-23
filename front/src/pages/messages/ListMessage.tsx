@@ -1,5 +1,5 @@
 import { FC, useContext } from "react";
-import { Button, Col } from "react-bootstrap";
+import { Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import {
   Columns,
@@ -26,48 +26,35 @@ const columns: Columns<MessageResource>[] = [
           className="text-primary fw-semibold"
           to={LINKS.messages.view(message.id)}
         >
-          {message.titre}
+          {message.objet}
         </Link>
       );
     },
   },
   {
-    name: "critere",
-    label: "Cible",
-    Cell: ({ critere }) => {
-      return <>{critere.mode}</>;
+    name: "auteur",
+    label: "Auteur",
+    Cell: ({ created_at }) => {
+      return <span className="text-dark">Zakaridia DIAWARA</span>;
     },
   },
   {
-    name: "destinataires",
+    name: "nombre_destinataires",
     label: "Nombre de destinataires",
-    Cell: ({ destinataires }) => {
-      return <>{destinataires.length} destinataire(s)</>;
+    Cell: ({ nombre_destinataires }) => {
+      return (
+        <span className="text-dark">
+          {nombre_destinataires} destinataire(s)
+        </span>
+      );
     },
   },
+
   {
     name: "date",
     label: "Date envoie",
     Cell: ({ created_at }) => {
       return <>{created_at}</>;
-    },
-  },
-
-  {
-    name: "actions",
-    label: "Actions",
-    headClassName: "text-end",
-    Cell: () => {
-      return (
-        <div className="text-end">
-          <Button className="action-icon" variant="link">
-            <i className="uil-eye fs-4 text-primary"></i>
-          </Button>
-          <Button variant="link" className="action-icon">
-            <i className="mdi mdi-delete fs-4 text-danger"></i>
-          </Button>
-        </div>
-      );
     },
   },
 ];
@@ -88,15 +75,10 @@ const ListMessage: FC = () => {
   return (
     <>
       <PageHeader.List
-        title="Messages"
-        subtitle="Consulter et gérer vos messages"
+        title="Mails"
+        subtitle="Consulter et gérer vos mails"
         icon={ICONS.message}
         className="my-4"
-        right={
-          <Link to={LINKS.messages.create} className="btn btn-primary">
-            Envoyer un mail
-          </Link>
-        }
       />
 
       <PageFilter.Container>

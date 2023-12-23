@@ -122,11 +122,11 @@ const FormContainer: FC<WrapperProps> = ({ onSubmit, title, subtitle }) => {
           />
           <Row className="g-3">
             <Col xs={12}>
-              <TextInput name="titre" label="Objet du mail" isRequired />
+              <TextInput name="objet" label="Objet du mail" isRequired />
             </Col>
 
             <Col xs={12}>
-              <TextEditor />
+              <TextEditor name="contenu" />
             </Col>
           </Row>
         </Card.Body>

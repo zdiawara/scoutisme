@@ -82,8 +82,8 @@ class PaiementService
         $paiement->update([
             'etat' => 'rejet',
             'date_traitement' => now(),
-            'commentaire' => collect($body)->get('commentaire', null)
-            //'valideur_id' => ''
+            'commentaire' => collect($body)->get('commentaire', null),
+            'valideur_id' => Auth()->user()->id
         ]);
 
         DB::commit();

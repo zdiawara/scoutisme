@@ -103,12 +103,12 @@ return new class extends Migration
         // Création des types organisations pour les organisations de nature unité & national
         $unite = Nature::where('code', 'unite')->get()->first();
         $national = Nature::where('code', 'national')->get()->first();
-        // national
+        // unité
         TypeOrganisation::create(['nom' => 'Meute', 'code' => 'meute', 'position' => 1, 'membre' => 'Louveteaux', 'nature_id' => $unite->id]);
         TypeOrganisation::create(['nom' => 'Troupe', 'code' => 'troupe', 'position' => 2, 'membre' => 'Eclaireurs', 'nature_id' => $unite->id]);
         TypeOrganisation::create(['nom' => 'Communauté', 'code' => 'communaute', 'position' => 3, 'membre' => 'Sinkiés', 'nature_id' => $unite->id]);
         TypeOrganisation::create(['nom' => 'Dièklou', 'code' => 'dieklou', 'position' => 4, 'membre' => 'Routiers', 'nature_id' => $unite->id]);
-        // unité
+        // national
         TypeOrganisation::create(['nom' => 'Conseil national', 'code' => 'conseil_national', 'position' => 1, 'membre' => 'Conseil national', 'nature_id' => $national->id]);
         TypeOrganisation::create(['nom' => 'Equipe nationale', 'code' => 'equipe_nationale', 'position' => 2, 'membre' => 'Equipe national', 'nature_id' => $national->id]);
 

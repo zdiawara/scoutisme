@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use App\ModelFilters\OrganisationFilter;
-use App\Traits\UUID;
+use App\Traits\Audit;
 use EloquentFilter\Filterable;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 class Organisation extends Model
 {
-    use UUID, Filterable;
+    use HasUuids, Filterable, Audit;
 
     protected $fillable = ['nom', 'code', 'adresse', 'nature_id', 'ville_id', 'type_id', 'parent_id', 'etat'];
 

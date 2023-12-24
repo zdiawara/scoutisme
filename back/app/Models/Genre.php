@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use App\Traits\UUID;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 class Genre extends Model
 {
-    use UUID;
+    use HasUuids;
 
     protected $fillable = ['nom', 'code'];
 }

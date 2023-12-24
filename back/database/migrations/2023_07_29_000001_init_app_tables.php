@@ -12,6 +12,19 @@ return new class extends Migration
      */
     public function up(): void
     {
+
+        Schema::create('users', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->uuid('role_id');
+            $table->uuid('personne_id')->nullable();
+            $table->rememberToken();
+            $table->timestamps();
+        });
+
         Schema::create('natures', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nom');
@@ -45,6 +58,11 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->timestamps();
             $table->softDeletes();
+            $table->uuid('created_by')->nullable();
+            $table->uuid('modified_by')->nullable();
+
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('modified_by')->references('id')->on('users');
         });
 
         Schema::create('villes', function (Blueprint $table) {
@@ -63,12 +81,16 @@ return new class extends Migration
             $table->uuid('type_id')->nullable();
             $table->uuid('nature_id');
             $table->uuid('ville_id')->nullable();
+            $table->uuid('created_by')->nullable();
+            $table->uuid('modified_by')->nullable();
             $table->json('parents')->nullable();
             $table->timestamps();
 
             $table->foreign('type_id')->references('id')->on('types_organisations');
             $table->foreign('nature_id')->references('id')->on('natures');
             $table->foreign('ville_id')->references('id')->on('villes');
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('modified_by')->references('id')->on('users');
         });
 
         Schema::table('organisations', function (Blueprint $table) {
@@ -85,9 +107,14 @@ return new class extends Migration
             $table->uuid('type_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
+            $table->uuid('created_by')->nullable();
+            $table->uuid('modified_by')->nullable();
 
             $table->foreign('nature_id')->references('id')->on('natures');
             $table->foreign('type_id')->references('id')->on('types_organisations');
+
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('modified_by')->references('id')->on('users');
         });
 
 
@@ -114,6 +141,10 @@ return new class extends Migration
             $table->uuid('ville_id')->nullable();
             $table->uuid('genre_id');
             $table->string('adresse')->nullable();
+
+            $table->uuid('created_by')->nullable();
+            $table->uuid('modified_by')->nullable();
+
             $table->timestamps();
 
             $table->foreign('ville_id')->references('id')->on('villes');
@@ -121,7 +152,11 @@ return new class extends Migration
             $table->foreign('genre_id')->references('id')->on('genres');
             $table->foreign('organisation_id')->references('id')->on('organisations');
             $table->foreign('fonction_id')->references('id')->on('fonctions');
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('modified_by')->references('id')->on('users');
         });
+
+        DB::statement("ALTER TABLE personnes ADD photo MEDIUMBLOB NULL AFTER prenom");
 
         Schema::create('roles', function (Blueprint $table) {
             $table->uuid('id')->primary();
@@ -129,24 +164,14 @@ return new class extends Migration
             $table->uuid('code');
             $table->json('perimetres');
             $table->timestamps();
+            $table->uuid('created_by')->nullable();
+            $table->uuid('modified_by')->nullable();
         });
 
-        Schema::create('users', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->uuid('role_id');
-            $table->uuid('personne_id')->nullable();
-            $table->rememberToken();
-            $table->timestamps();
-
+        Schema::table("users", function (Blueprint $table) {
             $table->foreign('role_id')->references('id')->on('roles');
             $table->foreign('personne_id')->references('id')->on('personnes');
         });
-
-        DB::statement("ALTER TABLE personnes ADD photo MEDIUMBLOB NULL AFTER prenom");
 
         Schema::create('attributions', function (Blueprint $table) {
             $table->uuid('id')->primary();
@@ -169,6 +194,12 @@ return new class extends Migration
             $table->json('destinataires')->nullable();
             $table->json('critere')->nullable();
             $table->timestamps();
+
+            $table->uuid('created_by')->nullable();
+            $table->uuid('modified_by')->nullable();
+
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('modified_by')->references('id')->on('users');
         });
 
         Schema::create('instances', function (Blueprint $table) {
@@ -177,6 +208,11 @@ return new class extends Migration
             $table->json('compositions');
             $table->timestamps();
             $table->softDeletes();
+            $table->uuid('created_by')->nullable();
+            $table->uuid('modified_by')->nullable();
+
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('modified_by')->references('id')->on('users');
         });
 
         Schema::create('cotisations', function (Blueprint $table) {
@@ -188,8 +224,13 @@ return new class extends Migration
             $table->integer('montant_restant')->nullable();
             $table->timestamps();
             $table->softDeletes();
+            $table->uuid('created_by')->nullable();
+            $table->uuid('modified_by')->nullable();
 
             $table->foreign('personne_id')->references('id')->on('personnes');
+
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('modified_by')->references('id')->on('users');
         });
 
         Schema::create('paiements', function (Blueprint $table) {
@@ -200,11 +241,17 @@ return new class extends Migration
             $table->integer('montant');
             $table->dateTime('date_traitement')->nullable();
             $table->string('commentaire')->nullable();
-            //$table->uuid('valideur_id'); // User validation
+            $table->uuid('valideur_id')->nullable();
+            $table->uuid('created_by')->nullable();
+            $table->uuid('modified_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('cotisation_id')->references('id')->on('cotisations');
+
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('modified_by')->references('id')->on('users');
+            $table->foreign('valideur_id')->references('id')->on('users');
         });
 
         Schema::create('montants_cotisations', function (Blueprint $table) {
@@ -213,6 +260,11 @@ return new class extends Migration
             $table->string('profil'); // tous,fonction,type_organisation
             $table->json('montants')->nullable();
             $table->timestamps();
+            $table->uuid('created_by')->nullable();
+            $table->uuid('modified_by')->nullable();
+
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('modified_by')->references('id')->on('users');
         });
 
         Schema::create('modules', function (Blueprint $table) {
@@ -220,6 +272,11 @@ return new class extends Migration
             $table->string('nom');
             $table->string('code');
             $table->timestamps();
+            $table->uuid('created_by')->nullable();
+            $table->uuid('modified_by')->nullable();
+
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('modified_by')->references('id')->on('users');
         });
 
         Schema::table('modules', function (Blueprint $table) {
@@ -233,8 +290,13 @@ return new class extends Migration
             $table->string('code');
             $table->uuid('module_id');
             $table->timestamps();
+            $table->uuid('created_by')->nullable();
+            $table->uuid('modified_by')->nullable();
 
             $table->foreign('module_id')->references('id')->on('modules');
+
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('modified_by')->references('id')->on('users');
         });
 
         Schema::create('habilitations', function (Blueprint $table) {
@@ -242,9 +304,14 @@ return new class extends Migration
             $table->uuid('role_id');
             $table->uuid('fonctionnalite_id');
             $table->timestamps();
+            $table->uuid('created_by')->nullable();
+            $table->uuid('modified_by')->nullable();
 
             $table->foreign('role_id')->references('id')->on('roles');
             $table->foreign('fonctionnalite_id')->references('id')->on('fonctionnalites');
+
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('modified_by')->references('id')->on('users');
         });
     }
 

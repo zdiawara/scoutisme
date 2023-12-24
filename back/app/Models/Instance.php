@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-use App\Traits\UUID;
+use App\Traits\Audit;
 use EloquentFilter\Filterable;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Instance extends Model
 {
-    use UUID, Filterable, SoftDeletes;
+    use HasUuids, Filterable, SoftDeletes, Audit;
 
     protected $fillable = [
         'nom', 'compositions'

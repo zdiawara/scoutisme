@@ -3,20 +3,21 @@
 namespace App\Models;
 
 use App\ModelFilters\PersonneFilter;
+use App\Traits\Audit;
 use EloquentFilter\Filterable;
-use App\Traits\UUID;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Personne extends Model
 {
-    use UUID, HasFactory, Filterable;
+    use HasUuids, HasFactory, Filterable, Audit;
 
     protected $fillable = [
         'nom', 'prenom', 'photo', 'code', 'adresse', 'email', 'telephone', 'etat', 'personne_a_contacter',
         'profession', 'date_naissance', 'lieu_naissance', 'type', 'genre_id', 'ville_id', 'niveau_formation_id',
-        'organisation_id', 'fonction_id', 'date_fin', 'date_debut'
+        'organisation_id', 'fonction_id', 'date_fin', 'date_debut', 'modified_by', 'created_by'
     ];
 
     protected $casts = ['personne_a_contacter' => 'array'];
@@ -55,4 +56,20 @@ class Personne extends Model
     {
         return $this->provideFilter(PersonneFilter::class);
     }
+
+    /*     public static function booted(): void
+    {
+        static::updated(function (Personne $personne) {
+            dd("ok");
+        });
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($model) {
+            dd($model);
+        });
+    } */
 }

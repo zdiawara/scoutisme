@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use App\Traits\UUID;
+use App\Traits\Audit;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 class Nature extends Model
 {
-    use UUID;
+    use HasUuids, Audit;
 
     protected $fillable = [
         'code', 'nom'

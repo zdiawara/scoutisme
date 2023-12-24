@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use App\ModelFilters\AttributionFilter;
-use App\Traits\UUID;
 use EloquentFilter\Filterable;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 class Attribution extends Model
 {
-    use UUID, Filterable;
+    use HasUuids, Filterable;
 
     protected $fillable = [
         'personne_id', 'organisation_id', 'fonction_id', 'date_debut', 'date_fin'

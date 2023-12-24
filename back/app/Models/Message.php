@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use App\Traits\UUID;
+use App\Traits\Audit;
 use EloquentFilter\Filterable;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
 {
-    use UUID, Filterable;
+    use HasUuids, Filterable, Audit;
 
     protected $fillable = [
         'objet', 'contenu', 'destinataires', 'critere'

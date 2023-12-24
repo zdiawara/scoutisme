@@ -8,13 +8,14 @@ trait Audit
     {
         parent::boot();
 
-        static::updating(function ($model) {
-            $model->modified_by = auth()->id;
-        });
-
-        static::creating(function ($model) {
-
-            $model->created_by = auth()->id;
+        static::saving(function ($model) {
+            if (Auth()->user() != null) {
+                if (isset($model->id)) {
+                    $model->modified_by = Auth()->user()->id;
+                } else {
+                    $model->created_by = Auth()->user()->id;
+                }
+            }
         });
     }
 }

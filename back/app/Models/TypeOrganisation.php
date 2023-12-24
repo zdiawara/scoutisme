@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use App\Traits\UUID;
+use App\Traits\Audit;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TypeOrganisation extends Model
 {
-    use UUID, SoftDeletes;
+    use HasUuids, SoftDeletes, Audit;
 
     protected $table = 'types_organisations';
 

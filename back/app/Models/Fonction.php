@@ -3,14 +3,15 @@
 namespace App\Models;
 
 use App\ModelFilters\FonctionFilter;
-use App\Traits\UUID;
+use App\Traits\Audit;
 use EloquentFilter\Filterable;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Fonction extends Model
 {
-    use UUID, Filterable, SoftDeletes;
+    use HasUuids, Filterable, SoftDeletes, Audit;
 
     protected $fillable = [
         'code', 'nom', 'nature_id', 'duree_mandat', 'type_id'

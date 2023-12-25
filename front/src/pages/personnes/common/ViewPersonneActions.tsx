@@ -4,19 +4,12 @@ import { ScoutModal } from "../modal";
 import { OrganisationResource } from "types/organisation.type";
 import { AffecterPersonneModal } from "pages/attributions/common";
 import { PersonneResource } from "types/personne.type";
-import { ICONS } from "pages/common";
 
 type ViewPersonneActionsProps = {
   personne: PersonneResource;
 };
 
 const ACTIONS = [
-  {
-    label: "Cotisation",
-    icon: ICONS.cotisation,
-    description: "Payer la cotisation de la personne",
-    code: "cotisation",
-  },
   {
     label: "Affecter",
     icon: "uil-link",
@@ -53,7 +46,7 @@ export const ViewPersonneActions: FC<ViewPersonneActionsProps> = ({
   return (
     <>
       <Dropdown className="ms-2">
-        <Dropdown.Toggle variant="secondary">Actions</Dropdown.Toggle>
+        <Dropdown.Toggle variant="primary">Actions</Dropdown.Toggle>
         <Dropdown.Menu className="topbar-dropdown-menu mt-2">
           {ACTIONS.map((item) => (
             <Dropdown.Item

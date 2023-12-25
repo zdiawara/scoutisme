@@ -18,6 +18,7 @@ import {
   PersonneFonctions,
 } from "./view";
 import { useDroits } from "hooks/useDroits";
+import { ViewPersonneActions } from "./common/ViewPersonneActions";
 
 const ViewPersonne: FC = () => {
   const personneId = useParams().id!;
@@ -47,7 +48,7 @@ const ViewPersonne: FC = () => {
       {
         label: "Fonctions",
         code: "fonctions",
-        icon: ICONS.fonction,
+        icon: ICONS.historique,
         visible: droits.personne.fonctions.consulter,
       },
     ].filter((e) => e.visible);
@@ -73,7 +74,7 @@ const ViewPersonne: FC = () => {
         >
           <i className="uil-edit-alt"></i> Modifier
         </Link>
-        {/* <ViewPersonneActions personne={personne} /> */}
+        <ViewPersonneActions personne={personne} />
       </div>
     );
   };

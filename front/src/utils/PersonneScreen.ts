@@ -51,7 +51,10 @@ export class PersonneScreen {
     ].some(Boolean);
   }
 
-  modifier(personne: PersonneResource): boolean {
+  modifier(personne?: PersonneResource): boolean {
+    if (!personne) {
+      return false;
+    }
     if (this.userDroit.isAdmin) {
       return true;
     }

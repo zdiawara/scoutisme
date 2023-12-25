@@ -4,7 +4,6 @@ import { FC, ReactNode } from "react";
 import {
   Alert,
   Button,
-  Form,
   ModalHeaderProps,
   ModalProps,
   Spinner,
@@ -126,17 +125,15 @@ export function withMutationForm(
 
     return (
       <FormProvider {...methods}>
-        <Form onSubmit={methods.handleSubmit(onSubmit)}>
-          <Wrapper
-            isEditMode={isEditMode}
-            renderButtons={renderButtons}
-            onExit={onExit}
-            onSubmit={methods.handleSubmit(onSubmit, onError)}
-            renderGeneralError={renderGeneralError}
-            {...rest}
-            meta={meta || {}}
-          />
-        </Form>
+        <Wrapper
+          isEditMode={isEditMode}
+          renderButtons={renderButtons}
+          onExit={onExit}
+          onSubmit={methods.handleSubmit(onSubmit, onError)}
+          renderGeneralError={renderGeneralError}
+          {...rest}
+          meta={meta || {}}
+        />
       </FormProvider>
     );
   };

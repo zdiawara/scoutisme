@@ -16,6 +16,7 @@ export const ICONS = {
   message: "uil-message",
   cotisation: "uil-euro-circle",
   paiement: "uil-euro-circle",
+  historique: " uil-history",
 };
 
 export const Header = {

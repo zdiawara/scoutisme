@@ -1,20 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { attributionApi } from "api";
 import { View } from "components";
-import {
-  AffecterPersonneModal,
-  AttributionActions,
-} from "pages/attributions/common";
+import { AttributionActions } from "pages/attributions/common";
 import { Columns, ICONS, ListResult } from "pages/common";
 import { isBefore, isAfter } from "date-fns";
 import { FC, useMemo } from "react";
-import { Badge, Button, Card } from "react-bootstrap";
+import { Badge, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { AttributionResource, PersonneResource } from "types/personne.type";
 import { LINKS } from "utils";
 import { QUERY_KEY } from "utils/constants";
 import { dateFormater, dateParser } from "utils/functions";
-import { useModalAction } from "hooks";
 import { useDroits } from "hooks/useDroits";
 
 type PersonneFonctionsProps = {
@@ -37,8 +33,6 @@ export const PersonneFonctions: FC<PersonneFonctionsProps> = ({ personne }) => {
   });
 
   const droits = useDroits();
-
-  const modalAction = useModalAction();
 
   const columns = useMemo(() => {
     const data: Columns<AttributionResource>[] = [
@@ -135,32 +129,14 @@ export const PersonneFonctions: FC<PersonneFonctionsProps> = ({ personne }) => {
   };
 
   return (
-    <>
-      <Card>
-        <Card.Body>
-          <View.Header
-            icon={ICONS.fonction}
-            label="Fonctions"
-            description="Toutes les fonctions occupées par la personne"
-            className="mb-2"
-            right={
-              droits.personne.fonctions.affecter && (
-                <Button size="sm" onClick={modalAction.change("affecter")}>
-                  <i className={`uil-link me-1`}></i>Affecter
-                </Button>
-              )
-            }
-          />
-          {renderContent()}
-        </Card.Body>
-      </Card>
-
-      {modalAction.action === "affecter" && (
-        <AffecterPersonneModal
-          closeModal={modalAction.close}
-          personne={personne}
-        />
-      )}
-    </>
+    <Card body>
+      <View.Header
+        icon={ICONS.fonction}
+        label="Fonctions"
+        description="Toutes les fonctions occupées par la personne"
+        className="mb-2"
+      />
+      {renderContent()}
+    </Card>
   );
 };

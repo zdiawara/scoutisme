@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { FC, ReactNode } from "react";
-import { Form, Modal, ModalHeaderProps, ModalProps } from "react-bootstrap";
+import { Modal, ModalHeaderProps, ModalProps } from "react-bootstrap";
 
 type UtilitaireModalProps = {
   onClose?: () => void;
@@ -25,29 +25,24 @@ export const HookModalForm: FC<UtilitaireModalProps> = ({
   modalHeaderProps,
   modalBodyClassName = "bg-modal",
   renderButtons,
-  onSubmit,
   children,
 }) => {
   return (
-    <Modal.Dialog>
-      <Form onSubmit={onSubmit}>
-        <Modal {...modalProps} show={true}>
-          {title && (
-            <Modal.Header {...modalHeaderProps}>
-              <div>
-                <Modal.Title
-                  className={classNames("text-primary", { "my-0": !!subtitle })}
-                >
-                  {title}
-                </Modal.Title>
-                {subtitle && <>{subtitle}</>}
-              </div>
-            </Modal.Header>
-          )}
-          <Modal.Body className={modalBodyClassName}>{children}</Modal.Body>
-          <Modal.Footer>{renderButtons()}</Modal.Footer>
-        </Modal>
-      </Form>
-    </Modal.Dialog>
+    <Modal {...modalProps} show={true}>
+      {title && (
+        <Modal.Header {...modalHeaderProps}>
+          <div>
+            <Modal.Title
+              className={classNames("text-primary", { "my-0": !!subtitle })}
+            >
+              {title}
+            </Modal.Title>
+            {subtitle && <>{subtitle}</>}
+          </div>
+        </Modal.Header>
+      )}
+      <Modal.Body className={modalBodyClassName}>{children}</Modal.Body>
+      <Modal.Footer>{renderButtons()}</Modal.Footer>
+    </Modal>
   );
 };

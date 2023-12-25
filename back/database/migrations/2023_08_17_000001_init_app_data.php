@@ -53,14 +53,14 @@ return new class extends Migration
             "Chargé de l'information",
             "Secrétaire",
         ])->each(function ($item) use ($unite) {
-            $this->fonctionService->create(['nom' => $item, 'nature_id' => $unite->id]);
+            $this->fonctionService->create(['nom' => $item, 'nature_id' => $unite->id, 'duree_mandat' => 1]);
         });
 
         collect([
             "Chef de groupe",
             "Conseiller de groupe",
         ])->each(function ($item) use ($groupe) {
-            $this->fonctionService->create(['nom' => $item, 'nature_id' => $groupe->id]);
+            $this->fonctionService->create(['nom' => $item, 'nature_id' => $groupe->id, 'duree_mandat' => 1]);
         });
 
         collect([

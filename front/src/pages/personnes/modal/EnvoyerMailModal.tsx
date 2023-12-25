@@ -5,18 +5,28 @@ import { TextEditor } from "pages/messages/form/TextEditor";
 import { messageSchema } from "pages/messages/form/messageUtils";
 import { FC } from "react";
 import { Alert, Col, Row } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 const Form: FC<WrapperV2Props> = (props) => {
   return (
     <HookModalForm
       {...props}
+      labels={{
+        saveLabel: "Envoyer",
+        cancelLabel: "Annuler",
+      }}
       modalBodyClassName="bg-light p-3"
       onClose={props.onExit}
     >
-      <Alert variant="info">Ce mail sera envoyé au 22 000 personnes.</Alert>
+      <Alert className="fw-bold bg-primary text-white">{props.meta.info}</Alert>
       <Row className="g-3">
         <Col xs={12}>
-          <TextInput name="objet" label="Objet du mail" isRequired />
+          <TextInput
+            name="objet"
+            label="Objet "
+            placeholder="Objet du mail"
+            isRequired
+          />
         </Col>
 
         <Col xs={12}>
@@ -31,24 +41,39 @@ const EnvoyerMailModalForm = withMutationForm(Form, messageSchema);
 
 type EnvoyerMailModalProps = {
   filter: Record<string, any>;
+  nombrePers: number;
   closeModal: () => void;
 };
 
 export const EnvoyerMailModal: FC<EnvoyerMailModalProps> = ({
   filter,
+  nombrePers,
   closeModal,
 }) => {
+  const sendMail = (data: Record<string, any>) => {
+    return personneApi.envoyerMail(
+      {
+        mail: data,
+      },
+      filter
+    );
+  };
+  if (nombrePers === 0) {
+    closeModal();
+    toast("Impossible d'envoyer ce mail. Aucun destinaire trouvé", {
+      type: toast.TYPE.WARNING,
+      autoClose: 5000,
+      position: "bottom-right",
+    });
+    return null;
+  }
   return (
     <EnvoyerMailModalForm
-      onSave={(data) => {
-        return personneApi.envoyerMail(
-          {
-            mail: data,
-          },
-          filter
-        );
-      }}
+      onSave={sendMail}
       title="Rédiger l'email à envoyer"
+      meta={{
+        info: `Ce mail sera envoyé à ${nombrePers} personne(s)`,
+      }}
       onSuccess={closeModal}
       onExit={closeModal}
     />

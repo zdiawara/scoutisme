@@ -1,10 +1,11 @@
 import classNames from "classnames";
 import { FC, ReactNode } from "react";
 import { Modal, ModalHeaderProps, ModalProps } from "react-bootstrap";
+import { ButtonLabel } from "types/request.type";
 
 type UtilitaireModalProps = {
   onClose?: () => void;
-  renderButtons: () => ReactNode;
+  renderButtons: (labels: ButtonLabel | undefined) => ReactNode;
   onSubmit: () => void;
   title?: string;
   subtitle?: string;
@@ -12,6 +13,7 @@ type UtilitaireModalProps = {
   modalBodyClassName?: string;
   modalHeaderProps?: ModalHeaderProps;
   children: ReactNode;
+  labels?: ButtonLabel;
 };
 
 export const HookModalForm: FC<UtilitaireModalProps> = ({
@@ -26,6 +28,7 @@ export const HookModalForm: FC<UtilitaireModalProps> = ({
   modalBodyClassName = "bg-modal",
   renderButtons,
   children,
+  labels,
 }) => {
   return (
     <Modal {...modalProps} show={true}>
@@ -42,7 +45,7 @@ export const HookModalForm: FC<UtilitaireModalProps> = ({
         </Modal.Header>
       )}
       <Modal.Body className={modalBodyClassName}>{children}</Modal.Body>
-      <Modal.Footer>{renderButtons()}</Modal.Footer>
+      <Modal.Footer>{renderButtons(labels)}</Modal.Footer>
     </Modal>
   );
 };

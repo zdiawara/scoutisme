@@ -13,9 +13,15 @@
     font-weight: 500;
 }
 
+.ql-editor.ql-blank::before{
+    color: $input-placeholder-color !important;
+    font-style: normal  !important;
+}
+
+
 .ql-container {
     font-family: $font-family-base;    
-
+    min-height: 200px;
     &.ql-snow {
         border-color: $input-border-color;
     }

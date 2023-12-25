@@ -44,7 +44,7 @@ export const TextEditor = ({ name, label }: TextEditorProps) => {
                 modules={TextEditor.modules}
                 formats={TextEditor.formats}
                 bounds=".app"
-                placeholder="Rediger un message ..."
+                placeholder="Contenu du message ..."
                 className={classNames("text-dark fs-4", {
                   "is-invalid": !!error,
                 })}

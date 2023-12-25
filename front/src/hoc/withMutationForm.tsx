@@ -10,6 +10,7 @@ import {
 } from "react-bootstrap";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { ButtonLabel } from "types/request.type";
 import { AnyObjectSchema } from "yup";
 
 type HocCompomentProps = {
@@ -28,7 +29,7 @@ type HocCompomentProps = {
 
 export type WrapperV2Props = {
   isEditMode: boolean;
-  renderButtons: () => ReactNode;
+  renderButtons: (labels: ButtonLabel | undefined) => ReactNode;
   renderGeneralError: () => ReactNode;
   onSubmit: () => void;
   onExit?: () => void;
@@ -82,7 +83,7 @@ export function withMutationForm(
       console.error(e);
     };
 
-    const renderButtons = () => {
+    const renderButtons = (labels: ButtonLabel | undefined) => {
       return (
         <>
           <Button
@@ -91,7 +92,7 @@ export function withMutationForm(
             onClick={onExit}
             disabled={isLoading}
           >
-            Annuler
+            {labels?.cancelLabel || "Annuler"}
           </Button>
           <Button
             onClick={methods.handleSubmit(onSubmit, onError)}
@@ -108,7 +109,7 @@ export function withMutationForm(
                 <span className="visually-hidden">Loading...</span>
               </Spinner>
             )}
-            Enregistrer
+            {labels?.saveLabel || "Enregistrer"}
           </Button>
         </>
       );

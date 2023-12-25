@@ -253,6 +253,7 @@ const ListPersonne: FC = () => {
       {mailModal && (
         <EnvoyerMailModal
           filter={buildRequestParams(filter)}
+          nombrePers={result?.data.length || 0}
           closeModal={() => setMailModal(false)}
         />
       )}

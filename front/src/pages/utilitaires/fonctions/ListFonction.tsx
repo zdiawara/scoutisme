@@ -79,13 +79,13 @@ const ListFonction: FC = () => {
       label: "Actions",
       headClassName: "text-end",
       Cell: (element) =>
-        element.code !== "scout" ? (
+        element.code !== "scout" && (
           <DeleteConfirmationActions
             element={element}
             onDelete={crudModal.onDelete}
             onUpdate={crudModal.onUpdate}
           />
-        ) : null,
+        ),
     },
   ];
 

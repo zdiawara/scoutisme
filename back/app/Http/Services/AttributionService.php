@@ -10,9 +10,7 @@ class AttributionService
     public function create(array $body): Attribution
     {
         // Cloturer attribution  existante
-        Attribution::where('fonction_id', $body['fonction_id'])
-            ->where('organisation_id', $body['organisation_id'])
-            ->where('personne_id', $body['personne_id'])
+        Attribution::where('personne_id', $body['personne_id'])
             ->where('date_debut', '<=', now())
             ->where(function ($q) {
                 $q->whereNull('date_fin')
@@ -22,19 +20,47 @@ class AttributionService
                 'date_fin' => now()
             ]);
 
+        // Création de l'attribution
+        $attribution = Attribution::create($body);
 
-        return Attribution::create($body);
+        $this->updatePersonne($attribution);
+
+        return $attribution;
     }
 
     public function update(Attribution $attribution, array $body)
     {
         $attribution->update($body);
+        $this->updatePersonne($attribution);
         return $attribution;
     }
 
     public function cloturer(Attribution $attribution, array $body)
     {
         $attribution->update(collect($body)->get('date_fin'));
+        $this->updatePersonne($attribution);
         return $attribution;
+    }
+
+    private function updatePersonne(Attribution $attribution)
+    {
+        // Mettre à jour la personne
+        $attribution->personne->update([
+            'fonction_id' => $attribution->fonction_id,
+            'organisation_id' => $attribution->organisation_id,
+            'date_debut' => $attribution->date_debut,
+            'date_fin' => $attribution->date_fin,
+        ]);
+    }
+
+    public function delete(Attribution $attribution)
+    {
+        $attribution->delete();
+        $attribution->personne->update([
+            'fonction_id' => null,
+            'organisation_id' => null,
+            'date_debut' => null,
+            'date_fin' => null,
+        ]);
     }
 }

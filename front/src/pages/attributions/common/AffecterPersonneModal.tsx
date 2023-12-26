@@ -6,8 +6,9 @@ import {
 } from "components";
 import { WrapperV2Props, withMutationForm } from "hoc";
 import { FC, useMemo } from "react";
+import { startOfYear, addYears } from "date-fns";
 import { Col, Row } from "react-bootstrap";
-import { fonctionApi, personneApi } from "api";
+import { attributionApi, fonctionApi } from "api";
 import { attributionConverter, personneAttributionSchema } from "../form";
 import { FonctionResource, PersonneResource } from "types/personne.type";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -66,6 +67,17 @@ const Form: FC<WrapperV2Props> = (props) => {
                 codeExclude: isScout ? undefined : "scout",
               }}
               resetDeps={depNatures}
+              afterSelected={(fonction) => {
+                const duree_mandat = (fonction as any)?.item?.duree_mandat || 0;
+                if (duree_mandat) {
+                  const dateDebut = startOfYear(new Date());
+                  setValue("date_debut", dateDebut);
+                  setValue(
+                    "date_fin",
+                    addYears(dateDebut, parseInt(duree_mandat))
+                  );
+                }
+              }}
             />
           </Col>
         )}
@@ -115,10 +127,23 @@ export const AffecterPersonneModal: FC<AffecterPersonneModalProps> = ({
     },
   });
 
-  const ajouterMembre = (data: Record<string, any>) => {
-    const { personne_id, ...body } = attributionConverter.toBody(data);
+  const isScout = personne.type === "scout";
 
-    return personneApi.createAttribution(personne.id, body);
+  const defaultValues = useMemo(() => {
+    const fonction = isScout
+      ? {
+          value: fonctionScout?.data[0].id,
+          label: fonctionScout?.data[0].nom,
+        }
+      : null;
+
+    return { fonction };
+  }, [fonctionScout?.data, isScout]);
+
+  const ajouterMembre = (data: Record<string, any>) => {
+    const body = attributionConverter.toBody(data);
+
+    return attributionApi.create({ ...body, personne_id: personne.id });
   };
 
   if (isLoading || !fonctionScout) {
@@ -129,22 +154,13 @@ export const AffecterPersonneModal: FC<AffecterPersonneModalProps> = ({
     <OrganisationMembreForm
       onSave={ajouterMembre}
       title={`Affecter ${personne.nom} ${personne.prenom} dans une ${
-        personne.type === "adulte" ? "organisation" : "unité"
+        isScout ? "unité" : "organisation"
       }`}
-      defaultValues={{
-        fonction:
-          personne.type === "scout"
-            ? {
-                value: fonctionScout.data[0].id,
-                label: fonctionScout.data[0].nom,
-              }
-            : null,
-      }}
+      defaultValues={defaultValues}
       meta={{ typePersonne: personne.type }}
-      onSuccess={(data) => {
-        query.invalidateQueries([QUERY_KEY.direction, data.organisation.id]);
+      onSuccess={() => {
         query.invalidateQueries([QUERY_KEY.attributions, personne.id]);
-        query.invalidateQueries([QUERY_KEY.attribution_active, personne.id]);
+        query.invalidateQueries([QUERY_KEY.personnes, personne.id]);
         closeModal();
       }}
       onExit={closeModal}

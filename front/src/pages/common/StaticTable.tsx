@@ -80,26 +80,28 @@ export function StaticTable<T>({
 
   const right = (
     <div className="d-flex align-items-center">
-      <InputGroup>
-        <Form.Control
-          placeholder="Rechercher"
-          aria-label="Text input with checkbox"
-          onChange={(e) => setSearch(e.target.value)}
-          onKeyUp={(event) => {
-            if (event.key === "Enter") {
-              event.preventDefault();
-              setQuery((prev: any) => ({ ...prev, search, pageActive: 0 }));
+      {onSearch && (
+        <InputGroup>
+          <Form.Control
+            placeholder="Rechercher"
+            aria-label="Text input with checkbox"
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyUp={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                setQuery((prev: any) => ({ ...prev, search, pageActive: 0 }));
+              }
+            }}
+          />
+          <Button
+            onClick={() =>
+              setQuery((prev: any) => ({ ...prev, search, pageActive: 0 }))
             }
-          }}
-        />
-        <Button
-          onClick={() =>
-            setQuery((prev: any) => ({ ...prev, search, pageActive: 0 }))
-          }
-        >
-          OK
-        </Button>
-      </InputGroup>
+          >
+            OK
+          </Button>
+        </InputGroup>
+      )}
       {actions}
     </div>
   );

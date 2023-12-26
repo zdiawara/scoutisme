@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { personneApi } from "api";
+import { attributionApi } from "api";
 import { FC } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { AttributionResource } from "types/personne.type";
@@ -19,20 +19,20 @@ export const SupprimerAttribution: FC<SupprimerAttributionProps> = ({
   const { mutate, isLoading } = useMutation({
     networkMode: "offlineFirst",
     mutationFn: () => {
-      return personneApi.deleteAttribution(attribution.personne.id);
+      return attributionApi.delete(attribution.id);
     },
     onSuccess: () => {
-      query.invalidateQueries([
-        QUERY_KEY.direction,
-        attribution.organisation.id,
-      ]);
-      query.invalidateQueries([QUERY_KEY.scouts, attribution.organisation.id]);
+      const { personne, organisation } = attribution;
+      query.invalidateQueries([QUERY_KEY.attributions, personne.id]);
+      query.invalidateQueries([QUERY_KEY.personnes, personne.id]);
+      query.invalidateQueries([QUERY_KEY.scouts, organisation.id]);
+      query.invalidateQueries([QUERY_KEY.direction, organisation.id]);
       closeModal();
     },
   });
 
   return (
-    <Modal show={true} onHide={closeModal} centered={true}>
+    <Modal show={true} onHide={closeModal}>
       <Modal.Header closeButton>
         <Modal.Title className="text-black">
           Supprimer une attribution

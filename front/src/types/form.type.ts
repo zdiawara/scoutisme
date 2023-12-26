@@ -17,7 +17,7 @@ export type SelectProps = {
   isClearable?: boolean;
   isDisabled?: boolean;
   initialOptions?: SelectItem[];
-  afterSelected?: (value: SelectItem) => void;
+  afterSelected?: (value?: SelectItem) => void;
   requestParams?: RequestParam;
   resetDeps?: string[];
   description?: string;

@@ -12,19 +12,11 @@ export function DeleteConfirmationActions<T>(props: Props<T>) {
   return (
     <div className="text-end">
       {props.children}
-      <Button
-        className="action-icon"
-        variant="link"
-        onClick={props.onUpdate(props.element)}
-      >
+      <Button variant="link" onClick={props.onUpdate(props.element)}>
         <i className="uil-edit-alt fs-4 text-primary"></i>
       </Button>
 
-      <Button
-        className="action-icon"
-        variant="link"
-        onClick={props.onDelete(props.element)}
-      >
+      <Button variant="link" onClick={props.onDelete(props.element)}>
         <i className="mdi mdi-delete fs-4 text-danger"></i>
       </Button>
     </div>

@@ -15,7 +15,7 @@ export const ICONS = {
   events: "uil-calender",
   message: "uil-message",
   cotisation: "uil-euro-circle",
-  paiement: "uil-euro-circle",
+  paiement: "uil-atm-card",
   historique: " uil-history",
 };
 

@@ -60,7 +60,7 @@ export const EnvoyerMailModal: FC<EnvoyerMailModalProps> = ({
   };
   if (nombrePers === 0) {
     closeModal();
-    toast("Impossible d'envoyer ce mail. Aucun destinaire trouvé", {
+    toast("Aucun destinaire trouvé", {
       type: toast.TYPE.WARNING,
       autoClose: 5000,
       position: "bottom-right",
@@ -70,7 +70,8 @@ export const EnvoyerMailModal: FC<EnvoyerMailModalProps> = ({
   return (
     <EnvoyerMailModalForm
       onSave={sendMail}
-      title="Rédiger l'email à envoyer"
+      title="Envoyer mail"
+      subtitle="Rédiger et envoyer un mail"
       meta={{
         info: `Ce mail sera envoyé à ${nombrePers} personne(s)`,
       }}

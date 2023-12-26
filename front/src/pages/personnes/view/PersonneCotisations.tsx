@@ -166,7 +166,7 @@ export const PersonneCotisations: FC<PersonneCotisationsProps> = ({
     <>
       <Card body>
         <View.Header
-          icon={ICONS.paiement}
+          icon={ICONS.cotisation}
           label="Cotisation"
           description="Montant de la cotisation de l'année 2023"
           className="mb-2"

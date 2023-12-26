@@ -51,4 +51,4 @@ export interface PaiementFilter extends Filter {
   size: number;
 }
 
-export type ButtonLabel = { saveLabel: string; cancelLabel: string };
+export type ButtonLabel = { saveLabel?: string; cancelLabel?: string };

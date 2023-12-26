@@ -1,6 +1,6 @@
 import { SelectItem } from "types/form.type";
 import { RequestParam } from "types/request.type";
-import { format, parse } from "date-fns";
+import { format, parse, isAfter, isBefore } from "date-fns";
 import { NATURE } from "./constants";
 
 export const requestParams = (params?: RequestParam) => {
@@ -41,6 +41,23 @@ export const dateFormater = {
 
 const toDate = (pattern: string, date?: string) => {
   return date ? parse(date, pattern, new Date()) : undefined;
+};
+
+export const isActive = (
+  dateReference: Date,
+  date_debut: string,
+  date_fin?: string
+) => {
+  const dateDebut = dateParser.toDateTime(date_debut);
+  if (!dateDebut) {
+    return false;
+  }
+  const dateFin = dateParser.toDateTime(date_fin);
+  const today = dateReference;
+
+  return (
+    isAfter(today, dateDebut) && (dateFin ? isBefore(today, dateFin) : true)
+  );
 };
 
 export const dateParser = {

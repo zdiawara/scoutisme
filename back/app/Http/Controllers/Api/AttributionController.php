@@ -67,6 +67,6 @@ class AttributionController extends Controller
      */
     public function destroy(Attribution $attribution)
     {
-        $attribution->delete();
+        $attribution = $this->attributionService->delete($attribution);
     }
 }

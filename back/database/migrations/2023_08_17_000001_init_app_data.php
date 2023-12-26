@@ -28,23 +28,10 @@ return new class extends Migration
     public function up(): void
     {
         // Nature des organisations
-        Nature::create(['nom' => 'Unité', 'code' => 'unite']);
-        Nature::create(['nom' => 'Groupe', 'code' => 'groupe']);
-        Nature::create(['nom' => 'Région', 'code' => 'region']);
-        Nature::create(['nom' => 'National', 'code' => 'national']);
-
-        $groupe = Nature::where('code', 'groupe')
-            ->firstOrFail();
-
-        $unite = Nature::where('code', 'unite')
-            ->firstOrFail();
-
-        $region = Nature::where('code', 'region')
-            ->firstOrFail();
-
-        $national = Nature::where('code', 'national')
-            ->firstOrFail();
-
+        $unite = Nature::create(['nom' => 'Unité', 'code' => 'unite']);
+        $groupe = Nature::create(['nom' => 'Groupe', 'code' => 'groupe']);
+        $region = Nature::create(['nom' => 'Région', 'code' => 'region']);
+        $national = Nature::create(['nom' => 'National', 'code' => 'national']);
 
         collect([
             "Chef d'unité",

@@ -6,7 +6,7 @@ import { Col, Row } from "react-bootstrap";
 import { useFormContext } from "react-hook-form";
 import { AttributionResource } from "types/personne.type";
 import { attributionConverter } from "../form";
-import { personneApi } from "api";
+import { attributionApi } from "api";
 import { QUERY_KEY } from "utils/constants";
 
 const Form: FC<WrapperV2Props> = (props) => {
@@ -51,7 +51,7 @@ export const CloturerAttribution: FC<CloturerAttributionProps> = ({
 
   const cloturerAttribution = (data: Record<string, any>) => {
     const body = attributionConverter.toBody(data);
-    return personneApi.cloturerAttribution(attribution.personne.id, {
+    return attributionApi.update(attribution.id, {
       date_fin: body.date_fin,
     });
   };
@@ -70,10 +70,11 @@ export const CloturerAttribution: FC<CloturerAttributionProps> = ({
       modalProps={{ centered: true }}
       modalBodyClassName="bg-light"
       onSuccess={() => {
-        query.invalidateQueries([
-          QUERY_KEY.direction,
-          attribution.organisation.id,
-        ]);
+        const { personne, organisation } = attribution;
+        query.invalidateQueries([QUERY_KEY.attributions, personne.id]);
+        query.invalidateQueries([QUERY_KEY.personnes, personne.id]);
+        query.invalidateQueries([QUERY_KEY.scouts, organisation.id]);
+        query.invalidateQueries([QUERY_KEY.direction, organisation.id]);
         closeModal();
       }}
       onExit={closeModal}

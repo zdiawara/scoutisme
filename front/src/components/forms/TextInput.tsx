@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { TooltipHelper } from "components/view";
-import { FC, useMemo } from "react";
+import { FC, ReactNode, useMemo } from "react";
 import { Form } from "react-bootstrap";
 import { useFormContext, Controller } from "react-hook-form";
 import MaskedInput, { Mask } from "react-text-mask";
@@ -12,7 +12,7 @@ type TextInputProps = {
   type?: string;
   isRequired?: boolean;
   mask?: Mask;
-  description?: string;
+  description?: ReactNode;
 };
 
 export const TextInput: FC<TextInputProps> = ({

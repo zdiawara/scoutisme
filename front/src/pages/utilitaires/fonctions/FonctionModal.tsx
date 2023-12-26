@@ -49,7 +49,6 @@ const Form: FC<WrapperV2Props> = (props) => {
                 requestParams={{ nature_code: NATURE.national }}
                 isClearable
                 isRequired
-                //description="Une fonction est associée à la nature de l'organisation"
               />
             </Col>
           </Fragment>
@@ -66,16 +65,27 @@ const Form: FC<WrapperV2Props> = (props) => {
             </Col>
           </Fragment>
         )}
-        <Col sm={12}>
-          <TextInput label="Nom fonction" name="nom" isRequired />
+        <Col sm={6}>
+          <TextInput
+            label="Nom"
+            placeholder="Nom de la fonction"
+            name="nom"
+            isRequired
+          />
         </Col>
-        <Col sm={12}>
+        <Col sm={6}>
           <TextInput
             label="Durée mandat"
             name="duree_mandat"
             type="number"
             placeholder="En nombre d'année"
-            description="Durée d'occupation de la fonction"
+            isRequired
+            description={
+              <div className="text-start">
+                Durée d'occupation de la fonction.
+                <p> Mettre 0 si durée infinie</p>
+              </div>
+            }
           />
         </Col>
       </Row>

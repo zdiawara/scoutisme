@@ -15,7 +15,7 @@ export const SelectFonction: FC<SelectProps> = ({
         const { data } = await fonctionApi.findAll<FonctionResource>(
           requestParams
         );
-        return data.map((item) => ({ label: item.nom, value: item.id }));
+        return data.map((item) => ({ label: item.nom, value: item.id, item }));
       }}
     />
   );

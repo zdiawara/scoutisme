@@ -248,6 +248,7 @@ const ListPersonne: FC = () => {
         <ExportPersonneModal
           filter={buildRequestParams(filter)}
           closeModal={() => setExportModal(false)}
+          nombrePers={result?.data.length || 0}
         />
       )}
       {mailModal && (

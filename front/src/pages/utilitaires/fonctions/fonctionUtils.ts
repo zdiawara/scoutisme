@@ -6,7 +6,7 @@ import * as yup from "yup";
 export const fonctionSchema = yup.object({
   nom: yup.string().required(),
   nature: yup.object().required(),
-
+  duree_mandat: yup.string().required().nullable(),
   type: yup
     .object()
     .when(["nature"], {
@@ -37,7 +37,7 @@ const toInput = (data: FonctionResource) => {
     nom: data.nom,
     nature: { label: nature.nom, value: nature.id, item: nature },
     type: type ? { label: type.nom, value: type.id } : null,
-    duree_mandat: data.duree_mandat,
+    duree_mandat: data.duree_mandat || "",
   };
 };
 export const fonctionConverter = {

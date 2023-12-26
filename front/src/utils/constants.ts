@@ -39,3 +39,5 @@ export const DATE_PATTERN = {
   dd_mm_yyyy_hh_mm_ss: "dd/MM/yyyy à HH:mm:ss",
   dd_mm_yyyy_hh_mm: "dd/MM/yyyy à HH:mm",
 };
+
+export const DEVISE = "FCFA";

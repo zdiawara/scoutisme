@@ -9,6 +9,7 @@ import {
 } from "pages/paiements/modal";
 import { DeletePaiementModal } from "pages/paiements/modal/DeletePaiementModal";
 import { paiementApi } from "api";
+import { VoirPaiementModal } from "pages/paiements/modal/VoirPaiement";
 
 type PaiementActionsProps = {
   personne: PersonneResource;
@@ -62,12 +63,18 @@ export const PaiementActions: FC<PaiementActionsProps> = ({
 
   return (
     <>
-      <div className="text-end">
+      <div className="text-end d-flex justify-content-end">
+        <Button
+          variant="outline-light text-dark"
+          onClick={modalAction.change("voir")}
+        >
+          Voir
+        </Button>
         <Dropdown className="ms-2">
           <Dropdown.Toggle
             as={Button}
             size="sm"
-            variant="outline-light"
+            variant="light"
             className="arrow-none card-drop"
           >
             <i className="mdi mdi-dots-vertical" />
@@ -86,7 +93,6 @@ export const PaiementActions: FC<PaiementActionsProps> = ({
                   modalAction.change(item.code)();
                 }}
                 key={item.code}
-                //disabled={!attribution.id}
               >
                 <i className={`${item.icon} text-primary me-2`}></i>
                 <span className="text-primary fs-5 fw-semibold">
@@ -123,6 +129,9 @@ export const PaiementActions: FC<PaiementActionsProps> = ({
           closeModal={modalAction.close}
           element={paiement}
         />
+      )}
+      {modalAction.action === "voir" && (
+        <VoirPaiementModal closeModal={modalAction.close} paiement={paiement} />
       )}
     </>
   );

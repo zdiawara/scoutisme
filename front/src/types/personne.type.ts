@@ -1,3 +1,4 @@
+import { UserResource } from "./auth.type";
 import {
   NatureResource,
   OrganisationResource,
@@ -98,5 +99,9 @@ export type PaiementResource = {
   etat: string;
   montant: number;
   cotisation: CotisationResource;
+  valideur?: UserResource;
+  createur: UserResource;
   created_at: string;
+  commentaire?: string;
+  date_traitement?: string;
 };

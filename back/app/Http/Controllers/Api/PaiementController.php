@@ -7,7 +7,6 @@ use App\Http\Resources\CotisationResource;
 use App\Http\Resources\PaiementResource;
 use App\Http\Services\CotisationService;
 use App\Http\Services\PaiementService;
-use App\Models\Instance;
 use App\Models\Paiement;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -52,7 +51,7 @@ class PaiementController extends Controller
         $data = $result['query']
             ->select($projection)
             ->orderBy('paiements.created_at', 'desc')
-            ->with(['cotisation.personne'])
+            ->with(['cotisation.personne', 'valideur', 'createur'])
             ->get();
 
         return [
@@ -84,9 +83,9 @@ class PaiementController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Instance $instance)
+    public function show(Paiement $paiement)
     {
-        return new CotisationResource($instance);
+        return new PaiementResource($paiement);
     }
 
     public function valider(Paiement $paiement)

@@ -20,7 +20,7 @@ const Form: FC<WrapperV2Props> = (props) => {
             name="commentaire"
             label="Motif du rejet"
             placeholder="Renseignez le motif"
-            description="Il s'agit du montant payé par la personne"
+            description="Mettre la raison pour laquelle vous rejeter ce paiement"
           />
         </Col>
       </Row>
@@ -55,6 +55,7 @@ export const RejeterPaiementModal: FC<PersonneCotisationModalProps> = ({
       title="Rejeter paiement"
       defaultValues={{}}
       onSuccess={() => {
+        query.invalidateQueries([QUERY_KEY.paiements]);
         query.invalidateQueries([QUERY_KEY.paiements, personne.id]);
         closeModal();
       }}

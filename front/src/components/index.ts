@@ -6,3 +6,4 @@ export * from "./forms/HookModalForm";
 export * from "./selectors";
 export * from "./view";
 export * from "./CardTitle";
+export * from "./MontantFormatText";

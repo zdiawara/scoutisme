@@ -60,7 +60,11 @@ export function StaticTable<T>({
 
     return (
       <>
-        <ListResult.Table<T> columns={columns} data={result.data || []} />
+        <ListResult.Table<T>
+          headerClassName="shadow-sm"
+          columns={columns}
+          data={result.data || []}
+        />
 
         <ListResult.Paginate
           pageCount={result.pageCount}

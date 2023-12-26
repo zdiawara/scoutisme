@@ -56,20 +56,4 @@ class Personne extends Model
     {
         return $this->provideFilter(PersonneFilter::class);
     }
-
-    /*     public static function booted(): void
-    {
-        static::updated(function (Personne $personne) {
-            dd("ok");
-        });
-    }
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::saving(function ($model) {
-            dd($model);
-        });
-    } */
 }

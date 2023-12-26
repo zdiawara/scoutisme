@@ -10,22 +10,26 @@ import {
 } from "pages/common";
 import { PaiementActions } from "pages/personnes/common/PaiementActions";
 import { FC, useContext } from "react";
-import { Badge, Button, Col } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Button, Col } from "react-bootstrap";
 import { PaiementResource } from "types/personne.type";
 import { PaiementFilter, RequestParam } from "types/request.type";
-import { LINKS } from "utils";
-import { DATE_PATTERN, QUERY_KEY } from "utils/constants";
-import { dateFormater, selectHelper } from "utils/functions";
+import { QUERY_KEY } from "utils/constants";
+import { selectHelper } from "utils/functions";
+import { EtatPaiement } from "./common";
+import { MontantFormatText } from "components";
 
 const columns: Columns<PaiementResource>[] = [
   {
     name: "numero",
     label: "Numéro paiement",
+    Cell: ({ numero }) => (
+      <span className="text-primary fw-bold">{numero}</span>
+    ),
   },
   {
     name: "montant",
-    label: "Montant payé",
+    label: "Montant",
+    Cell: ({ montant }) => <MontantFormatText value={montant} />,
   },
   {
     name: "code",
@@ -34,48 +38,21 @@ const columns: Columns<PaiementResource>[] = [
   },
   {
     name: "personne",
-    label: "Personne",
+    label: "Payeur",
     Cell: ({ cotisation }) => (
-      <Link
-        className="d-block"
-        to={LINKS.personnes.view(cotisation.personne?.id || "#")}
-      >
+      <span className="text-primary">
         {cotisation.personne?.nom} {cotisation.personne?.prenom}
-      </Link>
+      </span>
     ),
   },
   {
     name: "created_at",
-    label: "Date paiement",
-    Cell: ({ created_at }) => {
-      return (
-        <span>
-          {dateFormater.format(
-            new Date(created_at),
-            DATE_PATTERN.dd_mm_yyyy_hh_mm
-          )}
-        </span>
-      );
-    },
+    label: "Date soumission",
   },
   {
     name: "etat",
     label: "Etat",
-    Cell: ({ etat }) => {
-      return (
-        <Badge
-          bg={
-            etat === "valide"
-              ? "success"
-              : etat === "rejet"
-              ? "danger"
-              : "warning"
-          }
-        >
-          {etat}
-        </Badge>
-      );
-    },
+    Cell: ({ etat }) => <EtatPaiement etat={etat} />,
   },
   {
     name: "actions",

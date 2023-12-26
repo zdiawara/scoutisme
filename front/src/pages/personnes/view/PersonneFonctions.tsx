@@ -128,7 +128,6 @@ export const PersonneFonctions: FC<PersonneFonctionsProps> = ({ personne }) => {
           )
         }
       />
-
       {modalAction.action === "affecter" && (
         <AffecterPersonneModal
           closeModal={modalAction.close}

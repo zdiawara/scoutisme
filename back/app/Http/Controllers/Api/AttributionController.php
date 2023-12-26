@@ -30,7 +30,8 @@ class AttributionController extends Controller
             ->with($projection);
 
         return [
-            "data" => AttributionResource::collection($query->get())
+            "data" => AttributionResource::collection($query
+                ->orderBy('created_at', 'desc')->get())
         ];
     }
 

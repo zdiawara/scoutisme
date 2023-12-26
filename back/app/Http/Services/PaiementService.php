@@ -5,7 +5,6 @@ namespace App\Http\Services;
 use App\Exceptions\BadRequestException;
 use App\Models\Cotisation;
 use App\Models\Paiement;
-use Barryvdh\DomPDF\Facade\Pdf;
 use sirajcse\UniqueIdGenerator\UniqueIdGenerator;
 use Illuminate\Support\Facades\DB;
 
@@ -61,7 +60,7 @@ class PaiementService
         $paiement->update([
             'etat' => 'valide',
             'date_traitement' => now(),
-            //'valideur_id' => ''
+            'valideur_id' => Auth()->user()->id
         ]);
 
         DB::commit();

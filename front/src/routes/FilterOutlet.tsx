@@ -74,7 +74,6 @@ export const PaiementOutlet = () => {
   const filter: PaiementFilter = {
     page: 1,
     size: 10,
-    etat: null,
   };
   return (
     <FilterProvider initial={filter}>

@@ -41,3 +41,9 @@ export const DATE_PATTERN = {
 };
 
 export const DEVISE = "FCFA";
+
+export const ETAT_PAIEMENTS: Record<string, string> = {
+  valide: "Validé",
+  rejet: "Rejeté",
+  en_attente: "En attente",
+};

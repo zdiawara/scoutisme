@@ -106,19 +106,19 @@ class PaiementService
 
         return  [
             'signataire' => [
-                'nom' => 'Barro Mohammed',
+                'nom' => $paiement->valideur->name,
             ],
             'personne' => [
-                'nom' => 'Zakaridia DIAWARA',
+                'nom' => $paiement->cotisation->personne->nom . ' ' . $paiement->cotisation->personne->prenom,
             ],
             'montant' => [
-                'paye' => '3 000 Frs',
-                'reste' => '0 Frs'
+                'paye' => $paiement->montant . ' FCFA',
+                'reste' => '0 FCFA'
             ],
             'paiement' => [
                 'numero' => $paiement->numero,
-                'date' => '20/10/2023',
-                'motif' => 'Cotisation 2023'
+                'date' => date('d/m/Y', strtotime($paiement->created_at)),
+                'motif' => 'Cotisation ' . $paiement->cotisation->annee
 
             ],
             'association' => [

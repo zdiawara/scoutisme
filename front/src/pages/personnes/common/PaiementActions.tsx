@@ -65,10 +65,11 @@ export const PaiementActions: FC<PaiementActionsProps> = ({
     <>
       <div className="text-end d-flex justify-content-end">
         <Button
-          variant="outline-light text-dark"
+          title="Afficher les détails du paiement"
+          variant="light text-dark"
           onClick={modalAction.change("voir")}
         >
-          Voir
+          <i className=" uil-eye" />
         </Button>
         <Dropdown className="ms-2">
           <Dropdown.Toggle

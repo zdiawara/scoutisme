@@ -36,9 +36,8 @@
         }
 
         .header-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-weight: 400;
             text-align: center;
         }
     </style>
@@ -46,7 +45,7 @@
 
 </head>
 
-<body>
+<body style="font-size: 14px;">
 
     <table style="width:100%">
 
@@ -67,37 +66,37 @@
                 </td>
             </tr>
 
-            <tr style="padding-top: 1rem;">
-                <td style="padding-bottom: 0.8rem">De M : </td>
+            <tr>
+                <td style="font-weight: 700;">De M : </td>
                 <td>{{$personne['nom']}}</td>
-                <td>-</td>
+                <td></td>
             </tr>
 
             <tr>
-                <td>La somme de : </td>
+                <td style="font-weight: 700;">La somme de : </td>
                 <td>{{$montant['paye']}}</td>
-                <td>-</td>
+                <td></td>
             </tr>
 
             <tr>
-                <td style="padding-top: 2rem; padding-bottom: 2rem;">Pour : </td>
+                <td style="font-weight: 700;">Pour : </td>
                 <td>{{$paiement['motif']}}</td>
-                <td>-</td>
+                <td></td>
             </tr>
 
             <tr>
-                <td>Reste : </td>
+                <td style="font-weight: 700;">Reste : </td>
                 <td>{{$montant['reste']}}</td>
-                <td>-</td>
+                <td></td>
             </tr>
 
             <tr style="text-align: center;">
                 <td></td>
-                <td style="padding-top: 2rem;">
+                <td></td>
+                <td>
                     <div>Signature</div>
-                    <div style="margin-top: 2.5rem;">{{$signataire['nom']}}</div>
+                    <div style="margin-top: 1.25rem;">{{$signataire['nom']}}</div>
                 </td>
-                <td>-</td>
             </tr>
 
 

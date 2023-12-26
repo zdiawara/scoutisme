@@ -9,7 +9,7 @@ import {
   PageHeader,
 } from "pages/common";
 import { PaiementActions } from "pages/personnes/common/PaiementActions";
-import { FC, useContext } from "react";
+import { FC, useContext, useState } from "react";
 import { Button, Col } from "react-bootstrap";
 import { PaiementResource } from "types/personne.type";
 import { PaiementFilter, RequestParam } from "types/request.type";
@@ -17,6 +17,7 @@ import { QUERY_KEY } from "utils/constants";
 import { selectHelper } from "utils/functions";
 import { EtatPaiement } from "./common";
 import { MontantFormatText } from "components";
+import { FilterPaiement } from "./form";
 
 const columns: Columns<PaiementResource>[] = [
   {
@@ -71,21 +72,23 @@ const columns: Columns<PaiementResource>[] = [
 
 const buildRequestParams = (filter: Record<string, any>) => {
   return {
-    etat: selectHelper.getValue(filter.etat),
     search: filter.search,
     page: filter.page,
     size: filter.size,
+    etat: selectHelper.getValue(filter.etat),
+    fonctionId: selectHelper.getValue(filter.fonction),
+    organisationId: selectHelper.getValue(filter.organisation),
   };
 };
 
 const ListPaiement: FC = () => {
   const filterContext = useContext(FilterContext);
   const filter = filterContext.filter as PaiementFilter;
+  const [showFilter, setShowFilter] = useState<boolean>(false);
 
   const { data: results, isLoading } = useQuery({
     queryKey: [QUERY_KEY.paiements, filter],
     networkMode: "offlineFirst",
-    cacheTime: 0,
     queryFn: ({ queryKey }) => {
       return paiementApi.findAll<PaiementResource>(
         buildRequestParams(queryKey[1] as RequestParam)
@@ -113,11 +116,26 @@ const ListPaiement: FC = () => {
         </Col>
         <Col>
           <div className="text-sm-end">
-            <Button variant="secondary" className="ms-2">
+            <Button
+              variant="secondary"
+              className="ms-2"
+              onClick={() => {
+                setShowFilter(true);
+              }}
+            >
               <i className="uil-filter"></i> Filtre avancé
             </Button>
           </div>
         </Col>
+        <FilterPaiement
+          applyFiler={(data) => {
+            filterContext.setFilter((prev) => ({ ...prev, ...data, page: 1 }));
+            setShowFilter(false);
+          }}
+          defaultValues={filterContext.filter}
+          show={showFilter}
+          close={() => setShowFilter(false)}
+        />
       </PageFilter.Container>
 
       <ListResult.Container isLoading={isLoading}>

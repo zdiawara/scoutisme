@@ -21,14 +21,15 @@ export function withFilterForm(Wrapper: FC<FilterWrapperProps>) {
     const methods = useForm({ defaultValues });
 
     const onSubmit = (data: any) => {
-      console.log("oj");
       applyFiler(data);
     };
 
     return (
       <Offcanvas show={show} onHide={close} placement="end">
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Recherche avancée</Offcanvas.Title>
+          <Offcanvas.Title className="text-dark">
+            Recherche avancée
+          </Offcanvas.Title>
         </Offcanvas.Header>
 
         <Offcanvas.Body className="bg-light">

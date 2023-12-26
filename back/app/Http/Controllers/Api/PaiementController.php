@@ -32,16 +32,33 @@ class PaiementController extends Controller
 
         $query = Paiement::query();
 
-        if ($request->has('personneId') || $request->has('annee')) {
-            $query->join('cotisations', function ($builder) {
-                $builder->on('cotisations.id', 'paiements.cotisation_id');
+        $query->join('cotisations', function ($builder) {
+            $builder->on('cotisations.id', 'paiements.cotisation_id');
+        });
+
+        $query->join('personnes', function ($builder) {
+            $builder->on('personnes.id', 'cotisations.personne_id');
+        });
+
+        if ($personneId = $request->input('personneId')) {
+            $query->where('cotisations.personne_id', $personneId);
+        }
+
+        if ($annee = $request->input('annee')) {
+            $query->where('cotisations.annee', $annee);
+        }
+
+        if ($etat = $request->input('etat')) {
+            $query->where('paiements.etat', $etat);
+        }
+
+        if ($search = $request->input("search")) {
+            $query->where(function ($q) use ($search) {
+                $q->where('personnes.nom', 'LIKE', "%$search%")
+                    ->orWhere('personnes.prenom', 'LIKE', "%$search%")
+                    ->orWhere('personnes.code', 'LIKE', "%$search%")
+                    ->orWhere('paiements.numero', 'LIKE', "%$search%");
             });
-            if ($request->has('personneId')) {
-                $query->where('cotisations.personne_id', $request->get('personneId'));
-            }
-            if ($request->has('annee')) {
-                $query->where('cotisations.annee', $request->get('annee'));
-            }
         }
 
         $result = $this->addPaging($request, $query);

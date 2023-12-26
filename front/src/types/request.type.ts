@@ -27,8 +27,6 @@ export type FilterParam = {
 
 export interface PersonneFilter extends Filter {
   search: string | null;
-  page: number;
-  size: number;
   organisation?: SelectItem;
 }
 
@@ -46,9 +44,10 @@ export interface MessageFilter extends Filter {
 }
 
 export interface PaiementFilter extends Filter {
-  etat: string | null;
-  page: number;
-  size: number;
+  etat?: string;
+  search?: string;
+  organisation?: SelectItem;
+  fonction?: SelectItem;
 }
 
 export type ButtonLabel = { saveLabel?: string; cancelLabel?: string };

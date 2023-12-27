@@ -33,7 +33,7 @@ class OrganisationService
         $typeId = collect($body)->get('typeId', null);
 
         $data = collect(DB::select(
-            'SELECT f.id, p.date_debut, p.date_fin, f.type_id,
+            'SELECT a.id, a.date_debut, a.date_fin, f.type_id,
                 IF(p.id is not null, 
                     JSON_OBJECT("id", CAST(p.id AS CHAR(200)), "nom", p.nom, "prenom", p.prenom), 
                     null
@@ -43,7 +43,8 @@ class OrganisationService
 
             FROM fonctions f 
                 INNER JOIN organisations o on o.nature_id = f.nature_id
-                LEFT JOIN personnes p on (p.fonction_id = f.id and p.organisation_id = o.id and (p.date_fin is null or p.date_fin >= now()) )
+                LEFT JOIN attributions a on (a.fonction_id = f.id and a.organisation_id = o.id and (a.date_fin is null or a.date_fin >= now()) )
+                LEFT JOIN personnes p on p.id = a.personne_id
             WHERE o.id = :organisationId and f.code != "scout";
             ',
             ['organisationId' => $organisationId]

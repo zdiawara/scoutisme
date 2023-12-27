@@ -75,7 +75,7 @@ class PersonneService
     {
         return DB::select(
             'SELECT p.nom, p.prenom, p.id FROM personnes p WHERE p.type = :type and 
-                (p.organisation_id is null or p.fonction_id is null or p.date_fin < now())',
+                (p.date_debut is null or (p.fonction_id is not null and p.date_fin is not null and p.date_fin < now()))',
             ['type' => $params['type'] ?? null]
         );
     }

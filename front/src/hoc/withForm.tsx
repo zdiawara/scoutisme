@@ -53,7 +53,7 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
           } else {
             goBack ? goBack() : _goBack();
           }
-          toast("Vos modifications ont bien été enregistrées !", {
+          toast("Modifications enregistrées !", {
             type: toast.TYPE.INFO,
             autoClose: 5000,
             position: "bottom-right",

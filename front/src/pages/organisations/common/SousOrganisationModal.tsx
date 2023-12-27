@@ -173,7 +173,10 @@ export const SousOrganisationModal: FC<SousOrganisationModalProps> = ({
         },
       }}
       onSuccess={() => {
-        query.invalidateQueries([QUERY_KEY.organisations, organisation.id]);
+        query.invalidateQueries([
+          QUERY_KEY.organisation_enfants,
+          organisation.id,
+        ]);
         closeModal();
       }}
       onExit={closeModal}

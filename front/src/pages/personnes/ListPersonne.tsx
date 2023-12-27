@@ -28,11 +28,11 @@ const renderOrganisation = ({ organisation }: PersonneResource) => {
     const natures = [NATURE.unite, NATURE.groupe];
     return (
       <>
-        <span className="text-muted">{organisation.nature.nom}</span>&nbsp;
-        <Link to={LINKS.organisations.view(organisation.id)}>
+        <span className="text-muted">{organisation?.nature?.nom}</span>&nbsp;
+        <Link to={LINKS.organisations.view(organisation?.id)}>
           {organisation.nom}
         </Link>
-        {natures.includes(organisation.nature.code) && (
+        {natures.includes(organisation?.nature?.code) && (
           <TooltipHelper
             description={
               <>

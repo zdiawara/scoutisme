@@ -75,7 +75,8 @@ class PersonneController extends Controller
             } else {
                 $query->where('personnes.organisation_id', $organisationId);
             }
-
+        }
+        if ($request->has('organisationId') || $request->has('fonctionId')) {
             $query->where('personnes.date_debut', '<=', now())
                 ->where(function ($q) {
                     $q->whereNull('personnes.date_fin')

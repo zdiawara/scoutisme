@@ -67,7 +67,7 @@ export function withMutationForm(
       },
       onSuccess: (r) => {
         onSuccess && onSuccess(r?.data);
-        toast("Vos modifications ont bien été enregistrées !", {
+        toast("Modifications enregistrées !", {
           type: toast.TYPE.INFO,
           autoClose: 5000,
           position: "bottom-right",

@@ -28,10 +28,13 @@ export type FilterParam = {
 export interface PersonneFilter extends Filter {
   search: string | null;
   organisation?: SelectItem;
+  perimetres: string[];
 }
 
 export interface OrganisationFilter extends Filter {
   search: string | null;
+  organisation?: SelectItem;
+  perimetres: string[];
 }
 
 export interface FonctionFilter extends Filter {

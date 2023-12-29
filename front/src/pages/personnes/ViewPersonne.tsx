@@ -22,7 +22,7 @@ import { useDroits } from "hooks/useDroits";
 const ViewPersonne: FC = () => {
   const personneId = useParams().id!;
   const [page, setPage] = useState<string>("fiche");
-  const droits = useDroits();
+  const protection = useDroits();
 
   const menus = useMemo(() => {
     return [
@@ -36,7 +36,7 @@ const ViewPersonne: FC = () => {
         label: "Cotisations",
         code: "cotisations",
         icon: ICONS.cotisation,
-        visible: droits.personne.paiements.consulter,
+        visible: protection.cotisation.acces,
       },
       {
         label: "Carte membres",
@@ -48,10 +48,10 @@ const ViewPersonne: FC = () => {
         label: "Fonctions",
         code: "fonctions",
         icon: ICONS.fonction,
-        visible: droits.personne.fonctions.consulter,
+        visible: true,
       },
     ].filter((e) => e.visible);
-  }, [droits]);
+  }, [protection.cotisation.acces]);
 
   const { data: personne, isLoading } = useQuery({
     queryKey: [QUERY_KEY.personnes, personneId],
@@ -62,7 +62,11 @@ const ViewPersonne: FC = () => {
   });
 
   const actions = () => {
-    if (!personne || !droits.personne.modifier(personne) || page !== "fiche") {
+    if (
+      !personne ||
+      !protection.personne.modifier(personne) ||
+      page !== "fiche"
+    ) {
       return null;
     }
     return (

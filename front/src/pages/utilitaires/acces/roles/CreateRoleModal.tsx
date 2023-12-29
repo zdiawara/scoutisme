@@ -1,4 +1,4 @@
-import { CheckBox, HookModalForm, TextInput, View } from "components";
+import { CheckBox, HookModalForm, SwitchBox, TextInput } from "components";
 import { WrapperV2Props, withMutationForm } from "hoc";
 import { FC, Fragment, useState } from "react";
 import { Card, Col, ListGroup, Row } from "react-bootstrap";
@@ -117,45 +117,55 @@ const Form: FC<WrapperV2Props> = (props) => {
               </Card>
             </Col>
             <Col xl={9} lg={9}>
-              <Card body>
-                <Row>
-                  {modules
-                    ?.filter((e) => e.code === page)
-                    ?.map((module) => (
-                      <Fragment>
-                        {module.sous_modules.map((sousModule, i) => (
-                          <Col
-                            xs={12}
-                            key={sousModule.id}
-                            className={`mb-${
-                              i + 1 === module.sous_modules.length ? 0 : 3
-                            }`}
-                          >
-                            <View.Header
-                              label={sousModule.nom}
-                              className="mb-3 text-primary"
-                            />
-                            <Row className="g-2">
-                              {sousModule.fonctionnalites.map((sm) => (
-                                <Col xs={4} key={sm.id}>
-                                  <CheckBox
-                                    name="fonctionnalites"
-                                    id={sm.id}
-                                    label={sm.nom}
-                                    type="checkbox"
-                                    inline
-                                    value={sm.id}
-                                    className="text-dark"
-                                  />
-                                </Col>
-                              ))}
-                            </Row>
-                          </Col>
-                        ))}
-                      </Fragment>
-                    ))}
-                </Row>
-              </Card>
+              {/* <Card body> */}
+              <Row>
+                {modules
+                  ?.filter((e) => e.code === page)
+                  ?.map((module) => (
+                    <Fragment>
+                      {module.sous_modules.map((sousModule, i) => (
+                        <Col
+                          xs={12}
+                          key={sousModule.id}
+                          className={`mb-${
+                            i + 1 === module.sous_modules.length ? 0 : 3
+                          }`}
+                        >
+                          <ListGroup>
+                            <ListGroup.Item className="shadow-sm">
+                              <div className="fw-bold text-dark fs-4">
+                                {sousModule.nom}
+                              </div>
+                            </ListGroup.Item>
+                            {sousModule.fonctionnalites.map((sm) => (
+                              <ListGroup.Item key={sm.id}>
+                                <SwitchBox
+                                  name="fonctionnalites"
+                                  id={sm.id}
+                                  label={
+                                    <>
+                                      <span className="text-primary">
+                                        {sm.nom}
+                                      </span>
+                                      <div className="text-muted">
+                                        {sm.description}
+                                      </div>
+                                    </>
+                                  }
+                                  type="checkbox"
+                                  inline
+                                  value={sm.id}
+                                  className="text-dark"
+                                />
+                              </ListGroup.Item>
+                            ))}
+                          </ListGroup>
+                        </Col>
+                      ))}
+                    </Fragment>
+                  ))}
+              </Row>
+              {/* </Card> */}
             </Col>
           </Row>
         </Col>

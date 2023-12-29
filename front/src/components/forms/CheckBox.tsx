@@ -89,3 +89,50 @@ export const CheckBox: BsPrefixRefForwardingComponent<
     </>
   );
 };
+
+export const SwitchBox: BsPrefixRefForwardingComponent<
+  "input",
+  FormCheckProps
+> = (props) => {
+  const { setValue, control, watch } = useFormContext();
+
+  const isChecked = (value?: any) => {
+    const values = watch(props.name!) || [];
+    return values.includes(value);
+  };
+
+  return (
+    <>
+      <Controller
+        name={props.name || "mode"}
+        control={control}
+        render={() => {
+          return (
+            <Form.Check
+              {...props}
+              type="switch"
+              id={props.id || props.name}
+              onChange={(e) => {
+                const value = e.target.checked ? e.target.value : undefined;
+                let values = watch(props.name!) || [];
+
+                if (props.name) {
+                  if (!value) {
+                    values = values.filter((e: any) => e !== props.value);
+                  } else {
+                    values = [...(values || []), value];
+                  }
+                  setValue(props.name, values);
+                }
+                if (props.onChange) {
+                  props.onChange(e);
+                }
+              }}
+              defaultChecked={isChecked(props.value)}
+            />
+          );
+        }}
+      />
+    </>
+  );
+};

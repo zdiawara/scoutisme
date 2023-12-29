@@ -17,15 +17,20 @@ import { OrganisationResource } from "types/organisation.type";
 import { LINKS } from "utils";
 import { FilterOrganisation } from "./form/FilterOrganisation";
 import { selectHelper } from "utils/functions";
+import { useDroits } from "hooks/useDroits";
 
 const buildRequestParams = (filter: Record<string, any>) => {
   return {
     natureId: selectHelper.getValue(filter.nature),
     typeId: selectHelper.getValue(filter.type),
+    organisationId: selectHelper.getValue(filter.organisation),
     etat: selectHelper.getValue(filter.etat),
     search: filter.search,
     page: filter.page,
     size: filter.size,
+    perimetres: filter?.perimetres?.length
+      ? filter.perimetres.join(";")
+      : undefined,
   };
 };
 
@@ -42,7 +47,7 @@ const columns: Columns<OrganisationResource>[] = [
           >
             {organisation.nom}
           </Link>
-          <span className="text-muted ">{organisation.nature.nom}</span>
+          <span className="text-muted">{organisation.nature.nom}</span>
         </Stack>
       );
     },
@@ -85,6 +90,7 @@ const ListOrganisation: FC = () => {
   const filterContext = useContext(FilterContext);
   const filter = filterContext.filter as OrganisationFilter;
   const [show, setShow] = useState<boolean>(false);
+  const { organisation } = useDroits();
 
   const { data: result, isLoading } = useQuery({
     queryKey: [QUERY_KEY.organisations, filter],
@@ -105,9 +111,11 @@ const ListOrganisation: FC = () => {
         icon={ICONS.organisation}
         className="my-4"
         right={
-          <Link to={LINKS.organisations.create} className="btn btn-primary">
-            Ajouter une organisation
-          </Link>
+          organisation.creer && (
+            <Link to={LINKS.organisations.create} className="btn btn-primary">
+              Ajouter une organisation
+            </Link>
+          )
         }
       />
 

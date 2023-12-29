@@ -31,13 +31,6 @@ export const MENU_ITEMS = [
     url: LINKS.personnes.base,
   },
   {
-    key: "paiements",
-    label: "Paiements",
-    isTitle: false,
-    icon: ICONS.paiement,
-    url: LINKS.paiements.base,
-  },
-  {
     key: "organisations",
     label: "Organisations",
     isTitle: false,
@@ -45,19 +38,26 @@ export const MENU_ITEMS = [
     url: LINKS.organisations.base,
   },
   {
-    key: "message",
+    key: "paiements",
+    label: "Paiements",
+    isTitle: false,
+    icon: ICONS.paiement,
+    url: LINKS.paiements.base,
+  },
+  {
+    key: "mails",
     label: "Mails",
     isTitle: false,
     icon: ICONS.message,
     url: LINKS.messages.base,
   },
-  {
+  /*   {
     key: "evenements",
     label: "Evenements",
     isTitle: false,
     icon: ICONS.events,
     url: LINKS.events.base,
-  },
+  }, */
   {
     key: "params",
     label: "Paramètres",

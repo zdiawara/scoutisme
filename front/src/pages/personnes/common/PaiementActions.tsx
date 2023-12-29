@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import { Button, Dropdown } from "react-bootstrap";
 import { PaiementResource, PersonneResource } from "types/personne.type";
 import { useModalAction } from "hooks";
@@ -10,57 +10,65 @@ import {
 import { DeletePaiementModal } from "pages/paiements/modal/DeletePaiementModal";
 import { paiementApi } from "api";
 import { VoirPaiementModal } from "pages/paiements/modal/VoirPaiement";
+import { useDroits } from "hooks/useDroits";
 
 type PaiementActionsProps = {
   personne: PersonneResource;
   paiement: PaiementResource;
 };
 
-const ACTIONS = [
-  /*   {
-    label: "Modifier",
-    icon: "uil-edit-alt",
-    description: "Mettre à jour les informations de l'affectation",
-    code: "modifier",
-  }, */
-  {
-    label: "Valider",
-    icon: "uil-check-circle",
-    description: "Valider le paiement",
-    code: "valider",
-  },
-  {
-    label: "Rejeter",
-    icon: "uil-multiply",
-    description: "Rejeter le paiement",
-    code: "rejeter",
-  },
-  {
-    label: "Modifier",
-    icon: "uil-edit-alt",
-    description: "Modifier le paiement",
-    code: "modifier",
-  },
-  {
-    label: "Supprimer",
-    icon: "uil-trash-alt",
-    description: "Supprimer le paiement",
-    code: "supprimer",
-  },
-  {
-    label: "Récu",
-    icon: "uil-file-check-alt",
-    description: "Télécharger le récu du paiement",
-    code: "telecharger_recu",
-  },
-];
-
 export const PaiementActions: FC<PaiementActionsProps> = ({
   personne,
   paiement,
 }) => {
   const modalAction = useModalAction();
+  const { cotisation } = useDroits();
 
+  const actions = useMemo(() => {
+    const ACTIONS = [
+      {
+        label: "Valider",
+        icon: "uil-check-circle",
+        description: "Valider le paiement",
+        code: "valider",
+        visible: cotisation.paiements.valider,
+      },
+      {
+        label: "Rejeter",
+        icon: "uil-multiply",
+        description: "Rejeter le paiement",
+        code: "rejeter",
+        visible: cotisation.paiements.rejeter,
+      },
+      {
+        label: "Modifier",
+        icon: "uil-edit-alt",
+        description: "Modifier le paiement",
+        code: "modifier",
+        visible: cotisation.paiements.creer,
+      },
+      {
+        label: "Supprimer",
+        icon: "uil-trash-alt",
+        description: "Supprimer le paiement",
+        code: "supprimer",
+        visible: cotisation.paiements.creer,
+      },
+      {
+        label: "Récu",
+        icon: "uil-file-check-alt",
+        description: "Télécharger le récu du paiement",
+        code: "telecharger_recu",
+        visible: cotisation.paiements.telecharger_recu,
+      },
+    ];
+
+    return ACTIONS.filter((e) => e.visible);
+  }, [cotisation]);
+
+  if (!Boolean(actions.length)) {
+    return null;
+  }
   return (
     <>
       <div className="text-end d-flex justify-content-end">
@@ -71,6 +79,7 @@ export const PaiementActions: FC<PaiementActionsProps> = ({
         >
           <i className=" uil-eye" />
         </Button>
+
         <Dropdown className="ms-2">
           <Dropdown.Toggle
             as={Button}
@@ -81,7 +90,7 @@ export const PaiementActions: FC<PaiementActionsProps> = ({
             <i className="mdi mdi-dots-vertical" />
           </Dropdown.Toggle>
           <Dropdown.Menu className="topbar-dropdown-menu mt-2">
-            {ACTIONS.map((item) => (
+            {actions.map((item) => (
               <Dropdown.Item
                 as="button"
                 className="py-2 px-3"

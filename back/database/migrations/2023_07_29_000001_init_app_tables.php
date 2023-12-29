@@ -288,6 +288,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('nom');
             $table->string('code');
+            $table->string('description')->nullable();
             $table->uuid('module_id');
             $table->timestamps();
             $table->uuid('created_by')->nullable();

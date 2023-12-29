@@ -8,6 +8,7 @@ use App\Http\Services\OrganisationService;
 use App\ModelFilters\OrganisationFilter;
 use App\Models\Organisation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrganisationController extends Controller
 {
@@ -25,11 +26,32 @@ class OrganisationController extends Controller
     {
         $query = Organisation::filter($request->all(), OrganisationFilter::class);
 
+        if ($request->has('organisationId')) {
+            $organisationId = $request->get('organisationId');
+            if ($request->has('perimetres')) {
+                $query->join('natures as enfant_nature', function ($q) {
+                    $q->on('enfant_nature.id', 'organisations.nature_id');
+                });
+                $perimetres = explode(";", $request->get('perimetres', ""));
+                // Tenir compte d'une organisation et ses sous organisations
+                $query->where(function ($q) use ($organisationId, $perimetres) {
+                    $q->where(function ($qb) use ($organisationId, $perimetres) {
+                        $qb->where(DB::raw("JSON_CONTAINS(JSON_EXTRACT(organisations.parents, '$[*].id') , '\"" . $organisationId . "\"')"), '=', 1)
+                            ->whereIn('enfant_nature.code', $perimetres);
+                    })->orWhere('organisations.id', $organisationId);
+                });
+            } else {
+                $query->where('id', $organisationId);
+            }
+        }
+
         $data = collect([]);
 
         $result = $this->addPaging($request, $query);
 
+
         $data = $result['query']
+            ->select('organisations.*')
             ->orderBy('nom', 'asc')
             ->with(['nature', 'type', 'parent'])
             ->get();

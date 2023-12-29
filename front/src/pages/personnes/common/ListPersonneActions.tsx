@@ -28,19 +28,19 @@ export const ListPersonneActions: FC<ListPersonneActionsProps> = () => {
         icon: ICONS.personne,
         description: "Créer un nouvel adulte ",
         code: "adulte",
-        visible: personne.createAdulte(),
+        visible: personne.adultes.creer,
       },
       {
         label: "Scout",
         icon: ICONS.add,
         description: "Créer un nouveau scout dans une unité",
         code: "scout",
-        visible: personne.createScout(),
+        visible: personne.scouts.creer,
       },
     ].filter((e) => e.visible);
   }, [personne]);
 
-  if (!personne.create()) {
+  if (!menus.length) {
     return null;
   }
 

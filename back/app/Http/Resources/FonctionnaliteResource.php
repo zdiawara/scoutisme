@@ -18,6 +18,7 @@ class FonctionnaliteResource extends JsonResource
             'id' => $this->id,
             'nom' => $this->nom,
             'code' => $this->code,
+            'description' => $this->description,
             'module' =>  new ModuleResource($this->whenLoaded('module')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

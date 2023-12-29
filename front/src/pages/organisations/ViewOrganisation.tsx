@@ -15,25 +15,12 @@ import {
   SousOrganisation,
 } from "./view";
 import classNames from "classnames";
-
-const TABS = [
-  { label: "Détails", code: "fiche", icon: ICONS.detail },
-  {
-    label: "Sous organisation",
-    code: "sous_organisation",
-    icon: ICONS.organisation,
-  },
-  {
-    label: "Direction",
-    code: "direction",
-    icon: ICONS.direction,
-  },
-  { label: "Scouts", code: "scouts", icon: ICONS.personne },
-];
+import { useDroits } from "hooks/useDroits";
 
 const ViewOrganisation: FC = () => {
   const { id } = useParams();
   const [page, setPage] = useState<string>("fiche");
+  const protection = useDroits();
 
   const { data: organisation, isLoading } = useQuery({
     queryKey: [QUERY_KEY.organisations, id],
@@ -49,7 +36,26 @@ const ViewOrganisation: FC = () => {
     if (!organisation) {
       return [];
     }
-    return TABS.filter((item) => {
+
+    const TABS = [
+      { label: "Détails", code: "fiche", icon: ICONS.detail, visible: true },
+      {
+        label: "Direction",
+        code: "direction",
+        icon: ICONS.direction,
+        visible: true,
+      },
+      {
+        label: "Scouts",
+        code: "scouts",
+        icon: ICONS.personne,
+        visible: Object.values(protection.personne.scouts).some((e) => e),
+      },
+    ];
+
+    console.log(protection.personne.scouts);
+
+    return TABS.filter((e) => e.visible).filter((item) => {
       if (organisation.nature.code !== NATURE.unite) {
         return item.code !== "scouts";
       }
@@ -58,7 +64,7 @@ const ViewOrganisation: FC = () => {
       }
       return true;
     });
-  }, [organisation]);
+  }, [organisation, protection.personne.scouts]);
 
   useEffect(() => {
     setPage("fiche");
@@ -77,10 +83,15 @@ const ViewOrganisation: FC = () => {
         return <OrganisationMembres organisation={organisation} />;
       case "scouts":
         return <OrganisationScouts organisation={organisation} />;
-      case "sous_organisation":
-        return <SousOrganisation organisation={organisation} />;
       default:
-        return <DetailOrganisation organisation={organisation} />;
+        return (
+          <>
+            <DetailOrganisation organisation={organisation} />
+            {organisation.nature.code !== NATURE.unite && (
+              <SousOrganisation organisation={organisation} />
+            )}
+          </>
+        );
     }
   };
 
@@ -89,7 +100,7 @@ const ViewOrganisation: FC = () => {
   }
 
   const actions = () => {
-    if (!organisation) {
+    if (!organisation || !protection.organisation.creer || page !== "fiche") {
       return null;
     }
 

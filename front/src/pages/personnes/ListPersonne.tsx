@@ -1,4 +1,4 @@
-import { FC, useContext, useState } from "react";
+import { FC, useContext, useMemo, useState } from "react";
 import { Button, Col, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import {
@@ -22,6 +22,8 @@ import { ExportPersonneModal } from "./modal";
 import { NATURE, QUERY_KEY } from "utils/constants";
 import { PersonneActions } from "./common/PersonneActions";
 import { EnvoyerMailModal } from "./modal/EnvoyerMailModal";
+import { useAuth } from "hooks";
+import { useDroits } from "hooks/useDroits";
 
 const renderOrganisation = ({ organisation }: PersonneResource) => {
   if (organisation) {
@@ -99,7 +101,9 @@ const buildRequestParams = (filter: Record<string, any>) => {
     genreId: selectHelper.getValue(filter.genre),
     fonctionId: selectHelper.getValue(filter.fonction),
     organisationId: selectHelper.getValue(filter.organisation),
-    inclureSousOrganisation: filter.inclureSousOrganisation,
+    perimetres: filter.inclureSousOrganisation
+      ? filter.perimetres.join(";")
+      : undefined,
     search: filter.search,
     page: filter.page,
     size: filter.size,
@@ -112,6 +116,8 @@ const ListPersonne: FC = () => {
   const [show, setShow] = useState<boolean>(false);
   const [exportModal, setExportModal] = useState<boolean>(false);
   const [mailModal, setMailModal] = useState<boolean>(false);
+  const { userDroit } = useAuth();
+  const { mail } = useDroits();
 
   const { data: result, isLoading } = useQuery({
     queryKey: [QUERY_KEY.personnes, filter],
@@ -124,48 +130,55 @@ const ListPersonne: FC = () => {
     },
   });
 
-  const columns: Columns<PersonneResource>[] = [
-    {
-      name: "nom",
-      label: "Nom",
-      Cell: renderPersonne,
-    },
-
-    {
-      name: "fonction",
-      label: "Fonction",
-      Cell: ({ fonction }) => {
-        if (fonction) {
-          return <span>{fonction.nom}</span>;
-        }
-        return <span>-</span>;
+  const columns = useMemo(() => {
+    const cols: Columns<PersonneResource>[] = [
+      {
+        name: "nom",
+        label: "Nom",
+        Cell: renderPersonne,
       },
-    },
 
-    {
-      name: "organisation",
-      label: "Organisation",
-      Cell: renderOrganisation,
-    },
-
-    {
-      name: "email",
-      label: "Email",
-      Cell: ({ email }) => <span>{email}</span>,
-    },
-    {
-      name: "actions",
-      label: "Actions",
-      headClassName: "text-end",
-      Cell: (personne) => {
-        return (
-          <div className="text-end">
-            <PersonneActions personne={personne} />
-          </div>
-        );
+      {
+        name: "fonction",
+        label: "Fonction",
+        Cell: ({ fonction }) => {
+          if (fonction) {
+            return <span>{fonction.nom}</span>;
+          }
+          return <span>-</span>;
+        },
       },
-    },
-  ];
+
+      {
+        name: "organisation",
+        label: "Organisation",
+        Cell: renderOrganisation,
+      },
+
+      {
+        name: "email",
+        label: "Email",
+        Cell: ({ email }) => <span>{email}</span>,
+      },
+    ];
+
+    if (userDroit?.isAdmin) {
+      cols.push({
+        name: "actions",
+        label: "Actions",
+        headClassName: "text-end",
+        Cell: (personne) => {
+          return (
+            <div className="text-end">
+              <PersonneActions personne={personne} />
+            </div>
+          );
+        },
+      });
+    }
+
+    return cols;
+  }, [userDroit]);
 
   return (
     <>
@@ -196,15 +209,17 @@ const ListPersonne: FC = () => {
             >
               <i className="uil-export"></i> Exporter
             </Button>
-            <Button
-              variant="outline-primary"
-              className="ms-2"
-              onClick={() => {
-                setMailModal(true);
-              }}
-            >
-              <i className="uil-message"></i> Mail
-            </Button>
+            {mail.mails.envoyer && (
+              <Button
+                variant="outline-primary"
+                className="ms-2"
+                onClick={() => {
+                  setMailModal(true);
+                }}
+              >
+                <i className="uil-message"></i> Mail
+              </Button>
+            )}
             <Button
               variant="secondary"
               className="ms-2"

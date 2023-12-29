@@ -8,6 +8,7 @@ import { QUERY_KEY } from "utils/constants";
 import { organisationApi } from "api";
 import { Button } from "react-bootstrap";
 import { SousOrganisationActions } from "../common";
+import { useDroits } from "hooks/useDroits";
 
 type SousOrganisationProps = {
   organisation: OrganisationResource;
@@ -38,6 +39,8 @@ export const SousOrganisation: FC<SousOrganisationProps> = ({
         })
         .then((r) => r.data),
   });
+
+  const protection = useDroits();
 
   const columns: Columns<OrganisationResource>[] = [
     {
@@ -91,7 +94,11 @@ export const SousOrganisation: FC<SousOrganisationProps> = ({
       columns={columns}
       isLoading={query.isLoading}
       error={query.error}
-      actions={<SousOrganisationActions organisation={organisation} />}
+      actions={
+        protection.organisation.creer && (
+          <SousOrganisationActions organisation={organisation} />
+        )
+      }
     />
   );
 };

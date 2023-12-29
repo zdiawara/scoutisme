@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import ProfileDropdown from "./ProfileDropdown";
 import userImage from "assets/images/users/avatar-1.jpg";
+import { useAuth } from "hooks";
 /* import ProfileDropdown from "./ProfileDropdown";
 import { ProfileOption } from "layout/types"; */
 
@@ -47,7 +48,10 @@ export const Header = ({
   topbarDark,
 }: TopbarProps) => {
   const containerCssClasses = !hideLogo ? "container-fluid" : "";
-
+  const { user } = useAuth();
+  if (!user) {
+    return null;
+  }
   return (
     <>
       <div className={classNames("navbar-custom", navCssClasses)}>
@@ -57,8 +61,8 @@ export const Header = ({
               <ProfileDropdown
                 userImage={userImage}
                 menuItems={profileMenus}
-                username={"Zakaridia DIAWARA"}
-                userTitle={"Founder"}
+                username={user.name}
+                userTitle={user.role.nom}
               />
             </li>
           </ul>

@@ -10,7 +10,7 @@ class Fonctionnalite extends Model
 {
     use HasUuids, Audit;
 
-    protected $fillable = ["nom", "code", "module_id"];
+    protected $fillable = ["nom", "code", "module_id", 'description'];
 
     public function module()
     {

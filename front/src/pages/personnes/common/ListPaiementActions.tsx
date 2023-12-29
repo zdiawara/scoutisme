@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import { Button } from "react-bootstrap";
 import { PersonneResource } from "types/personne.type";
 import { CreerPaiementModal } from "pages/paiements/modal";
+import { useDroits } from "hooks/useDroits";
 
 type ListPaiementActionsProps = {
   personne: PersonneResource;
@@ -13,7 +14,7 @@ export const ListPaiementActions: FC<ListPaiementActionsProps> = ({
   annee,
 }) => {
   const [action, setAction] = useState<string | undefined>();
-
+  const { cotisation } = useDroits();
   const closeModal = () => {
     setAction(undefined);
   };
@@ -22,6 +23,9 @@ export const ListPaiementActions: FC<ListPaiementActionsProps> = ({
     setAction(code);
   };
 
+  if (!cotisation.paiements.creer) {
+    return null;
+  }
   return (
     <>
       <Button

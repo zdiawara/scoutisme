@@ -84,7 +84,7 @@ export const PersonneFonctions: FC<PersonneFonctionsProps> = ({ personne }) => {
       },
     ];
 
-    if (droits.personne.fonctions.supprimer) {
+    if (droits.personne.affecter(personne)) {
       data.push({
         name: "actions",
         label: "Actions",
@@ -106,7 +106,7 @@ export const PersonneFonctions: FC<PersonneFonctionsProps> = ({ personne }) => {
     }
 
     return data;
-  }, [droits.personne]);
+  }, [droits.personne, personne]);
 
   return (
     <>
@@ -121,7 +121,7 @@ export const PersonneFonctions: FC<PersonneFonctionsProps> = ({ personne }) => {
         isLoading={query.isLoading}
         error={query.error}
         actions={
-          droits.personne.fonctions.affecter && (
+          droits.personne.affecter(personne) && (
             <Button size="sm" onClick={modalAction.change("affecter")}>
               <i className={`uil-link me-1`}></i>Affecter
             </Button>

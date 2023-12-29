@@ -8,22 +8,35 @@ import {
   PersonneFilter,
 } from "types/request.type";
 import { useAuth } from "hooks";
+import { OrganisationResource } from "types/organisation.type";
+
+const computeOrganisation = (organisation?: OrganisationResource) => {
+  if (organisation) {
+    return {
+      value: organisation.id,
+      label: organisation.nom,
+    };
+  }
+  return undefined;
+};
 
 export const PersonneOutlet = () => {
   const auth = useAuth();
+  const isAdmin = auth.userDroit?.isAdmin;
+  const personne = auth.user?.personne;
 
-  const organisation = auth.user?.personne?.organisation;
   const filter: PersonneFilter = {
     search: "",
     page: 1,
     size: 10,
-    organisation: organisation
-      ? {
-          value: organisation.id,
-          label: organisation.nom,
-        }
-      : undefined,
+    perimetres: [],
   };
+
+  if (!isAdmin) {
+    filter.organisation = computeOrganisation(personne?.organisation);
+    filter.perimetres = auth.user?.role?.perimetres || [];
+  }
+
   return (
     <FilterProvider initial={filter}>
       <Outlet />
@@ -32,11 +45,22 @@ export const PersonneOutlet = () => {
 };
 
 export const OrganisationOutlet = () => {
+  const auth = useAuth();
+  const isAdmin = auth.userDroit?.isAdmin;
+  const personne = auth.user?.personne;
+
   const filter: OrganisationFilter = {
     search: "",
     page: 1,
     size: 10,
+    perimetres: [],
   };
+
+  if (!isAdmin) {
+    filter.organisation = computeOrganisation(personne?.organisation);
+    filter.perimetres = auth.user?.role?.perimetres || [];
+  }
+
   return (
     <FilterProvider initial={filter}>
       <Outlet />

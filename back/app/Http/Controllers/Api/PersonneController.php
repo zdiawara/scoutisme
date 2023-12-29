@@ -62,15 +62,20 @@ class PersonneController extends Controller
         $request = collect($params);
         if ($request->has('organisationId')) {
             $organisationId = $request->get('organisationId');
-            $inclureSousOrganisation = $request->get('inclureSousOrganisation', null);
-            if ($inclureSousOrganisation === 'true') {
+            if ($request->has('perimetres')) {
                 $query->join('organisations as o', function ($q) {
                     $q->on('o.id', 'personnes.organisation_id');
                 });
+                $query->join('natures as enfant_nature', function ($q) {
+                    $q->on('enfant_nature.id', 'o.nature_id');
+                });
+                $perimetres = explode(";", $request->get('perimetres', ""));
                 // Tenir compte d'une organisation et ses sous organisations
-                $query->where(function ($q) use ($organisationId) {
-                    $q->where(DB::raw("JSON_CONTAINS(JSON_EXTRACT(o.parents, '$[*].id') , '\"" . $organisationId . "\"')"), '=', 1)
-                        ->orWhere('o.id', $organisationId);
+                $query->where(function ($q) use ($organisationId, $perimetres) {
+                    $q->where(function ($qb) use ($organisationId, $perimetres) {
+                        $qb->where(DB::raw("JSON_CONTAINS(JSON_EXTRACT(o.parents, '$[*].id') , '\"" . $organisationId . "\"')"), '=', 1)
+                            ->whereIn('enfant_nature.code', $perimetres);
+                    })->orWhere('o.id', $organisationId);
                 });
             } else {
                 $query->where('personnes.organisation_id', $organisationId);

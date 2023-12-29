@@ -22,6 +22,7 @@ export type FonctionnaliteResource = {
   nom: string;
   code: string;
   module: ModuleResource;
+  description: string;
 };
 
 export type HabilitationResource = {

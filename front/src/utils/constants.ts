@@ -30,6 +30,11 @@ export const NATURE = {
   national: "national",
 };
 
+export const TYPE_ORGANISATION = {
+  equipe_nationale: "equipe_nationale",
+  conseil_national: "conseil_national",
+};
+
 export const TYPE_PERSONNES = {
   SCOUT: "scout",
   ADULTE: "adulte",

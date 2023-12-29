@@ -142,7 +142,7 @@ return new class extends Migration
         ]);
 
 
-        collect([Modules::MODULE_PERSONNE, Modules::MODULE_ORGANISATION])
+        collect([Modules::MODULE_PERSONNE, Modules::MODULE_ORGANISATION, Modules::MODULE_PAIEMENT, Modules::MODULE_MAIL])
             ->each(function ($item) {
                 $this->createModuleWithFonctionnalities($item);
             });

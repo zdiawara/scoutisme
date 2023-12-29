@@ -1,6 +1,6 @@
 import { View } from "components";
 import { Columns, ICONS, StaticTable } from "pages/common";
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { Button } from "react-bootstrap";
 import { OrganisationResource } from "types/organisation.type";
 import { organisationApi } from "api";
@@ -17,6 +17,7 @@ import { AttributionActions } from "pages/attributions/common";
 import { OrganisationMembreModal } from "pages/attributions/common";
 import { Link } from "react-router-dom";
 import { LINKS } from "utils";
+import { useDroits } from "hooks/useDroits";
 
 type OrganisationMembresProps = {
   organisation: OrganisationResource;
@@ -40,6 +41,8 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
   const typeId =
     organisation.nature.code === NATURE.national ? organisation.type?.id : null;
 
+  const protection = useDroits();
+
   const query = useQuery({
     queryKey: [QUERY_KEY.direction, organisation.id],
     networkMode: "offlineFirst",
@@ -50,80 +53,87 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
     OrganisationAttribution | undefined
   >();
 
-  const columns: Columns<OrganisationAttribution>[] = [
-    {
-      name: "fonction",
-      label: "Fonction",
-      Cell: ({ fonction }) => (
-        <span className="text-primary">{fonction.nom}</span>
-      ),
-    },
-    {
-      name: "personne",
-      label: "Personne",
-      Cell: (attribution) => {
-        if (!attribution.personne) {
-          return <View.Empty />;
-        }
-        return (
-          <Link to={LINKS.personnes.view(attribution.personne.id)}>
-            <span className="text-primary fw-semibold">
-              {attribution.personne.prenom} {attribution.personne.nom}
-            </span>
-          </Link>
-        );
+  const columns = useMemo(() => {
+    const cols: Columns<OrganisationAttribution>[] = [
+      {
+        name: "fonction",
+        label: "Fonction",
+        Cell: ({ fonction }) => (
+          <span className="text-primary">{fonction.nom}</span>
+        ),
       },
-    },
-    {
-      name: "date_debut",
-      label: "Date",
-      Cell: ({ date_debut, date_fin }) => {
-        if (!date_debut) {
-          return <View.Empty />;
-        }
-        const dateDebut = dateFormater.formatStr(date_debut);
+      {
+        name: "personne",
+        label: "Personne",
+        Cell: (attribution) => {
+          if (!attribution.personne) {
+            return <View.Empty />;
+          }
+          return (
+            <Link to={LINKS.personnes.view(attribution.personne.id)}>
+              <span className="text-primary fw-semibold">
+                {attribution.personne.prenom} {attribution.personne.nom}
+              </span>
+            </Link>
+          );
+        },
+      },
+      {
+        name: "date_debut",
+        label: "Date",
+        Cell: ({ date_debut, date_fin }) => {
+          if (!date_debut) {
+            return <View.Empty />;
+          }
+          const dateDebut = dateFormater.formatStr(date_debut);
 
-        if (date_debut && !date_fin) {
-          return `Depuis le ${dateDebut}`;
-        }
-        return `Du ${dateFormater.formatStr(
-          date_debut
-        )} au ${dateFormater.formatStr(date_fin)}`;
+          if (date_debut && !date_fin) {
+            return `Depuis le ${dateDebut}`;
+          }
+          return `Du ${dateFormater.formatStr(
+            date_debut
+          )} au ${dateFormater.formatStr(date_fin)}`;
+        },
       },
-    },
-    {
-      name: "actions",
-      label: "Actions",
-      headClassName: "text-end",
-      Cell: (attribution) => {
-        return (
-          <div className="text-end d-flex justify-content-end">
-            {!attribution.personne ? (
-              <Button
-                variant="outline-primary"
-                onClick={() => {
-                  setAttributionSelected(attribution);
-                }}
-              >
-                <i className="uil-link"></i> Affecter
-              </Button>
-            ) : (
-              <AttributionActions
-                attribution={
-                  {
-                    ...attribution,
-                    fonction: attribution.fonction as FonctionResource,
-                    organisation,
-                    personne: attribution.personne as PersonneResource,
-                  } as AttributionResource
-                }
-              />
-            )}
-          </div>
-        );
-      },
-    },
-  ];
+    ];
+
+    if (protection.organisation.direction(organisation)) {
+      cols.push({
+        name: "actions",
+        label: "Actions",
+        headClassName: "text-end",
+        Cell: (attribution) => {
+          return (
+            <div className="text-end d-flex justify-content-end">
+              {!attribution.personne ? (
+                <Button
+                  variant="outline-primary"
+                  onClick={() => {
+                    setAttributionSelected(attribution);
+                  }}
+                >
+                  <i className="uil-link"></i> Affecter
+                </Button>
+              ) : (
+                <AttributionActions
+                  attribution={
+                    {
+                      ...attribution,
+                      fonction: attribution.fonction as FonctionResource,
+                      organisation,
+                      personne: attribution.personne as PersonneResource,
+                    } as AttributionResource
+                  }
+                />
+              )}
+            </div>
+          );
+        },
+      });
+    }
+
+    return cols;
+  }, [organisation, protection.organisation]);
 
   return (
     <>

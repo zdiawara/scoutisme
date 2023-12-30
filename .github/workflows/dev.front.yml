@@ -30,4 +30,4 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           local-dir: /home/runner/work/scoutisme/scoutisme/front/build/
-          server-dir: asbf/
+          server-dir: ./

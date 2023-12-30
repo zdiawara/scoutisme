@@ -2,18 +2,27 @@
 
 namespace App\Http\Services;
 
+use App\Mail\CreerUserMail;
 use App\Models\Fonctionnalite;
 use App\Models\Personne;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class UserService
 {
     public function create(array $body): User
     {
+        DB::beginTransaction();
         $user = User::create(array_merge(
             $body,
             ['password' => bcrypt('secret')]
         ));
+
+        Mail::to('zakaridia.diawara@gmail.com')
+            ->send(new CreerUserMail($user));
+
+        DB::commit();
 
         return $user;
     }

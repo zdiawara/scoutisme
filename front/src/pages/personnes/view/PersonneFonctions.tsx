@@ -12,9 +12,9 @@ import { Link } from "react-router-dom";
 import { AttributionResource, PersonneResource } from "types/personne.type";
 import { LINKS } from "utils";
 import { QUERY_KEY } from "utils/constants";
-import { dateFormater, isActive } from "utils/functions";
 import { useModalAction } from "hooks";
 import { useDroits } from "hooks/useDroits";
+import { DateFormater, DateUtils } from "utils/DateUtils";
 
 type PersonneFonctionsProps = {
   personne: PersonneResource;
@@ -61,23 +61,21 @@ export const PersonneFonctions: FC<PersonneFonctionsProps> = ({ personne }) => {
         name: "date_debut",
         label: "Date début",
         Cell: ({ date_debut }) =>
-          date_debut ? dateFormater.formatStr(date_debut) : <View.Empty />,
+          DateFormater.toDate(date_debut) || <View.Empty />,
       },
       {
         name: "date_fin",
         label: "Date fin",
-        Cell: ({ date_fin }) =>
-          date_fin ? dateFormater.formatStr(date_fin) : <View.Empty />,
+        Cell: ({ date_fin }) => DateFormater.toDate(date_fin) || <View.Empty />,
       },
       {
         name: "etat",
         label: "Etat",
         Cell: ({ date_fin, date_debut }) => {
-          const today = new Date();
-          const active = isActive(today, date_debut, date_fin);
+          const isActive = DateUtils.isActive(new Date(), date_debut, date_fin);
           return (
-            <Badge bg={active ? "success" : "danger"}>
-              {active ? "Actif" : "Inactif"}
+            <Badge bg={isActive ? "success" : "danger"}>
+              {isActive ? "Actif" : "Inactif"}
             </Badge>
           );
         },
@@ -92,8 +90,8 @@ export const PersonneFonctions: FC<PersonneFonctionsProps> = ({ personne }) => {
         Cell: (attribution) => {
           const today = new Date();
           const { date_debut, date_fin } = attribution;
-          const active = isActive(today, date_debut, date_fin);
-          if (active) {
+          const isActive = DateUtils.isActive(today, date_debut, date_fin);
+          if (isActive) {
             return (
               <div className="text-end">
                 <AttributionActions attribution={attribution} />

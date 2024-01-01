@@ -3,6 +3,7 @@ import { Card, Col, Row } from "react-bootstrap";
 import { Header } from "pages/common";
 import { PersonneResource } from "types/personne.type";
 import { View } from "components";
+import { DateFormater } from "utils/DateUtils";
 
 type PersonneDetailsProps = {
   personne: PersonneResource;
@@ -40,7 +41,7 @@ export const PersonneDetails: FC<PersonneDetailsProps> = ({ personne }) => {
 
                 <Col sm={4}>
                   <View.Item label="Date naissance">
-                    {personne.date_naissance}
+                    {DateFormater.toDate(personne.date_naissance)}
                   </View.Item>
                 </Col>
 

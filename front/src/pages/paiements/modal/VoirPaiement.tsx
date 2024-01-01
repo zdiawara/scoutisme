@@ -3,7 +3,7 @@ import { FC } from "react";
 import { Button, Card, Col, Modal, Row } from "react-bootstrap";
 import { PaiementResource } from "types/personne.type";
 import { EtatPaiement } from "../common";
-import { dateFormater } from "utils/functions";
+import { DateFormater } from "utils/DateUtils";
 
 type ModalProps = {
   closeModal: () => void;
@@ -61,10 +61,7 @@ export const VoirPaiementModal: FC<ModalProps> = ({ closeModal, paiement }) => {
             </Col>
             <Col xs={4}>
               <View.Item label="Date traitement">
-                {dateFormater.formatStr(
-                  paiement.date_traitement,
-                  "dd/MM/yyyy HH:mm"
-                )}
+                {DateFormater.toDateTime(paiement.date_traitement)}
               </View.Item>
             </Col>
           </Row>

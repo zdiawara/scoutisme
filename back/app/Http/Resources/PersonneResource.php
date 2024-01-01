@@ -36,7 +36,7 @@ class PersonneResource extends JsonResource
         if ($this->date_debut == null) {
             return false;
         }
-        $date_debut = Carbon::createFromFormat('Y-m-d H:i:s', $this->date_debut)->subHours(1);
+        $date_debut = Carbon::createFromFormat('Y-m-d H:i:s', $this->date_debut);
         $date_fin = $this->date_fin == null ? null : Carbon::createFromFormat('Y-m-d H:i:s', $this->date_fin);
         $now = Carbon::now();
         if ($date_fin == null) {

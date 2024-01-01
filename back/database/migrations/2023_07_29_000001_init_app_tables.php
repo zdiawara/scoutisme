@@ -126,7 +126,7 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->string('email')->unique()->nullable();
             $table->string('telephone')->nullable();
-            $table->date('date_naissance')->nullable();
+            $table->dateTimeTz('date_naissance')->nullable();
             $table->string('lieu_naissance')->nullable();
             $table->string('profession')->nullable();
             $table->string('type'); // scout; adulte
@@ -135,8 +135,8 @@ return new class extends Migration
 
             $table->uuid('organisation_id')->nullable();
             $table->uuid('fonction_id')->nullable();
-            $table->dateTime('date_debut')->nullable();
-            $table->dateTime('date_fin')->nullable();
+            $table->dateTimeTz('date_debut')->nullable();
+            $table->dateTimeTz('date_fin')->nullable();
 
             $table->uuid('ville_id')->nullable();
             $table->uuid('genre_id');
@@ -178,8 +178,8 @@ return new class extends Migration
             $table->uuid('organisation_id');
             $table->uuid('personne_id');
             $table->uuid('fonction_id');
-            $table->dateTime('date_debut');
-            $table->dateTime('date_fin')->nullable();
+            $table->dateTimeTz('date_debut');
+            $table->dateTimeTz('date_fin')->nullable();
             $table->timestamps();
 
             $table->foreign('organisation_id')->references('id')->on('organisations');
@@ -240,7 +240,7 @@ return new class extends Migration
             $table->string('etat')->default('en_attente'); // en_attente ; annuler ; valider
             $table->integer('montant');
             $table->integer('montant_restant')->nullable();
-            $table->dateTime('date_traitement')->nullable();
+            $table->dateTimeTz('date_traitement')->nullable();
             $table->string('commentaire')->nullable();
             $table->uuid('valideur_id')->nullable();
             $table->uuid('created_by')->nullable();

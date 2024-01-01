@@ -12,12 +12,12 @@ import {
   OrganisationAttribution,
   PersonneResource,
 } from "types/personne.type";
-import { dateFormater } from "utils/functions";
 import { AttributionActions } from "pages/attributions/common";
 import { OrganisationMembreModal } from "pages/attributions/common";
 import { Link } from "react-router-dom";
 import { LINKS } from "utils";
 import { useDroits } from "hooks/useDroits";
+import { DateFormater } from "utils/DateUtils";
 
 type OrganisationMembresProps = {
   organisation: OrganisationResource;
@@ -65,18 +65,16 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
       {
         name: "personne",
         label: "Personne",
-        Cell: (attribution) => {
-          if (!attribution.personne) {
-            return <View.Empty />;
-          }
-          return (
-            <Link to={LINKS.personnes.view(attribution.personne.id)}>
+        Cell: ({ personne }) =>
+          personne ? (
+            <Link to={LINKS.personnes.view(personne.id)}>
               <span className="text-primary fw-semibold">
-                {attribution.personne.prenom} {attribution.personne.nom}
+                {personne.prenom} {personne.nom}
               </span>
             </Link>
-          );
-        },
+          ) : (
+            <View.Empty />
+          ),
       },
       {
         name: "date_debut",
@@ -85,14 +83,11 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
           if (!date_debut) {
             return <View.Empty />;
           }
-          const dateDebut = dateFormater.formatStr(date_debut);
-
+          const dateDebut = DateFormater.toDate(date_debut);
           if (date_debut && !date_fin) {
             return `Depuis le ${dateDebut}`;
           }
-          return `Du ${dateFormater.formatStr(
-            date_debut
-          )} au ${dateFormater.formatStr(date_fin)}`;
+          return `Du ${dateDebut} au ${DateFormater.toDate(date_fin)}`;
         },
       },
     ];

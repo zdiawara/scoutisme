@@ -10,8 +10,8 @@ import { Link } from "react-router-dom";
 import { LINKS } from "utils";
 import { OrganisationScoutActions } from "../common";
 import { AttributionActions } from "pages/attributions/common";
-import { dateFormater } from "utils/functions";
 import { useDroits } from "hooks/useDroits";
+import { DateFormater } from "utils/DateUtils";
 
 type OrganisationScoutsProps = {
   organisation: OrganisationResource;
@@ -61,14 +61,13 @@ export const OrganisationScouts: FC<OrganisationScoutsProps> = ({
         name: "date_debut",
         label: "Date début",
         Cell: ({ date_debut }) =>
-          date_debut ? dateFormater.formatStr(date_debut) : <View.Empty />,
+          DateFormater.toDate(date_debut) || <View.Empty />,
       },
 
       {
         name: "date_fin",
         label: "Date fin",
-        Cell: ({ date_fin }) =>
-          date_fin ? dateFormater.formatStr(date_fin) : <View.Empty />,
+        Cell: ({ date_fin }) => DateFormater.toDate(date_fin) || <View.Empty />,
       },
     ];
 

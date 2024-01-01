@@ -1,5 +1,6 @@
 import { PersonneResource } from "types/personne.type";
-import { dateFormater, dateParser, selectHelper } from "utils/functions";
+import { DateFormater, DateParser } from "utils/DateUtils";
+import { selectHelper } from "utils/functions";
 
 const toBody = (data: Record<string, any>) => {
   const body: Record<string, any> = {
@@ -7,7 +8,7 @@ const toBody = (data: Record<string, any>) => {
     nom: data.nom,
     prenom: data.prenom,
     lieu_naissance: data.lieu_naissance,
-    date_naissance: dateFormater.toBackPattern(data.date_naissance),
+    date_naissance: DateFormater.toISO(data.date_naissance),
     email: data.email,
     telephone: data.telephone,
     personne_a_contacter: data.personne_a_contacter,
@@ -26,8 +27,8 @@ const toBody = (data: Record<string, any>) => {
     body.attribution = {
       organisation_id: selectHelper.getValue(data.attribution.organisation),
       fonction_id: selectHelper.getValue(data.attribution.fonction),
-      date_debut: dateFormater.toBackPattern(data.attribution.date_debut),
-      date_fin: dateFormater.toBackPattern(data.attribution.date_fin),
+      date_debut: DateFormater.toISO(data.attribution.date_debut),
+      date_fin: DateFormater.toISO(data.attribution.date_fin),
     };
   }
 
@@ -40,7 +41,7 @@ const toInput = (data: PersonneResource) => {
     nom: data.nom,
     prenom: data.prenom,
     lieu_naissance: data.lieu_naissance,
-    date_naissance: dateParser.toDate(data.date_naissance),
+    date_naissance: DateParser.toDate(data.date_naissance),
     email: data.email,
     telephone: data.telephone,
     profession: data.profession,

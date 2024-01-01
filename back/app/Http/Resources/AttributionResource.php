@@ -14,7 +14,7 @@ class AttributionResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-
+        //dd($this->created_at, $this->date_debut);
         return [
             'id' => $this->id,
             'personne' => new PersonneResource($this->whenLoaded('personne')),

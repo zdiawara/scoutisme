@@ -1,25 +1,14 @@
 import { ICONS } from "pages/common";
-import { FC, useMemo, useState } from "react";
+import { FC, useMemo } from "react";
 import { Dropdown } from "react-bootstrap";
-import { ScoutModal } from "../modal";
-import { OrganisationResource } from "types/organisation.type";
-import { LINKS } from "utils";
-import { Link } from "react-router-dom";
 import { useDroits } from "hooks/useDroits";
+import { Link } from "react-router-dom";
+import { LINKS } from "utils";
 
 type ListPersonneActionsProps = {};
 
 export const ListPersonneActions: FC<ListPersonneActionsProps> = () => {
-  const [action, setAction] = useState<string | undefined>();
-  const { personne } = useDroits();
-
-  const onSelect = (code: string) => () => {
-    setAction(code);
-  };
-
-  const closeModal = () => {
-    setAction(undefined);
-  };
+  const protection = useDroits();
 
   const menus = useMemo(() => {
     return [
@@ -28,17 +17,17 @@ export const ListPersonneActions: FC<ListPersonneActionsProps> = () => {
         icon: ICONS.personne,
         description: "Créer un nouvel adulte ",
         code: "adulte",
-        visible: personne.adultes.creer,
+        visible: protection.personne.adultes.creer,
       },
       {
         label: "Scout",
-        icon: ICONS.add,
+        icon: "uil-user-plus",
         description: "Créer un nouveau scout dans une unité",
         code: "scout",
-        visible: personne.scouts.creer,
+        visible: protection.personne.scouts.creer,
       },
     ].filter((e) => e.visible);
-  }, [personne]);
+  }, [protection.personne]);
 
   if (!menus.length) {
     return null;
@@ -54,7 +43,6 @@ export const ListPersonneActions: FC<ListPersonneActionsProps> = () => {
               as={Link}
               to={`${LINKS.personnes.create}?type=${item.code}`}
               className="py-2 px-3"
-              onClick={onSelect(item.code)}
               key={item.code}
             >
               <i className={`${item.icon} text-black me-2`}></i>
@@ -66,12 +54,6 @@ export const ListPersonneActions: FC<ListPersonneActionsProps> = () => {
           ))}
         </Dropdown.Menu>
       </Dropdown>
-      {action === "ajouter_scout" && (
-        <ScoutModal
-          closeModal={closeModal}
-          organisation={{} as OrganisationResource}
-        />
-      )}
     </>
   );
 };

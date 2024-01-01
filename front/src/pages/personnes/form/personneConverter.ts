@@ -26,6 +26,8 @@ const toBody = (data: Record<string, any>) => {
     body.attribution = {
       organisation_id: selectHelper.getValue(data.attribution.organisation),
       fonction_id: selectHelper.getValue(data.attribution.fonction),
+      date_debut: dateFormater.toBackPattern(data.attribution.date_debut),
+      date_fin: dateFormater.toBackPattern(data.attribution.date_fin),
     };
   }
 

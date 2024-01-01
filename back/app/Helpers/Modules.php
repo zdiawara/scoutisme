@@ -91,7 +91,7 @@ class Modules
                 'nom' => 'Paiements',
                 'code' => 'paiements',
                 'fonctionnalites' => [
-                    ['nom' => 'Créer', 'code' => 'creer', 'description' => "Créer et modifier la cotisation des membres de son organisation"],
+                    ['nom' => 'Créer', 'code' => 'creer', 'description' => "Créer et modifier les paiements des membres de son organisation"],
                     ['nom' => 'Valider', 'code' => 'valider', 'description' => "Valider les paiements soumis"],
                     ['nom' => 'Rejeter', 'code' => 'rejeter', 'description' => "Rejeter les paiements quand ils ne sont pas recus"],
                     ['nom' => 'Consulter', 'code' => 'consulter', 'description' => "Consulter les paiements effectués"],

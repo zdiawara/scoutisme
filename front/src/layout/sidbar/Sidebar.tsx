@@ -1,4 +1,8 @@
-import { changeBodyAttribute, getMenuItems } from "../../utils";
+import {
+  MES_INFORMATIONS,
+  changeBodyAttribute,
+  getMenuItems,
+} from "../../utils";
 import SimpleBar from "simplebar-react";
 
 import { useEffect, useMemo, useRef } from "react";
@@ -32,7 +36,9 @@ export const Sidebar = () => {
       })
       .map((e) => e?.code || "");
 
-    return getMenuItems().filter((menu) => modules.includes(menu.key));
+    return getMenuItems().filter(
+      (menu) => menu.isTitle || modules.includes(menu.key)
+    );
   }, [query]);
 
   /*
@@ -50,7 +56,7 @@ export const Sidebar = () => {
     <>
       <div className="leftside-menu" ref={menuNodeRef}>
         <SimpleBar style={{ maxHeight: "100%" }} scrollbarMaxSize={320}>
-          <Menu menuItems={menus} />
+          <Menu menuItems={[...MES_INFORMATIONS, ...menus]} />
         </SimpleBar>
       </div>
     </>

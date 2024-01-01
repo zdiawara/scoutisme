@@ -1,5 +1,6 @@
 import { Suspense, lazy } from "react";
 import {
+  Navigate,
   Outlet,
   Route,
   createBrowserRouter,
@@ -91,11 +92,19 @@ const ListPaiement = Loadable(
 
 const Login = Loadable(lazy(() => import("pages/auth/Login")));
 
+const MonOrganisation = Loadable(
+  lazy(() => import("pages/compte/MonOrganisation"))
+);
+
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="login" element={<Login />} />
       <Route path="/" element={<Layout />}>
+        <Route index element={<Navigate to={LINKS.organisation.base} />} />
+        <Route path={LINKS.organisation.base} element={<Outlet />}>
+          <Route index element={<MonOrganisation />} />
+        </Route>
         <Route path={LINKS.personnes.base} element={<PersonneOutlet />}>
           <Route index element={<ListPersonne />} />
           <Route element={<CreatePersonne />} path="create" />

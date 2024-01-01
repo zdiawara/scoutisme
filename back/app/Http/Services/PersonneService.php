@@ -4,7 +4,6 @@ namespace App\Http\Services;
 
 use App\Http\Resources\PersonneCollection;
 use App\ModelFilters\PersonneFilter;
-use App\Models\Attribution;
 use App\Models\Fonction;
 use App\Models\Personne;
 use Illuminate\Support\Facades\DB;
@@ -45,20 +44,21 @@ class PersonneService
 
         $attribution = [];
 
-        if ($bodyCollection->has('attribution')) {
-            $attributionInput = collect($bodyCollection->get('attribution'));
-            $attribution = [
-                'organisation_id' => $attributionInput->get("organisation_id"),
-                'date_debut' => now(),
-                'fonction_id' => $body['type'] === "scout" ? Fonction::where('code', 'scout')->first()->id : $attributionInput->get('fonction_id'),
-                'type' => $body['type'] === "scout" ? 'scout' : 'direction'
-            ];
-        }
-
         $personne = Personne::create($bodyCollection->except("attribution")
             ->merge(['code' => $string])
-            ->merge($attribution)
             ->all());
+
+        if ($bodyCollection->has('attribution')) {
+            $attribution = collect($bodyCollection->get('attribution'));
+            $attributionInput = [
+                'organisation_id' => $attribution->get("organisation_id"),
+                'fonction_id' => $attribution->get('fonction_id'),
+                'personne_id' => $personne->id,
+                'date_debut' => $attribution->get('date_debut'),
+                'date_fin' => $attribution->get('date_fin'),
+            ];
+            $this->attributinService->create($attributionInput);
+        }
 
         DB::commit();
 

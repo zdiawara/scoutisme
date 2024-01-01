@@ -2,12 +2,32 @@ import { ICONS } from "pages/common";
 import { MenuItemType } from "../appConstants";
 import { LINKS } from "./links";
 
+export const MES_INFORMATIONS = [
+  {
+    key: "mes-informations",
+    label: "Mes informations",
+    isTitle: true,
+  },
+  {
+    key: "mon_organisation",
+    label: "Mon organisation",
+    isTitle: false,
+    icon: "uil-location",
+    url: LINKS.organisation.base,
+  },
+];
+
 export const MENU_ITEMS = [
   {
+    key: "navigation",
+    label: "Navigation",
+    isTitle: true,
+  },
+  {
     key: "dash",
-    label: "Dashbords",
+    label: "Dashboard",
     isTitle: false,
-    icon: "uil-home-alt",
+    icon: "mdi mdi-view-dashboard-outline",
     children: [
       {
         key: "organisation_1",

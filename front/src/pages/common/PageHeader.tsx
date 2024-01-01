@@ -44,23 +44,28 @@ export const PageHeader = {
     />
   ),
 
-  View: ({ left, ...props }: HeaderProps & HeaderLeftProps) => {
+  View: ({
+    left,
+    ...props
+  }: HeaderProps & HeaderLeftProps & { showBackBtn?: boolean }) => {
     const navigation = useNavigate();
+    const showBackBtn =
+      props.showBackBtn === undefined ? true : Boolean(props.showBackBtn);
     return (
       <Header
         {...props}
         left={
           <>
-            <Button
-              variant="default"
-              className="text-dark"
-              //size="sm"
-              //className="mt-1"
-              onClick={() => navigation(-1)}
-            >
-              <i className="uil-arrow-left fs-5 me-1"></i>
-              Retour
-            </Button>
+            {showBackBtn && (
+              <Button
+                variant="default"
+                className="text-dark"
+                onClick={() => navigation(-1)}
+              >
+                <i className="uil-arrow-left fs-5 me-1"></i>
+                Retour
+              </Button>
+            )}
             {left}
           </>
         }

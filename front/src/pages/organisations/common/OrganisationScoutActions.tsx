@@ -15,9 +15,9 @@ const ACTIONS = [
     code: "affecter",
   },
   {
-    label: "Créer",
-    icon: "uil-plus",
-    description: "Créer un nouveau scout et l'ajouter à l'unité",
+    label: "Nouveau",
+    icon: "uil-user-plus",
+    description: "Ajouter un nouveau scout dans l'unité",
     code: "ajouter_scout",
   },
 ];

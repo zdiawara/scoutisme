@@ -1,12 +1,14 @@
 import { HookModalForm } from "components";
 import { WrapperV2Props, withMutationForm } from "hoc";
 import { FC } from "react";
-import { personneApi } from "api";
+import { fonctionApi, personneApi } from "api";
 import { OrganisationResource } from "types/organisation.type";
 import { QUERY_KEY } from "utils/constants";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { PersonneFormInputs, personneConverter } from "../form";
 import { personneSchema } from "../form/personneSchema";
+import { FonctionResource } from "types/personne.type";
+import { toast } from "react-toastify";
 
 /**
  * Formulaire commun d'ajout et de modification d'une attribution
@@ -38,20 +40,41 @@ export const ScoutModal: FC<ScoutModalProps> = ({
   organisation,
 }) => {
   const query = useQueryClient();
+
+  const fonctionScoutQuery = useQuery({
+    queryKey: [QUERY_KEY.fonctions, "scout"],
+    networkMode: "offlineFirst",
+    queryFn: () => {
+      return fonctionApi
+        .findAll<FonctionResource>({ code: "scout" })
+        .then((data) => data.data[0] || undefined);
+    },
+  });
+
   const ajouterScout = (data: Record<string, any>) => {
-    const body = {
-      ...personneConverter.toBody(data),
-      attribution: {
-        organisation_id: organisation.id,
-      },
-    };
-    return personneApi.create(body);
+    return personneApi.create(personneConverter.toBody(data));
   };
+
+  if (fonctionScoutQuery.isLoading) {
+    return null;
+  }
+
+  if (!fonctionScoutQuery.data) {
+    toast.error("Impossible de trouver la fonction scout", {
+      autoClose: false,
+      position: "bottom-right",
+    });
+    closeModal();
+    return null;
+  }
+
+  const { data: fonction } = fonctionScoutQuery;
+
   return (
     <ScoutForm
       onSave={ajouterScout}
       title="Ajouter un scout"
-      subtitle="Le nouveau scout sera ajouté dans l'unité ZAMA"
+      //subtitle={`Ce scout sera ajouté dans l'unité ${organisation.nom}`}
       modalProps={{
         dialogClassName: "modal-90w",
         centered: false,
@@ -60,9 +83,20 @@ export const ScoutModal: FC<ScoutModalProps> = ({
       modalBodyClassName="bg-light p-3"
       defaultValues={{
         type: { value: "scout" },
+        attribution: {
+          organisation: {
+            label: organisation.nom,
+            value: organisation.id,
+          },
+          fonction: { label: fonction.nom, value: fonction.id },
+          date_debut: new Date(),
+        },
       }}
       onSuccess={() => {
-        query.invalidateQueries([QUERY_KEY.scouts, organisation.id]);
+        if (organisation?.id) {
+          query.invalidateQueries([QUERY_KEY.scouts, organisation.id]);
+        }
+        query.invalidateQueries([QUERY_KEY.personnes]);
         closeModal();
       }}
       onExit={closeModal}

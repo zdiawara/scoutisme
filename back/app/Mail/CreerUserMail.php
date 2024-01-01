@@ -23,6 +23,8 @@ class CreerUserMail extends Mailable
         $this->data = [
             'subject' => 'Création de votre compte',
             'nom' => $user->name,
+            'email' => $user->email,
+            'password' => 'secret',
             'plateforme' => env('APP_NAME')
         ];
     }

@@ -44,7 +44,6 @@ return new class extends Migration
         });
 
         collect([
-            "Chef de groupe",
             "Conseiller de groupe",
         ])->each(function ($item) use ($groupe) {
             $this->fonctionService->create(['nom' => $item, 'nature_id' => $groupe->id, 'duree_mandat' => 1]);

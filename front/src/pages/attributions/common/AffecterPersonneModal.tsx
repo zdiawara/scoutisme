@@ -119,11 +119,13 @@ export const AffecterPersonneModal: FC<AffecterPersonneModalProps> = ({
 }) => {
   const query = useQueryClient();
 
-  const { data: fonctionScout, isLoading } = useQuery({
-    queryKey: ["fonction_scout"],
+  const fonctionScoutQuery = useQuery({
+    queryKey: [QUERY_KEY.fonctions, "scout"],
     networkMode: "offlineFirst",
     queryFn: () => {
-      return fonctionApi.findAll<FonctionResource>({ code: "scout" });
+      return fonctionApi
+        .findAll<FonctionResource>({ code: "scout" })
+        .then((data) => data.data[0] || undefined);
     },
   });
 
@@ -132,13 +134,13 @@ export const AffecterPersonneModal: FC<AffecterPersonneModalProps> = ({
   const defaultValues = useMemo(() => {
     const fonction = isScout
       ? {
-          value: fonctionScout?.data[0].id,
-          label: fonctionScout?.data[0].nom,
+          value: fonctionScoutQuery?.data?.id,
+          label: fonctionScoutQuery?.data?.nom,
         }
       : null;
 
     return { fonction };
-  }, [fonctionScout?.data, isScout]);
+  }, [fonctionScoutQuery.data, isScout]);
 
   const ajouterMembre = (data: Record<string, any>) => {
     const body = attributionConverter.toBody(data);
@@ -146,7 +148,12 @@ export const AffecterPersonneModal: FC<AffecterPersonneModalProps> = ({
     return attributionApi.create({ ...body, personne_id: personne.id });
   };
 
-  if (isLoading || !fonctionScout) {
+  if (fonctionScoutQuery.isLoading) {
+    return null;
+  }
+
+  if (!fonctionScoutQuery.data) {
+    closeModal();
     return null;
   }
 

@@ -82,10 +82,10 @@ class PersonneController extends Controller
             }
         }
         if ($request->has('organisationId') || $request->has('fonctionId')) {
-            $query->where('personnes.date_debut', '<=', now())
+            $query->where('personnes.date_debut', '<=', now('Europe/Paris'))
                 ->where(function ($q) {
                     $q->whereNull('personnes.date_fin')
-                        ->orWhere('personnes.date_fin', '>=', now());
+                        ->orWhere('personnes.date_fin', '>=', now('Europe/Paris'));
                 });
         }
         return $query;

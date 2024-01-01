@@ -60,7 +60,8 @@ class PaiementService
         $paiement->update([
             'etat' => 'valide',
             'date_traitement' => now(),
-            'valideur_id' => Auth()->user()->id
+            'valideur_id' => Auth()->user()->id,
+            'montant_restant' => $paiement->montant_restant
         ]);
 
         DB::commit();
@@ -113,7 +114,7 @@ class PaiementService
             ],
             'montant' => [
                 'paye' => $paiement->montant . ' FCFA',
-                'reste' => '0 FCFA'
+                'reste' => $paiement->montant_restant ?? '0' . ' FCFA'
             ],
             'paiement' => [
                 'numero' => $paiement->numero,

@@ -7,8 +7,8 @@ Cher(e) {{$data['nom']}},
 Voici vos informations de connexion :
 
 <ul>
-    <li>Adresse e-mail associée : [Adresse e-mail]</li>
-    <li>Mot de passe : [Nom d'utilisateur]</li>
+    <li>Adresse e-mail : $data['email']</li>
+    <li>Mot de passe : $data['password']</li>
 </ul>
 
 <p>Vous pouvez vous connecter en utilisant ces informations sur notre site [lien du site] dès maintenant. Nous vous encourageons à changer votre mot de passe dès votre première connexion pour des raisons de sécurité.</p>
@@ -17,5 +17,6 @@ Voici vos informations de connexion :
 
 
 Cordialement,
-[L'équipe de support de [Nom de la Plateforme]]
+[NOM ENVOYER]
+[FONCTION ENVOYER]
 @endcomponent

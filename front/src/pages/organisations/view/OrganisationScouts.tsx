@@ -2,9 +2,9 @@ import { View } from "components";
 import { Columns, ICONS, StaticTable } from "pages/common";
 import { FC, useMemo } from "react";
 import { OrganisationResource } from "types/organisation.type";
-import { personneApi } from "api";
+import { attributionApi } from "api";
 import { QUERY_KEY } from "utils/constants";
-import { PersonneResource } from "types/personne.type";
+import { AttributionResource } from "types/personne.type";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { LINKS } from "utils";
@@ -17,8 +17,11 @@ type OrganisationScoutsProps = {
   organisation: OrganisationResource;
 };
 
-const searchByCriteres = (term: string, personnes: PersonneResource[]) => {
-  return personnes.filter(({ nom, prenom }) =>
+const searchByCriteres = (
+  term: string,
+  attributions: AttributionResource[]
+) => {
+  return attributions.filter(({ personne: { nom, prenom } }) =>
     `${nom} ${prenom}`.match(new RegExp(term, "gi"))
   );
 };
@@ -30,11 +33,10 @@ export const OrganisationScouts: FC<OrganisationScoutsProps> = ({
     queryKey: [QUERY_KEY.scouts, organisation.id],
     networkMode: "offlineFirst",
     queryFn: () =>
-      personneApi
-        .findAll<PersonneResource>({
+      attributionApi
+        .findAll<AttributionResource>({
           organisationId: organisation.id,
-          codeFonction: "scout",
-          type: "scout",
+          fonctionCode: "scout",
         })
         .then((r) => r.data),
   });
@@ -42,41 +44,31 @@ export const OrganisationScouts: FC<OrganisationScoutsProps> = ({
   const protection = useDroits();
 
   const columns = useMemo(() => {
-    const cols: Columns<PersonneResource>[] = [
+    const cols: Columns<AttributionResource>[] = [
       {
         name: "personne",
         label: "Personne",
-        Cell: (personne) => {
-          return (
-            <Link to={LINKS.personnes.view(personne.id)}>
-              <span className="text-primary fw-semibold">
-                {personne.prenom} {personne.nom}
-              </span>
-              <div className="text-muted">{personne.code}</div>
-            </Link>
-          );
-        },
+        Cell: ({ personne }) => (
+          <Link to={LINKS.personnes.view(personne.id)}>
+            <span className="text-primary fw-semibold">
+              {personne.prenom} {personne.nom}
+            </span>
+            <div className="text-muted">{personne.code}</div>
+          </Link>
+        ),
       },
       {
         name: "date_debut",
         label: "Date début",
-        Cell: ({ date_debut }) => {
-          if (!date_debut) {
-            return <View.Empty />;
-          }
-          return dateFormater.formatStr(date_debut);
-        },
+        Cell: ({ date_debut }) =>
+          date_debut ? dateFormater.formatStr(date_debut) : <View.Empty />,
       },
 
       {
         name: "date_fin",
         label: "Date fin",
-        Cell: ({ date_fin }) => {
-          if (!date_fin) {
-            return <View.Empty />;
-          }
-          return dateFormater.formatStr(date_fin);
-        },
+        Cell: ({ date_fin }) =>
+          date_fin ? dateFormater.formatStr(date_fin) : <View.Empty />,
       },
     ];
 
@@ -85,22 +77,11 @@ export const OrganisationScouts: FC<OrganisationScoutsProps> = ({
         name: "actions",
         label: "Actions",
         headClassName: "text-end",
-        Cell: (personne) => {
-          return (
-            <div className="text-end">
-              <AttributionActions
-                attribution={{
-                  id: personne.id,
-                  personne,
-                  fonction: personne.fonction!,
-                  organisation: personne.organisation!,
-                  date_debut: personne.date_debut!,
-                  date_fin: personne.date_fin!,
-                }}
-              />
-            </div>
-          );
-        },
+        Cell: (attribution) => (
+          <div className="text-end">
+            <AttributionActions attribution={attribution} />
+          </div>
+        ),
       });
     }
     return cols;
@@ -109,7 +90,7 @@ export const OrganisationScouts: FC<OrganisationScoutsProps> = ({
   const { data } = query;
 
   return (
-    <StaticTable
+    <StaticTable<AttributionResource>
       header={{
         icon: ICONS.personne,
         label: "Scouts",

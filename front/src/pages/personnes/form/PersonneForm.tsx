@@ -65,7 +65,7 @@ export const PersonneFormInputs = () => {
               />
 
               <Row className="g-3">
-                <Col sm={6}>
+                <Col sm={4}>
                   <TextInput
                     name="nom"
                     label="Nom"
@@ -73,7 +73,7 @@ export const PersonneFormInputs = () => {
                     isRequired
                   />
                 </Col>
-                <Col sm={6}>
+                <Col sm={4}>
                   <TextInput
                     name="prenom"
                     label="Prénom"
@@ -81,14 +81,8 @@ export const PersonneFormInputs = () => {
                     isRequired
                   />
                 </Col>
-
                 <Col sm={4}>
-                  <SelectGenre
-                    name="genre"
-                    label="Genre"
-                    isRequired
-                    placeholder="Homme ou femme"
-                  />
+                  <SelectGenre name="genre" label="Genre" isRequired />
                 </Col>
                 <Col sm={4}>
                   <DatePicker
@@ -108,6 +102,50 @@ export const PersonneFormInputs = () => {
                   />
                 </Col>
               </Row>
+
+              {/* <View.Header
+                label="Organisation"
+                description="La fonction occupée par la personne au sein d'une organisation"
+                className="mb-3 mt-3"
+                icon={ICONS.organisation}
+              />
+              <Row className="g-2">
+                <Col sm={4}>
+                  <SelectOrganisation
+                    name="attribution.organisation"
+                    label="Organisation"
+                    isRequired
+                    isClearable
+                    requestParams={organisationParams}
+                  />
+                </Col>
+                <Col sm={4}>
+                  <SelectFonction
+                    name="attribution.fonction"
+                    label="Fonction"
+                    isRequired
+                    isClearable
+                    requestParams={fonctionParams}
+                  />
+                </Col>
+                <Col sm={2}>
+                  <DatePicker
+                    name="attribution.date_debut"
+                    label="Date début"
+                    useHookForm
+                    isClearable
+                    required
+                  />
+                </Col>
+                <Col sm={2}>
+                  <DatePicker
+                    name="attribution.date_fin"
+                    label="Date fin"
+                    useHookForm
+                    isClearable
+                  />
+                </Col>
+              </Row> */}
 
               <View.Header
                 {...Header.contact}
@@ -235,11 +273,5 @@ const FormContainer: FC<WrapperProps> = ({
     </>
   );
 };
-
-// Sous groupe == Saka ==> Nombre max de scouts
-// Nom du saka ==> Toto
-// Affecter 5 scoutes
-// Il reste 27
-// Créer un autre saka
 
 export const PersonneForm = withForm(FormContainer, personneSchema);

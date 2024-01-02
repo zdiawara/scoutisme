@@ -3,12 +3,14 @@
 namespace App\Http\Services;
 
 use App\Models\Attribution;
+use Illuminate\Support\Facades\DB;
 
 class AttributionService
 {
 
     public function create(array $body): Attribution
     {
+        dd($body);
         // Cloturer attribution  existante
         Attribution::where('personne_id', $body['personne_id'])
             ->where('date_debut', '<=', now())
@@ -37,8 +39,12 @@ class AttributionService
 
     public function cloturer(Attribution $attribution, array $body)
     {
-        $attribution->update(collect($body)->get('date_fin'));
+        DB::beginTransaction();
+        $attribution->update([
+            'date_fin' => collect($body)->get('date_fin')
+        ]);
         $this->updatePersonne($attribution);
+        DB::commit();
         return $attribution;
     }
 

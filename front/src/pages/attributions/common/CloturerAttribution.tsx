@@ -5,9 +5,9 @@ import { FC } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useFormContext } from "react-hook-form";
 import { AttributionResource } from "types/personne.type";
-import { attributionConverter } from "../form";
 import { attributionApi } from "api";
 import { QUERY_KEY } from "utils/constants";
+import { DateFormater } from "utils/DateUtils";
 
 const Form: FC<WrapperV2Props> = (props) => {
   const { watch } = useFormContext();
@@ -50,9 +50,8 @@ export const CloturerAttribution: FC<CloturerAttributionProps> = ({
   const query = useQueryClient();
 
   const cloturerAttribution = (data: Record<string, any>) => {
-    const body = attributionConverter.toBody(data);
-    return attributionApi.update(attribution.id, {
-      date_fin: body.date_fin,
+    return attributionApi.cloturer(attribution.id, {
+      date_fin: DateFormater.toISO(data.date_fin),
     });
   };
 

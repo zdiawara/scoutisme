@@ -113,7 +113,15 @@ export const refFormationApi = new RefFormationApi("ref_formations");
 class FonctionApi extends CrudService {}
 export const fonctionApi = new FonctionApi("fonctions");
 
-class AttributionApi extends CrudService {}
+class AttributionApi extends CrudService {
+  public async cloturer<T>(id: string, body: any) {
+    const { data } = await requestPut<{ data: T }>(
+      `${this.base}/${id}/cloturer`,
+      body
+    );
+    return data;
+  }
+}
 export const attributionApi = new AttributionApi("attributions");
 
 class GenreApi extends CrudService {}

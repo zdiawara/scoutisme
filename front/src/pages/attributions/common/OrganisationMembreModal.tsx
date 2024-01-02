@@ -1,8 +1,4 @@
-import {
-  DatePicker,
-  HookModalForm,
-  SelectPersonneSansFonction,
-} from "components";
+import { DatePicker, HookModalForm, SelectPersonne } from "components";
 import { WrapperV2Props, withMutationForm } from "hoc";
 import { FC } from "react";
 import { Col, Row } from "react-bootstrap";
@@ -22,7 +18,7 @@ const Form: FC<WrapperV2Props> = (props) => {
     >
       <Row className="g-2">
         <Col sm={12}>
-          <SelectPersonneSansFonction
+          <SelectPersonne
             label="Personne"
             name="personne"
             isClearable
@@ -85,6 +81,7 @@ export const OrganisationMembreModal: FC<OrganisationMembreModalProps> = ({
       subtitle={`Selectionner ${fonction.nom}`}
       defaultValues={{
         natureId: organisation.nature.id,
+        date_debut: new Date(),
       }}
       onSuccess={() => {
         query.invalidateQueries([QUERY_KEY.direction, organisation.id]);

@@ -74,6 +74,7 @@ Route::apiResource('villes', VilleController::class);
 Route::apiResource('ref_formations', RefFormationController::class, []);
 Route::apiResource('fonctions', FonctionController::class);
 Route::apiResource('attributions', AttributionController::class);
+Route::put('/attributions/{attribution}/cloturer', [AttributionController::class, 'cloturer']);
 Route::apiResource('genres', GenreController::class);
 Route::apiResource('messages',  MessageController::class);
 Route::apiResource('instances',  InstanceController::class);

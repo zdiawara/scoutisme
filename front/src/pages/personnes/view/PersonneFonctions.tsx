@@ -90,8 +90,7 @@ export const PersonneFonctions: FC<PersonneFonctionsProps> = ({ personne }) => {
         Cell: (attribution) => {
           const today = new Date();
           const { date_debut, date_fin } = attribution;
-          const isActive = DateUtils.isActive(today, date_debut, date_fin);
-          if (isActive) {
+          if (DateUtils.isActive(today, date_debut, date_fin)) {
             return (
               <div className="text-end">
                 <AttributionActions attribution={attribution} />

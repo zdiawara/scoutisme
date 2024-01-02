@@ -63,6 +63,13 @@ class AttributionController extends Controller
         return new AttributionResource($attribution);
     }
 
+    public function cloturer(Attribution $attribution, Request $request)
+    {
+        $attribution = $this->attributionService->cloturer($attribution, $request->all());
+        $attribution->load(['personne', 'organisation.nature', 'fonction']);
+        return new AttributionResource($attribution);
+    }
+
     /**
      * Update the specified resource in storage.
      */

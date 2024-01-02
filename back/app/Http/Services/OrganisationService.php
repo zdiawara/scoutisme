@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Models\Organisation;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class OrganisationService
@@ -51,6 +52,8 @@ class OrganisationService
         ))->map(function ($item) {
             $item->personne = json_decode($item->personne);
             $item->fonction = json_decode($item->fonction);
+            $item->date_debut = $item->date_debut != null ? Carbon::createFromFormat('Y-m-d H:i:s', $item->date_debut) : null;
+            $item->date_fin = $item->date_fin != null ? Carbon::createFromFormat('Y-m-d H:i:s', $item->date_fin) : null;
             return $item;
         });
 

@@ -1,5 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
-import { personneApi } from "api";
 import { AsyncSelectSimple, MontantFormatText, View } from "components";
 import { ICONS } from "pages/common";
 import { FC } from "react";
@@ -7,7 +5,6 @@ import { Badge, Card, Col, Row } from "react-bootstrap";
 import { SelectItem } from "types/form.type";
 import { getYear } from "date-fns";
 import { CotisationResource, PaiementResource } from "types/personne.type";
-import { QUERY_KEY } from "utils/constants";
 
 const fetchYears = () => {
   const year = getYear(new Date());
@@ -27,23 +24,46 @@ type CotisationProps = {
   paiements?: PaiementResource[];
   annee: SelectItem;
   setAnnee: (item: SelectItem) => void;
+  isLoading: boolean;
+  cotisation?: CotisationResource;
 };
 
 export const Cotisation: FC<CotisationProps> = ({
-  personneId,
   paiements,
   annee,
   setAnnee,
+  cotisation,
+  isLoading,
 }) => {
-  const cotisationQuery = useQuery({
-    queryKey: [QUERY_KEY.personnes, "paiements", annee.value],
-    networkMode: "offlineFirst",
-    queryFn: () => {
-      return personneApi.findCotisation(personneId, annee.value);
-    },
-    select: ({ data }) => data,
-  });
-
+  const renderContent = () => {
+    if (isLoading) {
+      return <>Chargement ...</>;
+    }
+    if (!cotisation) {
+      return null;
+    }
+    if (cotisation.montant_total <= 0) {
+      return <>Aucune ligne de cotisation trouver.</>;
+    }
+    return (
+      <>
+        <Row className="g-3">
+          <Col sm={3}>
+            {cotisation && (
+              <View.Item label="Montant cotisation">
+                <span className="fs-5 fw-bold text-primary">
+                  <MontantFormatText value={cotisation?.montant_total} />
+                </span>
+              </View.Item>
+            )}
+          </Col>
+          <Col sm={3}>
+            <EtatCotisation cotisation={cotisation} paiements={paiements} />
+          </Col>
+        </Row>
+      </>
+    );
+  };
   return (
     <Card body>
       <View.Header
@@ -60,29 +80,7 @@ export const Cotisation: FC<CotisationProps> = ({
           />
         }
       />
-      {cotisationQuery.isLoading ? (
-        <>Chargement ...</>
-      ) : (
-        <Row className="g-3">
-          <Col sm={3}>
-            {cotisationQuery.data && (
-              <View.Item label="Montant cotisation">
-                <span className="fs-5 fw-bold text-primary">
-                  <MontantFormatText
-                    value={cotisationQuery.data?.montant_total}
-                  />
-                </span>
-              </View.Item>
-            )}
-          </Col>
-          <Col sm={3}>
-            <EtatCotisation
-              cotisation={cotisationQuery.data}
-              paiements={paiements}
-            />
-          </Col>
-        </Row>
-      )}
+      {renderContent()}
     </Card>
   );
 };
@@ -111,7 +109,7 @@ const EtatCotisation: FC<EtatCotisationProps> = ({ paiements, cotisation }) => {
         </View.Item>
       ) : (
         <View.Item label="Reste à payer">
-          <Badge bg="warning">
+          <Badge bg="info">
             <MontantFormatText value={cotisation.montant_total - montantPaye} />
           </Badge>
         </View.Item>

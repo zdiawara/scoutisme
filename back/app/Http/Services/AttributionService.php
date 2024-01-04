@@ -10,7 +10,6 @@ class AttributionService
 
     public function create(array $body): Attribution
     {
-        dd($body);
         // Cloturer attribution  existante
         Attribution::where('personne_id', $body['personne_id'])
             ->where('date_debut', '<=', now())

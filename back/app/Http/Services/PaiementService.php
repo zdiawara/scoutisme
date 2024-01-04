@@ -55,13 +55,36 @@ class PaiementService
 
         DB::beginTransaction();
 
-        $this->cotisationService->updateMontant($paiement->cotisation, $paiement->montant);
+        $cotisation = $this->cotisationService->updateMontant($paiement->cotisation, $paiement->montant);
+
+        $valideur = Auth()->user();
 
         $paiement->update([
             'etat' => 'valide',
             'date_traitement' => now(),
-            'valideur_id' => Auth()->user()->id,
-            'montant_restant' => $paiement->montant_restant
+            'valideur_id' => $valideur->id,
+            'recu' => [
+                'signataire' => [
+                    'nom' => $valideur->name,
+                ],
+                'personne' => [
+                    'nom' => $cotisation->personne->nom . ' ' . $cotisation->personne->prenom,
+                ],
+                'montant' => [
+                    'paye' => $paiement->montant . ' FCFA',
+                    'reste' => ($cotisation->montant_restant ?? '0') . ' FCFA'
+                ],
+                'paiement' => [
+                    'numero' => $paiement->numero,
+                    'date' => date('d/m/Y', strtotime($paiement->created_at)),
+                    'motif' => 'Cotisation ' . $cotisation->annee
+
+                ],
+                'association' => [
+                    'nom' => 'Association des scouts du Burkina Faso (ASBF)',
+                    'adresse' => '01 BP 2548 Ouagadougou 01 - Burkina Faso'
+                ]
+            ]
         ]);
 
         DB::commit();
@@ -105,27 +128,6 @@ class PaiementService
             throw new BadRequestException("Impossible de fournir le récu pour un paiement non validé");
         }
 
-        return  [
-            'signataire' => [
-                'nom' => $paiement->valideur->name,
-            ],
-            'personne' => [
-                'nom' => $paiement->cotisation->personne->nom . ' ' . $paiement->cotisation->personne->prenom,
-            ],
-            'montant' => [
-                'paye' => $paiement->montant . ' FCFA',
-                'reste' => $paiement->montant_restant ?? '0' . ' FCFA'
-            ],
-            'paiement' => [
-                'numero' => $paiement->numero,
-                'date' => date('d/m/Y', strtotime($paiement->created_at)),
-                'motif' => 'Cotisation ' . $paiement->cotisation->annee
-
-            ],
-            'association' => [
-                'nom' => 'Association des scouts du Burkina Faso (ASBF)',
-                'adresse' => '01 BP 2548 Ouagadougou 01 - Burkina Faso'
-            ]
-        ];
+        return  $paiement->recu;
     }
 }

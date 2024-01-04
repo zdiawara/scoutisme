@@ -239,10 +239,10 @@ return new class extends Migration
             $table->string('numero')->unique();
             $table->string('etat')->default('en_attente'); // en_attente ; annuler ; valider
             $table->integer('montant');
-            $table->integer('montant_restant')->nullable();
             $table->dateTimeTz('date_traitement')->nullable();
             $table->string('commentaire')->nullable();
             $table->uuid('valideur_id')->nullable();
+            $table->json('recu')->nullable();
             $table->uuid('created_by')->nullable();
             $table->uuid('modified_by')->nullable();
             $table->timestamps();

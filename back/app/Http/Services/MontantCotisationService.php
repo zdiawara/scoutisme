@@ -12,6 +12,11 @@ class MontantCotisationService
         $personne = Personne::findOrFail($personneId);
         $organisation = $personne->organisation;
         $fonction = $personne->fonction;
+
+        if ($organisation == null || $fonction == null) {
+            return 0;
+        }
+
         $codeNature = $organisation->nature->code;
 
         $typeMontantCotisation = "";

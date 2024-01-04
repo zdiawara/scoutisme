@@ -14,8 +14,10 @@ class Paiement extends Model
     use HasUuids, Filterable, SoftDeletes, Audit;
 
     protected $fillable = [
-        'cotisation_id', 'etat', 'montant', 'date_traitement', 'numero', 'commentaire', 'valideur_id'
+        'cotisation_id', 'etat', 'montant', 'recu', 'date_traitement', 'numero', 'commentaire', 'valideur_id'
     ];
+
+    protected $casts = ['recu' => 'array'];
 
     public function cotisation()
     {

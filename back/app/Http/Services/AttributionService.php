@@ -10,6 +10,8 @@ class AttributionService
 
     public function create(array $body): Attribution
     {
+        DB::beginTransaction();
+
         // Cloturer attribution  existante
         Attribution::where('personne_id', $body['personne_id'])
             ->where('date_debut', '<=', now())
@@ -18,7 +20,7 @@ class AttributionService
                     ->orWhere('date_fin', '>=', now());
             })
             ->update([
-                'date_fin' => now()
+                'date_fin' => $body['date_debut']
             ]);
 
         // Création de l'attribution
@@ -26,6 +28,7 @@ class AttributionService
 
         $this->updatePersonne($attribution);
 
+        DB::commit();
         return $attribution;
     }
 

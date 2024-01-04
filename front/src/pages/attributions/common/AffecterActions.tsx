@@ -3,6 +3,7 @@ import { Button, Dropdown } from "react-bootstrap";
 import { FonctionResource } from "types/personne.type";
 import { OrganisationMembreModal } from "./OrganisationMembreModal";
 import { OrganisationResource } from "types/organisation.type";
+import { CreateAdulteModal } from "pages/personnes/modal";
 
 type AffecterActionsProps = {
   /* attribution: AttributionResource; */
@@ -72,6 +73,14 @@ export const AffecterActions: FC<AffecterActionsProps> = ({
 
       {action === "affecter" && (
         <OrganisationMembreModal
+          fonction={fonction}
+          organisation={organisation}
+          closeModal={closeModal}
+        />
+      )}
+
+      {action === "ajouter" && (
+        <CreateAdulteModal
           fonction={fonction}
           organisation={organisation}
           closeModal={closeModal}

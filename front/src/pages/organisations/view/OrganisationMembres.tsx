@@ -1,7 +1,6 @@
 import { View } from "components";
 import { Columns, ICONS, StaticTable } from "pages/common";
-import { FC, useMemo, useState } from "react";
-import { Button } from "react-bootstrap";
+import { FC, useMemo } from "react";
 import { OrganisationResource } from "types/organisation.type";
 import { organisationApi } from "api";
 import { NATURE, QUERY_KEY } from "utils/constants";
@@ -13,7 +12,7 @@ import {
   PersonneResource,
 } from "types/personne.type";
 import { AffecterActions, AttributionActions } from "pages/attributions/common";
-import { OrganisationMembreModal } from "pages/attributions/common";
+
 import { Link } from "react-router-dom";
 import { LINKS } from "utils";
 import { useDroits } from "hooks/useDroits";
@@ -48,10 +47,6 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
     networkMode: "offlineFirst",
     queryFn: () => organisationApi.findDirection(organisation.id, { typeId }),
   });
-
-  const [attributionSelected, setAttributionSelected] = useState<
-    OrganisationAttribution | undefined
-  >();
 
   const columns = useMemo(() => {
     const cols: Columns<OrganisationAttribution>[] = [
@@ -100,12 +95,7 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
         Cell: (attribution) => {
           return (
             <div className="text-end d-flex justify-content-end">
-              {!attribution.personne ? (
-                <AffecterActions
-                  organisation={organisation}
-                  fonction={attribution.fonction as FonctionResource}
-                />
-              ) : (
+              {attribution.personne ? (
                 <AttributionActions
                   attribution={
                     {
@@ -115,6 +105,11 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
                       personne: attribution.personne as PersonneResource,
                     } as AttributionResource
                   }
+                />
+              ) : (
+                <AffecterActions
+                  organisation={organisation}
+                  fonction={attribution.fonction as FonctionResource}
                 />
               )}
             </div>
@@ -127,19 +122,17 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
   }, [organisation, protection.organisation]);
 
   return (
-    <>
-      <StaticTable
-        header={{
-          icon: ICONS.direction,
-          label: "Organe de direction",
-          description: "Membres de l'organe de direction",
-        }}
-        data={query.data}
-        columns={columns}
-        isLoading={query.isLoading}
-        error={query.error}
-        onSearch={searchByCriteres}
-      />
-    </>
+    <StaticTable
+      header={{
+        icon: ICONS.direction,
+        label: "Organe de direction",
+        description: "Membres de l'organe de direction",
+      }}
+      data={query.data}
+      columns={columns}
+      isLoading={query.isLoading}
+      error={query.error}
+      onSearch={searchByCriteres}
+    />
   );
 };

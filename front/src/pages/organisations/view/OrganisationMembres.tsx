@@ -12,7 +12,7 @@ import {
   OrganisationAttribution,
   PersonneResource,
 } from "types/personne.type";
-import { AttributionActions } from "pages/attributions/common";
+import { AffecterActions, AttributionActions } from "pages/attributions/common";
 import { OrganisationMembreModal } from "pages/attributions/common";
 import { Link } from "react-router-dom";
 import { LINKS } from "utils";
@@ -101,14 +101,10 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
           return (
             <div className="text-end d-flex justify-content-end">
               {!attribution.personne ? (
-                <Button
-                  variant="outline-primary"
-                  onClick={() => {
-                    setAttributionSelected(attribution);
-                  }}
-                >
-                  <i className="uil-link"></i> Affecter
-                </Button>
+                <AffecterActions
+                  organisation={organisation}
+                  fonction={attribution.fonction as FonctionResource}
+                />
               ) : (
                 <AttributionActions
                   attribution={
@@ -144,14 +140,6 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
         error={query.error}
         onSearch={searchByCriteres}
       />
-
-      {attributionSelected && (
-        <OrganisationMembreModal
-          fonction={attributionSelected.fonction as FonctionResource}
-          organisation={organisation}
-          closeModal={() => setAttributionSelected(undefined)}
-        />
-      )}
     </>
   );
 };

@@ -22,9 +22,8 @@ import { ExportPersonneModal } from "./modal";
 import { NATURE, QUERY_KEY } from "utils/constants";
 import { PersonneActions } from "./common/PersonneActions";
 import { EnvoyerMailModal } from "./modal/EnvoyerMailModal";
-import { useAuth, useModalAction } from "hooks";
+import { useAuth } from "hooks";
 import { useDroits } from "hooks/useDroits";
-import useToggle from "hooks/useToggle";
 
 const renderOrganisation = ({ organisation }: PersonneResource) => {
   if (organisation) {
@@ -117,7 +116,6 @@ const ListPersonne: FC = () => {
   const [show, setShow] = useState<boolean>(false);
   const [exportModal, setExportModal] = useState<boolean>(false);
   const [mailModal, setMailModal] = useState<boolean>(false);
-  const [scoutModal, setScoutModal] = useToggle();
   const { userDroit } = useAuth();
   const { mail } = useDroits();
 
@@ -169,13 +167,11 @@ const ListPersonne: FC = () => {
         name: "actions",
         label: "Actions",
         headClassName: "text-end",
-        Cell: (personne) => {
-          return (
-            <div className="text-end">
-              <PersonneActions personne={personne} />
-            </div>
-          );
-        },
+        Cell: (personne) => (
+          <div className="text-end">
+            <PersonneActions personne={personne} />
+          </div>
+        ),
       });
     }
 

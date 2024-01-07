@@ -38,7 +38,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           local-dir: /home/runner/work/scoutisme/scoutisme/back/
-          server-dir: asbf/back/
+          server-dir: ./back/
       ## If migrate and seed
       - if: github.event.inputs.migrate_seed == 'true'
         name: Runing migrate and seed

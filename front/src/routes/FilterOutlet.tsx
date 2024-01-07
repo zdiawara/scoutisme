@@ -9,6 +9,7 @@ import {
 } from "types/request.type";
 import { useAuth } from "hooks";
 import { OrganisationResource } from "types/organisation.type";
+import { NATURE } from "utils/constants";
 
 const computeOrganisation = (organisation?: OrganisationResource) => {
   if (organisation) {
@@ -35,6 +36,13 @@ export const PersonneOutlet = () => {
   if (!isAdmin) {
     filter.organisation = computeOrganisation(personne?.organisation);
     filter.perimetres = auth.user?.role?.perimetres || [];
+  } else {
+    filter.perimetres = [
+      NATURE.groupe,
+      NATURE.national,
+      NATURE.region,
+      NATURE.unite,
+    ];
   }
 
   return (
@@ -59,6 +67,13 @@ export const OrganisationOutlet = () => {
   if (!isAdmin) {
     filter.organisation = computeOrganisation(personne?.organisation);
     filter.perimetres = auth.user?.role?.perimetres || [];
+  } else {
+    filter.perimetres = [
+      NATURE.groupe,
+      NATURE.national,
+      NATURE.region,
+      NATURE.unite,
+    ];
   }
 
   return (

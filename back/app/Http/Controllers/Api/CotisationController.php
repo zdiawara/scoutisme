@@ -8,7 +8,6 @@ use App\Http\Services\CotisationService;
 use App\Http\Services\PaiementService;
 use App\ModelFilters\CotisationFilter;
 use App\Models\Cotisation;
-use App\Models\Instance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -53,14 +52,6 @@ class CotisationController extends Controller
         $this->paiementService->create($cotisation->id, $request->input('montant_paye'));
         DB::commit();
         return new CotisationResource($cotisation);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Cotisation $cotisation)
-    {
-        return new CotisationResource($this->cotisationService->update($cotisation, $request->all()));
     }
 
     /**

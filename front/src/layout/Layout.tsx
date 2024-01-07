@@ -1,14 +1,13 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { Card, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { Sidebar } from "./sidbar";
 import { Header } from "./header";
 import { useQuery } from "@tanstack/react-query";
 import { authApi } from "api";
 import { useAuth } from "hooks";
-import { useMemo } from "react";
 
 export const Layout = () => {
-  const { setUser, user } = useAuth();
+  const { setUser } = useAuth();
   const query = useQuery({
     queryKey: ["user-info"],
     cacheTime: 0,

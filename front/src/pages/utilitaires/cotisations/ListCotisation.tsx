@@ -11,6 +11,22 @@ import { FC } from "react";
 import { QUERY_KEY } from "utils/constants";
 import { useCrudModal } from "hooks/useCrudModal";
 import { MontantCotisationResource } from "types/cotisation.type";
+import { MontantFormatText } from "components";
+import { Badge } from "react-bootstrap";
+
+const TYPES: Record<string, string> = {
+  direction_conseil_national: "Direction du conseil national",
+  direction_equipe_nationale: "Direction de l'équipe nationale",
+  direction_groupe: "Direction d'un groupe",
+  direction_region: "Direction d'une région",
+  direction_unite: "Direction d'une unité",
+  scout: "Scout",
+};
+
+const PROFILS: Record<string, string> = {
+  tous: "Tout le monde",
+  type_organisation: "Par type d'organisation",
+};
 
 const ListCotisation: FC = () => {
   const { data: results } = useQuery({
@@ -25,15 +41,27 @@ const ListCotisation: FC = () => {
     {
       name: "type",
       label: "Type",
-    },
-    {
-      name: "profil",
-      label: "Profil",
+      Cell: ({ type }) => <span className="text-primary">{TYPES[type]}</span>,
     },
     {
       name: "montants",
       label: "Montants",
-      Cell: ({ montants }) => <>{montants.map((e) => e.value).join(" , ")}</>,
+      Cell: ({ montants }) => (
+        <>
+          {montants
+            .map((e) => e.value)
+            .map((m, i) => (
+              <Badge key={i} className="me-2" bg="primary">
+                <MontantFormatText value={m} withDevise />
+              </Badge>
+            ))}
+        </>
+      ),
+    },
+    {
+      name: "profil",
+      label: "Profil",
+      Cell: ({ profil }) => <span>{PROFILS[profil]}</span>,
     },
     {
       name: "actions",
@@ -52,7 +80,7 @@ const ListCotisation: FC = () => {
   return (
     <>
       <PageHeader.List
-        title="Cotisations"
+        title="Montant cotisations"
         subtitle="Paramètrer montants des cotisations"
         icon={ICONS.cotisation}
         className="my-4"
@@ -65,20 +93,6 @@ const ListCotisation: FC = () => {
           headerClassName="bg-light"
         />
       </ListResult.Container>
-
-      {/* {crudModal.isCreateOrUpdate && (
-        <TypeUniteModal
-          closeModal={crudModal.reset}
-          selected={crudModal.action?.element!}
-        />
-      )}
-
-      {crudModal.isDelete && (
-        <DeleteTypeUniteModal
-          element={crudModal.action?.element!}
-          closeModal={crudModal.reset}
-        />
-      )} */}
     </>
   );
 };

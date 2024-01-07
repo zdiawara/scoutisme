@@ -47,7 +47,7 @@ export const OrganisationScouts: FC<OrganisationScoutsProps> = ({
     const cols: Columns<AttributionResource>[] = [
       {
         name: "personne",
-        label: "Personne",
+        label: "Nom",
         Cell: ({ personne }) => (
           <Link to={LINKS.personnes.view(personne.id)}>
             <span className="text-primary fw-semibold">

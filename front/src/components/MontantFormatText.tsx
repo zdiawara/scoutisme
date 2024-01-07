@@ -22,8 +22,12 @@ export const MontantFormatText: FC<MontantFormatTextProps> = ({
         decimalSeparator=","
         displayType="text"
       />
-      &nbsp;
-      {DEVISE}
+      {withDevise && (
+        <>
+          &nbsp;
+          {DEVISE}
+        </>
+      )}
     </>
   );
 };

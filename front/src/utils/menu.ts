@@ -104,12 +104,12 @@ export const MENU_ITEMS = [
         isTitle: false,
         url: LINKS.ref_formations.base,
       },
-      {
+      /*       {
         key: "instances",
         label: "Instances",
         isTitle: false,
         url: LINKS.instances.base,
-      },
+      }, */
       {
         key: "cotisations",
         label: "Cotisations",

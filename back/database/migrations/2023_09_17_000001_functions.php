@@ -10,7 +10,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::unprepared("SET GLOBAL log_bin_trust_function_creators = 1;");
+        #DB::unprepared("SET GLOBAL log_bin_trust_function_creators = 1;");
         DB::unprepared('DROP FUNCTION IF EXISTS compute_parents');
         DB::unprepared('CREATE FUNCTION compute_parents(organisationId char(36))
             RETURNS JSON

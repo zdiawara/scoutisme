@@ -19,6 +19,24 @@ class CotisationService
             ->where('personne_id', $personneId)
             ->first();
 
+        /*         if ($cotisation == null) {
+            return Cotisation::create([
+                'annee' => $annee,
+                'personne_id' => $personneId,
+                'montant_total' => $this->montantCotisationService->findMontant($personneId),
+                'paiements' => []
+            ]);
+        } */
+
+        return $cotisation;
+    }
+
+    public function create(string $personneId, string $annee)
+    {
+        $cotisation = Cotisation::where('annee', $annee)
+            ->where('personne_id', $personneId)
+            ->first();
+
         if ($cotisation == null) {
             return Cotisation::create([
                 'annee' => $annee,

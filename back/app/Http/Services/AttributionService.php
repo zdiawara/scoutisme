@@ -8,6 +8,15 @@ use Illuminate\Support\Facades\DB;
 class AttributionService
 {
 
+    private CotisationService $cotisationService;
+
+    public function __construct(
+        CotisationService $cotisationService,
+    ) {
+        $this->cotisationService = $cotisationService;
+    }
+
+
     public function create(array $body): Attribution
     {
         DB::beginTransaction();
@@ -27,6 +36,10 @@ class AttributionService
         $attribution = Attribution::create($body);
 
         $this->updatePersonne($attribution);
+
+        // Créer une ligne de cotisation
+        $this->cotisationService->create($body['personne_id'], date('Y'));
+
 
         DB::commit();
         return $attribution;

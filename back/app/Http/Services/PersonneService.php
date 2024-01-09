@@ -4,7 +4,6 @@ namespace App\Http\Services;
 
 use App\Http\Resources\PersonneCollection;
 use App\ModelFilters\PersonneFilter;
-use App\Models\Fonction;
 use App\Models\Personne;
 use Illuminate\Support\Facades\DB;
 

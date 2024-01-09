@@ -1,4 +1,4 @@
-import { formatISO, format, isAfter, isBefore } from "date-fns";
+import { format, isAfter, isBefore } from "date-fns";
 
 export class DateUtils {
   public static isActive(
@@ -36,16 +36,24 @@ export class DateFormater {
 
   public static toISO(date?: Date): string | undefined {
     try {
-      return date ? formatISO(date, { format: "extended" }) : undefined;
+      if (date) {
+        const isoDate = date.toISOString();
+        return `${isoDate.substring(0, 10)} ${isoDate.substring(11, 19)}`;
+      }
+      return undefined;
     } catch (error) {
+      console.error(error);
       return undefined;
     }
   }
 
   private static format(date?: string, pattern = DateFormater.DATE) {
     try {
-      return date ? format(new Date(date), pattern) : DateFormater.EMPTY;
+      return date
+        ? format(new Date(date?.replace(" ", "T").concat(".000Z")), pattern)
+        : DateFormater.EMPTY;
     } catch (error) {
+      console.error(error);
       return DateFormater.EMPTY;
     }
   }

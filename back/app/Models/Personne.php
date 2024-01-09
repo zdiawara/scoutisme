@@ -20,7 +20,7 @@ class Personne extends Model
         'organisation_id', 'fonction_id', 'date_fin', 'date_debut', 'modified_by', 'created_by'
     ];
 
-    protected $casts = ['personne_a_contacter' => 'array', 'date_naissance' => 'date:Y'];
+    protected $casts = ['personne_a_contacter' => 'array'];
 
     public function niveauFormation()
     {

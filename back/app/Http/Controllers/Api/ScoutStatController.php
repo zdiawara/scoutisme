@@ -29,7 +29,7 @@ class ScoutStatController extends Controller
                     o.id AS orga_id,
                     tuo.id AS type_id,
                     COUNT(p.id) AS nb,
-                    o.parents
+                    o.parents AS parents
                 FROM personnes p
                     INNER JOIN organisations o on o.id = p.organisation_id
                     INNER JOIN types_organisations tuo on tuo.id = o.type_id
@@ -135,7 +135,7 @@ class ScoutStatController extends Controller
                                 ELSE 0
                             END
                         ) as femme,
-                        o.parents
+                        o.parents AS parents
                     FROM attributions a
                         INNER JOIN organisations o on o.id = a.organisation_id
                         INNER JOIN types_organisations tuo on tuo.id = o.type_id

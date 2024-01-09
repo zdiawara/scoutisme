@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
@@ -10,7 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        #DB::unprepared("SET GLOBAL log_bin_trust_function_creators = 1;");
+        if (!App::environment('prod')) {
+            DB::unprepared("SET GLOBAL log_bin_trust_function_creators = 1;");
+        }
         DB::unprepared('DROP FUNCTION IF EXISTS compute_parents');
         DB::unprepared('CREATE FUNCTION compute_parents(organisationId char(36))
             RETURNS JSON

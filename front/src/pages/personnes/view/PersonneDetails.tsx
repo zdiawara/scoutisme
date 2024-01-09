@@ -41,7 +41,7 @@ export const PersonneDetails: FC<PersonneDetailsProps> = ({ personne }) => {
 
                 <Col sm={4}>
                   <View.Item label="Date naissance">
-                    {DateFormater.toDate(personne.date_naissance)}
+                    {DateFormater.toDateTime(personne.date_naissance)}
                   </View.Item>
                 </Col>
 

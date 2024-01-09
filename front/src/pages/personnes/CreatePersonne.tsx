@@ -32,6 +32,7 @@ const CreatePersonne: FC = () => {
       defaultValues={{
         type: { value: typePersonne },
         attributionForm: "1",
+        date_naissance: new Date(),
       }}
     />
   );

@@ -1,10 +1,7 @@
 export type OrganisationParent = {
   id: string;
   nom: string;
-  nature: {
-    id: string;
-    nom: string;
-  };
+  nature: string;
 };
 
 export type OrganisationResource = {

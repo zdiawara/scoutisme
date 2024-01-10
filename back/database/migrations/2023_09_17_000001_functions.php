@@ -26,10 +26,13 @@ return new class extends Migration
                                 "id",
                                 CAST(uo.id AS CHAR(200)),
                                 "nom",
-                                uo.nom
+                                uo.nom,
+                                "nature",
+                                n.code
                             )
                         ) as parents
                     FROM organisations uo
+                    INNER JOIN natures n on n.id = uo.nature_id
                         WHERE parent_id is null
                     UNION ALL
                     SELECT c.id, c.nom,
@@ -40,11 +43,14 @@ return new class extends Migration
                                     "id",
                                     CAST(c.id AS CHAR(200)),
                                     "nom",
-                                    c.nom
+                                    c.nom,
+                                    "nature",
+                                    n.code
                                 )
                             )
                         ) as parents
                     FROM organisations c
+                    INNER JOIN natures n on n.id = c.nature_id
                         JOIN cte ON cte.id = c.parent_id
                 )
                 SELECT parents into v_parents

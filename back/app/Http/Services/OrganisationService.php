@@ -3,7 +3,6 @@
 namespace App\Http\Services;
 
 use App\Models\Organisation;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class OrganisationService
@@ -26,6 +25,13 @@ class OrganisationService
     public function update(Organisation $organisation, array $body)
     {
         $organisation->update($body);
+
+        $input = collect($body);
+        if ($input->has('nom')) {
+            DB::unprepared("UPDATE organisations o SET parents = compute_parents(o.parent_id) 
+                WHERE JSON_CONTAINS(JSON_EXTRACT(o.parents, '$[*].id') ,  '\"" . $organisation->id . "\"') = 1;
+            ");
+        }
         return $organisation;
     }
 

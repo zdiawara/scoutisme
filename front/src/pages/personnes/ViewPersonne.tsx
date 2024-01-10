@@ -3,7 +3,7 @@ import { Badge, Card, Col, ListGroup, Row } from "react-bootstrap";
 import { ICONS, PageHeader } from "pages/common";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { QUERY_KEY } from "utils/constants";
+import { NATURE, QUERY_KEY } from "utils/constants";
 import { personneApi } from "api";
 import { PersonneResource } from "types/personne.type";
 import { PersonneBox } from "./view/PersonneBox";
@@ -144,10 +144,20 @@ const ViewPersonne: FC = () => {
               <View.Item>
                 {personne?.organisation ? (
                   <>
-                    <span className="text-muted">
-                      {personne.organisation.nature.nom}
-                      &nbsp;/&nbsp;
-                    </span>
+                    {personne.organisation.parents
+                      ?.filter((parent) =>
+                        [NATURE.unite, NATURE.groupe].includes(
+                          personne.organisation?.nature?.code!
+                        )
+                          ? NATURE.national !== parent.nature
+                          : true
+                      )
+                      ?.map((parent) => (
+                        <span className="text-muted" key={parent.id}>
+                          {parent.nom}
+                          &nbsp;/&nbsp;
+                        </span>
+                      ))}
                     <Link
                       to={LINKS.organisations.view(personne.organisation.id)}
                       className="text-decoration-underline"

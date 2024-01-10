@@ -17,12 +17,14 @@ return new class extends Migration
             END;
         ');
 
-        DB::unprepared('DROP TRIGGER IF EXISTS `001_COMPUTE_PARENTS_TRIGGER`');
+        DB::unprepared('DROP TRIGGER IF EXISTS `002_COMPUTE_PARENTS_TRIGGER`');
         DB::unprepared('CREATE TRIGGER 002_COMPUTE_PARENTS_TRIGGER BEFORE INSERT ON organisations 
             FOR EACH ROW BEGIN 
                 SET NEW.parents = compute_parents(NEW.parent_id);
             END;
         ');
+
+        DB::unprepared('DROP TRIGGER IF EXISTS `003_UPDATE_NOM_ORGANISATION`');
     }
 
     /**

@@ -29,6 +29,7 @@ class PersonneResource extends JsonResource
 
         $response = collect(parent::toArray($request))->except(['ville_id', 'niveau_formation_id', 'genre_id', 'fonction_id', 'organisation_id', 'date_debut', 'date_fin'])
             ->merge([
+                'nom' => strtoupper($this->nom),
                 'ville' => new VilleResource($this->whenLoaded('ville')),
                 'niveau_formation' => new RefFormationResource($this->whenLoaded('niveauFormation')),
                 'etat' => (string)$this->etat,

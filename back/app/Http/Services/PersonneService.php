@@ -4,17 +4,24 @@ namespace App\Http\Services;
 
 use App\Http\Resources\PersonneCollection;
 use App\ModelFilters\PersonneFilter;
+use App\Models\Organisation;
 use App\Models\Personne;
 use Illuminate\Support\Facades\DB;
+use sirajcse\UniqueIdGenerator\UniqueIdGenerator;
 
 class PersonneService
 {
 
     private AttributionService $attributinService;
+    private array $config;
 
     public function __construct(AttributionService $attributinService)
     {
         $this->attributinService = $attributinService;
+        $prefix = date("ym");
+        $this->config = [
+            'table' => 'personnes', 'field' => 'code', 'length' => 8,  'prefix' => $prefix . '-', 'reset_on_change' => 'prefix'
+        ];
     }
 
     public function readPersonnes(array $filters): PersonneCollection
@@ -24,31 +31,23 @@ class PersonneService
         return new PersonneCollection($data);
     }
 
-    public function create(array $body): Personne
+    public function create(array $input): Personne
     {
-        // Available alpha caracters
-        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-        // generate a pin based on 2 * 7 digits + a random character
-        $pin = mt_rand(1000000, 9999999)
-            . mt_rand(1000000, 9999999)
-            . $characters[rand(0, strlen($characters) - 1)];
-
-        // shuffle the result
-        $string = str_shuffle($pin);
-
-        $bodyCollection = collect($body);
+        $body = collect($input);
 
         DB::beginTransaction();
 
         $attribution = [];
 
-        $personne = Personne::create($bodyCollection->except("attribution")
-            ->merge(['code' => $string])
+        $code = $this->computeCode($body['attribution'] ?? null);
+
+        $personne = Personne::create($body->except("attribution")
+            ->merge(['code' => $code])
             ->all());
 
-        if ($bodyCollection->has('attribution')) {
-            $attribution = collect($bodyCollection->get('attribution'));
+        if ($body->has('attribution')) {
+            $attribution = collect($body->get('attribution'));
             $attributionInput = [
                 'organisation_id' => $attribution->get("organisation_id"),
                 'fonction_id' => $attribution->get('fonction_id'),
@@ -62,6 +61,30 @@ class PersonneService
         DB::commit();
 
         return $personne;
+    }
+
+    private function computeCode($attribution)
+    {
+        $prefix = "";
+        if ($attribution == null) {
+            $prefix = "PERS";
+        } else {
+            $organisation = Organisation::findOrFail($attribution['organisation_id']);
+            $code = collect([$organisation->code]);
+            $prefix = $code
+                ->map(fn ($item) => strtoupper($item))
+                ->reverse()
+                ->join("-");
+        }
+
+        $prefix = $prefix . '-';
+        return UniqueIdGenerator::generate([
+            'table' => 'personnes',
+            'field' => 'code',
+            'length' => strlen($prefix) + 4, // 4 est la longueur du format numérique
+            'prefix' => $prefix,
+            'reset_on_change' => "prefix"
+        ]);
     }
 
     public function update(Personne $personne, array $body)

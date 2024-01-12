@@ -5,6 +5,7 @@ const toBody = (data: Record<string, any>) => {
   return {
     nature_id: selectHelper.getValue(data.nature),
     nom: data.nom,
+    code: data.code,
     type_id: selectHelper.getValue(data.type),
     parent_id: selectHelper.getValue(data.parent),
     ville_id: selectHelper.getValue(data.ville),
@@ -16,6 +17,7 @@ const toInput = (data: OrganisationResource) => {
   return {
     id: data.id,
     nom: data.nom,
+    code: data.code,
     nature: { label: nature.nom, value: nature.id, item: nature },
     type: type ? { label: type.nom, value: type.id } : null,
     parent: parent ? { label: parent.nom, value: parent.id } : null,

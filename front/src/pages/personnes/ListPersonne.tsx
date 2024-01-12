@@ -1,5 +1,5 @@
 import { FC, useContext, useMemo, useState } from "react";
-import { Button, Col, Stack } from "react-bootstrap";
+import { Badge, Button, Col, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import {
   Columns,
@@ -51,13 +51,7 @@ const renderOrganisation = ({ organisation }: PersonneResource) => {
   return <span>-</span>;
 };
 
-const renderPersonne = ({
-  id,
-  nom,
-  prenom,
-  genre,
-  photo,
-}: PersonneResource) => {
+const renderPersonne = ({ id, nom, prenom, code, photo }: PersonneResource) => {
   return (
     <Link to={LINKS.personnes.view(id)} className="table-user d-flex">
       <div className="avatar-sm me-2">
@@ -86,7 +80,7 @@ const renderPersonne = ({
         <span className="text-primary fw-semibold">
           {prenom} {nom}
         </span>
-        <span className="text-muted text-capitalize">{genre?.nom}</span>
+        <span className="text-muted text-capitalize">{code}</span>
       </Stack>
     </Link>
   );
@@ -137,7 +131,11 @@ const ListPersonne: FC = () => {
         label: "Nom",
         Cell: renderPersonne,
       },
-
+      {
+        name: "genre",
+        label: "Genre",
+        Cell: ({ genre }) => <span>{genre?.nom}</span>,
+      },
       {
         name: "fonction",
         label: "Fonction",
@@ -156,9 +154,9 @@ const ListPersonne: FC = () => {
       },
 
       {
-        name: "email",
-        label: "Email",
-        Cell: ({ email }) => <span>{email}</span>,
+        name: "type",
+        label: "Type",
+        Cell: ({ type }) => <Badge>{type.toLocaleUpperCase()}</Badge>,
       },
     ];
 

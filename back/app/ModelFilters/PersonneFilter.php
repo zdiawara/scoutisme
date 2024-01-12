@@ -11,8 +11,10 @@ class PersonneFilter extends ModelFilter
     public function search($search)
     {
         return $this->where(function ($q) use ($search) {
+
             return $q->where('nom', 'LIKE', "%$search%")
-                ->orWhere('prenom', 'LIKE', "%$search%");
+                ->orWhere('prenom', 'LIKE', "%$search%")
+                ->orWhere('code', 'LIKE', "%$search%");
         });
     }
 

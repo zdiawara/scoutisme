@@ -8,6 +8,7 @@ use App\Models\Genre;
 use App\Models\Module;
 use App\Models\Nature;
 use App\Models\MontantCotisation;
+use App\Models\Organisation;
 use App\Models\Role;
 use App\Models\TypeOrganisation;
 use App\Models\User;
@@ -110,6 +111,33 @@ return new class extends Migration
             ]
         ]);
 
+        $this->initOrganisationNational();
+        $this->initOrganisationRegionale();
+
+        $this->initMontantCotisation();
+
+        $this->initHabilitations();
+    }
+
+    private function initHabilitations()
+    {
+        collect([Modules::MODULE_PERSONNE, Modules::MODULE_ORGANISATION, Modules::MODULE_PAIEMENT, Modules::MODULE_MAIL])
+            ->each(function ($item) {
+                $this->createModuleWithFonctionnalities($item);
+            });
+
+        $roleAdmin = Role::create(['nom' => 'Administrateur', 'code' => 'admin', 'perimetres' => []]);
+
+        User::create([
+            'name' => 'Administrateur',
+            'email' => 'admin@asbf.bf',
+            'password' => bcrypt('secret'),
+            'role_id' => $roleAdmin->id
+        ]);
+    }
+
+    private function initMontantCotisation()
+    {
         MontantCotisation::create([
             'type' => 'direction_unite',
             'profil' => 'tous',
@@ -139,21 +167,64 @@ return new class extends Migration
             'profil' => 'tous',
             'montants' => [["value" => 50000]]
         ]);
+    }
 
+    private function initOrganisationNational()
+    {
+        $natureConseil = Nature::where('code', 'national')
+            ->firstOrFail();
 
-        collect([Modules::MODULE_PERSONNE, Modules::MODULE_ORGANISATION, Modules::MODULE_PAIEMENT, Modules::MODULE_MAIL])
-            ->each(function ($item) {
-                $this->createModuleWithFonctionnalities($item);
-            });
-
-        $roleAdmin = Role::create(['nom' => 'Administrateur', 'code' => 'admin', 'perimetres' => []]);
-
-        User::create([
-            'name' => 'Administrateur',
-            'email' => 'admin@asbf.bf',
-            'password' => bcrypt('secret'),
-            'role_id' => $roleAdmin->id
+        $conseilNational = Organisation::create([
+            'nom' => 'Conseil national',
+            'code' => 'cna',
+            'nature_id' => $natureConseil->id,
+            'type_id' => TypeOrganisation::where('code', 'conseil_national')
+                ->firstOrFail()
+                ->id
         ]);
+
+        Organisation::create([
+            'nom' => 'Equipe nationale',
+            'code' => 'ena',
+            'nature_id' => $natureConseil->id,
+            'parent_id' => $conseilNational->id,
+            'type_id' => TypeOrganisation::where('code', 'equipe_nationale')
+                ->firstOrFail()
+                ->id
+        ]);
+    }
+
+    private function initOrganisationRegionale()
+    {
+        $typeId = TypeOrganisation::where('code', 'equipe_nationale')
+            ->firstOrFail()
+            ->id;
+
+        $equipeNationale = Organisation::where('type_id', $typeId)->firstOrFail();
+
+        $natureRegion = Nature::where('code', 'region')
+            ->firstOrFail();
+
+        collect([
+            ['nom' => 'Boucle du Mouhoun', 'code' => 'bmo'],
+            ['nom' => 'Cascades', 'code' => 'cas'],
+            ['nom' => 'Centre', 'code' => 'cen'],
+            ['nom' => 'Centre-Est', 'code' => 'ces'],
+            ['nom' => 'Centre-Nord', 'code' => 'cno'],
+            ['nom' => 'Centre-Ouest', 'code' => 'cou'],
+            ['nom' => 'Centre-Sud', 'code' => 'csu'],
+            ['nom' => 'Est', 'code' => 'est'],
+            ['nom' => 'Hauts-Bassins', 'code' => 'hba'],
+            ['nom' => 'Nord', 'code' => 'nor'],
+            ['nom' => 'Plateau central', 'code' => 'pce'],
+            ['nom' => 'Sahel', 'code' => 'sah'],
+            ['nom' => 'Sud-Ouest', 'code' => 'sou'],
+        ])->each(function ($item) use ($equipeNationale, $natureRegion) {
+            Organisation::create(array_merge($item, [
+                'nature_id' => $natureRegion->id,
+                'parent_id' => $equipeNationale->id
+            ]));
+        });
     }
 
     private function createModuleWithFonctionnalities(array $body): void

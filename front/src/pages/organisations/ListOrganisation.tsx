@@ -17,7 +17,6 @@ import { OrganisationResource } from "types/organisation.type";
 import { LINKS } from "utils";
 import { FilterOrganisation } from "./form/FilterOrganisation";
 import { selectHelper } from "utils/functions";
-import { useDroits } from "hooks/useDroits";
 
 const buildRequestParams = (filter: Record<string, any>) => {
   return {
@@ -47,7 +46,6 @@ const columns: Columns<OrganisationResource>[] = [
           >
             {organisation.nom}
           </Link>
-          <span className="text-muted">{organisation.nature.nom}</span>
         </Stack>
       );
     },
@@ -55,6 +53,14 @@ const columns: Columns<OrganisationResource>[] = [
   {
     name: "code",
     label: "Code",
+  },
+
+  {
+    name: "nature",
+    label: "Niveau",
+    Cell: ({ nature }) => {
+      return <span>{nature.nom}</span>;
+    },
   },
 
   {
@@ -90,7 +96,6 @@ const ListOrganisation: FC = () => {
   const filterContext = useContext(FilterContext);
   const filter = filterContext.filter as OrganisationFilter;
   const [show, setShow] = useState<boolean>(false);
-  const { organisation } = useDroits();
 
   const { data: result, isLoading } = useQuery({
     queryKey: [QUERY_KEY.organisations, filter],
@@ -110,13 +115,6 @@ const ListOrganisation: FC = () => {
         subtitle="Consulter et gérer les organisations"
         icon={ICONS.organisation}
         className="my-4"
-        right={
-          organisation.creer && (
-            <Link to={LINKS.organisations.create} className="btn btn-primary">
-              Ajouter une organisation
-            </Link>
-          )
-        }
       />
 
       <PageFilter.Container>

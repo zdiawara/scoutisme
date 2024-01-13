@@ -52,7 +52,10 @@ export const Cotisation: FC<CotisationProps> = ({
             {cotisation && (
               <View.Item label="Montant cotisation">
                 <span className="fs-5 fw-bold text-primary">
-                  <MontantFormatText value={cotisation?.montant_total} />
+                  <MontantFormatText
+                    value={cotisation?.montant_total}
+                    withDevise
+                  />
                 </span>
               </View.Item>
             )}
@@ -110,7 +113,10 @@ const EtatCotisation: FC<EtatCotisationProps> = ({ paiements, cotisation }) => {
       ) : (
         <View.Item label="Reste à payer">
           <Badge bg="info">
-            <MontantFormatText value={cotisation.montant_total - montantPaye} />
+            <MontantFormatText
+              value={cotisation.montant_total - montantPaye}
+              withDevise
+            />
           </Badge>
         </View.Item>
       )}

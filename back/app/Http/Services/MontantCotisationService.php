@@ -40,7 +40,6 @@ class MontantCotisationService
 
         if ($montantCotisation->profil === "fonction") {
             return collect($montantCotisation->montants)->filter(function ($montant) use ($fonction) {
-                dd($montant);
                 return $montant['id'] === $fonction->id;
             })->firstOrFail()['value'];
         }

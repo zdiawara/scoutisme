@@ -30,7 +30,7 @@ const columns: Columns<PaiementResource>[] = [
   {
     name: "montant",
     label: "Montant",
-    Cell: ({ montant }) => <MontantFormatText value={montant} />,
+    Cell: ({ montant }) => <MontantFormatText withDevise value={montant} />,
   },
   {
     name: "code",

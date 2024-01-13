@@ -47,6 +47,7 @@ class PersonneController extends Controller
                 'genre',
                 'fonction',
                 'organisation.nature',
+                'organisation.type',
             ])
             ->get();
 

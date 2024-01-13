@@ -28,11 +28,73 @@ return new class extends Migration
      */
     public function up(): void
     {
+
+        $this->insertReferentiels();
+
+        $this->insertTypeOrganisations();
+
+        $this->insertFonctions();
+
+        collect(json_decode(file_get_contents(storage_path() . "/bf.json"), true))
+            ->each(function ($ville) {
+                Ville::create(['nom' => $ville['city']]);
+            });
+
+        $this->insertOrganisationNationals();
+
+        $this->insertOrganisationRegionaux();
+
+        $this->insertMontantCotisations();
+
+        $this->insertHabilitations();
+    }
+
+    private function insertReferentiels()
+    {
         // Nature des organisations
-        $unite = Nature::create(['nom' => 'Unité', 'code' => 'unite']);
-        $groupe = Nature::create(['nom' => 'Groupe', 'code' => 'groupe']);
-        $region = Nature::create(['nom' => 'Région', 'code' => 'region']);
-        $national = Nature::create(['nom' => 'National', 'code' => 'national']);
+        collect([
+            ['nom' => 'Unité', 'code' => 'unite'],
+            ['nom' => 'Groupe', 'code' => 'groupe'],
+            ['nom' => 'Région', 'code' => 'region'],
+            ['nom' => 'National', 'code' => 'national']
+        ])->each(function ($data) {
+            Nature::create($data);
+        });
+
+        collect([
+            ['nom' => 'Homme', 'code' => 'h'],
+            ['nom' => 'Femme', 'code' => 'f']
+        ])->each(function ($item) {
+            Genre::create($item);
+        });
+    }
+
+    private function insertTypeOrganisations()
+    {
+        // Création des types organisations pour les organisations de nature unité & national
+        $unite = Nature::where('code', 'unite')->get()->first();
+        $national = Nature::where('code', 'national')->get()->first();
+        // unité
+        TypeOrganisation::create(['nom' => 'Meute', 'code' => 'meute', 'position' => 1, 'membre' => 'Louveteau', 'nature_id' => $unite->id]);
+        TypeOrganisation::create(['nom' => 'Troupe', 'code' => 'troupe', 'position' => 2, 'membre' => 'Eclaireur', 'nature_id' => $unite->id]);
+        TypeOrganisation::create(['nom' => 'Communauté', 'code' => 'communaute', 'position' => 3, 'membre' => 'Sinkié', 'nature_id' => $unite->id]);
+        TypeOrganisation::create(['nom' => 'Dièklou', 'code' => 'dieklou', 'position' => 4, 'membre' => 'Routier', 'nature_id' => $unite->id]);
+        // national
+        TypeOrganisation::create(['nom' => 'Conseil national', 'code' => 'conseil_national', 'position' => 1, 'membre' => 'Conseil national', 'nature_id' => $national->id]);
+        TypeOrganisation::create(['nom' => 'Equipe nationale', 'code' => 'equipe_nationale', 'position' => 2, 'membre' => 'Equipe national', 'nature_id' => $national->id]);
+    }
+
+    private function insertFonctions()
+    {
+
+        $unite = Nature::where('code', 'unite')->firstOrFail();
+        $groupe = Nature::where('code', 'groupe')->firstOrFail();
+        $region = Nature::where('code', 'region')->firstOrFail();
+        $national = Nature::where('code', 'national')->firstOrFail();
+
+
+        // Création de la fonction scout
+        Fonction::create(['nom' => 'Scout', 'code' => 'scout', 'nature_id' => Nature::where('code', 'unite')->first()->id]);
 
         collect([
             "Chef d'unité",
@@ -62,6 +124,8 @@ return new class extends Migration
             $this->fonctionService->create(['nom' => $item, 'nature_id' => $region->id]);
         });
 
+        $typeEquipeNationale = TypeOrganisation::where('code', 'equipe_nationale')->firstOrFail();
+
         collect([
             "Commissaire général",
             "Commissaire général adjoint. chargé des relations internationales",
@@ -70,56 +134,20 @@ return new class extends Migration
             "Commissaire national à la formation et aux ressources adultes",
             "Commissaire national au secrétariat et à la communication",
             "Commissaire national aux scoutismes confessionnels"
-        ])->each(function ($item) use ($national) {
-            $this->fonctionService->create(['nom' => $item, 'nature_id' => $national->id]);
+        ])->each(function ($item) use ($national, $typeEquipeNationale) {
+            $this->fonctionService->create(['nom' => $item, 'nature_id' => $national->id, 'type_id' => $typeEquipeNationale->id]);
         });
 
-        // Insertion des genres
-        Genre::create(['nom' => 'Homme', 'code' => 'h']);
-        Genre::create(['nom' => 'Femme', 'code' => 'f']);
-
-        // Insertion des villes 
-        $villes = json_decode(file_get_contents(storage_path() . "/bf.json"), true);
-        collect($villes)->each(function ($ville) {
-            Ville::create(['nom' => $ville['city']]);
+        $typeConseilNational = TypeOrganisation::where('code', 'conseil_national')->firstOrFail();
+        collect([
+            "Président",
+            "Vice président",
+        ])->each(function ($item) use ($national, $typeConseilNational) {
+            $this->fonctionService->create(['nom' => $item, 'nature_id' => $national->id, 'type_id' => $typeConseilNational->id]);
         });
-
-        // Création de la fonction scout
-        Fonction::create(['nom' => 'Scout', 'code' => 'scout', 'nature_id' => Nature::where('code', 'unite')->first()->id]);
-
-        // Création des types organisations pour les organisations de nature unité & national
-        $unite = Nature::where('code', 'unite')->get()->first();
-        $national = Nature::where('code', 'national')->get()->first();
-        // unité
-        TypeOrganisation::create(['nom' => 'Meute', 'code' => 'meute', 'position' => 1, 'membre' => 'Louveteaux', 'nature_id' => $unite->id]);
-        TypeOrganisation::create(['nom' => 'Troupe', 'code' => 'troupe', 'position' => 2, 'membre' => 'Eclaireurs', 'nature_id' => $unite->id]);
-        TypeOrganisation::create(['nom' => 'Communauté', 'code' => 'communaute', 'position' => 3, 'membre' => 'Sinkiés', 'nature_id' => $unite->id]);
-        TypeOrganisation::create(['nom' => 'Dièklou', 'code' => 'dieklou', 'position' => 4, 'membre' => 'Routiers', 'nature_id' => $unite->id]);
-        // national
-        TypeOrganisation::create(['nom' => 'Conseil national', 'code' => 'conseil_national', 'position' => 1, 'membre' => 'Conseil national', 'nature_id' => $national->id]);
-        TypeOrganisation::create(['nom' => 'Equipe nationale', 'code' => 'equipe_nationale', 'position' => 2, 'membre' => 'Equipe national', 'nature_id' => $national->id]);
-
-        // montants cotisations
-        MontantCotisation::create([
-            'type' => 'scout',
-            'profil' => 'type_organisation',
-            'montants' => [
-                ['id' => TypeOrganisation::where('code', 'meute')->first()->id, 'value' => 500],
-                ['id' => TypeOrganisation::where('code', 'troupe')->first()->id, 'value' => 1000],
-                ['id' => TypeOrganisation::where('code', 'communaute')->first()->id, 'value' => 2000],
-                ['id' => TypeOrganisation::where('code', 'dieklou')->first()->id, 'value' => 3000],
-            ]
-        ]);
-
-        $this->initOrganisationNational();
-        $this->initOrganisationRegionale();
-
-        $this->initMontantCotisation();
-
-        $this->initHabilitations();
     }
 
-    private function initHabilitations()
+    private function insertHabilitations()
     {
         collect([Modules::MODULE_PERSONNE, Modules::MODULE_ORGANISATION, Modules::MODULE_PAIEMENT, Modules::MODULE_MAIL])
             ->each(function ($item) {
@@ -136,8 +164,20 @@ return new class extends Migration
         ]);
     }
 
-    private function initMontantCotisation()
+    private function insertMontantCotisations()
     {
+        // montants cotisations des scouts
+        MontantCotisation::create([
+            'type' => 'scout',
+            'profil' => 'type_organisation',
+            'montants' => [
+                ['id' => TypeOrganisation::where('code', 'meute')->first()->id, 'value' => 500],
+                ['id' => TypeOrganisation::where('code', 'troupe')->first()->id, 'value' => 1000],
+                ['id' => TypeOrganisation::where('code', 'communaute')->first()->id, 'value' => 2000],
+                ['id' => TypeOrganisation::where('code', 'dieklou')->first()->id, 'value' => 3000],
+            ]
+        ]);
+
         MontantCotisation::create([
             'type' => 'direction_unite',
             'profil' => 'tous',
@@ -169,7 +209,7 @@ return new class extends Migration
         ]);
     }
 
-    private function initOrganisationNational()
+    private function insertOrganisationNationals()
     {
         $natureConseil = Nature::where('code', 'national')
             ->firstOrFail();
@@ -194,7 +234,7 @@ return new class extends Migration
         ]);
     }
 
-    private function initOrganisationRegionale()
+    private function insertOrganisationRegionaux()
     {
         $typeId = TypeOrganisation::where('code', 'equipe_nationale')
             ->firstOrFail()

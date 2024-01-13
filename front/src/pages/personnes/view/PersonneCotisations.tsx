@@ -65,7 +65,7 @@ export const PersonneCotisations: FC<PersonneCotisationsProps> = ({
     {
       name: "montant",
       label: "Montant",
-      Cell: ({ montant }) => <MontantFormatText value={montant} />,
+      Cell: ({ montant }) => <MontantFormatText withDevise value={montant} />,
     },
     {
       name: "created_at",

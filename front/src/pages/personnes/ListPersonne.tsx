@@ -1,5 +1,5 @@
 import { FC, useContext, useMemo, useState } from "react";
-import { Badge, Button, Col, Stack } from "react-bootstrap";
+import { Button, Col, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import {
   Columns,
@@ -139,9 +139,19 @@ const ListPersonne: FC = () => {
       {
         name: "fonction",
         label: "Fonction",
-        Cell: ({ fonction }) => {
+        Cell: ({ fonction, organisation }) => {
           if (fonction) {
-            return <span>{fonction.nom}</span>;
+            return (
+              <>
+                <span className="text-primary">{fonction?.nom}</span>
+                {fonction.code === "scout" && organisation?.type?.membre && (
+                  <>
+                    &nbsp;/&nbsp;
+                    <span>{organisation?.type?.membre}</span>
+                  </>
+                )}
+              </>
+            );
           }
           return <span>-</span>;
         },
@@ -151,12 +161,6 @@ const ListPersonne: FC = () => {
         name: "organisation",
         label: "Organisation",
         Cell: renderOrganisation,
-      },
-
-      {
-        name: "type",
-        label: "Type",
-        Cell: ({ type }) => <Badge>{type.toLocaleUpperCase()}</Badge>,
       },
     ];
 

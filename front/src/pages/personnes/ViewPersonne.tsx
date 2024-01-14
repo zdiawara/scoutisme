@@ -42,7 +42,7 @@ const ViewPersonne: FC = () => {
         label: "Carte membres",
         code: "carte",
         icon: "mdi mdi-card-account-details-outline",
-        visible: false,
+        visible: true,
       },
       {
         label: "Fonctions",
@@ -92,7 +92,7 @@ const ViewPersonne: FC = () => {
     }
     switch (page) {
       case "carte":
-        return <PersonneCard />;
+        return <PersonneCard personne={personne} />;
       case "fonctions":
         return <PersonneFonctions personne={personne} />;
       case "cotisations":

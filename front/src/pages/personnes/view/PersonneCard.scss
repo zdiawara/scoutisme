@@ -1,0 +1,37 @@
+$primary: #61217f;
+$dark: #000;
+$white: #fff;
+
+.carte {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  width: 8.89cm;
+  height: 5.08cm;
+  font-size: 0.7rem;
+  color: $dark;
+  border: 2px solid #eee;
+  background: #fff center/contain url("../../../assets/images/bg-logo.png")
+    no-repeat;
+
+  .table-sm > :not(caption) > * > * {
+    padding: 0;
+  }
+
+  .carte-content {
+    padding: 5px;
+  }
+
+  .carte-footer {
+    font-size: 0.55rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    //justify-content: center;
+    //background-color: $primary;
+    color: $dark;
+    margin-bottom: 5px;
+    padding-left: 5px;
+  }
+}

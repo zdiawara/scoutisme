@@ -1,11 +1,13 @@
 import { View } from "components";
 import { FC } from "react";
-import { Button, Card } from "react-bootstrap";
+import { Alert, Button, Card } from "react-bootstrap";
 import logo from "./logo.png";
 
 import "./PersonneCard.scss";
 import generatePDF, { Margin, Resolution } from "react-to-pdf";
 import { PersonneResource } from "types/personne.type";
+import { useQuery } from "@tanstack/react-query";
+import { personneApi } from "api";
 
 type PersonneCardProps = {
   personne: PersonneResource;
@@ -47,13 +49,107 @@ const options = {
   },
 };
 
+const Item: FC<{ label: string; value?: string }> = (props) => (
+  <>
+    <span className="carte-ligne--label">{props.label}</span>
+    &nbsp;:&nbsp;
+    <span className="carte-ligne--value">{props.value}</span>
+  </>
+);
+
 export const PersonneCard: FC<PersonneCardProps> = ({ personne }) => {
+  const { data: carte, isLoading } = useQuery({
+    queryKey: ["carte_membre"],
+    queryFn: () => {
+      return personneApi.carteMembre(personne.id);
+    },
+    cacheTime: 0,
+  });
+
   const telechargerPDF = () => {
     // you can use a function to return the target element besides using React refs
     const getTargetElement = () => document.getElementById("content-id");
     //@ts-ignore
     generatePDF(getTargetElement, options);
   };
+
+  const renderContent = () => {
+    if (isLoading) {
+      return <span>Chargement ...</span>;
+    }
+
+    if (!carte) {
+      return <span>Pas de données</span>;
+    }
+
+    if (carte.message) {
+      return (
+        <Alert variant="secondary" className="mb-0">
+          {carte.message}
+        </Alert>
+      );
+    }
+
+    return (
+      <div className="carte" id="content-id">
+        <div className="carte-content">
+          <table className="p-0">
+            <tbody>
+              <tr>
+                <td className="carte-logo" rowSpan={2}>
+                  <img src={logo} alt="Logo" />
+                </td>
+                <td colSpan={2} className="carte-association">
+                  <div className="mb-1">{carte.data.meta.association}</div>
+                </td>
+              </tr>
+              <tr>
+                <td className="carte-personne">
+                  <div className="carte-membre">
+                    <span className="carte-membre--titre">Carte de membre</span>
+                  </div>
+                  <div>{carte.data.personne.nom}</div>
+                  <div>{carte.data.personne.fonction}</div>
+                </td>
+                <td rowSpan={5} className="carte-media">
+                  <div className="carte-photo">
+                    <img alt="indentité" src={personne.photo} />
+                  </div>
+                  <div className="carte-signataire">
+                    {carte.data.meta.signataire.libelle}
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td className="pt-1" colSpan={2}>
+                  <Item label="ID" value={carte.data.personne.code} />
+                </td>
+              </tr>
+              <tr>
+                <td colSpan={2}>
+                  <Item label="Region" value={carte.data.region?.nom} />
+                </td>
+              </tr>
+              <tr>
+                <td colSpan={2}>
+                  <Item label="Unite" value={carte.data.unite?.nom} />
+                </td>
+              </tr>
+              <tr>
+                <td colSpan={2}>
+                  <Item label="Branche" value={carte.data.unite?.branche} />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="carte-footer">Du 01/01/2024 au 31/12/2024</div>
+      </div>
+    );
+  };
+
   return (
     <Card>
       <Card.Body>
@@ -64,116 +160,7 @@ export const PersonneCard: FC<PersonneCardProps> = ({ personne }) => {
           className="mb-2"
           right={<Button onClick={telechargerPDF}>Télécharger</Button>}
         />
-        <div className="carte" id="content-id">
-          <div className="carte-content">
-            <table className="p-0">
-              <tbody style={{ color: "#61217f" }}>
-                <tr>
-                  <td rowSpan={2} style={{ width: "65px" }}>
-                    <img
-                      src={logo}
-                      style={{
-                        objectFit: "cover",
-                      }}
-                      alt="Logo"
-                      width="65px"
-                    />
-                  </td>
-                  <td colSpan={2} className="text-uppercase  fw-bold">
-                    <div className="mb-1">
-                      ASSOCIATION DES SCOUTS DU BURKINA FASO
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-center">
-                    <div className="mb-1">
-                      <span
-                        style={{
-                          backgroundColor: "#61217f",
-                          padding: "3px 15px",
-                        }}
-                        className="fw-bold text-uppercase text-white"
-                      >
-                        Carte de membre
-                      </span>
-                    </div>
-                    <div className="fw-bold">Zakaridia DIAWARA</div>
-                    <div className="fw-bold">Etudiant</div>
-                  </td>
-                  <td
-                    rowSpan={5}
-                    style={{ width: "70px", verticalAlign: "top" }}
-                  >
-                    <div
-                      style={{
-                        width: "70px",
-                        height: "70px",
-                      }}
-                    >
-                      <img
-                        alt=""
-                        src={personne.photo}
-                        width="70px"
-                        height="70px"
-                        style={{ objectFit: "cover" }}
-                      />
-                    </div>
-                    <div
-                      style={{
-                        fontSize: ".5rem",
-                        textAlign: "center",
-                        marginTop: "10px",
-                        color: "black",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Le président du comité national
-                    </div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td colSpan={2}>
-                    <span className="fw-bold" style={{ color: "black" }}>
-                      ID
-                    </span>
-                    &nbsp;:&nbsp;<span style={{ color: "black" }}>ZAM-103</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td colSpan={2}>
-                    <span className="fw-bold" style={{ color: "black" }}>
-                      Région
-                    </span>
-                    &nbsp;:&nbsp;
-                    <span style={{ color: "black" }}>Hauts Bassins</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td colSpan={2}>
-                    <span className="fw-bold" style={{ color: "black" }}>
-                      Unité
-                    </span>
-                    &nbsp;:&nbsp;
-                    <span style={{ color: "black" }}>Guimbi ouattara</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td colSpan={2}>
-                    <span className="fw-bold" style={{ color: "black" }}>
-                      Branche
-                    </span>
-                    &nbsp;:&nbsp;
-                    <span style={{ color: "black" }}>Louveteau</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div className="carte-footer">Valide du 01/01/2024 au 31/12/2024</div>
-        </div>
+        {renderContent()}
       </Card.Body>
     </Card>
   );

@@ -64,6 +64,7 @@ Route::post('/personnes/{personne}/convertir', [PersonneController::class, 'conv
 Route::post('/personnes/{personneId}/cotiser', [PersonneController::class, 'cotiser']);
 Route::get('/personnes/exports/csv', [PersonneController::class, 'exportPersonnes']);
 Route::get('/personnes_sans_fonction', [PersonneController::class, 'readPersonnesSansFonction']);
+Route::get('/personnes/{personne}/carte_membre', [PersonneController::class, 'carteMembre']);
 
 Route::apiResource('organisations', OrganisationController::class);
 Route::get('/organisations/{organisationId}/direction', [OrganisationController::class, 'readDirection']);

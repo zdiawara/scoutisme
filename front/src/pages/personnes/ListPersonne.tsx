@@ -1,5 +1,5 @@
 import { FC, useContext, useMemo, useState } from "react";
-import { Button, Col, Stack } from "react-bootstrap";
+import { Badge, Button, Col, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import {
   Columns,
@@ -135,6 +135,11 @@ const ListPersonne: FC = () => {
         name: "genre",
         label: "Genre",
         Cell: ({ genre }) => <span>{genre?.nom}</span>,
+      },
+      {
+        name: "type",
+        label: "Type",
+        Cell: ({ type }) => <Badge>{type.toLocaleUpperCase()}</Badge>,
       },
       {
         name: "fonction",

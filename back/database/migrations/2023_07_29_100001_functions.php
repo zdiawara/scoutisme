@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!App::environment('prod')) {
+        if (App::environment('local')) {
             DB::unprepared("SET GLOBAL log_bin_trust_function_creators = 1;");
         }
         DB::unprepared('DROP FUNCTION IF EXISTS compute_parents');

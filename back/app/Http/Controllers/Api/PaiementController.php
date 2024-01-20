@@ -83,7 +83,7 @@ class PaiementController extends Controller
     public function store(Request $request)
     {
         DB::beginTransaction();
-        $cotisation = $this->cotisationService->findOrcreate($request->get('personne_id'), $request->get('annee'));
+        $cotisation = $this->cotisationService->find($request->get('personne_id'), $request->get('annee'));
         $this->paiementService->create($cotisation->id, $request->input('montant'));
         DB::commit();
         return new CotisationResource($cotisation);

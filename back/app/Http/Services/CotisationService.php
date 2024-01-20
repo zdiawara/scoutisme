@@ -13,7 +13,7 @@ class CotisationService
         $this->montantCotisationService = $montantCotisationService;
     }
 
-    public function findOrcreate(string $personneId, string $annee)
+    public function find(string $personneId, string $annee)
     {
         $cotisation = Cotisation::where('annee', $annee)
             ->where('personne_id', $personneId)

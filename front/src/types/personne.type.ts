@@ -105,3 +105,30 @@ export type PaiementResource = {
   commentaire?: string;
   date_traitement?: string;
 };
+
+export type PersonneCarte = {
+  type: string;
+  meta: {
+    association: string;
+    signataire: {
+      libelle: string;
+      nom: string;
+    };
+  };
+  personne: {
+    nom: string;
+    code: string;
+    fonction: string;
+  };
+  region?: {
+    nom: string;
+  };
+  unite?: {
+    nom: string;
+    branche: string;
+  };
+  validite: {
+    debut: string;
+    fin: string;
+  };
+};

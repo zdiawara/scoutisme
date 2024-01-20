@@ -229,8 +229,13 @@ class PersonneController extends Controller
     public function readCotisation(Personne $personne, Request $request, CotisationService $cotisationService)
     {
         return [
-            'data' => $cotisationService->findOrcreate($personne->id, $request->input("annee"))
+            'data' => $cotisationService->find($personne->id, $request->input("annee"))
         ];
+    }
+
+    public function carteMembre(Personne $personne, Request $request)
+    {
+        return $this->personneService->carteMembre($personne, $request->all());
     }
 
     public function envoyerMail(Request $request, MessageService $messageService, MailService $mailService)

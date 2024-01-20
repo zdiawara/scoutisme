@@ -33,13 +33,7 @@ const ViewPersonne: FC = () => {
         visible: true,
       },
       {
-        label: "Cotisations",
-        code: "cotisations",
-        icon: ICONS.cotisation,
-        visible: protection.cotisation.acces,
-      },
-      {
-        label: "Carte membres",
+        label: "Carte membre",
         code: "carte",
         icon: "mdi mdi-card-account-details-outline",
         visible: true,
@@ -49,6 +43,12 @@ const ViewPersonne: FC = () => {
         code: "fonctions",
         icon: ICONS.fonction,
         visible: true,
+      },
+      {
+        label: "Cotisations",
+        code: "cotisations",
+        icon: ICONS.cotisation,
+        visible: protection.cotisation.acces,
       },
     ].filter((e) => e.visible);
   }, [protection.cotisation.acces]);

@@ -3,6 +3,7 @@ import {
   CotisationResource,
   OrganisationAttribution,
   PaiementResource,
+  PersonneCarte,
   PersonneResource,
 } from "types/personne.type";
 import { CrudService } from "./crudService";
@@ -79,6 +80,13 @@ class PersonneApi extends CrudService {
     const response = await requestPost(
       `${this.base}/mails${requestParams(params)}`,
       body
+    );
+    return response;
+  }
+
+  public async carteMembre(personneId: string) {
+    const response = await requestGet<{ data: PersonneCarte; message: string }>(
+      `${this.base}/${personneId}/carte_membre`
     );
     return response;
   }

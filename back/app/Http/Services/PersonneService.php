@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Helpers\Nature;
 use App\Http\Resources\PersonneCollection;
 use App\ModelFilters\PersonneFilter;
 use App\Models\Organisation;
@@ -13,15 +14,12 @@ class PersonneService
 {
 
     private AttributionService $attributinService;
-    private array $config;
+    private CotisationService $cotisationService;
 
-    public function __construct(AttributionService $attributinService)
+    public function __construct(AttributionService $attributinService, CotisationService $cotisationService)
     {
         $this->attributinService = $attributinService;
-        $prefix = date("ym");
-        $this->config = [
-            'table' => 'personnes', 'field' => 'code', 'length' => 8,  'prefix' => $prefix . '-', 'reset_on_change' => 'prefix'
-        ];
+        $this->cotisationService = $cotisationService;
     }
 
     public function readPersonnes(array $filters): PersonneCollection
@@ -109,5 +107,63 @@ class PersonneService
         ])->toArray());
 
         return $personne;
+    }
+
+    public function carteMembre(Personne $personne, array $body)
+    {
+
+        if ($personne->type == "adulte") {
+            return [
+                'message' => "La carte d'adhésion n'est pas encore disponible pour les adultes",
+                'date' => [],
+            ];
+        }
+
+        $cotisation = $this->cotisationService->find($personne->id, collect($body)->get('annee', date('Y')));
+
+        if ($cotisation && $cotisation->montant_restant !== 0) {
+            return [
+                'message' => "La carte d'adhésion n'est pas disponible. Le scout n'est pas à jour dans ses cotisations",
+                'date' => [],
+            ];
+        }
+
+        $organisation = $personne->organisation;
+
+        $parents = collect($organisation ? $organisation->parents : []);
+
+        $isUnite = $organisation ? $organisation->nature->code === Nature::UNITE : false;
+
+        $region = $parents->first(fn ($item) => $item['nature'] === Nature::REGION);
+
+        $data = [
+            'meta' => [
+                'association' => 'ASSOCIATION DES SCOUTS DU BURKINA FASO',
+                'signataire' => [
+                    'libelle' => 'Le président du comité national',
+                    'nom' => ''
+                ]
+            ],
+            'personne' => [
+                'nom' => $personne->prenom . ' ' . $personne->nom,
+                'code' => $personne->code,
+                'fonction' => ''
+            ],
+            'region' => [
+                'nom' => $region ? $region['nom'] : ''
+            ],
+            'unite' => $isUnite ? [
+                'nom' => $organisation->nom,
+                'branche' => $organisation->type->membre,
+            ] : null,
+            'validite' => [
+                'debut' => date('d/m/Y', strtotime($personne->date_debut)),
+                'fin' => $personne->date_fin ? date('d/m/Y', strtotime($personne->date_fin)) : ''
+            ]
+        ];
+
+        return [
+            "data" => $data
+        ];
     }
 }

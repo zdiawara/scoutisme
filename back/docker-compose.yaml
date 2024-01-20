@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   scoutisme_main:
-    container_name: scoutisme.serve
+    container_name: scoutisme-serve
     build:
       context: .
       dockerfile: Dockerfile
@@ -15,7 +15,7 @@ services:
       - scoutisme_db
 
   scoutisme_queue:
-    container_name: scoutisme.queue
+    container_name: scoutisme-queue
     build:
       context: .
       dockerfile: Dockerfile
@@ -26,7 +26,7 @@ services:
   scoutisme_db:
     platform: linux/x86_64
     image: mysql:8.0
-    container_name: scoutisme.db
+    container_name: scoutisme-db
     environment:
       MYSQL_DATABASE: scoutisme
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
@@ -37,7 +37,7 @@ services:
 
   scoutisme_mailpit:
     image: axllent/mailpit
-    container_name: scoutisme.mail
+    container_name: scoutisme-mail
     ports:
       - "1025:1025"
       - "8025:8025"

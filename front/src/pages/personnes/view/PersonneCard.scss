@@ -2,6 +2,10 @@ $primary: #61217f;
 $dark: #000;
 $white: #fff;
 
+$logo-width: 65px;
+$photo-height: 70px;
+$photo-width: 70px;
+
 .carte {
   display: flex;
   flex-direction: column;
@@ -18,20 +22,69 @@ $white: #fff;
   .table-sm > :not(caption) > * > * {
     padding: 0;
   }
-
   .carte-content {
     padding: 5px;
   }
-
   .carte-footer {
     font-size: 0.55rem;
     font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     display: flex;
     align-items: center;
     //justify-content: center;
     //background-color: $primary;
-    color: $dark;
     margin-bottom: 5px;
     padding-left: 5px;
+  }
+  .carte-logo {
+    width: $logo-width;
+    img {
+      width: $logo-width;
+      object-fit: cover;
+    }
+  }
+  .carte-association {
+    color: $primary;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+  .carte-personne {
+    font-weight: bold;
+    text-align: center;
+    color: $primary;
+  }
+  .carte-membre {
+    margin-bottom: 0.5rem;
+    .carte-membre--titre {
+      background-color: $primary;
+      padding: 3px 15px;
+      text-transform: uppercase;
+      color: $white;
+    }
+  }
+
+  .carte-media {
+    width: 70px;
+    vertical-align: top;
+    .carte-photo {
+      width: $photo-width;
+      height: $photo-height;
+      img {
+        width: $photo-width;
+        height: $photo-height;
+        object-fit: cover;
+      }
+    }
+    .carte-signataire {
+      font-size: 0.6rem;
+      text-align: center;
+      margin-top: 7px;
+    }
+  }
+
+  .carte-ligne--label {
+    font-weight: bold;
+    text-transform: uppercase;
   }
 }

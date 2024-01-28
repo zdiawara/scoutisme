@@ -38,10 +38,12 @@ class CotisationService
             ->first();
 
         if ($cotisation == null) {
+            $montantTotal = $this->montantCotisationService->findMontant($personneId);
             return Cotisation::create([
                 'annee' => $annee,
                 'personne_id' => $personneId,
-                'montant_total' => $this->montantCotisationService->findMontant($personneId),
+                'montant_total' => $montantTotal,
+                'montant_restant' => $montantTotal,
                 'paiements' => []
             ]);
         }

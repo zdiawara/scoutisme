@@ -26,4 +26,12 @@ class TypeOrganisationService
         $typeOrganisation->update($body);
         return $typeOrganisation;
     }
+
+    public function findByNature(string $nature)
+    {
+        return TypeOrganisation::whereHas('nature', function ($q) use ($nature) {
+            $q->where('code', $nature);
+        })->orderBy('position', 'asc')
+            ->get();
+    }
 }

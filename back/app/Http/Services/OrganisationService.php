@@ -58,4 +58,11 @@ class OrganisationService
         }
         return $data->values();
     }
+
+    public function findByNature(string $nature)
+    {
+        return Organisation::whereHas('nature', function ($q) use ($nature) {
+            $q->where('code', $nature);
+        })->get();
+    }
 }

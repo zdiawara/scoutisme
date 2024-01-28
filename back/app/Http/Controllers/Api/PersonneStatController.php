@@ -2,13 +2,24 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Nature;
 use App\Http\Controllers\Controller;
+use App\Http\Services\PersonneStatService;
 use App\Models\Organisation;
 use App\Models\TypeOrganisation;
 use Illuminate\Support\Facades\DB;
 
-class ScoutStatController extends Controller
+class PersonneStatController extends Controller
 {
+
+
+    private PersonneStatService $personneStatService;
+
+    public function __construct(PersonneStatService $personneStatService)
+    {
+        $this->personneStatService = $personneStatService;
+    }
+
     public function statByRegion()
     {
 
@@ -46,12 +57,12 @@ class ScoutStatController extends Controller
             GROUP BY parent.id, nb_scouts.type_id", []));
 
         $typesOrganisations = TypeOrganisation::whereHas('nature', function ($q) {
-            $q->where('code', 'unite');
+            $q->where('code', Nature::UNITE);
         })->orderBy('position', 'asc')
             ->get();
 
         $items = Organisation::whereHas('nature', function ($q) {
-            $q->where('code', 'region');
+            $q->where('code', Nature::REGION);
         })->get()
             ->map(function ($organisation) use ($typesOrganisations, $data) {
 
@@ -205,5 +216,10 @@ class ScoutStatController extends Controller
                 ]]
             )
         ];
+    }
+
+    public function cotisationScoutByRegion()
+    {
+        return $this->personneStatService->cotisationByScoutAndRegion();
     }
 }

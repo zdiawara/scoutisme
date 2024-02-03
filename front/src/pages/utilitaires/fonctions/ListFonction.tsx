@@ -40,16 +40,20 @@ const ListFonction: FC = () => {
 
   const columns: Columns<FonctionResource>[] = [
     {
-      name: "code",
-      label: "Code",
-    },
-    {
       name: "nom",
       label: "Nom",
-      Cell: ({ nom }) => {
-        return <span className="text-primary fw-semibold">{nom}</span>;
+      Cell: ({ nom, responsable }) => {
+        return (
+          <>
+            <div className="text-primary fw-semibold">{nom}</div>
+            {responsable.toString() === "1" ? (
+              <span>Responsable d'organisation</span>
+            ) : null}
+          </>
+        );
       },
     },
+
     {
       name: "etat",
       label: "Nature organisation",

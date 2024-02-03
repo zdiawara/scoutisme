@@ -97,53 +97,53 @@ return new class extends Migration
         Fonction::create(['nom' => 'Scout', 'code' => 'scout', 'nature_id' => Nature::where('code', 'unite')->first()->id]);
 
         collect([
-            "Chef d'unité",
-            "Adj. chef d'unité",
-            "Chargé de la trésorerie",
-            "Chargé de l'information",
-            "Secrétaire",
+            ["nom" => "Chef d'unité", "responsable" => 1],
+            ["nom" => "Adj. chef d'unité", "responsable" => 0],
+            ["nom" => "Chargé de la trésorerie", "responsable" => 0],
+            ["nom" => "Chargé de l'information", "responsable" => 0],
+            ["nom" => "Secrétaire", "responsable" => 0]
         ])->each(function ($item) use ($unite) {
-            $this->fonctionService->create(['nom' => $item, 'nature_id' => $unite->id, 'duree_mandat' => 1]);
+            $this->fonctionService->create(array_merge($item, ['nature_id' => $unite->id, 'duree_mandat' => 1]));
         });
 
         collect([
-            "Conseiller de groupe",
+            ["nom" => "Conseiller de groupe", "responsable" => 1],
         ])->each(function ($item) use ($groupe) {
-            $this->fonctionService->create(['nom' => $item, 'nature_id' => $groupe->id, 'duree_mandat' => 1]);
+            $this->fonctionService->create(array_merge($item, ['nature_id' => $groupe->id, 'duree_mandat' => 1]));
         });
 
         collect([
-            'Commissaire régional',
-            'Com. rég. adj. chargé du secrétariat',
-            'Com. rég. gestion financière et du patrimoine',
-            'Com. rég. communication',
-            'Com. rég. programme des jeunes',
-            'Com. rég. formation et aux ressources adultes',
-            'Com. rég. scoutismes confessionnels'
+            ["nom" => 'Commissaire régional', "responsable" => 1],
+            ["nom" => 'Com. rég. adj. chargé du secrétariat', "responsable" => 0],
+            ["nom" => 'Com. rég. gestion financière et du patrimoine', "responsable" => 0],
+            ["nom" => 'Com. rég. communication', "responsable" => 0],
+            ["nom" => 'Com. rég. programme des jeunes', "responsable" => 0],
+            ["nom" => 'Com. rég. formation et aux ressources adultes', "responsable" => 0],
+            ["nom" => 'Com. rég. scoutismes confessionnels', "responsable" => 0]
         ])->each(function ($item) use ($region) {
-            $this->fonctionService->create(['nom' => $item, 'nature_id' => $region->id]);
+            $this->fonctionService->create(array_merge($item, ['nature_id' => $region->id]));
         });
 
         $typeEquipeNationale = TypeOrganisation::where('code', 'equipe_nationale')->firstOrFail();
 
         collect([
-            "Commissaire général",
-            "Commissaire général adjoint. chargé des relations internationales",
-            "Commissaire national à la gestion financière et du patrimoine",
-            "Commissaire national au programme des jeunes",
-            "Commissaire national à la formation et aux ressources adultes",
-            "Commissaire national au secrétariat et à la communication",
-            "Commissaire national aux scoutismes confessionnels"
+            ["nom" => "Commissaire général", "responsable" => 1],
+            ["nom" => "Commissaire général adjoint. chargé des relations internationales", "responsable" => 0],
+            ["nom" => "Commissaire national à la gestion financière et du patrimoine", "responsable" => 0],
+            ["nom" => "Commissaire national au programme des jeunes", "responsable" => 0],
+            ["nom" => "Commissaire national à la formation et aux ressources adultes", "responsable" => 0],
+            ["nom" => "Commissaire national au secrétariat et à la communication", "responsable" => 0],
+            ["nom" => "Commissaire national aux scoutismes confessionnels", "responsable" => 0]
         ])->each(function ($item) use ($national, $typeEquipeNationale) {
-            $this->fonctionService->create(['nom' => $item, 'nature_id' => $national->id, 'type_id' => $typeEquipeNationale->id]);
+            $this->fonctionService->create(array_merge($item, ['nature_id' => $national->id, 'type_id' => $typeEquipeNationale->id]));
         });
 
         $typeConseilNational = TypeOrganisation::where('code', 'conseil_national')->firstOrFail();
         collect([
-            "Président",
-            "Vice président",
+            ["nom" => "Président", "responsable" => 1],
+            ["nom" => "Vice président", "responsable" => 0]
         ])->each(function ($item) use ($national, $typeConseilNational) {
-            $this->fonctionService->create(['nom' => $item, 'nature_id' => $national->id, 'type_id' => $typeConseilNational->id]);
+            $this->fonctionService->create(array_merge($item, ['nature_id' => $national->id, 'type_id' => $typeConseilNational->id]));
         });
     }
 

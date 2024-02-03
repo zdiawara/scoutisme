@@ -50,6 +50,7 @@ export type FonctionResource = {
   nom: string;
   code: string;
   duree_mandat: string;
+  responsable: string;
   nature: NatureResource;
   type?: TypeOrganisationResource;
 };

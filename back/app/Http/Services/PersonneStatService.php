@@ -132,7 +132,7 @@ class PersonneStatService
                     ];
                 })->toArray(),
                 [[
-                    'nom' => 'Effectif',
+                    'nom' => 'Cumul',
                     'code' => 'cumul'
                 ]]
             ),

@@ -14,7 +14,7 @@ class Fonction extends Model
     use HasUuids, Filterable, SoftDeletes, Audit;
 
     protected $fillable = [
-        'code', 'nom', 'nature_id', 'duree_mandat', 'type_id'
+        'code', 'nom', 'nature_id', 'duree_mandat', 'type_id', 'responsable'
     ];
 
     public function modelFilter()

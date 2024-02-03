@@ -86,6 +86,10 @@ const ScoutDashbord = Loadable(
   lazy(() => import("pages/dashbords/personnes/ScoutDashbord"))
 );
 
+const CotisationDashbord = Loadable(
+  lazy(() => import("pages/dashbords/cotisations/CotisationDashBoard"))
+);
+
 const ListPaiement = Loadable(
   lazy(() => import("pages/paiements/ListPaiement"))
 );
@@ -159,6 +163,7 @@ export const router = createBrowserRouter(
         <Route path={LINKS.dashbords.base} element={<Outlet />}>
           <Route path="organisations" element={<OrganisationDashBord />} />
           <Route path="scouts" element={<ScoutDashbord />} />
+          <Route path="cotisations" element={<CotisationDashbord />} />
         </Route>
 
         <Route path={LINKS.acces.base} element={<Outlet />}>

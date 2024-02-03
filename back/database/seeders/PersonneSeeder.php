@@ -36,17 +36,18 @@ class PersonneSeeder extends Seeder
                         ->get()
                         ->each(function ($organisation) use ($fonction) {
                             Personne::factory()
-                                ->count(rand(3, 30))
+                                ->count(rand(15, 30))
                                 ->make()
                                 ->each(function ($personne) use ($organisation, $fonction) {
                                     $personne->type = 'scout';
                                     $personne->genre_id = Genre::all()->random()->id;
-                                    $personneCreated = $this->personneService->create($personne->toArray());
-                                    $this->personneService->affecter($personneCreated, [
-                                        'organisation_id' => $organisation->id,
-                                        'fonction_id' => $fonction->id,
-                                        'date_debut' => now(),
-                                    ]);
+                                    $this->personneService->create(array_merge($personne->toArray(), [
+                                        "attribution" => [
+                                            'organisation_id' => $organisation->id,
+                                            'fonction_id' => $fonction->id,
+                                            'date_debut' => now(),
+                                        ]
+                                    ]));
                                 });
                         });
                 } else {
@@ -59,12 +60,13 @@ class PersonneSeeder extends Seeder
                                 ->each(function ($personne) use ($organisation, $fonction) {
                                     $personne->type = 'adulte';
                                     $personne->genre_id = Genre::all()->random()->id;
-                                    $personneCreated = $this->personneService->create($personne->toArray());
-                                    $this->personneService->affecter($personneCreated, [
-                                        'organisation_id' => $organisation->id,
-                                        'fonction_id' => $fonction->id,
-                                        'date_debut' => now(),
-                                    ]);
+                                    $this->personneService->create(array_merge($personne->toArray(), [
+                                        "attribution" => [
+                                            'organisation_id' => $organisation->id,
+                                            'fonction_id' => $fonction->id,
+                                            'date_debut' => now(),
+                                        ]
+                                    ]));
                                 });
                         });
                 }

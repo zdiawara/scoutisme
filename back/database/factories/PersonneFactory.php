@@ -22,8 +22,7 @@ class PersonneFactory extends Factory
             'id' => Str::uuid(),
             'nom' => fake()->lastName(),
             'prenom' => fake()->firstName(),
-            'etat' => fake()->numberBetween(0, 1),
-            'type' => fake()->numberBetween(0, 1) === 0 ? 'scout' : 'adulte',
+            'etat' => 1,
             'code' => fake()->unique()->numerify('#####'),
             'email' => fake()->unique()->safeEmail()
         ];

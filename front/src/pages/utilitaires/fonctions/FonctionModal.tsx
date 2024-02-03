@@ -1,5 +1,6 @@
 import {
   HookModalForm,
+  Radio,
   SelectNature,
   SelectTypeOrganisation,
   TextInput,
@@ -86,6 +87,16 @@ const Form: FC<WrapperV2Props> = (props) => {
                 <p> Mettre 0 si durée infinie</p>
               </div>
             }
+          />
+        </Col>
+        <Col xs={12}>
+          <Radio
+            name="responsable"
+            label="Responsable d'organisation"
+            type="switch"
+            inline
+            value="true"
+            className="text-primary mt-2"
           />
         </Col>
       </Row>

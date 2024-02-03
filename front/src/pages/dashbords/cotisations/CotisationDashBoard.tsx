@@ -1,28 +1,30 @@
 import classNames from "classnames";
 import { useState } from "react";
 import { Card, Row, Col, ListGroup } from "react-bootstrap";
-import { ScoutEffectifByRegion } from "./scouts";
+import { ScoutCotisation } from "./scouts";
 
 const TABS = [
   {
-    label: "Effectif",
-    code: "scout_effectif_by_region",
-    description: "Repartition des scouts par région",
+    label: "Scout",
+    code: "scouts",
+    description: "Cotisation des scouts par région",
   },
   {
-    label: "Genre",
-    code: "scout_genre_by_region",
-    description: "Nombre de scouts par genre",
+    label: "Adulte",
+    code: "adultes",
+    description: "Etat de cotisations des adultes",
   },
 ];
 
-const PersonneDashbord = () => {
-  const [page, setPage] = useState<string>("scout_effectif_by_region");
+const CotisationDashbord = () => {
+  const [page, setPage] = useState<string>("scouts");
 
   const renderContent = () => {
     switch (page) {
+      case "scouts":
+        return <ScoutCotisation />;
       default:
-        return <ScoutEffectifByRegion />;
+        return null;
     }
   };
 
@@ -31,7 +33,7 @@ const PersonneDashbord = () => {
       <Col xs={3}>
         <Card>
           <Card.Header className="bg-light fw-bold text-dark shadow-sm">
-            SCOUTS
+            Cotisation par région
           </Card.Header>
           <Card.Body className="p-1">
             <ListGroup defaultActiveKey="#link1">
@@ -58,4 +60,4 @@ const PersonneDashbord = () => {
   );
 };
 
-export default PersonneDashbord;
+export default CotisationDashbord;

@@ -65,6 +65,7 @@ export const LINKS = {
   dashbords: {
     base: "dashbords",
     scouts: "/dashbords/scouts",
+    cotisations: "/dashbords/cotisations",
     adultes: "/dashbords/adultes",
     organisations: "/dashbords/organisations",
   },

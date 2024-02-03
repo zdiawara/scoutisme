@@ -44,7 +44,6 @@ class CotisationService
                 'personne_id' => $personneId,
                 'montant_total' => $montantTotal,
                 'montant_restant' => $montantTotal,
-                'paiements' => []
             ]);
         }
 

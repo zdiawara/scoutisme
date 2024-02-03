@@ -1,2 +1,1 @@
-export * from "./ScoutCotisationByRegion";
-export * from "./ScoutEffectifByRegion";
+export * from "./ScoutEffectif";

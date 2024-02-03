@@ -105,6 +105,7 @@ return new class extends Migration
             $table->integer('duree_mandat')->nullable();
             $table->uuid('nature_id');
             $table->uuid('type_id')->nullable();
+            $table->boolean('responsable')->default(0);
             $table->timestamps();
             $table->softDeletes();
             $table->uuid('created_by')->nullable();

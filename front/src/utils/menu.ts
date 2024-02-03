@@ -41,6 +41,12 @@ export const MENU_ITEMS = [
         isTitle: false,
         url: LINKS.dashbords.scouts,
       },
+      {
+        key: "cotisations_1",
+        label: "Cotisations",
+        isTitle: false,
+        url: LINKS.dashbords.cotisations,
+      },
     ],
   },
   {

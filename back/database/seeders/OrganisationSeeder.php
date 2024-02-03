@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Http\Services\OrganisationService;
 use App\Models\Nature;
+use App\Models\Organisation;
 use App\Models\TypeOrganisation;
 use Illuminate\Database\Seeder;
 
@@ -23,79 +24,118 @@ class OrganisationSeeder extends Seeder
      */
     public function run(): void
     {
-        $natureConseil = Nature::where('code', 'national')
-            ->firstOrFail();
-
-        $natureRegion = Nature::where('code', 'region')
-            ->firstOrFail();
-
-        $conseilNational = $this->organisationService->create([
-            'nom' => 'Conseil national',
-            'nature_id' => $natureConseil->id,
-            'type_id' => TypeOrganisation::where('code', 'conseil_national')
-                ->firstOrFail()
-                ->id
-        ]);
-
-        $equipeNational = $this->organisationService->create([
-            'nom' => 'Equipe nationale',
-            'nature_id' => $natureConseil->id,
-            'parent_id' => $conseilNational->id,
-            'type_id' => TypeOrganisation::where('code', 'equipe_nationale')
-                ->firstOrFail()
-                ->id
-        ]);
 
         collect([
-            'Boucle du Mouhoun',
-            'Cascades',
-            'Centre',
-            'Centre-Est',
-            'Centre-Nord',
-            'Centre-Ouest',
-            'Centre-Sud',
-            'Est',
-            'Hauts-Bassins',
-            'Nord',
-            'Plateau central',
-            'Sahel',
-            'Sud-Ouest',
-        ])->each(function ($item) use ($equipeNational, $natureRegion) {
-            $region = $this->organisationService->create([
-                'nom' => $item,
-                'nature_id' => $natureRegion->id,
-                'parent_id' => $equipeNational->id
-            ]);
+            "hba" => [
+                "groupes" => [
+                    [
+                        "nom" => "Dinizulu",
+                        "code" => "DIN",
+                        "unites" => [
+                            ["nom" => "Babemba", "code" => "BAB"],
+                        ]
+                    ]
+                ]
+            ],
+            "bmo" => [
+                "groupes" => [
+                    [
+                        "nom" => "Saint Pierre de Gounghin",
+                        "code" => "SPG",
+                        "unites" => [
+                            ["nom" => "Tagafet", "code" => "TAG"],
+                        ]
+                    ]
+                ]
+            ],
+            "cas" => [
+                "unites" => [["nom" => "Charles Lwang", "code" => "CHL"]]
+            ],
+            "cen" => [
+                "unites" => [["nom" => "Nelson Mandela", "code" => "NEM"]]
+            ],
+            "ces" => [
+                "unites" => [["nom" => "Boli bama", "code" => "BOB"]]
+            ],
+            "cno" => [
+                "unites" => [["nom" => "Guimbi Ouattara", "code" => "GUO"]]
+            ],
+            "cou" => [
+                "unites" => [["nom" => "Luteur King", "code" => "LKI"]]
+            ],
+            "csu" => [
+                "unites" => [["nom" => "Léopold Sédar Senghor", "code" => "LSS"]]
+            ],
+            "est" => [
+                "unites" => [["nom" => "Balaie", "code" => "BAL"]]
+            ],
+            "cou" => [
+                "unites" => [["nom" => "Thomas Sang", "code" => "THS"]]
+            ],
+            "nor" => [
+                "unites" => [["nom" => "Diaba Lompo", "code" => "DIL"]]
+            ],
+            "pce" => [
+                "unites" => [["nom" => "Fanga", "code" => "FAN"]]
+            ],
+            "sah" => [
+                "unites" => [["nom" => "Soundiata Keita", "code" => "SOK"]]
+            ],
+            "sou" => [
+                "unites" => [["nom" => "Massa", "code" => "MAS"]]
+            ]
+        ])->each(function ($region, $codeOrganisation) {
+
+            $organisation = Organisation::where('code', $codeOrganisation)
+                ->firstOrFail();
 
             $types = TypeOrganisation::whereHas('nature', function ($q) {
                 $q->where('code', 'unite');
             })->get();
 
-            $natureGroupe = Nature::where('code', 'groupe')
+            $natureUnite = Nature::where('code', 'unite')
                 ->firstOrFail();
 
-            $nb = fake()->numberBetween(4, 10);
-
-            for ($i = 0; $i <= $nb; $i++) {
-                $groupe = $this->organisationService->create([
-                    'nom' => 'G - ' . fake()->unique(true, 100000)->word(),
-                    'nature_id' => $natureGroupe->id,
-                    'parent_id' => $region->id
-                ]);
-
-                $nbUnite = fake()->numberBetween(2, 6);
-
-                $natureUnite = Nature::where('code', 'unite')
-                    ->firstOrFail();
-
-                for ($j = 0; $j <= $nbUnite; $j++) {
-                    $this->organisationService->create([
-                        'nom' => 'U - ' . fake()->unique(true, 100000)->word(),
+            if (isset($region["unites"])) {
+                collect($region["unites"])->each(function ($item) use ($organisation, $types, $natureUnite) {
+                    $this->organisationService->create(array_merge($item, [
+                        'parent_id' => $organisation->id,
                         'nature_id' => $natureUnite->id,
-                        'parent_id' => $groupe->id,
-                        'type_id' => $types->random()->id,
-                    ]);
-                }
+                        "type_id" => $types->random()->id
+                    ]));
+                });
+            }
+
+            if (isset($region["groupes"])) {
+                collect($region["groupes"])->each(function ($groupe) use ($organisation, $types, $natureUnite) {
+                    $groupeOrganisation = $this->organisationService->create(collect($groupe)->except('unites')
+                        ->merge(['parent_id' => $organisation->id, 'nature_id' => Nature::where('code', 'groupe')
+                            ->firstOrFail()->id])
+                        ->toArray());
+
+                    if (isset($groupe["unites"])) {
+                        collect($groupe["unites"])->each(function ($unite) use ($groupeOrganisation, $types, $natureUnite) {
+                            $this->organisationService->create(array_merge($unite, [
+                                'parent_id' => $groupeOrganisation->id,
+                                'nature_id' => $natureUnite->id,
+                                "type_id" => $types->random()->id
+                            ]));
+                        });
+                    }
+                });
+            }
+
+
+            $nbUnite = fake()->numberBetween(2, 6);
+
+            for ($j = 0; $j <= $nbUnite; $j++) {
+                $this->organisationService->create([
+                    'nom' => 'U - ' . fake()->unique(true, 100000)->word(),
+                    'nature_id' => $natureUnite->id,
+                    'parent_id' => $organisation->id,
+                    'type_id' => $types->random()->id,
+                    'code' => fake()->unique()->numerify('###') . $j,
+                ]);
             }
         });
     }

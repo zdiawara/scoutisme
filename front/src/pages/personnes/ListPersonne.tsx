@@ -253,6 +253,7 @@ const ListPersonne: FC = () => {
           columns={columns}
           data={result?.data || []}
           headerClassName="bg-light"
+          hover
         />
         {result?.data && (
           <ListResult.Paginate

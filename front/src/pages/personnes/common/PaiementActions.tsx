@@ -32,6 +32,7 @@ export const PaiementActions: FC<PaiementActionsProps> = ({
         description: "Valider le paiement",
         code: "valider",
         visible: cotisation.paiements.valider,
+        disabled: paiement.etat === "valide",
       },
       {
         label: "Rejeter",
@@ -39,6 +40,7 @@ export const PaiementActions: FC<PaiementActionsProps> = ({
         description: "Rejeter le paiement",
         code: "rejeter",
         visible: cotisation.paiements.rejeter,
+        disabled: paiement.etat === "valide",
       },
       {
         label: "Modifier",
@@ -46,6 +48,7 @@ export const PaiementActions: FC<PaiementActionsProps> = ({
         description: "Modifier le paiement",
         code: "modifier",
         visible: cotisation.paiements.creer,
+        disabled: paiement.etat === "valide",
       },
       {
         label: "Supprimer",
@@ -53,6 +56,7 @@ export const PaiementActions: FC<PaiementActionsProps> = ({
         description: "Supprimer le paiement",
         code: "supprimer",
         visible: cotisation.paiements.creer,
+        disabled: paiement.etat === "valide",
       },
       {
         label: "Récu",
@@ -64,7 +68,7 @@ export const PaiementActions: FC<PaiementActionsProps> = ({
     ];
 
     return ACTIONS.filter((e) => e.visible);
-  }, [cotisation]);
+  }, [cotisation, paiement]);
 
   if (!Boolean(actions.length)) {
     return null;
@@ -103,6 +107,7 @@ export const PaiementActions: FC<PaiementActionsProps> = ({
                   modalAction.change(item.code)();
                 }}
                 key={item.code}
+                disabled={item.disabled}
               >
                 <i className={`${item.icon} text-primary me-2`}></i>
                 <span className="text-primary fs-5 fw-semibold">

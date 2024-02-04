@@ -3,7 +3,7 @@ import * as yup from "yup";
 
 export const organisationSchema = yup.object({
   nom: yup.string().required(),
-  code: yup.string().length(3).required(),
+  code: yup.string().length(4).required(),
   nature: yup.object().required(),
   parent: yup
     .object()

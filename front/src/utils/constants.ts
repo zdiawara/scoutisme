@@ -21,7 +21,7 @@ export const MASK = {
   telephone: [/\d/, /\d/, " ", /\d/, /\d/, " ", /\d/, /\d/, " ", /\d/, /\d/],
   number: [/^\d+/],
   numbers: [/^\d+/],
-  codeOrganisation: [/\S/, /\S/, /\S/],
+  codeOrganisation: [/\S/, /\S/, /\S/, /\S/],
 };
 
 export const NATURE = {

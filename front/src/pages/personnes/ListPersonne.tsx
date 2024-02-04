@@ -174,11 +174,12 @@ const ListPersonne: FC = () => {
         name: "actions",
         label: "Actions",
         headClassName: "text-end",
-        Cell: (personne) => (
-          <div className="text-end">
-            <PersonneActions personne={personne} />
-          </div>
-        ),
+        Cell: (personne) =>
+          personne.type !== "scout" ? (
+            <div className="text-end">
+              <PersonneActions personne={personne} />
+            </div>
+          ) : null,
       });
     }
 

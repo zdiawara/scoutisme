@@ -120,32 +120,20 @@ export const PersonneCard: FC<PersonneCardProps> = ({ personne }) => {
                   </div>
                 </td>
               </tr>
-
-              <tr>
-                <td className="pt-1" colSpan={2}>
-                  <Item label="ID" value={carte.data.personne.code} />
-                </td>
-              </tr>
-              <tr>
-                <td colSpan={2}>
-                  <Item label="Region" value={carte.data.region?.nom} />
-                </td>
-              </tr>
-              <tr>
-                <td colSpan={2}>
-                  <Item label="Unite" value={carte.data.unite?.nom} />
-                </td>
-              </tr>
-              <tr>
-                <td colSpan={2}>
-                  <Item label="Branche" value={carte.data.unite?.branche} />
-                </td>
-              </tr>
+              {carte.data.lignes.map((ligne) => (
+                <tr key={ligne.nom}>
+                  <td colSpan={2}>
+                    <Item label={ligne.nom} value={ligne.value} />
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
 
-        <div className="carte-footer">Du 01/01/2024 au 31/12/2024</div>
+        <div className="carte-footer">
+          Du {carte.data.validite.debut} au {carte.data.validite.fin || "..."}
+        </div>
       </div>
     );
   };

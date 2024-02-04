@@ -121,13 +121,14 @@ export type PersonneCarte = {
     code: string;
     fonction: string;
   };
-  region?: {
+  lignes: Array<{ nom: string; value: string }>;
+  /* region?: {
     nom: string;
   };
   unite?: {
     nom: string;
     branche: string;
-  };
+  }; */
   validite: {
     debut: string;
     fin: string;

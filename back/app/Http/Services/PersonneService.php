@@ -111,30 +111,24 @@ class PersonneService
 
     public function carteMembre(Personne $personne, array $body)
     {
-
-        if ($personne->type == "adulte") {
-            return [
-                'message' => "La carte d'adhésion n'est pas encore disponible pour les adultes",
-                'date' => [],
-            ];
-        }
-
         $cotisation = $this->cotisationService->find($personne->id, collect($body)->get('annee', date('Y')));
 
         if ($cotisation && $cotisation->montant_restant !== 0) {
             return [
-                'message' => "La carte d'adhésion n'est pas disponible. Le scout n'est pas à jour dans ses cotisations",
+                'message' => "La carte d'adhésion n'est pas disponible. La personne n'est pas à jour dans ses cotisations",
                 'date' => [],
             ];
         }
 
         $organisation = $personne->organisation;
 
-        $parents = collect($organisation ? $organisation->parents : []);
 
-        $isUnite = $organisation ? $organisation->nature->code === Nature::UNITE : false;
-
-        $region = $parents->first(fn ($item) => $item['nature'] === Nature::REGION);
+        if ($organisation == null) {
+            return [
+                'message' => "Impossible de générer une carte pour une personne qui n'est pas rattachée à une d'organisation",
+                'date' => [],
+            ];
+        }
 
         $data = [
             'meta' => [
@@ -147,20 +141,51 @@ class PersonneService
             'personne' => [
                 'nom' => $personne->prenom . ' ' . $personne->nom,
                 'code' => $personne->code,
-                'fonction' => ''
+                'fonction' => $personne->fonction != null ?  $personne->fonction->nom : ''
             ],
-            'region' => [
-                'nom' => $region ? $region['nom'] : ''
-            ],
-            'unite' => $isUnite ? [
-                'nom' => $organisation->nom,
-                'branche' => $organisation->type->membre,
-            ] : null,
             'validite' => [
                 'debut' => date('d/m/Y', strtotime($personne->date_debut)),
                 'fin' => $personne->date_fin ? date('d/m/Y', strtotime($personne->date_fin)) : ''
             ]
         ];
+
+        $lignes = collect([
+            ["nom" => "ID", "value" => $personne->code]
+        ]);
+
+
+        $nature = $organisation->nature->code;
+
+        if ($nature == Nature::NATIONAL) {
+            $lignes->push(
+                ["nom" => "Organisation", "value" => $organisation->nom]
+            );
+        } else {
+
+            $hasRegionLevel = collect([Nature::UNITE, Nature::GROUPE])->contains($nature);
+
+            if ($hasRegionLevel) {
+                $parents = collect($organisation ? $organisation->parents : []);
+                $region = $parents->first(fn ($item) => $item['nature'] === Nature::REGION);
+                $lignes->push(
+                    ["nom" => "Region", "value" => $region ? $region['nom'] : '']
+                );
+            }
+
+            if ($nature == Nature::UNITE) {
+                $lignes->push(["nom" => "Unite", "value" =>  $organisation->nom]);
+            } else if ($nature == Nature::GROUPE) {
+                $lignes->push(["nom" => "Groupe", "value" =>  $organisation->nom]);
+            } else if ($nature == Nature::REGION) {
+                $lignes->push(["nom" => "Region", "value" =>  $organisation->nom]);
+            }
+
+            if ($personne->type == "scout") {
+                $lignes->push(["nom" => "Branche", "value" => $organisation->type->membre]);
+            }
+        }
+
+        $data['lignes'] = $lignes;
 
         return [
             "data" => $data

@@ -1,0 +1,67 @@
+name: Déploiement Dev ASBF
+on:
+  push:
+    branches: [develop]
+jobs:
+  deploiement-backend:
+    runs-on: ubuntu-latest
+    environment: RECETTE
+    defaults:
+      run:
+        working-directory: ./back
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@4.1.0
+        with:
+          server: ${{ secrets.ASBF_FTP_HOST }}
+          username: ${{ secrets.ASBF_FTP_USERNAME }}
+          password: ${{ secrets.ASBF_FTP_PASSWORD }}
+          local-dir: /home/runner/work/scoutisme/scoutisme/back/
+          server-dir: ./back/
+
+      - name: Deploy to asbf
+        uses: appleboy/ssh-action@master
+        with:
+          username: u130034144
+          host: 195.35.49.146
+          port: 65002
+          password: k@BaKoLOb1
+          script: |
+            cd ./domains/asbf.bf/public_html/back
+            php ../../../../composer.phar install --no-interaction --prefer-dist --optimize-autoloader
+            php artisan migrate --force
+            php artisan optimize
+
+  deploiement-front:
+    runs-on: ubuntu-latest
+    environment: RECETTE
+    defaults:
+      run:
+        working-directory: ./front
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: front/package-lock.json
+      - run: npm install
+      - run: npm run build --if-present
+        working-directory: ./front
+
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@4.1.0
+        with:
+          server: ${{ secrets.ASBF_FTP_HOST }}
+          username: ${{ secrets.ASBF_FTP_USERNAME }}
+          password: ${{ secrets.ASBF_FTP_PASSWORD }}
+          local-dir: /home/runner/work/scoutisme/scoutisme/front/build/
+          server-dir: ./

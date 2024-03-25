@@ -1,4 +1,4 @@
-name: Déploiement Dev ASBF
+name: Déploiement sur RECETTE ASBF
 on:
   push:
     branches: [develop]
@@ -22,13 +22,13 @@ jobs:
           local-dir: /home/runner/work/scoutisme/scoutisme/back/
           server-dir: ./back/
 
-      - name: Deploy to asbf
+      - name: Copier les fichiers
         uses: appleboy/ssh-action@master
         with:
-          username: u130034144
-          host: 195.35.49.146
-          port: 65002
-          password: k@BaKoLOb1
+          username: ${{ secrets.ASBF_SSH_USERNAME }}
+          host: ${{ secrets.ASBF_SSH_HOST }}
+          port: ${{ secrets.ASBF_SSH_PORT }}
+          password: ${{ secrets.ASBF_SSH_PASSWORD }}
           script: |
             cd ./domains/asbf.bf/public_html/back
             php ../../../../composer.phar install --no-interaction --prefer-dist --optimize-autoloader

@@ -46,6 +46,12 @@ export const Organisation: FC<OrganisationProps> = ({
     const TABS = [
       { label: "Détails", code: "fiche", icon: ICONS.detail, visible: true },
       {
+        label: "Organisation",
+        code: "organisations",
+        icon: ICONS.organisation,
+        visible: true,
+      },
+      {
         label: "Direction",
         code: "direction",
         icon: ICONS.direction,
@@ -59,14 +65,12 @@ export const Organisation: FC<OrganisationProps> = ({
       },
     ];
 
-    console.log(protection.personne.scouts);
-
     return TABS.filter((e) => e.visible).filter((item) => {
       if (organisation.nature.code !== NATURE.unite) {
         return item.code !== "scouts";
       }
       if (organisation.nature.code === NATURE.unite) {
-        return item.code !== "sous_organisation";
+        return item.code !== "organisations";
       }
       return true;
     });
@@ -89,15 +93,10 @@ export const Organisation: FC<OrganisationProps> = ({
         return <OrganisationMembres organisation={organisation} />;
       case "scouts":
         return <OrganisationScouts organisation={organisation} />;
+      case "organisations":
+        return <SousOrganisation organisation={organisation} />;
       default:
-        return (
-          <>
-            <DetailOrganisation organisation={organisation} />
-            {organisation.nature.code !== NATURE.unite && (
-              <SousOrganisation organisation={organisation} />
-            )}
-          </>
-        );
+        return <DetailOrganisation organisation={organisation} />;
     }
   };
 

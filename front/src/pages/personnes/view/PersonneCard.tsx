@@ -84,7 +84,7 @@ export const PersonneCard: FC<PersonneCardProps> = ({ personne }) => {
 
     if (carte.message) {
       return (
-        <Alert variant="secondary" className="mb-0">
+        <Alert variant="danger" className="mb-0">
           {carte.message}
         </Alert>
       );
@@ -146,7 +146,11 @@ export const PersonneCard: FC<PersonneCardProps> = ({ personne }) => {
           label="Carte d'adhésion"
           description="Carte d'adhésion de la personne"
           className="mb-2"
-          right={<Button onClick={telechargerPDF}>Télécharger</Button>}
+          right={
+            Boolean(carte?.data) && (
+              <Button onClick={telechargerPDF}>Télécharger</Button>
+            )
+          }
         />
         {renderContent()}
       </Card.Body>

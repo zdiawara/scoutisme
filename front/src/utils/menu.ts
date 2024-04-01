@@ -10,10 +10,10 @@ export const MES_INFORMATIONS = [
   },
   {
     key: "mon_organisation",
-    label: "Mon organisation",
+    label: "Mon profil",
     isTitle: false,
     icon: "uil-location",
-    url: LINKS.organisation.base,
+    url: LINKS.profil.base,
   },
 ];
 

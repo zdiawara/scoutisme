@@ -15,9 +15,7 @@ type ItemProps = {
 const Item: FC<ItemProps> = ({ label, children }) => {
   return (
     <>
-      {label && (
-        <div className="font-14 text-black m-0 mb-1">{label}&nbsp;:</div>
-      )}
+      {label && <div className="font-12 text-black m-0 mb-1">{label} </div>}
       {children === undefined || children === null ? (
         <Empty />
       ) : (
@@ -46,12 +44,12 @@ const Header: FC<HeaderProps> = ({
   return (
     <Stack
       direction="horizontal"
-      className={`text-primary bg-light rounded p-2 ${className}`}
+      className={`text-primary bg-white shadow-sm p-2 ${className}`}
     >
       {icon && <i className={`me-1 fs-3 align-self-start ${icon}`}></i>}
       <Stack>
-        <div className={`fs-3 text-primary fw-semibold`}>{label}</div>
-        {description && <div className="text-primary">{description}</div>}
+        <div className={`fs-3 text-black fw-semibold`}>{label}</div>
+        {description && <div className="text-black">{description}</div>}
       </Stack>
       <div className="ms-auto align-self-start">{right}</div>
     </Stack>

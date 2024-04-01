@@ -18,10 +18,11 @@ const ViewPersonne: FC = () => {
     return (
       <div className="ms-auto d-flex align-items-center">
         <Link
-          className="rounded-corner btn btn-danger"
+          className="rounded-corner btn btn-danger btn-sm"
           to={LINKS.personnes.edit(personne.id)}
         >
-          <i className="uil-edit-alt"></i> Modifier
+          <i className="uil-edit-alt"></i>
+          <span className="d-none d-sm-inline">Modifier</span>
         </Link>
       </div>
     );

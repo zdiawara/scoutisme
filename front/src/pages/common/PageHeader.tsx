@@ -59,11 +59,12 @@ export const PageHeader = {
             {showBackBtn && (
               <Button
                 variant="default"
+                size="sm"
                 className="text-dark"
                 onClick={() => navigation(-1)}
               >
                 <i className="uil-arrow-left fs-5 me-1"></i>
-                Retour
+                <span className="d-none d-sm-inline">Retour</span>
               </Button>
             )}
             {left}

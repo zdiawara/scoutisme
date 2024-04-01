@@ -115,7 +115,8 @@ export const Organisation: FC<OrganisationProps> = ({
           className="rounded-corner btn btn-danger"
           to={LINKS.organisations.edit(organisation.id)}
         >
-          <i className="uil-edit-alt"></i> Modifier
+          <i className="uil-edit-alt"></i>
+          <span className="d-none d-sm-block">Modifier</span>
         </Link>
       </div>
     );

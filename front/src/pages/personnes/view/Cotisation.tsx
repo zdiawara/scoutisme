@@ -68,7 +68,7 @@ export const Cotisation: FC<CotisationProps> = ({
     );
   };
   return (
-    <Card body>
+    <Card className="shadow-sm">
       <View.Header
         icon={ICONS.cotisation}
         label="Cotisation"
@@ -83,7 +83,7 @@ export const Cotisation: FC<CotisationProps> = ({
           />
         }
       />
-      {renderContent()}
+      <Card.Body>{renderContent()}</Card.Body>
     </Card>
   );
 };

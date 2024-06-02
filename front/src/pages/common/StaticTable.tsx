@@ -61,7 +61,7 @@ export function StaticTable<T>({
     return (
       <>
         <ListResult.Table<T>
-          headerClassName="shadow-sm"
+          headerClassName="bg-light"
           columns={columns}
           data={result.data || []}
         />
@@ -111,9 +111,9 @@ export function StaticTable<T>({
   );
 
   return (
-    <Card body>
-      <View.Header {...header} className="mb-2" right={right} />
-      {renderContent()}
+    <Card>
+      <View.Header {...header} right={right} />
+      <Card.Body>{renderContent()}</Card.Body>
     </Card>
   );
 }

@@ -57,13 +57,11 @@ export const PersonneFormInputs = () => {
         </Col>
         <Col xl={9} lg={9} className="mx-auto">
           <Card className="shadow-sm">
+            <View.Header
+              {...Header.infoGenerale}
+              description="Informations générales de la personne"
+            />
             <Card.Body>
-              <View.Header
-                {...Header.infoGenerale}
-                description="Informations générales de la personne"
-                className="mb-3"
-              />
-
               <Row className="g-3">
                 <Col sm={4}>
                   <TextInput
@@ -102,7 +100,13 @@ export const PersonneFormInputs = () => {
                   />
                 </Col>
               </Row>
+            </Card.Body>
 
+            <View.Header
+              {...Header.contact}
+              description="Email et numéro de la personne et de son representant"
+            />
+            <Card.Body>
               {/* <View.Header
                 label="Organisation"
                 description="La fonction occupée par la personne au sein d'une organisation"
@@ -147,12 +151,6 @@ export const PersonneFormInputs = () => {
                 </Col>
               </Row> */}
 
-              <View.Header
-                {...Header.contact}
-                description="Email et numéro de la personne et de son representant"
-                className="mb-3 mt-3"
-              />
-
               <Row className="g-3">
                 <Col sm={6}>
                   <TextInput
@@ -193,13 +191,13 @@ export const PersonneFormInputs = () => {
                   />
                 </Col>
               </Row>
+            </Card.Body>
 
-              <View.Header
-                {...Header.adresse}
-                description="Ville et lieu de résidence de la personne"
-                className="mb-3 mt-3"
-              />
-
+            <View.Header
+              {...Header.adresse}
+              description="Ville et lieu de résidence de la personne"
+            />
+            <Card.Body>
               <Row className="g-3">
                 <Col sm={6}>
                   <SelectVille
@@ -222,12 +220,12 @@ export const PersonneFormInputs = () => {
           </Card>
           {typePersonne === TYPE_PERSONNES.ADULTE && (
             <Card className="shadow-sm">
+              <View.Header
+                {...Header.formation}
+                description="Profession et formation de la personne"
+                className="mb-3"
+              />
               <Card.Body>
-                <View.Header
-                  {...Header.formation}
-                  description="Profession et formation de la personne"
-                  className="mb-3"
-                />
                 <Row className="g-3">
                   <Fragment key="adulte">
                     <Col sm={6}>

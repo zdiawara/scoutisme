@@ -8,23 +8,18 @@ type ViewMailProps = {
 
 export const ViewMail = ({ message }: ViewMailProps) => {
   return (
-    <>
-      <Card className="shadow-sm">
-        <Card.Body>
-          <View.Header label="Objet" className="mb-3" />
-          <View.Item>{message?.objet}</View.Item>
-        </Card.Body>
-      </Card>
-
-      <Card className="shadow-sm">
-        <Card.Body>
-          <View.Header label="Corps du mail" className="mb-4" />
-          <div
-            className="text-dark"
-            dangerouslySetInnerHTML={{ __html: message?.contenu || "" }}
-          />
-        </Card.Body>
-      </Card>
-    </>
+    <Card className="shadow-sm">
+      <View.Header label="Objet" />
+      <Card.Body>
+        <View.Item>{message?.objet}</View.Item>
+      </Card.Body>
+      <View.Header label="Corps du mail" />
+      <Card.Body>
+        <div
+          className="text-dark"
+          dangerouslySetInnerHTML={{ __html: message?.contenu || "" }}
+        />
+      </Card.Body>
+    </Card>
   );
 };

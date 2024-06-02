@@ -140,20 +140,17 @@ export const PersonneCard: FC<PersonneCardProps> = ({ personne }) => {
 
   return (
     <Card>
-      <Card.Body>
-        <View.Header
-          icon="mdi mdi-card-account-details-outline"
-          label="Carte d'adhésion"
-          description="Carte d'adhésion de la personne"
-          className="mb-2"
-          right={
-            Boolean(carte?.data) && (
-              <Button onClick={telechargerPDF}>Télécharger</Button>
-            )
-          }
-        />
-        {renderContent()}
-      </Card.Body>
+      <View.Header
+        icon="mdi mdi-card-account-details-outline"
+        label="Carte d'adhésion"
+        description="Carte d'adhésion de la personne"
+        right={
+          Boolean(carte?.data) && (
+            <Button onClick={telechargerPDF}>Télécharger</Button>
+          )
+        }
+      />
+      <Card.Body>{renderContent()}</Card.Body>
     </Card>
   );
 };

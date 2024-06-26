@@ -17,6 +17,13 @@ export const statApi = {
         headers: Array<{ nom: string; code: string }>;
       }>(`${base}/scouts/regions`),
 
+    byGenre: () =>
+      requestGet<{
+        data: Array<Record<string, any>>;
+        headers: Array<{ nom: string; code: string }>;
+        headers_2: Array<{ nom: string; code: string }>;
+      }>(`${base}/scouts/genres`),
+
     cotisationScoutByRegion: () =>
       requestGet<{
         data: Array<Record<string, any>>;

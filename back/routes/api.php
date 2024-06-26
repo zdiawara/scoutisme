@@ -18,7 +18,6 @@ use App\Http\Controllers\Api\PersonneController;
 use App\Http\Controllers\Api\PersonneStatController;
 use App\Http\Controllers\Api\RefFormationController;
 use App\Http\Controllers\Api\RoleController;
-use App\Http\Controllers\Api\ScoutStatController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TypeOrganisationController;
@@ -89,7 +88,7 @@ Route::get('/paiements/{paiement}/recus', [PaiementController::class, 'telecharg
 Route::get('/stats/organisations/regions', [OrganisationStatController::class, 'statByRegion']);
 Route::get('/stats/organisations', [OrganisationStatController::class, 'countAll']);
 Route::get('/stats/scouts/regions', [PersonneStatController::class, 'statByRegion']);
-Route::get('/stats/scouts/genre', [PersonneStatController::class, 'scoutByGenre']);
+Route::get('/stats/scouts/genres', [PersonneStatController::class, 'scoutByGenre']);
 Route::get('/stats/scouts/cotisations', [PersonneStatController::class, 'cotisationScoutByRegion']);
 
 Route::apiResource('users',  UserController::class);

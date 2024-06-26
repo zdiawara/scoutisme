@@ -2,6 +2,7 @@ import classNames from "classnames";
 import { useState } from "react";
 import { Card, Row, Col, ListGroup } from "react-bootstrap";
 import { ScoutEffectifByRegion } from "./scouts";
+import { EffectifScoutGenre } from "./scouts/EffectifScoutGenre";
 
 const TABS = [
   {
@@ -11,7 +12,7 @@ const TABS = [
   },
   {
     label: "Genre",
-    code: "scout_genre_by_region",
+    code: "scout_effectif_by_genre",
     description: "Nombre de scouts par genre",
   },
 ];
@@ -21,6 +22,8 @@ const PersonneDashbord = () => {
 
   const renderContent = () => {
     switch (page) {
+      case "scout_effectif_by_genre":
+        return <EffectifScoutGenre />;
       default:
         return <ScoutEffectifByRegion />;
     }

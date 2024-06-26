@@ -6,7 +6,7 @@ import { LINKS } from "utils";
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "utils/constants";
 import { organisationApi } from "api";
-import { Button } from "react-bootstrap";
+import { Button, Card, Col, Row } from "react-bootstrap";
 import { SousOrganisationActions } from "../common";
 import { useDroits } from "hooks/useDroits";
 
@@ -83,22 +83,24 @@ export const SousOrganisation: FC<SousOrganisationProps> = ({
   const { data } = query;
 
   return (
-    <StaticTable
-      header={{
-        icon: ICONS.personne,
-        label: "Sous organisations",
-        description: `Liste des organisations rattachées ${organisation.nom}`,
-      }}
-      data={data}
-      onSearch={searchByCriteres}
-      columns={columns}
-      isLoading={query.isLoading}
-      error={query.error}
-      actions={
-        protection.organisation.creer && (
-          <SousOrganisationActions organisation={organisation} />
-        )
-      }
-    />
+    <>
+      <StaticTable
+        header={{
+          icon: ICONS.personne,
+          label: "Sous organisations",
+          description: `Liste des organisations rattachées ${organisation.nom}`,
+        }}
+        data={data}
+        onSearch={searchByCriteres}
+        columns={columns}
+        isLoading={query.isLoading}
+        error={query.error}
+        actions={
+          protection.organisation.creer && (
+            <SousOrganisationActions organisation={organisation} />
+          )
+        }
+      />
+    </>
   );
 };

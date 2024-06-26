@@ -14,7 +14,7 @@ type ScoutCotisationListProps = {
   etatCotisationNames: DashHeaderItem[];
 };
 
-export const ScoutCotisationList: FC<ScoutCotisationListProps> = ({
+export const EffectifScoutGenreList: FC<ScoutCotisationListProps> = ({
   colonneNames,
   etatCotisationNames,
   data,
@@ -54,11 +54,11 @@ export const ScoutCotisationList: FC<ScoutCotisationListProps> = ({
               ) : (
                 <Fragment key={header.code + "cell"}>
                   <DashBoardTableCell
-                    value={item[header.code]?.cotisation_a_jour}
+                    value={item[header.code]?.homme}
                     key={`${header.code}_1`}
                   />
                   <DashBoardTableCell
-                    value={item[header.code]?.cotisation_non_a_jour}
+                    value={item[header.code]?.femme}
                     key={`${header.code}_2`}
                   />
                 </Fragment>

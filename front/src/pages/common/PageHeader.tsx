@@ -1,9 +1,9 @@
 import { FC, ReactNode } from "react";
-import { Button, Stack } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 type HeaderProps = {
-  title: string;
+  title?: string;
   subtitle?: string;
   right?: ReactNode;
   className?: string;
@@ -21,16 +21,18 @@ const Header: FC<HeaderProps & HeaderLeftProps> = ({
   className = "",
 }) => {
   return (
-    <Stack direction="horizontal" className={`align-items-center ${className}`}>
-      <Stack direction="horizontal" className="align-items-start">
+    <div className={`d-flex align-items-center ${className}`}>
+      <div className="d-flex align-items-start">
         {left}
-        <div className="ms-2">
-          <div className="m-0 h2 fw-normal text-primary">{title}</div>
-          <div className="text-primary">{subtitle}</div>
-        </div>
-      </Stack>
+        {title && (
+          <div className="ms-0">
+            <div className="m-0 h3 fw-normal text-primary">{title}</div>
+            <div className="text-primary">{subtitle}</div>
+          </div>
+        )}
+      </div>
       <div className="ms-auto">{right}</div>
-    </Stack>
+    </div>
   );
 };
 
@@ -38,9 +40,9 @@ export const PageHeader = {
   List: ({ icon, ...props }: HeaderProps & { icon?: string }) => (
     <Header
       {...props}
-      left={
-        icon ? <i className={`${icon} text-primary fs-1 lh-1`} /> : undefined
-      }
+      // left={
+      //   icon ? <i className={`${icon} text-primary fs-2 lh-1`} /> : undefined
+      // }
     />
   ),
 

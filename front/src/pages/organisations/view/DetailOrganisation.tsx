@@ -15,7 +15,7 @@ export const DetailOrganisation: FC<DetailOrganisationProps> = ({
 }) => {
   return (
     <>
-      <Card className="shadow-sm mt-1">
+      <Card className="shadow-sm">
         <View.Header
           {...Header.infoGenerale}
           description="Les informations générales de l'organisation"

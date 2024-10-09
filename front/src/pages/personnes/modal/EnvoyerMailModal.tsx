@@ -4,8 +4,7 @@ import { WrapperV2Props, withMutationForm } from "hoc";
 import { TextEditor } from "pages/messages/form/TextEditor";
 import { messageSchema } from "pages/messages/form/messageUtils";
 import { FC } from "react";
-import { Alert, Badge, Col, Row } from "react-bootstrap";
-import { toast } from "react-toastify";
+import { Alert, Col, Row } from "react-bootstrap";
 
 const Form: FC<WrapperV2Props> = (props) => {
   return (
@@ -21,12 +20,8 @@ const Form: FC<WrapperV2Props> = (props) => {
       <Alert className="text  bg-white text-dark shadow-sm" variant="default">
         <Alert.Heading>Informations</Alert.Heading>
         <p>
-          Ce mail sera envoyé à&nbsp;
-          <Badge bg="primary" className="fw-bold fs-5">
-            {props.meta.nombrePers}
-          </Badge>
-          &nbsp;personne(s). Il s'agit des personnes présentes dans le tableau
-          de recherche
+          Ce mail sera envoyé aux personnes présentes dans le tableau de
+          recherche
         </p>
       </Alert>
       <Row className="g-3">
@@ -51,13 +46,11 @@ const EnvoyerMailModalForm = withMutationForm(Form, messageSchema);
 
 type EnvoyerMailModalProps = {
   filter: Record<string, any>;
-  nombrePers: number;
   closeModal: () => void;
 };
 
 export const EnvoyerMailModal: FC<EnvoyerMailModalProps> = ({
   filter,
-  nombrePers,
   closeModal,
 }) => {
   const sendMail = (data: Record<string, any>) => {
@@ -68,23 +61,15 @@ export const EnvoyerMailModal: FC<EnvoyerMailModalProps> = ({
       filter
     );
   };
-  if (nombrePers === 0) {
-    closeModal();
-    toast("Aucun destinaire trouvé", {
-      type: toast.TYPE.WARNING,
-      autoClose: 5000,
-      position: "bottom-right",
-    });
-    return null;
-  }
+
   return (
     <EnvoyerMailModalForm
       onSave={sendMail}
       title="Envoyer mail"
-      meta={{
-        info: `Ce mail sera envoyé à ${nombrePers} personne(s)`,
-        nombrePers,
-      }}
+      // meta={{
+      //   info: `Ce mail sera envoyé à ${nombrePers} personne(s)`,
+      //   nombrePers,
+      // }}
       onSuccess={closeModal}
       onExit={closeModal}
     />

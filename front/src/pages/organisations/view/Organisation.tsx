@@ -104,21 +104,19 @@ export const Organisation: FC<OrganisationProps> = ({
     return <span>chargement ...</span>;
   }
 
-  const actions = () => {
+  const renderActions = () => {
     if (!organisation || !protection.organisation.creer || page !== "fiche") {
       return null;
     }
 
     return (
-      <div className="ms-auto d-flex">
-        <Link
-          className="rounded-corner btn btn-danger"
-          to={LINKS.organisations.edit(organisation.id)}
-        >
-          <i className="uil-edit-alt"></i>
-          <span className="d-none d-sm-block">Modifier</span>
-        </Link>
-      </div>
+      <Link
+        className="rounded-corner btn btn-danger"
+        to={LINKS.organisations.edit(organisation.id)}
+      >
+        <i className="uil-edit-alt"></i>
+        <span className="d-none d-sm-inline">Modifier</span>
+      </Link>
     );
   };
 
@@ -126,9 +124,8 @@ export const Organisation: FC<OrganisationProps> = ({
     <>
       <PageHeader.View
         title={organisation.nom}
-        subtitle={`Code : ${organisation.code}`}
-        right={actions()}
-        className={"my-4"}
+        right={renderActions()}
+        className="my-4"
         showBackBtn={showBackBtn}
       />
       <Row>

@@ -4,7 +4,6 @@ import { WrapperV2Props, withMutationForm } from "hoc";
 import { ICONS } from "pages/common";
 import { FC } from "react";
 import { Col, Row } from "react-bootstrap";
-import { toast } from "react-toastify";
 
 const Form: FC<WrapperV2Props> = (props) => {
   return (
@@ -109,14 +108,12 @@ const defaultValues = [
 
 type ExportPersonneModalProps = {
   filter: Record<string, any>;
-  nombrePers: number;
   closeModal: () => void;
 };
 
 export const ExportPersonneModal: FC<ExportPersonneModalProps> = ({
   filter,
   closeModal,
-  nombrePers,
 }) => {
   const exporter = (data: Record<string, any>) => {
     const fields = Object.entries(data)
@@ -127,16 +124,6 @@ export const ExportPersonneModal: FC<ExportPersonneModalProps> = ({
       .join(";");
     return personneApi.download("exports/csv", { ...filter, fields });
   };
-
-  if (nombrePers === 0) {
-    closeModal();
-    toast("Aucune personne trouvée", {
-      type: toast.TYPE.WARNING,
-      autoClose: 5000,
-      position: "bottom-right",
-    });
-    return null;
-  }
 
   return (
     <ExportPersonneForm

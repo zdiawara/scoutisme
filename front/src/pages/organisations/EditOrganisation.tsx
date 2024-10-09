@@ -18,8 +18,6 @@ const EditOrganisation: FC = () => {
     <OrganisationForm
       onSave={update}
       defaultValues={organisationConverter.toInput(organisation)}
-      title={organisation.nom}
-      subtitle="Modification"
     />
   );
 };

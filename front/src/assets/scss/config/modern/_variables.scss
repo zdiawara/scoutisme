@@ -401,7 +401,7 @@ $position-values: (
 //
 // Settings for the `<body>` element.
 
-$body-bg: #eee;
+$body-bg: #f3f6f9;
 $body-color: $gray-700;
 $body-text-align: null;
 
@@ -581,7 +581,7 @@ $font-family-code: var(--#{$variable-prefix}font-monospace);
 // $font-size-root affects the value of `rem`, which is used for as well font sizes, paddings, and margins
 // $font-size-base affects the font size of the body text
 $font-size-root: null;
-$font-size-base: 0.9rem; // Assumes the browser default, typically `16px`
+$font-size-base: 0.8rem; // Assumes the browser default, typically `16px`
 $font-size-sm: $font-size-base - 0.025;
 $font-size-lg: $font-size-base * 1.39;
 

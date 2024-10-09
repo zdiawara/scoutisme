@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { FC } from "react";
 import { PageHeader } from "pages/common";
 import { useParams } from "react-router-dom";
 import { PersonneResource } from "types/personne.type";
@@ -16,33 +16,24 @@ const ViewPersonne: FC = () => {
       return null;
     }
     return (
-      <div className="ms-auto d-flex align-items-center">
-        <Link
-          className="rounded-corner btn btn-danger btn-sm"
-          to={LINKS.personnes.edit(personne.id)}
-        >
-          <i className="uil-edit-alt"></i>
-          <span className="d-none d-sm-inline">Modifier</span>
-        </Link>
-      </div>
+      <Link
+        className="rounded-corner btn btn-danger"
+        to={LINKS.personnes.edit(personne.id)}
+      >
+        <i className="uil-edit-alt"></i>
+        <span className="d-none d-sm-inline">Modifier</span>
+      </Link>
     );
   };
 
-  const renderHeader = (
-    personne: PersonneResource,
-    page?: string
-  ): ReactNode => {
-    return (
-      <PageHeader.View
-        title={`${personne.nom} ${personne.prenom}`}
-        subtitle={`Code : ${personne.code}`}
-        right={actions(personne, page)}
-        className="my-4"
-      />
-    );
-  };
-
-  return <Personne personneId={personneId} header={renderHeader} />;
+  return (
+    <Personne
+      personneId={personneId}
+      header={(personne, page) => (
+        <PageHeader.View right={actions(personne, page)} className="my-4" />
+      )}
+    />
+  );
 };
 
 export default ViewPersonne;

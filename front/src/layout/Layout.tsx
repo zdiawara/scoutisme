@@ -32,8 +32,8 @@ export const Layout = () => {
     <div className="wrapper">
       <Sidebar />
       <div className="content-page">
-        <div className="content">
-          <Header />
+        <div className="S">
+          {/* <Header /> */}
           <Container fluid>
             <Outlet />
           </Container>

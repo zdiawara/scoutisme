@@ -5,24 +5,27 @@ import { LINKS } from "./links";
 export const MES_INFORMATIONS = [
   {
     key: "mes-informations",
-    label: "Mes informations",
-    isTitle: true,
-  },
-  {
-    key: "mon_organisation",
-    label: "Profil",
+    label: "Informations",
     isTitle: false,
-    icon: "uil-location",
-    url: LINKS.profil.base,
+    icon: "dripicons-information",
+    children: [
+      {
+        key: "profil",
+        label: "Profil",
+        isTitle: false,
+        url: LINKS.profil.base,
+      },
+      {
+        key: "organisation",
+        label: "Organisation",
+        isTitle: false,
+        url: LINKS.organisation.base,
+      },
+    ],
   },
 ];
 
 export const MENU_ITEMS = [
-  {
-    key: "navigation",
-    label: "Navigation",
-    isTitle: true,
-  },
   {
     key: "dash",
     label: "Dashboard",

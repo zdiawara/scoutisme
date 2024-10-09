@@ -11,7 +11,7 @@ type HocCompomentProps = {
   onFinished?: (data: any) => void;
   goBack?: () => void;
   defaultValues?: Record<string, any>;
-  title: string;
+  title?: string;
   subtitle?: string;
 };
 

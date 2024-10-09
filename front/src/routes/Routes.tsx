@@ -98,6 +98,9 @@ const Login = Loadable(lazy(() => import("pages/auth/Login")));
 const Logout = Loadable(lazy(() => import("pages/auth/Logout")));
 
 const MonProfil = Loadable(lazy(() => import("pages/compte/MonProfil")));
+const MonOrganisation = Loadable(
+  lazy(() => import("pages/compte/MonOrganisation"))
+);
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -106,6 +109,7 @@ export const router = createBrowserRouter(
       <Route path="logout" element={<Logout />} />
       <Route path="/" element={<Layout />}>
         <Route index element={<Navigate to={LINKS.profil.base} />} />
+        <Route path={LINKS.organisation.base} element={<MonOrganisation />} />
         <Route path={LINKS.profil.base} element={<Outlet />}>
           <Route index element={<MonProfil />} />
         </Route>

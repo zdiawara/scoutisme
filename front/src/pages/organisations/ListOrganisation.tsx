@@ -145,7 +145,6 @@ const ListOrganisation: FC = () => {
         <ListResult.Table<OrganisationResource>
           columns={columns}
           data={result?.data || []}
-          headerClassName="bg-light"
         />
         {result?.data && (
           <ListResult.Paginate

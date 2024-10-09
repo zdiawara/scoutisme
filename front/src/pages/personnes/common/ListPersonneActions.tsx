@@ -1,14 +1,22 @@
 import { ICONS } from "pages/common";
-import { FC, useMemo } from "react";
-import { Dropdown } from "react-bootstrap";
+import { FC, useMemo, useState } from "react";
+import { Button, Dropdown } from "react-bootstrap";
 import { useDroits } from "hooks/useDroits";
 import { Link } from "react-router-dom";
 import { LINKS } from "utils";
+import { ExportPersonneModal } from "../modal";
+import { EnvoyerMailModal } from "../modal/EnvoyerMailModal";
 
-type ListPersonneActionsProps = {};
+type ListPersonneActionsProps = {
+  filter: Record<string, any>;
+};
 
-export const ListPersonneActions: FC<ListPersonneActionsProps> = () => {
+export const ListPersonneActions: FC<ListPersonneActionsProps> = ({
+  filter,
+}) => {
   const protection = useDroits();
+  const [exportModal, setExportModal] = useState<boolean>(false);
+  const [mailModal, setMailModal] = useState<boolean>(false);
 
   const menus = useMemo(() => {
     return [
@@ -35,25 +43,58 @@ export const ListPersonneActions: FC<ListPersonneActionsProps> = () => {
 
   return (
     <>
-      <Dropdown className="ms-2">
-        <Dropdown.Toggle variant="primary">Ajouter personne</Dropdown.Toggle>
-        <Dropdown.Menu className="topbar-dropdown-menu mt-2">
-          {menus.map((item) => (
-            <Dropdown.Item
-              as={Link}
-              to={`${LINKS.personnes.create}?type=${item.code}`}
-              className="py-2 px-3"
-              key={item.code}
-            >
-              <i className={`${item.icon} text-black me-2`}></i>
-              <span className="text-primary fs-5 fw-semibold">
-                {item.label}
-              </span>
-              <div className="text-muted">{item.description}</div>
-            </Dropdown.Item>
-          ))}
-        </Dropdown.Menu>
-      </Dropdown>
+      <div className="d-flex">
+        <Button
+          variant="outline-primary"
+          onClick={() => {
+            setExportModal(true);
+          }}
+        >
+          <i className="uil-export"></i> Exporter
+        </Button>
+        {protection.mail.mails.envoyer && (
+          <Button
+            variant="outline-primary"
+            className="ms-2"
+            onClick={() => {
+              setMailModal(true);
+            }}
+          >
+            <i className="uil-message"></i> Mail
+          </Button>
+        )}
+        <Dropdown className="ms-2">
+          <Dropdown.Toggle variant="primary">Creer personne</Dropdown.Toggle>
+          <Dropdown.Menu className="topbar-dropdown-menu mt-2">
+            {menus.map((item) => (
+              <Dropdown.Item
+                as={Link}
+                to={`${LINKS.personnes.create}?type=${item.code}`}
+                className="py-2 px-3"
+                key={item.code}
+              >
+                <i className={`${item.icon} text-black me-2`}></i>
+                <span className="text-primary fs-5 fw-semibold">
+                  {item.label}
+                </span>
+                <div className="text-muted">{item.description}</div>
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+      </div>
+      {exportModal && (
+        <ExportPersonneModal
+          filter={filter}
+          closeModal={() => setExportModal(false)}
+        />
+      )}
+      {mailModal && (
+        <EnvoyerMailModal
+          filter={filter}
+          closeModal={() => setMailModal(false)}
+        />
+      )}
     </>
   );
 };

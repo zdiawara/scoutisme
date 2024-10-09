@@ -20,6 +20,9 @@ export const LINKS = {
   profil: {
     base: "profil",
   },
+  organisation: {
+    base: "organisation",
+  },
   organisations: {
     base: ORGANISATIONS,
     view: (id: string) => `${ORGANISATIONS}/${id}`,

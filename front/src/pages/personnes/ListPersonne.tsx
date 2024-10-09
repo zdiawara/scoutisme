@@ -1,5 +1,5 @@
 import { FC, useContext, useMemo, useState } from "react";
-import { Badge, Button, Col, Stack } from "react-bootstrap";
+import { Button, Col, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import {
   Columns,
@@ -18,12 +18,9 @@ import { TooltipHelper } from "components";
 import { FilterPersonne } from "./FilterPersonne";
 import { selectHelper } from "utils/functions";
 import { ListPersonneActions } from "./common/ListPersonneActions";
-import { ExportPersonneModal } from "./modal";
 import { NATURE, QUERY_KEY } from "utils/constants";
 import { PersonneActions } from "./common/PersonneActions";
-import { EnvoyerMailModal } from "./modal/EnvoyerMailModal";
 import { useAuth } from "hooks";
-import { useDroits } from "hooks/useDroits";
 
 const renderOrganisation = ({ organisation }: PersonneResource) => {
   if (organisation) {
@@ -108,10 +105,8 @@ const ListPersonne: FC = () => {
   const filterContext = useContext(FilterContext);
   const filter = filterContext.filter as PersonneFilter;
   const [show, setShow] = useState<boolean>(false);
-  const [exportModal, setExportModal] = useState<boolean>(false);
-  const [mailModal, setMailModal] = useState<boolean>(false);
+
   const { userDroit } = useAuth();
-  const { mail } = useDroits();
 
   const { data: result, isLoading } = useQuery({
     queryKey: [QUERY_KEY.personnes, filter],
@@ -136,11 +131,13 @@ const ListPersonne: FC = () => {
         label: "Genre",
         Cell: ({ genre }) => <span>{genre?.nom}</span>,
       },
-      {
-        name: "type",
-        label: "Type",
-        Cell: ({ type }) => <Badge>{type.toLocaleUpperCase()}</Badge>,
-      },
+      // {
+      //   name: "type",
+      //   label: "Type",
+      //   Cell: ({ type }) => (
+      //     <Badge bg="secondary">{type.toLocaleUpperCase()}</Badge>
+      //   ),
+      // },
       {
         name: "fonction",
         label: "Fonction",
@@ -174,12 +171,18 @@ const ListPersonne: FC = () => {
         name: "actions",
         label: "Actions",
         headClassName: "text-end",
-        Cell: (personne) =>
-          personne.type !== "scout" ? (
-            <div className="text-end">
-              <PersonneActions personne={personne} />
+        Cell: (personne) => {
+          return (
+            <div className="d-flex" style={{ justifyContent: "end" }}>
+              <Button size="sm" variant="light">
+                voir
+              </Button>
+              {personne.type !== "scout" && (
+                <PersonneActions personne={personne} />
+              )}
             </div>
-          ) : null,
+          );
+        },
       });
     }
 
@@ -192,7 +195,7 @@ const ListPersonne: FC = () => {
         title="Personnes"
         subtitle="Consulter et gérer les personnes"
         icon={ICONS.personne}
-        right={<ListPersonneActions />}
+        right={<ListPersonneActions filter={buildRequestParams(filter)} />}
         className="my-4"
       />
 
@@ -207,7 +210,7 @@ const ListPersonne: FC = () => {
         </Col>
         <Col>
           <div className="text-sm-end">
-            <Button
+            {/* <Button
               variant="outline-primary"
               onClick={() => {
                 setExportModal(true);
@@ -225,7 +228,7 @@ const ListPersonne: FC = () => {
               >
                 <i className="uil-message"></i> Mail
               </Button>
-            )}
+            )} */}
             <Button
               variant="secondary"
               className="ms-2"
@@ -252,8 +255,8 @@ const ListPersonne: FC = () => {
         <ListResult.Table<PersonneResource>
           columns={columns}
           data={result?.data || []}
-          headerClassName="bg-light"
-          hover
+          // headerClassName="bg-light"
+          // hover
         />
         {result?.data && (
           <ListResult.Paginate
@@ -266,20 +269,6 @@ const ListPersonne: FC = () => {
           />
         )}
       </ListResult.Container>
-      {exportModal && (
-        <ExportPersonneModal
-          filter={buildRequestParams(filter)}
-          closeModal={() => setExportModal(false)}
-          nombrePers={result?.data.length || 0}
-        />
-      )}
-      {mailModal && (
-        <EnvoyerMailModal
-          filter={buildRequestParams(filter)}
-          nombrePers={result?.data.length || 0}
-          closeModal={() => setMailModal(false)}
-        />
-      )}
     </>
   );
 };

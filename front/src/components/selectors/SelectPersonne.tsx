@@ -16,7 +16,7 @@ export const SelectPersonne: FC<SelectProps> = ({
           requestParams
         );
         return data.map((item) => ({
-          label: `${item.prenom} ${item.nom}`,
+          label: `${item.prenom} ${item.nom} (${item.code})`,
           value: item.id,
         }));
       }}

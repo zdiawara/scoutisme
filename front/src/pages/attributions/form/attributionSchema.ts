@@ -10,3 +10,8 @@ export const personneAttributionSchema = yup.object({
   fonction: yup.object().required(),
   date_debut: yup.date().required().nullable(),
 });
+
+export const affecterScoutSchema = yup.object({
+  personne: yup.object().required(),
+  date_debut: yup.date().required().nullable(),
+});

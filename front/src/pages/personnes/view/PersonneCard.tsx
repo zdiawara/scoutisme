@@ -3,6 +3,7 @@ import { FC } from "react";
 import { Alert, Button, Card } from "react-bootstrap";
 import logo from "./logo.png";
 import tamponEquipeNationale from "../../../assets/images/signatures/tampon_equipe_nationale.png";
+import signatureTresorerie from "../../../assets/images/signatures/signature-tresorerie.png";
 
 import "./PersonneCard.scss";
 import generatePDF, { Margin, Resolution } from "react-to-pdf";
@@ -130,6 +131,18 @@ export const PersonneCard: FC<PersonneCardProps> = ({ personne }) => {
                         top: 0,
                         left: 0,
                         zIndex: 10,
+                      }}
+                    />
+                    <img
+                      src={signatureTresorerie}
+                      alt=""
+                      style={{
+                        position: "absolute",
+                        left: "-40px",
+                        zIndex: 10,
+                        width: "85px",
+                        rotate: "-10deg",
+                        top: "76%",
                       }}
                     />
                   </div>

@@ -32,7 +32,7 @@ class AttributionService
                 'date_fin' => $body['date_debut']
             ]);
 
-        // Création de l'attribution
+        // Création de la nouvelle attribution
         $attribution = Attribution::create($body);
 
         $this->updatePersonne($attribution);

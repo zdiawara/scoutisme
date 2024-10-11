@@ -1,3 +1,4 @@
+import { AffecterScoutModal } from "pages/attributions/common";
 import { ScoutModal } from "pages/personnes/modal";
 import { FC, useState } from "react";
 import { Button, Dropdown } from "react-bootstrap";
@@ -9,15 +10,15 @@ type OrganisationScoutActionsProps = {
 
 const ACTIONS = [
   {
-    label: "Affecter",
+    label: "Scout existant",
     icon: "uil-link",
-    description: "Ajouter un scout existant à l'unité",
-    code: "affecter",
+    description: "Choisir un scout existant et l'ajouter à l'unité",
+    code: "affecter_scout",
   },
   {
-    label: "Nouveau",
+    label: "Nouveau scout",
     icon: "uil-user-plus",
-    description: "Ajouter un nouveau scout dans l'unité",
+    description: "Créer un nouveau scout qui sera ajouté à l'unité",
     code: "ajouter_scout",
   },
 ];
@@ -39,7 +40,7 @@ export const OrganisationScoutActions: FC<OrganisationScoutActionsProps> = ({
     <>
       <Dropdown className="ms-2">
         <Dropdown.Toggle as={Button} variant="secondary">
-          Actions
+          Ajouter
         </Dropdown.Toggle>
         <Dropdown.Menu className="topbar-dropdown-menu mt-2">
           {ACTIONS.map((item) => (
@@ -62,6 +63,10 @@ export const OrganisationScoutActions: FC<OrganisationScoutActionsProps> = ({
 
       {action === "ajouter_scout" && (
         <ScoutModal closeModal={closeModal} organisation={organisation} />
+      )}
+
+      {action === "affecter_scout" && (
+        <AffecterScoutModal closeModal={closeModal} unite={organisation} />
       )}
     </>
   );

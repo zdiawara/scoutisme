@@ -1,7 +1,12 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useMemo } from "react";
 import { Card, Col, ListGroup, Row } from "react-bootstrap";
 import { ICONS, PageHeader } from "pages/common";
-import { Link } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { LINKS } from "utils";
 import { useQuery } from "@tanstack/react-query";
 import { NATURE, QUERY_KEY } from "utils/constants";
@@ -25,8 +30,11 @@ export const Organisation: FC<OrganisationProps> = ({
   organisationId,
   showBackBtn,
 }) => {
-  const [page, setPage] = useState<string>("fiche");
+  const [searchParams] = useSearchParams();
+  const page = searchParams.get("p") || "fiche";
   const protection = useDroits();
+  const navigation = useNavigate();
+  const location = useLocation();
 
   const { data: organisation, isLoading } = useQuery({
     queryKey: [QUERY_KEY.organisations, organisationId],
@@ -76,12 +84,10 @@ export const Organisation: FC<OrganisationProps> = ({
     });
   }, [organisation, protection.personne.scouts]);
 
-  useEffect(() => {
-    setPage("fiche");
-  }, [organisationId]);
-
   const onSelectPage = (pageSelected: string) => () => {
-    setPage(pageSelected);
+    navigation(`${location.pathname}?p=${pageSelected}`, {
+      replace: true,
+    });
   };
 
   const renderContent = () => {

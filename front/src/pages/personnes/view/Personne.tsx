@@ -1,4 +1,4 @@
-import { FC, ReactNode, useMemo, useState } from "react";
+import { FC, ReactNode, useMemo } from "react";
 import { Badge, Card, Col, ListGroup, Row } from "react-bootstrap";
 import { ICONS } from "pages/common";
 import { useQuery } from "@tanstack/react-query";
@@ -7,7 +7,12 @@ import { personneApi } from "api";
 import { PersonneResource } from "types/personne.type";
 import { PersonneBox } from "./PersonneBox";
 import { View } from "components";
-import { Link } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { LINKS } from "utils";
 import classNames from "classnames";
 import {
@@ -24,8 +29,11 @@ type PersonneProps = {
 };
 
 export const Personne: FC<PersonneProps> = ({ personneId, header }) => {
-  const [page, setPage] = useState<string>("fiche");
+  const [searchParams] = useSearchParams();
+  const page = searchParams.get("p") || "fiche";
   const protection = useDroits();
+  const navigation = useNavigate();
+  const location = useLocation();
 
   const menus = useMemo(() => {
     return [
@@ -65,7 +73,9 @@ export const Personne: FC<PersonneProps> = ({ personneId, header }) => {
   });
 
   const onSelectPage = (pageSelected: string) => () => {
-    setPage(pageSelected);
+    navigation(`${location.pathname}?p=${pageSelected}`, {
+      replace: true,
+    });
   };
 
   const renderContent = () => {
@@ -157,6 +167,8 @@ export const Personne: FC<PersonneProps> = ({ personneId, header }) => {
                       active: item.code === page,
                     })}
                     action
+                    // as={Link}
+                    // to={LINKS.personnes.view(personne.id) + "?p=" + item.code}
                     onClick={onSelectPage(item.code)}
                   >
                     <i className={`${item.icon} me-1`}></i>&nbsp;{item.label}

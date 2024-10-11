@@ -2,6 +2,7 @@ import { View } from "components";
 import { FC } from "react";
 import { Alert, Button, Card } from "react-bootstrap";
 import logo from "./logo.png";
+import tamponEquipeNationale from "../../../assets/images/signatures/tampon_equipe_nationale.png";
 
 import "./PersonneCard.scss";
 import generatePDF, { Margin, Resolution } from "react-to-pdf";
@@ -59,7 +60,7 @@ const Item: FC<{ label: string; value?: string }> = (props) => (
 
 export const PersonneCard: FC<PersonneCardProps> = ({ personne }) => {
   const { data: carte, isLoading } = useQuery({
-    queryKey: ["carte_membre"],
+    queryKey: ["carte_membre", personne.id],
     queryFn: () => {
       return personneApi.carteMembre(personne.id);
     },
@@ -115,8 +116,22 @@ export const PersonneCard: FC<PersonneCardProps> = ({ personne }) => {
                   <div className="carte-photo">
                     <img alt="indentité" src={personne.photo} />
                   </div>
-                  <div className="carte-signataire">
-                    {carte.data.meta.signataire.libelle}
+                  <div
+                    className="carte-signataire"
+                    style={{ position: "relative" }}
+                  >
+                    <span>{carte.data.meta.signataire.libelle}</span>
+                    <img
+                      src={tamponEquipeNationale}
+                      alt=""
+                      style={{
+                        width: "85px",
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        zIndex: 10,
+                      }}
+                    />
                   </div>
                 </td>
               </tr>
@@ -132,7 +147,10 @@ export const PersonneCard: FC<PersonneCardProps> = ({ personne }) => {
         </div>
 
         <div className="carte-footer">
-          Du {carte.data.validite.debut} au {carte.data.validite.fin || "..."}
+          <Item
+            label="Validite"
+            value={`Du ${carte.data.validite.debut} au ${carte.data.validite.fin}`}
+          />
         </div>
       </div>
     );

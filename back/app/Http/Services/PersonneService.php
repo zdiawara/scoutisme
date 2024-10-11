@@ -7,6 +7,7 @@ use App\Http\Resources\PersonneCollection;
 use App\ModelFilters\PersonneFilter;
 use App\Models\Organisation;
 use App\Models\Personne;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use sirajcse\UniqueIdGenerator\UniqueIdGenerator;
 
@@ -70,7 +71,7 @@ class PersonneService
             $organisation = Organisation::findOrFail($attribution['organisation_id']);
             $code = collect([$organisation->code]);
             $prefix = $code
-                ->map(fn ($item) => strtoupper($item))
+                ->map(fn($item) => strtoupper($item))
                 ->reverse()
                 ->join("-");
         }
@@ -103,7 +104,10 @@ class PersonneService
     public function affecter(Personne $personne, array $body): Personne
     {
         $personne->update(collect($body)->only([
-            'fonction_id', 'organisation_id', 'date_debut', 'date_fin'
+            'fonction_id',
+            'organisation_id',
+            'date_debut',
+            'date_fin'
         ])->toArray());
 
         return $personne;
@@ -145,7 +149,9 @@ class PersonneService
             ],
             'validite' => [
                 'debut' => date('d/m/Y', strtotime($personne->date_debut)),
-                'fin' => $personne->date_fin ? date('d/m/Y', strtotime($personne->date_fin)) : ''
+                'fin' => Carbon::parse($personne->date_debut)
+                    ->endOfYear()
+                    ->format("d/m/Y")
             ]
         ];
 
@@ -166,7 +172,7 @@ class PersonneService
 
             if ($hasRegionLevel) {
                 $parents = collect($organisation ? $organisation->parents : []);
-                $region = $parents->first(fn ($item) => $item['nature'] === Nature::REGION);
+                $region = $parents->first(fn($item) => $item['nature'] === Nature::REGION);
                 $lignes->push(
                     ["nom" => "Region", "value" => $region ? $region['nom'] : '']
                 );

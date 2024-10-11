@@ -210,33 +210,20 @@ const ListPersonne: FC = () => {
         </Col>
         <Col>
           <div className="text-sm-end">
-            {/* <Button
-              variant="outline-primary"
-              onClick={() => {
-                setExportModal(true);
-              }}
-            >
-              <i className="uil-export"></i> Exporter
-            </Button>
-            {mail.mails.envoyer && (
-              <Button
-                variant="outline-primary"
-                className="ms-2"
-                onClick={() => {
-                  setMailModal(true);
-                }}
-              >
-                <i className="uil-message"></i> Mail
-              </Button>
-            )} */}
             <Button
-              variant="secondary"
+              variant="outline-secondary"
               className="ms-2"
               onClick={() => {
                 setShow(true);
               }}
             >
-              <i className="uil-filter"></i> Filtre avancé
+              <i className="uil-filter"></i> Filtre avancé (
+              {
+                Object.entries(filter)
+                  .filter((e) => !["page", "size", "perimetres"].includes(e[0]))
+                  .filter((e) => Boolean(e[1])).length
+              }
+              )
             </Button>
           </div>
         </Col>

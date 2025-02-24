@@ -142,7 +142,6 @@ const ListPaiement: FC = () => {
         <ListResult.Table<PaiementResource>
           columns={columns}
           data={results?.data || []}
-          headerClassName="bg-light"
         />
         {results?.data && (
           <ListResult.Paginate

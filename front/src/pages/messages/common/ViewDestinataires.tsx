@@ -40,7 +40,10 @@ export const ViewDestinataires = ({
           description: `${destinataires?.length} personne(s)`,
         }}
         data={destinataires || []}
-        onSearch={searchByCriteres}
+        search={{
+          onSearch: searchByCriteres,
+          placeholder: "",
+        }}
         columns={columns}
         isLoading={false}
       />

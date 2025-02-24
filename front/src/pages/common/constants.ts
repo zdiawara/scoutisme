@@ -1,6 +1,8 @@
 export const ICONS = {
+  account: "mdi mdi-information-outline",
   organisation: "uil-building",
   personne: "uil-users-alt",
+  searchPersonne: "mdi mdi-account-search-outline",
   setting: "uil-cog",
   adresseAlt: "uil-location-pin-alt",
   info: "uil-info-circle",

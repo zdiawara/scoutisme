@@ -17,6 +17,8 @@ import { Link } from "react-router-dom";
 import { LINKS } from "utils";
 import { useDroits } from "hooks/useDroits";
 import { DateFormater } from "utils/DateUtils";
+import { Button, Card, ListGroup, Stack } from "react-bootstrap";
+import * as Icon from "react-bootstrap-icons";
 
 type OrganisationMembresProps = {
   organisation: OrganisationResource;
@@ -122,17 +124,66 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
   }, [organisation, protection.organisation]);
 
   return (
-    <StaticTable
-      header={{
-        icon: ICONS.direction,
-        label: "Organe de direction",
-        description: "Membres de l'organe de direction",
-      }}
-      data={query.data}
-      columns={columns}
-      isLoading={query.isLoading}
-      error={query.error}
-      onSearch={searchByCriteres}
-    />
+    <>
+      {/* <StaticTable
+          header={{
+            icon: ICONS.direction,
+            label: "Organe de direction",
+            description: "Membres de l'organe de direction",
+          }}
+          data={query.data}
+          columns={columns}
+          isLoading={query.isLoading}
+          error={query.error}
+          renderCount={(total) => <span>{total} membre(s)</span>}
+          search={{
+            onSearch: searchByCriteres,
+            placeholder: "Recherche par fonction, nom ...",
+          }}
+        /> */}
+      <ListGroup>
+        <ListGroup.Item className="d-flex align-items-center bg-gray-100">
+          {/* <div>
+            <Icon.InfoCircle size="1.1rem" className="me-1" />
+            <span className="fs-5">Organe de direction</span>
+          </div> */}
+          <Button
+            className="ms-auto d-block"
+            size="sm"
+            variant="outline-primary"
+          >
+            <Icon.Pencil />
+          </Button>
+        </ListGroup.Item>
+        {query.data?.map((item) => (
+          <ListGroup.Item
+            // as="li"
+            className="d-flex justify-content-between align-items-start"
+            key={item.fonction.id}
+          >
+            <div className="me-auto">
+              <div className="fw-semibold mb-1">{item.fonction.nom}</div>
+              {item.personne ? (
+                <div className="fw-light">
+                  {item.personne?.prenom} {item.personne?.nom}
+                </div>
+              ) : (
+                <div className="text-muted">
+                  <Button variant="outline-secondary" size="sm">
+                    <Icon.PlusLg className="me-1" />
+                    adulte
+                  </Button>
+                </div>
+              )}
+            </div>
+            <div className="text-muted">
+              <Button size="sm" variant="text">
+                <Icon.ThreeDotsVertical />
+              </Button>
+            </div>
+          </ListGroup.Item>
+        ))}
+      </ListGroup>
+    </>
   );
 };

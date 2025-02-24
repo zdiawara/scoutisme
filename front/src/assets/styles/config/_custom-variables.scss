@@ -1,0 +1,10 @@
+//
+// custom-variables.scss
+//
+
+$nav-pills-bg: var(--#{$variable-prefix}nav-pills-bg);
+
+// Custom-accordion
+$custom-accordion-title-color: var(
+  --#{$variable-prefix}custom-accordion-title-color
+);

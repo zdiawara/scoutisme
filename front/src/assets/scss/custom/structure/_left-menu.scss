@@ -61,7 +61,7 @@
     list-style-type: none;
   }
   .side-nav-link {
-    color: $menu-item;
+    color: $black;
     display: block;
     padding: 10px 30px;
     font-size: 1rem;
@@ -810,7 +810,7 @@ body[data-layout-color="dark"] {
   &[data-layout="detached"] {
     .leftbar-user {
       .leftbar-user-name {
-        color: #{map-get($dark-grays, "900")};
+        // color: #{map-get($dark-grays, "900")};
       }
     }
   }

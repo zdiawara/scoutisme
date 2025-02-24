@@ -9,7 +9,9 @@ export abstract class AbstractProtection {
 
   protected buildActions(actions: string[], fonctionnalite: string) {
     return actions.reduce((prev, curr) => {
-      prev[curr] = this.userDroit.has([fonctionnalite], curr);
+      prev[curr] = this.userDroit
+        ? this.userDroit.has([fonctionnalite], curr)
+        : false;
       return prev;
     }, {} as Record<string, boolean>);
   }

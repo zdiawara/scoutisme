@@ -1,11 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { getYear } from "date-fns";
 import { paiementApi, personneApi } from "api";
-import { Columns, ICONS, StaticTable } from "pages/common";
+import { Columns } from "pages/common";
 import { FC, useMemo, useState } from "react";
 import { PaiementResource, PersonneResource } from "types/personne.type";
 import { QUERY_KEY } from "utils/constants";
-import { ListPaiementActions } from "../common/ListPaiementActions";
 import { PaiementActions } from "../common/PaiementActions";
 import { SelectItem } from "types/form.type";
 import { Cotisation } from "./Cotisation";
@@ -96,7 +95,8 @@ export const PersonneCotisations: FC<PersonneCotisationsProps> = ({
         cotisation={cotisationQuery.data}
         isLoading={cotisationQuery.isLoading}
       />
-      <StaticTable
+
+      {/* <StaticTable
         header={{
           icon: ICONS.paiement,
           label: "Paiements",
@@ -113,7 +113,7 @@ export const PersonneCotisations: FC<PersonneCotisationsProps> = ({
             <ListPaiementActions personne={personne} annee={annee.value} />
           )
         }
-      />
+      /> */}
     </>
   );
 };

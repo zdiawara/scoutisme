@@ -78,7 +78,10 @@ export const ListUser = () => {
           description: "Les personnes habilitées à accèder à l'application",
         }}
         data={query.data}
-        onSearch={searchByCriteres}
+        search={{
+          onSearch: searchByCriteres,
+          placeholder: "",
+        }}
         columns={columns}
         isLoading={query.isLoading}
         error={query.error}

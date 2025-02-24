@@ -1,6 +1,6 @@
 import { View } from "components";
 import { FC } from "react";
-import { Alert, Button, Card } from "react-bootstrap";
+import { Alert, Button, Card, Col, Row, Stack } from "react-bootstrap";
 import logo from "./logo.png";
 import tamponEquipeNationale from "../../../assets/images/signatures/tampon_equipe_nationale.png";
 import signatureTresorerie from "../../../assets/images/signatures/signature-tresorerie.png";
@@ -10,6 +10,7 @@ import generatePDF, { Margin, Resolution } from "react-to-pdf";
 import { PersonneResource } from "types/personne.type";
 import { useQuery } from "@tanstack/react-query";
 import { personneApi } from "api";
+import * as Icon from "react-bootstrap-icons";
 
 type PersonneCardProps = {
   personne: PersonneResource;
@@ -93,7 +94,7 @@ export const PersonneCard: FC<PersonneCardProps> = ({ personne }) => {
     }
 
     return (
-      <div className="carte" id="content-id">
+      <div className="carte mx-auto my-2 overflosw-scroll" id="content-id">
         <div className="carte-content">
           <table className="p-0">
             <tbody>
@@ -170,18 +171,13 @@ export const PersonneCard: FC<PersonneCardProps> = ({ personne }) => {
   };
 
   return (
-    <Card>
-      <View.Header
-        icon="mdi mdi-card-account-details-outline"
-        label="Carte d'adhésion"
-        description="Carte d'adhésion de la personne"
-        right={
-          Boolean(carte?.data) && (
-            <Button onClick={telechargerPDF}>Télécharger</Button>
-          )
-        }
-      />
-      <Card.Body>{renderContent()}</Card.Body>
-    </Card>
+    <>
+      <div>
+        <Button size="sm" variant="outline-primary d-block ms-auto">
+          <Icon.Download className="me-1" /> Télécharger
+        </Button>
+        {renderContent()}
+      </div>
+    </>
   );
 };

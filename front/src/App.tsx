@@ -5,10 +5,13 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ToastContainer } from "react-toastify";
-import "./assets/scss/Saas.scss";
+// import "./assets/scss/Saas.scss";
 
 import "react-toastify/dist/ReactToastify.css";
+
 import { AuthProvider } from "context/AuthContext";
+
+import "./assets/styles/app.scss";
 
 const queryClient = new QueryClient({
   defaultOptions: {

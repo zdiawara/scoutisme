@@ -1,0 +1,101 @@
+//
+// tables.scss
+//
+
+//Table centered (Custom)
+
+/* _tables.scss:167 */
+// .table-responsive {
+//   @each $breakpoint in map-keys($grid-breakpoints) {
+//     $next: breakpoint-next($breakpoint, $grid-breakpoints);
+//     $infix: breakpoint-infix($next, $grid-breakpoints);
+
+//     &#{$infix} {
+//       @include media-breakpoint-down($breakpoint) {
+//         display: block;
+//         width: 100%;
+//         overflow-x: auto;
+//         -webkit-overflow-scrolling: touch;
+//         -ms-overflow-style: -ms-autohiding-scrollbar;
+
+//         // See https://github.com/twbs/bootstrap/pull/10057
+//         // Prevent double border on horizontal scroll due to use of `display: block;`
+//         > .table-bordered {
+//           border: 0;
+//         }
+//       }
+//     }
+//   }
+// }
+
+.table-centered {
+  th,
+  td {
+    vertical-align: middle !important;
+  }
+}
+
+// Custom table components (Custom)
+.table {
+  .table-user {
+    img {
+      height: 40px;
+      width: 40px;
+    }
+  }
+  .action-icon {
+    color: #{map-get($grays, "600")};
+    font-size: 1.2rem;
+    display: inline-block;
+    padding: 0 3px;
+
+    &:hover {
+      color: #{map-get($grays, "700")};
+    }
+  }
+  > :not(caption) > * > * {
+    background-color: var(--#{$variable-prefix}table-bg) !important;
+  }
+  &.table-bordered {
+    tbody {
+      border-top: $border-width solid;
+      border-top-color: inherit;
+    }
+  }
+}
+
+// Tables fluid
+.table-nowrap {
+  th,
+  td {
+    white-space: nowrap;
+  }
+}
+
+table {
+  // Table Hover
+  &.table-hover {
+    thead,
+    tbody {
+      tr {
+        &:hover {
+          > * {
+            --ct-table-accent-bg: #f1f3fa;
+          }
+        }
+      }
+    }
+  }
+  //  Table Striped
+  &.table-striped {
+    tbody {
+      tr {
+        &:nth-of-type(odd) {
+          > * {
+            --ct-table-accent-bg: #f1f3fa;
+          }
+        }
+      }
+    }
+  }
+}

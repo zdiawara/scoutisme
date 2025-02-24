@@ -1,9 +1,9 @@
 import { FC } from "react";
-import { Card, Col, Row } from "react-bootstrap";
-import { Header } from "pages/common";
+import { Button, Col, ListGroup, Row } from "react-bootstrap";
 import { PersonneResource } from "types/personne.type";
 import { View } from "components";
 import { DateFormater } from "utils/DateUtils";
+import * as Icon from "react-bootstrap-icons";
 
 type PersonneDetailsProps = {
   personne: PersonneResource;
@@ -11,119 +11,153 @@ type PersonneDetailsProps = {
 export const PersonneDetails: FC<PersonneDetailsProps> = ({ personne }) => {
   return (
     <>
-      <Card className="shadow-sm">
-        <View.Header
-          {...Header.infoGenerale}
-          description="Informations générales de la personne"
-          className="mb-0"
-        />
-        <Card.Body>
+      <ListGroup className="mb-3 shadow-sm">
+        <ListGroup.Item className="d-flex align-items-center bg-gray-100">
+          <span>
+            <Icon.InfoCircle size="1.1rem" className="me-1" />
+            <span className="fs-5">Identite</span>
+          </span>
+          <Button
+            className="ms-auto d-block"
+            size="sm"
+            variant="outline-primary"
+          >
+            <Icon.Pencil className="me-0" />
+          </Button>
+        </ListGroup.Item>
+        <ListGroup.Item>
           <Row className="g-3">
-            <Col sm={4}>
-              <View.Item label="Code">{personne.code}</View.Item>
+            <Col xs={6}>
+              <View.Item label="Nom">{personne.nom}</View.Item>
             </Col>
-            <Col sm={4}>
-              <View.Item label="Nom">
-                {personne.nom} {personne.prenom}
-              </View.Item>
+            <Col xs={6}>
+              <View.Item label="Prenom">{personne.prenom}</View.Item>
             </Col>
-            <Col sm={4}>
-              <View.Item label="Etat">
-                <View.Etat value={personne.etat} />
-              </View.Item>
-            </Col>
-            <Col sm={4}>
+          </Row>
+        </ListGroup.Item>
+        <ListGroup.Item>
+          <Row className="g-3">
+            <Col xs={6}>
               <View.Item label="Genre">{personne.genre?.nom}</View.Item>
             </Col>
-
-            <Col sm={4}>
-              <View.Item label="Date naissance">
+            <Col xs={6}>
+              <View.Item label="Profession">{personne.profession}</View.Item>
+            </Col>
+          </Row>
+        </ListGroup.Item>
+        <ListGroup.Item>
+          <Row className="g-3">
+            <Col xs={6}>
+              <View.Item label="Date de naissance">
                 {DateFormater.toDateTime(personne.date_naissance) || undefined}
               </View.Item>
             </Col>
-
-            <Col sm={4}>
-              <View.Item label="Lieu naissance">
+            <Col xs={6}>
+              <View.Item label="Lieu de naissance">
                 {personne.lieu_naissance}
               </View.Item>
             </Col>
           </Row>
-        </Card.Body>
+        </ListGroup.Item>
 
-        <View.Header
-          {...Header.contact}
-          description="Email et numéro de la personne et de son representant"
-        />
-        <Card.Body>
+        <ListGroup.Item className="d-flex align-items-center bg-gray-100">
+          <span>
+            <Icon.Telephone size="1.1rem" className="me-1" />
+            <span className="fs-5">Coordonnées</span>
+          </span>
+          <Button
+            className="ms-auto d-block"
+            size="sm"
+            variant="outline-primary"
+          >
+            <Icon.Pencil className="me-0" />
+          </Button>
+        </ListGroup.Item>
+
+        <ListGroup.Item>
+          <View.Item label="Num. Tel">{personne.telephone}</View.Item>
+        </ListGroup.Item>
+        <ListGroup.Item>
+          <View.Item label="Email">{personne.email}</View.Item>
+        </ListGroup.Item>
+
+        <ListGroup.Item>
           <Row className="g-3">
-            <Col sm={4}>
-              <View.Item label="Email">{personne.email}</View.Item>
+            <Col xs={6}>
+              <View.Item label="Ville">{personne.ville?.nom}</View.Item>
             </Col>
-            <Col sm={8}>
-              <View.Item label="Téléphone">{personne.telephone}</View.Item>
+            <Col xs={6}>
+              <View.Item label="Adresse">{personne?.adresse}</View.Item>
             </Col>
-            <Col sm={4}>
-              <View.Item label="Personne à contacter">
+          </Row>
+        </ListGroup.Item>
+
+        <ListGroup.Item className="d-flex align-items-center bg-gray-100">
+          <span>
+            <Icon.Briefcase size="1.1rem" className="me-1" />
+            <span className="fs-5">Formation</span>
+          </span>
+          <Button
+            className="ms-auto d-block"
+            size="sm"
+            variant="outline-primary"
+          >
+            <Icon.PlusLg className="me-0" />
+          </Button>
+        </ListGroup.Item>
+        <ListGroup.Item className="d-flex justify-content-between align-items-start">
+          <div>
+            <div className="fw-bold">Camps</div>
+            <span className="fw-light">Janv 2025</span>
+          </div>
+          <Button className="ms-auto d-block" size="sm" variant="default">
+            <Icon.ThreeDotsVertical />
+          </Button>
+        </ListGroup.Item>
+
+        <ListGroup.Item className="d-flex align-items-center bg-gray-100">
+          <span>
+            <Icon.FileEarmarkPerson size="1.1rem" className="me-1" />
+            <span className="fs-5">Personne à contacter</span>
+          </span>
+          <Button
+            className="ms-auto d-block"
+            size="sm"
+            variant="outline-primary"
+          >
+            <Icon.Pencil className="me-0" />
+          </Button>
+        </ListGroup.Item>
+
+        <ListGroup.Item>
+          <Row className="g-3">
+            <Col xs={6}>
+              <View.Item label="Nom">
                 {personne.personne_a_contacter?.nom}
               </View.Item>
             </Col>
-            <Col sm={4}>
-              <View.Item label="Rélation">
+            <Col xs={6}>
+              <View.Item label="Relation">
                 {personne.personne_a_contacter?.relation}
               </View.Item>
             </Col>
-            <Col sm={4}>
-              <View.Item label="Téléphone">
+            {/* <Col sm={3}>
+                  <View.Item label="Téléphone">
+                    {personne.personne_a_contacter?.telephone}
+                  </View.Item>
+                </Col> */}
+          </Row>
+        </ListGroup.Item>
+        <ListGroup.Item>
+          <Row className="g-3">
+            <Col sm={3}>
+              <View.Item label="Telephone">
                 {personne.personne_a_contacter?.telephone}
               </View.Item>
             </Col>
           </Row>
-        </Card.Body>
-      </Card>
-
-      <Card className="shadow-sm mb-0">
-        <View.Header
-          {...Header.adresse}
-          description="Ville et lieu de résidence de la personne"
-        />
-        <Card.Body>
-          <Row className="g-3">
-            <Col sm={4}>
-              <View.Item label="Ville">{personne.ville?.nom}</View.Item>
-            </Col>
-            <Col sm={8}>
-              <View.Item label="Adresse">{personne?.adresse}</View.Item>
-            </Col>
-          </Row>
-        </Card.Body>
-
-        {personne.type === "adulte" && (
-          <>
-            <View.Header
-              {...Header.formation}
-              description="Profession et formation de la personne"
-              className="mb-0"
-            />
-            <Card.Body>
-              <Row className="g-3">
-                <Col sm={4}>
-                  <View.Item label="Profession">
-                    {personne.profession}
-                  </View.Item>
-                </Col>
-
-                <Col sm={4}>
-                  <View.Item label="Niveau formation">
-                    {personne.niveau_formation?.nom}
-                  </View.Item>
-                </Col>
-              </Row>
-            </Card.Body>
-          </>
-        )}
-      </Card>
-      {/* </Card.Body> */}
-      {/* </Card> */}
+        </ListGroup.Item>
+      </ListGroup>
     </>
   );
 };

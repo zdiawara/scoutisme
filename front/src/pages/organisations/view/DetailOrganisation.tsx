@@ -1,10 +1,10 @@
 import { FC } from "react";
-import { Card, Col, Row } from "react-bootstrap";
-import { Header } from "pages/common";
+import { Button, Col, ListGroup, Row } from "react-bootstrap";
 import { OrganisationResource } from "types/organisation.type";
 import { View } from "components";
 import { Link } from "react-router-dom";
 import { LINKS } from "utils";
+import * as Icon from "react-bootstrap-icons";
 
 type DetailOrganisationProps = {
   organisation: OrganisationResource;
@@ -15,60 +15,91 @@ export const DetailOrganisation: FC<DetailOrganisationProps> = ({
 }) => {
   return (
     <>
-      <Card className="shadow-sm">
-        <View.Header
-          {...Header.infoGenerale}
-          description="Les informations générales de l'organisation"
-        />
-        <Card.Body className="shadow-none">
+      <ListGroup className="shadow-sm">
+        <ListGroup.Item className="d-flex align-items-center bg-gray-100">
+          <span>
+            <Icon.InfoCircle size="1.1rem" className="me-1" />
+            <span className="fs-5">Identite</span>
+          </span>
+          <Button
+            className="ms-auto d-block"
+            size="sm"
+            variant="outline-primary"
+          >
+            <Icon.Pencil className="me-0" />
+          </Button>
+        </ListGroup.Item>
+        <ListGroup.Item>
           <Row className="g-3">
-            <Col sm={4}>
-              <View.Item label="Code">{organisation.code}</View.Item>
-            </Col>
-            <Col sm={4}>
+            <Col xs={6}>
               <View.Item label="Nom">{organisation.nom}</View.Item>
             </Col>
-            <Col sm={4}>
-              <View.Item label="Nature">{organisation.nature?.nom}</View.Item>
-            </Col>
-            <Col sm={4}>
-              <View.Item label="Type">{organisation.type?.nom}</View.Item>
-            </Col>
-            <Col sm={4}>
-              <View.Item label="Parent">
-                {organisation.parent ? (
-                  <Link
-                    to={LINKS.organisations.view(organisation.parent.id)}
-                    className="text-decoration-underline"
-                  >
-                    {organisation.parent.nom}
-                  </Link>
-                ) : null}
-              </View.Item>
-            </Col>
-            <Col sm={4}>
-              <View.Item label="Etat">
-                <View.Etat value={organisation.etat} />
-              </View.Item>
+            <Col xs={6}>
+              <View.Item label="Code">{organisation.code}</View.Item>
             </Col>
           </Row>
-        </Card.Body>
-        <View.Header
-          {...Header.adresse}
-          description="Adresse physique de l'organisation"
-        />
+        </ListGroup.Item>
+        <ListGroup.Item>
+          <Row className="g-3">
+            <Col xs={6}>
+              <View.Item label="Nature">{organisation.nature.nom}</View.Item>
+            </Col>
+            <Col xs={6}>
+              <View.Item label="Type">{organisation.type?.nom}</View.Item>
+            </Col>
+          </Row>
+        </ListGroup.Item>
+        <ListGroup.Item>
+          <View.Item label="Parent">
+            {organisation.parent ? (
+              <Link
+                to={LINKS.organisations.view(organisation.parent.id)}
+                className="text-decoration-underline text-black"
+              >
+                {organisation.parent.nom}
+              </Link>
+            ) : null}
+          </View.Item>
+        </ListGroup.Item>
 
-        <Card.Body>
+        <ListGroup.Item className="d-flex align-items-center bg-gray-100">
+          <span>
+            <Icon.GeoAlt size="1.1rem" className="me-1" />
+            <span className="fs-5">Adresse</span>
+          </span>
+          <Button
+            className="ms-auto d-block"
+            size="sm"
+            variant="outline-primary"
+          >
+            <Icon.Pencil className="me-0" />
+          </Button>
+        </ListGroup.Item>
+        <ListGroup.Item>
           <Row>
-            <Col sm={4}>
+            <Col xs={6}>
               <View.Item label="Ville">{organisation.ville?.nom}</View.Item>
             </Col>
-            <Col sm={8}>
+            <Col xs={6}>
               <View.Item label="Lieu">{organisation.adresse}</View.Item>
             </Col>
           </Row>
-        </Card.Body>
-      </Card>
+        </ListGroup.Item>
+
+        {/* <ListGroup.Item className="d-flex align-items-center bg-gray-100">
+          <span>
+            <Icon.Building size="1.1rem" className="me-1" />
+            <span className="fs-5">Sous organisation</span>
+          </span>
+          <Button
+            className="ms-auto d-block"
+            size="sm"
+            variant="outline-primary"
+          >
+            <Icon.PlusLg className="me-0" />
+          </Button>
+        </ListGroup.Item> */}
+      </ListGroup>
     </>
   );
 };

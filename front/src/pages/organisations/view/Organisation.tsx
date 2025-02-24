@@ -1,5 +1,14 @@
 import { FC, useMemo } from "react";
-import { Card, Col, ListGroup, Row } from "react-bootstrap";
+import {
+  Badge,
+  Button,
+  Card,
+  Col,
+  ListGroup,
+  Nav,
+  Row,
+  Stack,
+} from "react-bootstrap";
 import { ICONS, PageHeader } from "pages/common";
 import {
   Link,
@@ -21,6 +30,8 @@ import {
 } from "../view";
 import classNames from "classnames";
 import { useDroits } from "hooks/useDroits";
+import * as Icon from "react-bootstrap-icons";
+import { View } from "components";
 
 type OrganisationProps = {
   organisationId: string;
@@ -31,7 +42,7 @@ export const Organisation: FC<OrganisationProps> = ({
   showBackBtn,
 }) => {
   const [searchParams] = useSearchParams();
-  const page = searchParams.get("p") || "fiche";
+  const page = searchParams.get("p") || "details";
   const protection = useDroits();
   const navigation = useNavigate();
   const location = useLocation();
@@ -52,11 +63,10 @@ export const Organisation: FC<OrganisationProps> = ({
     }
 
     const TABS = [
-      { label: "Détails", code: "fiche", icon: ICONS.detail, visible: true },
       {
-        label: "Organisation",
-        code: "organisations",
-        icon: ICONS.organisation,
+        label: "Détails",
+        code: "details",
+        Icon: Icon.FileEarmarkText,
         visible: true,
       },
       {
@@ -64,12 +74,21 @@ export const Organisation: FC<OrganisationProps> = ({
         code: "direction",
         icon: ICONS.direction,
         visible: true,
+        Icon: Icon.FileEarmarkText,
+      },
+      {
+        label: "Sous orga.",
+        code: "organisations",
+        icon: ICONS.organisation,
+        visible: true,
+        Icon: Icon.Building,
       },
       {
         label: "Scouts",
         code: "scouts",
         icon: ICONS.personne,
-        visible: Object.values(protection.personne.scouts).some((e) => e),
+        visible: true, //Object.values(protection.personne.scouts).some((e) => e),
+        Icon: Icon.Person,
       },
     ];
 
@@ -129,48 +148,58 @@ export const Organisation: FC<OrganisationProps> = ({
   return (
     <>
       <PageHeader.View
-        title={organisation.nom}
+        // title={organisation.nom}
         right={renderActions()}
         className="my-4"
         showBackBtn={showBackBtn}
       />
-      <Row>
-        <Col xl={3} lg={3}>
-          <Card className="text-black mb-1">
-            <Card.Body className="p-1">
-              <Organigramme
-                parents={organisation.parents}
-                organisation={{
-                  nature: organisation.nature.nom,
-                  nom: organisation.nom,
-                }}
-              />
-            </Card.Body>
-          </Card>
 
-          <Card className="text-black">
-            <Card.Body className="p-1">
-              <ListGroup defaultActiveKey="#link1">
-                {menus.map((item) => (
-                  <ListGroup.Item
-                    key={item.code}
-                    className={classNames("border-0 rounded", {
-                      active: item.code === page,
-                    })}
-                    action
-                    onClick={onSelectPage(item.code)}
-                  >
-                    <i className={`${item.icon} me-1`}></i>&nbsp;{item.label}
-                  </ListGroup.Item>
-                ))}
-              </ListGroup>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col xl={9} lg={9}>
-          {renderContent()}
-        </Col>
-      </Row>
+      <div className="shadow-sm rounded p-2 bg-white mt-3 mb-2">
+        <Row className="g-3">
+          <Col xs={6}>
+            <View.Item label="Nom">{organisation.nom}</View.Item>
+          </Col>
+          <Col xs={6}>
+            <View.Item label="Nature">
+              <Badge bg="secondary">{organisation.nature.nom}</Badge>
+            </View.Item>
+          </Col>
+          <Col>
+            <View.Item label="Parent">
+              {organisation.parent ? (
+                <Link
+                  to={LINKS.organisations.view(organisation.parent.id)}
+                  className="text-decoration-underline text-black"
+                >
+                  {organisation.parent.nom}
+                </Link>
+              ) : null}
+            </View.Item>
+          </Col>
+        </Row>
+      </div>
+
+      <Nav
+        variant="pills"
+        style={{ overflow: "scroll" }}
+        className="flex-nowrap border-bottom py-1 mb-2"
+        defaultActiveKey="/home"
+      >
+        {menus.map((item) => (
+          <Nav.Item key={item.code}>
+            <Nav.Link
+              active={item.code === page}
+              onClick={onSelectPage(item.code)}
+              href="#"
+              className="d-flex align-items-center"
+            >
+              <item.Icon size="1.1rem" className="me-1" />
+              {item.label}
+            </Nav.Link>
+          </Nav.Item>
+        ))}
+      </Nav>
+      {renderContent()}
     </>
   );
 };

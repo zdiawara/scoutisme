@@ -1,5 +1,6 @@
 import { FC, ReactNode } from "react";
 import { Card, Table as BsTable, Stack, Spinner } from "react-bootstrap";
+import { ArrowLeft, ArrowRight } from "react-bootstrap-icons";
 import ReactPaginate from "react-paginate";
 import Select from "react-select";
 
@@ -52,7 +53,7 @@ function Table<T>({
 }: TableProps<T>) {
   return (
     <>
-      <BsTable hover={hover} className="table-centered">
+      <BsTable hover={hover} striped className="table-centered">
         <thead className={`text-black ${headerClassName}`}>
           <tr>
             {columns.map((col) => (
@@ -104,8 +105,12 @@ const Paginate: FC<PaginateProps> = ({
   onSizeChange,
 }) => {
   return (
-    <Stack direction="horizontal" className="aligns-items-center m-2">
-      <div style={{ width: "80px" }}>
+    <Stack
+      direction="horizontal"
+      style={{ overflow: "scroll" }}
+      className="aligns-items-center my-3"
+    >
+      {/* <div style={{ width: "80px" }}>
         <Select
           className="react-select"
           classNamePrefix="react-select"
@@ -124,20 +129,20 @@ const Paginate: FC<PaginateProps> = ({
             if (onSizeChange) onSizeChange(parseInt(item?.value || ""));
           }}
         />
-      </div>
+      </div> */}
       {!!total && (
         <>
-          <div className="ms-auto me-auto">{total} résultat(s)</div>
+          {/* <div className="ms-auto me-auto">{total} résultat(s)</div> */}
 
           <ReactPaginate
             breakLabel="..."
-            nextLabel={<i className="uil-angle-right"></i>}
+            nextLabel={<ArrowRight />}
             onPageChange={({ selected }) => onPageChange(selected)}
-            pageRangeDisplayed={3}
+            pageRangeDisplayed={2}
             marginPagesDisplayed={2}
             pageCount={pageCount}
             forcePage={pageActive}
-            previousLabel={<i className="uil-angle-left"></i>}
+            previousLabel={<ArrowLeft />}
             renderOnZeroPageCount={null}
             pageClassName="page-item"
             previousClassName="page-item"
@@ -147,7 +152,7 @@ const Paginate: FC<PaginateProps> = ({
             nextLinkClassName="page-link"
             breakClassName="page-item"
             breakLinkClassName="page-link"
-            containerClassName="pagination pagination-rounded m-0"
+            containerClassName="pagination pagination-rounded m-0 mx-auto"
             activeClassName="active"
           />
         </>

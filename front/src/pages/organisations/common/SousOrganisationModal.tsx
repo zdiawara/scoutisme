@@ -74,13 +74,12 @@ const Form: FC<WrapperV2Props> = (props) => {
 
   return (
     <HookModalForm {...props} onClose={props.onExit}>
+      <View.Header
+        {...Header.infoGenerale}
+        className="mb-3"
+        description="Les informations générales de l'organisation"
+      />
       <Row className="g-2">
-        <View.Header
-          {...Header.infoGenerale}
-          className="mb-0"
-          description="Les informations générales de l'organisation"
-        />
-
         {[NATURE.unite].includes(codeNature) ? (
           <Fragment>
             <Col sm={6}>{selectNatureComponent}</Col>
@@ -123,7 +122,7 @@ const Form: FC<WrapperV2Props> = (props) => {
       <View.Header
         {...Header.adresse}
         description="Ville et lieu de l'organisation"
-        className="mt-3"
+        className="my-3"
       />
 
       <Row className="g-2">
@@ -168,7 +167,7 @@ export const SousOrganisationModal: FC<SousOrganisationModalProps> = ({
     <OrganisationMembreForm
       onSave={createSousOrganisation}
       title="Ajouter une sous organisation"
-      subtitle={`Cette organisation sera rattachée à ${organisation.nom}`}
+      subtitle={`La nouvelle sous organisation sera rattachée à ${organisation.nom}`}
       modalProps={{
         size: "lg",
       }}

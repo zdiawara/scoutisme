@@ -27,8 +27,11 @@ export const Loadable = (Component: any) => (props: any) =>
     </Suspense>
   );
 
-const ListPersonne = Loadable(
-  lazy(() => import("pages/personnes/ListPersonne"))
+// const ListPersonne = Loadable(
+//   lazy(() => import("pages/personnes/ListPersonne"))
+// );
+const SearchPersonne = Loadable(
+  lazy(() => import("pages/personnes/search/SearchPersonne"))
 );
 const ViewPersonne = Loadable(
   lazy(() => import("pages/personnes/ViewPersonne"))
@@ -114,7 +117,8 @@ export const router = createBrowserRouter(
           <Route index element={<MonProfil />} />
         </Route>
         <Route path={LINKS.personnes.base} element={<PersonneOutlet />}>
-          <Route index element={<ListPersonne />} />
+          {/* <Route index element={<ListPersonne />} /> */}
+          <Route index element={<SearchPersonne />} />
           <Route element={<CreatePersonne />} path="create" />
           <Route element={<ViewPersonne />} path=":id" />
           <Route

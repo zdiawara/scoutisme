@@ -16,9 +16,9 @@ $gray-300: #dee2e6 !default;
 $gray-400: #ced4da !default;
 $gray-500: #adb5bd !default;
 $gray-600: #98a6ad;
-$gray-700: #919ca7;
+$gray-700: #6c757d;
 $gray-800: #343a40 !default;
-$gray-900: #474d56;
+$gray-900: #323a46;
 $black: #000 !default;
 // scss-docs-end gray-color-variables
 
@@ -39,16 +39,16 @@ $grays: (
 // fusv-enable
 
 // scss-docs-start color-variables
-$blue: #3688fc;
+$blue: #3d73dd;
 $indigo: #727cf5;
-$purple: #6b5eae;
+$purple: #536de6;
 $pink: #ff679b;
-$red: #fa6767;
-$orange: #ff9041;
-$yellow: #f9bc0d;
-$green: #42d29d;
+$red: #ff5b5b;
+$orange: #fd7e14;
+$yellow: #f9c851;
+$green: #10c469;
 $teal: #02a8b5;
-$cyan: #44badc;
+$cyan: #35b8e0;
 // scss-docs-end color-variables
 
 // scss-docs-start colors-map
@@ -70,8 +70,8 @@ $colors: (
 // scss-docs-end colors-map
 
 // scss-docs-start theme-color-variables
-$primary: $blue;
-$secondary: $gray-700;
+$primary: #040444; //$purple;
+$secondary: #b49d84;
 $success: $green;
 $info: $cyan;
 $warning: $yellow;
@@ -401,8 +401,8 @@ $position-values: (
 //
 // Settings for the `<body>` element.
 
-$body-bg: #fafbfe;
-$body-color: shade-color($gray-700, 10%);
+$body-bg: #f3f6f9;
+$body-color: $gray-700;
 $body-text-align: null;
 
 // Utilities maps
@@ -444,7 +444,7 @@ $utilities-bg-colors: map-loop($utilities-bg, rgba-css-var, "$key", "bg");
 
 $link-color: var(--#{$variable-prefix}link-color);
 $link-decoration: none;
-$link-shade-percentage: 25%;
+$link-shade-percentage: 15%;
 $link-hover-color: var(--#{$variable-prefix}link-hover-color);
 $link-hover-decoration: null;
 
@@ -581,7 +581,7 @@ $font-family-code: var(--#{$variable-prefix}font-monospace);
 // $font-size-root affects the value of `rem`, which is used for as well font sizes, paddings, and margins
 // $font-size-base affects the font size of the body text
 $font-size-root: null;
-$font-size-base: 0.9rem; // Assumes the browser default, typically `16px`
+$font-size-base: 0.8rem; // Assumes the browser default, typically `16px`
 $font-size-sm: $font-size-base - 0.025;
 $font-size-lg: $font-size-base * 1.39;
 
@@ -620,7 +620,7 @@ $font-sizes: (
 $headings-margin-bottom: $spacer * 0.5;
 $headings-font-family: null;
 $headings-font-style: null;
-$headings-font-weight: 400;
+$headings-font-weight: 500;
 $headings-line-height: 1.1;
 $headings-color: null;
 // scss-docs-end headings-variables
@@ -747,7 +747,7 @@ $input-btn-font-family: null;
 $input-btn-font-size: $font-size-base;
 $input-btn-line-height: $line-height-base;
 
-$input-btn-focus-width: 0.2rem;
+$input-btn-focus-width: 0.1rem;
 $input-btn-focus-color-opacity: 0.25;
 $input-btn-focus-color: var(--#{$variable-prefix}input-btn-focus-color);
 $input-btn-focus-blur: 0;
@@ -788,7 +788,7 @@ $btn-font-size-lg: $input-btn-font-size-lg;
 $btn-border-width: $input-btn-border-width;
 
 $btn-font-weight: $font-weight-normal;
-$btn-box-shadow: var(--#{$variable-prefix}btn-box-shadow);
+$btn-box-shadow: 0 0 0; // button box shadow
 $btn-focus-width: 0.15rem;
 $btn-focus-box-shadow: $input-btn-focus-box-shadow;
 $btn-disabled-opacity: 0.65;
@@ -799,9 +799,9 @@ $btn-link-hover-color: var(--#{$variable-prefix}btn-link-hover-color);
 $btn-link-disabled-color: var(--#{$variable-prefix}btn-link-disabled-color);
 
 // Allows for customizing button radius independently from global border radius
-$btn-border-radius: 0.3rem;
-$btn-border-radius-sm: 0.15rem;
-$btn-border-radius-lg: 0.15rem;
+$btn-border-radius: 0.55rem;
+$btn-border-radius-sm: 0.55rem;
+$btn-border-radius-lg: 0.55rem;
 
 $btn-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
   border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -1218,7 +1218,7 @@ $dropdown-inner-border-radius: subtract(
   $dropdown-border-width
 );
 $dropdown-divider-bg: var(--#{$variable-prefix}dropdown-divider-bg);
-$dropdown-divider-margin-y: $spacer * 0.5;
+$dropdown-divider-margin-y: $spacer * 0.3;
 $dropdown-box-shadow: var(--#{$variable-prefix}dropdown-box-shadow);
 
 $dropdown-link-color: var(--#{$variable-prefix}dropdown-link-color);
@@ -1500,7 +1500,7 @@ $modal-title-line-height: $line-height-base;
 $modal-content-color: null;
 $modal-content-bg: var(--#{$variable-prefix}modal-content-bg);
 $modal-content-border-color: transparent;
-$modal-content-border-width: 0;
+$modal-content-border-width: $border-width;
 $modal-content-border-radius: 0.2rem;
 $modal-content-inner-border-radius: subtract(
   $modal-content-border-radius,
@@ -1624,7 +1624,7 @@ $breadcrumb-padding-y: $spacer * 1;
 $breadcrumb-padding-x: 0;
 $breadcrumb-item-padding-x: 0.5rem;
 $breadcrumb-margin-bottom: 1rem;
-$breadcrumb-bg: transparent;
+$breadcrumb-bg: null;
 $breadcrumb-divider-color: var(--#{$variable-prefix}breadcrumb-divider-color);
 $breadcrumb-active-color: var(--#{$variable-prefix}breadcrumb-active-color);
 $breadcrumb-divider: quote("\F0142");
@@ -1698,7 +1698,7 @@ $btn-close-padding-y: $btn-close-padding-x;
 $btn-close-color: var(--#{$variable-prefix}btn-close-color);
 $btn-close-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#8b96a0'><path d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/></svg>");
 $btn-close-focus-shadow: none;
-$btn-close-opacity: 1;
+$btn-close-opacity: 0.65;
 $btn-close-hover-opacity: 0.8;
 $btn-close-focus-opacity: 1;
 $btn-close-disabled-opacity: 0.25;

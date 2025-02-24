@@ -346,11 +346,7 @@
   --#{$variable-prefix}bg-detached-leftbar: #{$white};
 
   // Background left-sidebar
-  --#{$variable-prefix}bg-leftbar-gradient: #{linear-gradient(
-      135deg,
-      #6379c3 0%,
-      #546ee5 60%
-    )};
+  --#{$variable-prefix}bg-leftbar-gradient: #{$secondary};
   --#{$variable-prefix}bg-topnav: #{linear-gradient(to bottom, #6379c3, #546ee5)};
 
   // Boxed Layout

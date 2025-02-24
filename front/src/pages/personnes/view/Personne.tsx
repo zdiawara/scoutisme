@@ -1,5 +1,5 @@
 import { FC, ReactNode, useMemo } from "react";
-import { Badge, Card, Col, ListGroup, Row } from "react-bootstrap";
+import { Badge, Card, Col, ListGroup, Nav, Row, Stack } from "react-bootstrap";
 import { ICONS } from "pages/common";
 import { useQuery } from "@tanstack/react-query";
 import { NATURE, QUERY_KEY } from "utils/constants";
@@ -22,6 +22,7 @@ import {
   PersonneFonctions,
 } from ".";
 import { useDroits } from "hooks/useDroits";
+import * as Icon from "react-bootstrap-icons";
 
 type PersonneProps = {
   personneId: string;
@@ -38,27 +39,28 @@ export const Personne: FC<PersonneProps> = ({ personneId, header }) => {
   const menus = useMemo(() => {
     return [
       {
-        label: "Informations",
+        label: "Profil",
         code: "fiche",
-        icon: "uil uil-bookmark",
+        Icon: Icon.PersonLinesFill,
         visible: true,
       },
       {
-        label: "Carte membre",
+        label: "Carte",
         code: "carte",
         icon: "mdi mdi-card-account-details-outline",
         visible: true,
+        Icon: Icon.PersonVcard,
       },
       {
-        label: "Fonctions",
+        label: "Fonction",
         code: "fonctions",
-        icon: ICONS.fonction,
+        Icon: Icon.Briefcase,
         visible: true,
       },
       {
-        label: "Cotisations",
+        label: "Cotisation",
         code: "cotisations",
-        icon: ICONS.cotisation,
+        Icon: Icon.Bank2,
         visible: protection.cotisation.acces,
       },
     ].filter((e) => e.visible);
@@ -102,83 +104,99 @@ export const Personne: FC<PersonneProps> = ({ personneId, header }) => {
     <>
       {header && header(personne, page)}
 
-      <Row>
-        <Col xl={3} lg={3}>
-          <PersonneBox
-            source={personne.photo}
-            title={
-              <>
-                <div className="mb mt-2 fs-4">
-                  {personne.nom} {personne.prenom}
-                </div>
-                <Badge className="bg-primary text-uppercase">
-                  {personne.type}
-                </Badge>
-              </>
-            }
-          >
-            <div className="text-start mt-2">
-              <div className="font-13">
-                <i className={`${ICONS.fonction} me-1`}></i>
-                Fonction
-              </div>
-              <View.Item>{personne.fonction?.nom}</View.Item>
-              <hr />
-              <div className="font-13">
-                <i className={`${ICONS.organisation} me-1`}></i>
-                Organisation
-              </div>
-              <View.Item>
-                {personne?.organisation ? (
-                  <>
-                    {personne.organisation.parents
-                      ?.filter((parent) =>
-                        [NATURE.unite, NATURE.groupe].includes(
-                          personne.organisation?.nature?.code!
-                        )
-                          ? NATURE.national !== parent.nature
-                          : true
-                      )
-                      ?.map((parent) => (
-                        <span className="text-muted" key={parent.id}>
-                          {parent.nom}
-                          &nbsp;/&nbsp;
-                        </span>
-                      ))}
-                    <Link
-                      to={LINKS.organisations.view(personne.organisation.id)}
-                      className="text-decoration-underline"
-                    >
-                      {personne.organisation.nom}
-                    </Link>
-                  </>
-                ) : null}
-              </View.Item>
-            </div>
-          </PersonneBox>
+      <Stack direction="horizontal">
+        <div className="avatar-md">
+          {personne.photo ? (
+            <img
+              src={personne.photo}
+              className="rounded-circle avatar-md img-thumbnail"
+              alt=""
+              style={{
+                width: "100%",
+                height: "100%",
+                textAlign: "center",
+                objectFit: "cover",
+                color: "transparent",
+                textIndent: "10000px",
+              }}
+            />
+          ) : (
+            <span className="avatar-title bg-secondary-lighten text-secondary font-20 rounded-circle">
+              Photo
+            </span>
+          )}
+        </div>
+        <div className="ms-1">
+          <span className="fw-bold fs-3">
+            {personne.nom} {personne.prenom}
+          </span>
+          <div className="fw-light mt-1">{personne.fonction?.nom}</div>
+        </div>
+      </Stack>
 
-          <Card>
-            <Card.Body className="p-2">
-              <ListGroup defaultActiveKey="#link1">
-                {menus.map((item) => (
-                  <ListGroup.Item
-                    key={item.code}
-                    className={classNames("border-0 rounded", {
-                      active: item.code === page,
-                    })}
-                    action
-                    // as={Link}
-                    // to={LINKS.personnes.view(personne.id) + "?p=" + item.code}
-                    onClick={onSelectPage(item.code)}
+      <div className="shadow-sm rounded p-2 bg-white mt-3 mb-2">
+        <Row className="g-3">
+          <Col xs={6}>
+            <View.Item label="Numero scout">{personne.code}</View.Item>
+          </Col>
+          <Col xs={6}>
+            <View.Item label="Fonction">{personne.fonction?.nom}</View.Item>
+          </Col>
+          <Col xs={12}>
+            <View.Item label="Organisation">
+              {personne?.organisation ? (
+                <>
+                  {personne.organisation.parents
+                    ?.filter((parent) =>
+                      [NATURE.unite, NATURE.groupe].includes(
+                        personne.organisation?.nature?.code!
+                      )
+                        ? NATURE.national !== parent.nature
+                        : true
+                    )
+                    ?.map((parent) => (
+                      <span className="fw-light" key={parent.id}>
+                        {parent.nom}
+                        &nbsp;/&nbsp;
+                      </span>
+                    ))}
+                  <Link
+                    to={LINKS.organisations.view(personne.organisation.id)}
+                    className="text-decoration-underline text-black"
                   >
-                    <i className={`${item.icon} me-1`}></i>&nbsp;{item.label}
-                  </ListGroup.Item>
-                ))}
-              </ListGroup>
-            </Card.Body>
-          </Card>
+                    {personne.organisation.nom}
+                  </Link>
+                </>
+              ) : null}
+            </View.Item>
+          </Col>
+        </Row>
+      </div>
+
+      <Row className="g-2">
+        <Col xs={12} sm={3}>
+          <Nav
+            variant="pills"
+            style={{ overflow: "scroll" }}
+            className="border-bottom flex-nowrap py-1 flex-sm-column"
+            defaultActiveKey="/home"
+          >
+            {menus.map((item) => (
+              <Nav.Item key={item.code}>
+                <Nav.Link
+                  active={item.code === page}
+                  onClick={onSelectPage(item.code)}
+                  href="#"
+                  className="d-flex align-items-center"
+                >
+                  <item.Icon size="1.1rem" className="me-1" />
+                  {item.label}
+                </Nav.Link>
+              </Nav.Item>
+            ))}
+          </Nav>
         </Col>
-        <Col xl={9} lg={9}>
+        <Col xs={12} sm={9}>
           {renderContent()}
         </Col>
       </Row>

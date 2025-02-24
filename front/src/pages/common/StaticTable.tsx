@@ -1,7 +1,7 @@
 import { View } from "components";
 import { Columns, ListResult } from "pages/common";
 import { ReactNode, useMemo, useState } from "react";
-import { Button, Card, Form, InputGroup } from "react-bootstrap";
+import { Button, Card, Form, InputGroup, Stack } from "react-bootstrap";
 
 type StaticTableProps<T> = {
   data: T[] | undefined;
@@ -9,8 +9,12 @@ type StaticTableProps<T> = {
   error?: any;
   columns: Columns<T>[];
   actions?: ReactNode;
-  header: { label: string; description?: string; icon?: string };
-  onSearch?: (search: string, data: T[]) => T[];
+  header?: { label: string; description?: string; icon?: string };
+  search?: {
+    onSearch: (search: string, data: T[]) => T[];
+    placeholder: string;
+  };
+  renderCount?: (total: number) => ReactNode;
 };
 
 export function StaticTable<T>({
@@ -20,19 +24,20 @@ export function StaticTable<T>({
   error,
   actions,
   header,
-  onSearch,
+  search,
+  renderCount,
 }: StaticTableProps<T>) {
-  const [search, setSearch] = useState<string | undefined>();
+  const [searchText, setSearchText] = useState<string | undefined>();
   const [query, setQuery] = useState<any>({
-    pageSize: 10,
+    pageSize: 5,
     pageActive: 0,
     search,
   });
 
   const result = useMemo(() => {
     let _data = [];
-    if (onSearch && query.search) {
-      _data = onSearch(query.search, data || []);
+    if (search?.onSearch && query.search) {
+      _data = search.onSearch(query.search, data || []);
     } else {
       _data = data || [];
     }
@@ -45,7 +50,8 @@ export function StaticTable<T>({
       total: _data.length,
       pageCount: Math.ceil(_data.length / query.pageSize),
     };
-  }, [data, query, onSearch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, query, search?.onSearch]);
 
   const renderContent = () => {
     if (isLoading) {
@@ -61,7 +67,7 @@ export function StaticTable<T>({
     return (
       <>
         <ListResult.Table<T>
-          headerClassName="bg-light"
+          // headerClassName="shadow-sm"
           columns={columns}
           data={result.data || []}
         />
@@ -82,38 +88,56 @@ export function StaticTable<T>({
     );
   };
 
-  const right = (
+  const searchInput = (
     <div className="d-flex align-items-center">
-      {onSearch && (
+      {search && (
         <InputGroup>
           <Form.Control
-            placeholder="Rechercher"
+            placeholder={search.placeholder}
             aria-label="Text input with checkbox"
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => setSearchText(e.target.value)}
             onKeyUp={(event) => {
               if (event.key === "Enter") {
                 event.preventDefault();
-                setQuery((prev: any) => ({ ...prev, search, pageActive: 0 }));
+                setQuery((prev: any) => ({
+                  ...prev,
+                  search: searchText,
+                  pageActive: 0,
+                }));
               }
             }}
           />
           <Button
             onClick={() =>
-              setQuery((prev: any) => ({ ...prev, search, pageActive: 0 }))
+              setQuery((prev: any) => ({
+                ...prev,
+                search: searchText,
+                pageActive: 0,
+              }))
             }
+            variant="secondary"
           >
             OK
           </Button>
         </InputGroup>
       )}
-      {actions}
     </div>
   );
 
-  return (
-    <Card>
-      <View.Header {...header} right={right} />
-      <Card.Body>{renderContent()}</Card.Body>
-    </Card>
-  );
+  // return (
+  //   <Card>
+  //     <View.Header {...header} right={actions} />
+  //     <Card.Body>
+  //       <Stack direction="horizontal" className="align-items-center mb-3">
+  //         {renderCount && renderCount(result.data.length)}
+  //         <div style={{ width: "300px" }} className="ms-auto">
+  //           {searchInput}
+  //         </div>
+  //       </Stack>
+  //       {renderContent()}
+  //     </Card.Body>
+  //   </Card>
+  // );
+
+  return <>{renderContent()}</>;
 }

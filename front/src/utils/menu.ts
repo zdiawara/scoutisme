@@ -3,25 +3,40 @@ import { MenuItemType } from "../appConstants";
 import { LINKS } from "./links";
 
 export const MES_INFORMATIONS = [
+  // {
+  //   key: "mes-informations",
+  //   label: "Informations",
+  //   isTitle: false,
+  //   icon: "dripicons-information",
+  //   children: [
+  //     {
+  //       key: "profil",
+  //       label: "Profil",
+  //       isTitle: false,
+  //       url: LINKS.profil.base,
+  //     },
+  //     {
+  //       key: "organisation",
+  //       label: "Organisation",
+  //       isTitle: false,
+  //       url: LINKS.organisation.base,
+  //     },
+  //   ],
+  // },
+
   {
-    key: "mes-informations",
-    label: "Informations",
+    key: "profil",
+    label: "Mon profil",
     isTitle: false,
-    icon: "dripicons-information",
-    children: [
-      {
-        key: "profil",
-        label: "Profil",
-        isTitle: false,
-        url: LINKS.profil.base,
-      },
-      {
-        key: "organisation",
-        label: "Organisation",
-        isTitle: false,
-        url: LINKS.organisation.base,
-      },
-    ],
+    url: LINKS.profil.base,
+    icon: ICONS.account,
+  },
+  {
+    key: "organisation",
+    label: "Organisation",
+    isTitle: false,
+    url: LINKS.organisation.base,
+    icon: ICONS.organisation,
   },
 ];
 
@@ -56,7 +71,7 @@ export const MENU_ITEMS = [
     key: "personnes",
     label: "Personnes",
     isTitle: false,
-    icon: ICONS.personne,
+    icon: ICONS.searchPersonne,
     url: LINKS.personnes.base,
   },
   {

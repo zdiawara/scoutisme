@@ -31,14 +31,16 @@
   --#{$variable-prefix}text-muted: #{map-get($grays, "600")};
   --#{$variable-prefix}blockquote-footer-color: #{map-get($grays, "600")};
 
+  --#{$variable-prefix}hr-color: #{map-get($grays, "400")};
+
   --#{$variable-prefix}mark-bg: #fcf8e3;
 
   // scss-docs-start table-variables
   --#{$variable-prefix}table-color: #{$body-color};
   --#{$variable-prefix}table-bg: transparent;
   --#{$variable-prefix}table-accent-bg: transparent;
-  --#{$variable-prefix}table-striped-color: #{map-get($grays, "700")};
-  --#{$variable-prefix}table-striped-bg: #{rgba(map-get($grays, "100"), 0.8)};
+  // --#{$variable-prefix}table-striped-color: #{map-get($grays, "700")};
+  --#{$variable-prefix}table-striped-bg: #{rgba(map-get($grays, "100"), 1)};
   --#{$variable-prefix}table-active-color: #{$table-color};
   --#{$variable-prefix}table-active-bg: #{rgba(
       map-get($grays, "300"),
@@ -46,7 +48,7 @@
     )};
   --#{$variable-prefix}table-hover-color: #{$table-color};
   --#{$variable-prefix}table-hover-bg: #{map-get($grays, "100")};
-  --#{$variable-prefix}table-border-color: #{map-get($grays, "300")};
+  --#{$variable-prefix}table-border-color: #{map-get($grays, "200")};
   --#{$variable-prefix}table-group-separator-color: #{lighten(
       map-get($grays, "300"),
       5%
@@ -129,6 +131,7 @@
     )};
 
   // scss-docs-start nav-variables
+  --#{$variable-prefix}nav-link-color: #{$black};
   --#{$variable-prefix}nav-link-disabled-color: #{map-get($grays, "600")};
   --#{$variable-prefix}nav-tabs-border-color: #{map-get($grays, "300")};
   --#{$variable-prefix}nav-tabs-link-hover-border-color: #{map-get(
@@ -213,7 +216,7 @@
     )};
 
   // scss-docs-start card-variables
-  --#{$variable-prefix}card-border-color: #{rgba($black, 0.125)};
+  --#{$variable-prefix}card-border-color: #{map-get($grays, "200")};
   --#{$variable-prefix}card-box-shadow: #{$box-shadow};
   --#{$variable-prefix}card-cap-bg: #{$white};
   --#{$variable-prefix}card-bg: #{$white};
@@ -244,12 +247,9 @@
 
   // scss-docs-start toast-variables
   --#{$variable-prefix}toast-background-color: #{rgba($white, 0.85)};
-  --#{$variable-prefix}toast-border-color: #{rgba(map-get($grays, "900"), 0.1)};
+  --#{$variable-prefix}toast-border-color: #{rgba($black, 0.1)};
   --#{$variable-prefix}toast-header-background-color: #{rgba($white, 0.85)};
-  --#{$variable-prefix}toast-header-border-color: #{rgba(
-      map-get($grays, "900"),
-      0.05
-    )};
+  --#{$variable-prefix}toast-header-border-color: #{rgba($black, 0.05)};
 
   // scss-docs-start badge-variables
   --#{$variable-prefix}badge-color: #{$white};
@@ -269,7 +269,7 @@
   --#{$variable-prefix}progress-bar-bg: #{$primary};
 
   // scss-docs-start list-group-variables
-  --#{$variable-prefix}list-group-color: #{map-get($grays, "900")};
+  --#{$variable-prefix}list-group-color: #{null};
   --#{$variable-prefix}list-group-bg: #{$white};
   --#{$variable-prefix}list-group-border-color: #{map-get($grays, "200")};
   --#{$variable-prefix}list-group-hover-bg: #{map-get($grays, "100")};
@@ -291,8 +291,8 @@
   --#{$variable-prefix}figure-caption-color: #{map-get($grays, "600")};
 
   // scss-docs-start breadcrumb-variables
-  --#{$variable-prefix}breadcrumb-divider-color: #{map-get($grays, "500")};
-  --#{$variable-prefix}breadcrumb-active-color: #{map-get($grays, "900")};
+  --#{$variable-prefix}breadcrumb-divider-color: #{map-get($grays, "400")};
+  --#{$variable-prefix}breadcrumb-active-color: #{map-get($grays, "500")};
 
   // scss-docs-start carousel-variables
   --#{$variable-prefix}carousel-control-color: #{$white};
@@ -316,12 +316,12 @@
   // <=============================================>
 
   // Left Sidebar
-  --#{$variable-prefix}bg-leftbar: #{$white};
+  --#{$variable-prefix}bg-leftbar: #{$primary};
 
-  // Menu
-  --#{$variable-prefix}menu-item: #{map-get($grays, "700")};
-  --#{$variable-prefix}menu-item-hover: #{$primary};
-  --#{$variable-prefix}menu-item-active: #{$primary};
+  // Menu Light
+  --#{$variable-prefix}menu-item: #{map-get($grays, "600")};
+  --#{$variable-prefix}menu-item-hover: #{$white};
+  --#{$variable-prefix}menu-item-active: #{$white};
 
   // Topbar
   --#{$variable-prefix}bg-topbar: #{$white};
@@ -347,25 +347,21 @@
   --#{$variable-prefix}bg-detached-leftbar: #{$white};
 
   // Background left-sidebar
-  --#{$variable-prefix}bg-leftbar-gradient: #{linear-gradient(
-      135deg,
-      #8f75da 0%,
-      #727cf5 60%
-    )};
-  --#{$variable-prefix}bg-topnav: #313a46;
+  --#{$variable-prefix}bg-leftbar-gradient: #{$secondary};
+  --#{$variable-prefix}bg-topnav: #{linear-gradient(to bottom, #6379c3, #546ee5)};
 
   // Boxed Layout
   --#{$variable-prefix}boxed-layout-bg: #{$white};
 
   // Helpbox
   --#{$variable-prefix}help-box-light-bg: #{rgba($white, 0.07)};
-  --#{$variable-prefix}help-box-dark-bg: #{$primary};
+  --#{$variable-prefix}help-box-dark-bg: #{$blue};
 
   // Nav-pill background
   --#{$variable-prefix}nav-pills-bg: #eef2f7;
 
   // Custom-accordion
-  --#{$variable-prefix}custom-accordion-title-color: #{map-get($grays, "900")};
+  --#{$variable-prefix}custom-accordion-title-color: #313a46;
 
   // Dragula demo background
   --#{$variable-prefix}dragula-bg: #f7f9fb;
@@ -374,13 +370,13 @@
   --#{$variable-prefix}form-wizard-header-bg: #eef2f7;
 
   // Text title color
-  --#{$variable-prefix}text-title-color: #6c757d;
+  --#{$variable-prefix}text-title-color: #{map-get($grays, "700")};
 
   // Page title color
   --#{$variable-prefix}page-title-color: #{map-get($grays, "700")};
 
   // card Loader background
-  --#{$variable-prefix}card-loader-bg: #{map-get($grays, "900")};
+  --#{$variable-prefix}card-loader-bg: #313a46;
 
   // Chat widget
   --#{$variable-prefix}chat-primary-user-bg: #fef5e4;
@@ -393,22 +389,5 @@
   --#{$variable-prefix}apex-grid-color: #f9f9fd;
 
   // Hero
-  --#{$variable-prefix}hero-bg: #{linear-gradient(to bottom, #8669ed, #727cf5)};
-}
-
-body[data-leftbar-theme="dark"] {
-  // Left Sidebar
-  --#{$variable-prefix}bg-leftbar: #040444; //#{map-get($grays, "900")};
-
-  // Menu
-  --#{$variable-prefix}dark-menu-item: #{$white};
-  --#{$variable-prefix}dark-menu-item-hover: #bccee4;
-  --#{$variable-prefix}dark-menu-item-active: #{$white};
-}
-
-body[data-leftbar-theme="default"] {
-  // Menu
-  --#{$variable-prefix}menu-item: #cedce4;
-  --#{$variable-prefix}menu-item-hover: #{$white};
-  --#{$variable-prefix}menu-item-active: #{$white};
+  --#{$variable-prefix}hero-bg: #{linear-gradient(to bottom, #6379c3, #546ee5)};
 }

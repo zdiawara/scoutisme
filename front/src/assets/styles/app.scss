@@ -1,0 +1,31 @@
+// Custom.scss
+// Option B: Include parts of Bootstrap
+
+@import "fonts/open-sans";
+
+// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
+@import "../../../node_modules/bootstrap/scss/functions";
+@import "../../../node_modules/bootstrap/scss/variables";
+@import "../../../node_modules/bootstrap/scss/mixins";
+
+// 2. Include any default variable overrides here
+@import "./config/variables";
+@import "./config/light-mode";
+@import "./config/custom-variables";
+
+// 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets)
+@import "../../../node_modules/bootstrap/scss/bootstrap.scss";
+
+@import "./components/mixins";
+
+@import "./components/accordions";
+@import "./components/avatar";
+@import "./components/badge";
+@import "./components/buttons";
+@import "./components/card";
+@import "./components/nav";
+@import "./components/pagination";
+@import "./components/reboot";
+@import "./components/tables";
+@import "./components/type";
+@import "./components/utilities";

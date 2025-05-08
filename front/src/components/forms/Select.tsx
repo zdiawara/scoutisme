@@ -27,7 +27,7 @@ export const Select: FC<SelectProps> = ({
   return (
     <Form.Group className="position-relative">
       {label && (
-        <Form.Label className="fw-semibold text-secondary">
+        <Form.Label className="text-muted text-uppercase fs-6">
           {label}
           {isRequired ? <strong className="text-danger">&nbsp;*</strong> : null}
         </Form.Label>
@@ -99,7 +99,7 @@ export const AsyncSelect: FC<AsyncSelectProps> = ({
     <>
       <Form.Group className="position-relative">
         {label && (
-          <Form.Label>
+          <Form.Label className="text-muted text-uppercase fs-6">
             {label}
             {isRequired ? (
               <strong className="text-danger">&nbsp;*</strong>

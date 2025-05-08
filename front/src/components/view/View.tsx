@@ -1,5 +1,5 @@
 import { FC, ReactNode } from "react";
-import { Badge, Stack } from "react-bootstrap";
+import { Badge, ListGroup, Stack } from "react-bootstrap";
 
 type EmptyProps = {
   label?: string;
@@ -65,9 +65,31 @@ const Etat: FC<EtatProps> = ({ value }) => {
   );
 };
 
+type ToolbarProps = {
+  icon?: ReactNode;
+  label?: string;
+  right?: ReactNode;
+  children?: ReactNode;
+};
+const Toolbar: FC<ToolbarProps> = ({ label, children, icon, right }) => {
+  return (
+    <ListGroup.Item className="d-flex align-items-center bg-gray-100">
+      {(label || icon) && (
+        <div>
+          {icon}
+          <span className="fs-5">Identite</span>
+        </div>
+      )}
+      {children}
+      {right && <div className="ms-auto d-block">{right}</div>}
+    </ListGroup.Item>
+  );
+};
+
 export const View = {
   Item,
   Header,
   Etat,
   Empty,
+  Toolbar,
 };

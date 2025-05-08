@@ -3,12 +3,13 @@ import { Button, Col, ListGroup, Row } from "react-bootstrap";
 import { PersonneResource } from "types/personne.type";
 import { View } from "components";
 import * as Icon from "react-bootstrap-icons";
-import { PersonneIdentite } from "../consultation/profil/identite/PersonneIdentite";
+import { PersonneIdentite } from "./profil/identite/PersonneIdentite";
 
-type PersonneDetailsProps = {
+type PersonneDetailProps = {
   personne: PersonneResource;
 };
-export const PersonneDetails: FC<PersonneDetailsProps> = ({ personne }) => {
+
+const PersonneDetail: FC<PersonneDetailProps> = ({ personne }) => {
   return (
     <>
       <ListGroup className="mb-3 shadow-sm">
@@ -114,3 +115,5 @@ export const PersonneDetails: FC<PersonneDetailsProps> = ({ personne }) => {
     </>
   );
 };
+
+export default PersonneDetail;

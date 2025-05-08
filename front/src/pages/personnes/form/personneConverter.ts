@@ -34,6 +34,20 @@ const toBody = (data: Record<string, any>) => {
 
   return body;
 };
+
+const toIdentiteBody = (data: Record<string, any>) => {
+  const body: Record<string, any> = {
+    nom: data.nom,
+    prenom: data.prenom,
+    lieu_naissance: data.lieu_naissance,
+    date_naissance: DateFormater.toISO(data.date_naissance),
+    genre_id: selectHelper.getValue(data.genre),
+    profession: data.profession,
+  };
+
+  return body;
+};
+
 const toInput = (data: PersonneResource) => {
   return {
     id: data.id,
@@ -58,7 +72,9 @@ const toInput = (data: PersonneResource) => {
     },
   };
 };
+
 export const personneConverter = {
   toBody,
+  toIdentiteBody,
   toInput,
 };

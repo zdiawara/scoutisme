@@ -23,6 +23,7 @@ import {
 } from ".";
 import { useDroits } from "hooks/useDroits";
 import * as Icon from "react-bootstrap-icons";
+import PersonneDetail from "../consultation/PersonneDetail";
 
 type PersonneProps = {
   personneId: string;
@@ -92,7 +93,7 @@ export const Personne: FC<PersonneProps> = ({ personneId, header }) => {
       case "cotisations":
         return <PersonneCotisations personne={personne} />;
       default:
-        return <PersonneDetails personne={personne} />;
+        return <PersonneDetail personne={personne} />;
     }
   };
 
@@ -134,15 +135,20 @@ export const Personne: FC<PersonneProps> = ({ personneId, header }) => {
         </div>
       </Stack>
 
-      <div className="shadow-sm rounded p-2 bg-white mt-3 mb-2">
+      <div className="shadow-sm rounded p-3 bg-white mt-3 mb-2">
         <Row className="g-3">
           <Col xs={6}>
             <View.Item label="Numero scout">{personne.code}</View.Item>
           </Col>
           <Col xs={6}>
+            <View.Item label="Cotisation">
+              <Badge bg="success">A jour</Badge>
+            </View.Item>
+          </Col>
+          <Col xs={6}>
             <View.Item label="Fonction">{personne.fonction?.nom}</View.Item>
           </Col>
-          <Col xs={12}>
+          <Col xs={6}>
             <View.Item label="Organisation">
               {personne?.organisation ? (
                 <>

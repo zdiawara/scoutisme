@@ -132,11 +132,7 @@ export const OrganisationMembres: FC<OrganisationMembresProps> = ({
       columns={columns}
       isLoading={query.isLoading}
       error={query.error}
-      renderCount={(total) => <span>{total} membre(s)</span>}
-      search={{
-        onSearch: searchByCriteres,
-        placeholder: "Recherche par fonction, nom ...",
-      }}
+      onSearch={searchByCriteres}
     />
   );
 };

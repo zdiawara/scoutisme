@@ -10,12 +10,6 @@ import { Menu } from "./menu";
 import { useQueryClient } from "@tanstack/react-query";
 import { UserResource } from "types/auth.type";
 
-const NATURE: Record<string, string> = {
-  region: "Ma région",
-  unite: "Mon unité",
-  groupe: "Mon groupe",
-};
-
 export const Sidebar = () => {
   const menuNodeRef = useRef(null);
 
@@ -25,8 +19,6 @@ export const Sidebar = () => {
     const { data: user } = query.getQueryData(["user-info"]) as {
       data: UserResource;
     };
-
-    const { personne } = user;
 
     if (user.role.code === "admin") {
       return getMenuItems();
@@ -44,23 +36,9 @@ export const Sidebar = () => {
       })
       .map((e) => e?.code || "");
 
-    const menus = getMenuItems().filter(
+    return getMenuItems().filter(
       (menu) => menu.isTitle || modules.includes(menu.key)
     );
-
-    if (personne && personne.organisation) {
-      const { nature, nom } = personne.organisation;
-      const infos = MES_INFORMATIONS.map((item) =>
-        item.key === "organisation"
-          ? {
-              ...item,
-              label: "Mon organisation", //NATURE[nature.code] || nom,
-            }
-          : item
-      );
-      return [...infos, ...menus].filter((e) => e.key !== "organisations");
-    }
-    return menus;
   }, [query]);
 
   /*
@@ -78,7 +56,7 @@ export const Sidebar = () => {
     <>
       <div className="leftside-menu" ref={menuNodeRef}>
         <SimpleBar style={{ maxHeight: "100%" }} scrollbarMaxSize={320}>
-          <Menu menuItems={menus} />
+          <Menu menuItems={[...MES_INFORMATIONS, ...menus]} />
         </SimpleBar>
       </div>
     </>

@@ -15,6 +15,7 @@ export const PersonneDetails: FC<PersonneDetailsProps> = ({ personne }) => {
         <View.Header
           {...Header.infoGenerale}
           description="Informations générales de la personne"
+          className="mb-0"
         />
         <Card.Body>
           <Row className="g-3">
@@ -101,6 +102,7 @@ export const PersonneDetails: FC<PersonneDetailsProps> = ({ personne }) => {
             <View.Header
               {...Header.formation}
               description="Profession et formation de la personne"
+              className="mb-0"
             />
             <Card.Body>
               <Row className="g-3">
@@ -120,6 +122,8 @@ export const PersonneDetails: FC<PersonneDetailsProps> = ({ personne }) => {
           </>
         )}
       </Card>
+      {/* </Card.Body> */}
+      {/* </Card> */}
     </>
   );
 };

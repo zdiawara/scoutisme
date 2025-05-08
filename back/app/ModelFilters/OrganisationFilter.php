@@ -9,8 +9,8 @@ class OrganisationFilter extends ModelFilter
     public function search($search)
     {
         return $this->where(function ($q) use ($search) {
-            return $q->where('organisations.nom', 'LIKE', "%$search%")
-                ->orWhere('organisations.code', 'LIKE', "%$search%");
+            return $q->where('nom', 'LIKE', "%$search%")
+                ->orWhere('code', 'LIKE', "%$search%");
         });
     }
 

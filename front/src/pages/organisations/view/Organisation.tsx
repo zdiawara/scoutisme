@@ -54,15 +54,15 @@ export const Organisation: FC<OrganisationProps> = ({
     const TABS = [
       { label: "Détails", code: "fiche", icon: ICONS.detail, visible: true },
       {
-        label: "Direction",
-        code: "direction",
-        icon: ICONS.direction,
+        label: "Organisation",
+        code: "organisations",
+        icon: ICONS.organisation,
         visible: true,
       },
       {
-        label: "Sous organisations",
-        code: "organisations",
-        icon: ICONS.organisation,
+        label: "Direction",
+        code: "direction",
+        icon: ICONS.direction,
         visible: true,
       },
       {

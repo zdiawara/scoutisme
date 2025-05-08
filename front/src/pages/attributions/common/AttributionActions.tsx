@@ -45,11 +45,7 @@ export const AttributionActions: FC<AttributionActionsProps> = ({
   return (
     <>
       <Dropdown className="ms-2">
-        <Dropdown.Toggle
-          as={Button}
-          variant="light"
-          className="btn-sm arrow-none"
-        >
+        <Dropdown.Toggle as={Button} variant="light" className="arrow-none">
           <i className="mdi mdi-dots-vertical" />
         </Dropdown.Toggle>
         <Dropdown.Menu className="topbar-dropdown-menu mt-2">

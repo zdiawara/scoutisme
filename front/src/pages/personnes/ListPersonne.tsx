@@ -174,12 +174,9 @@ const ListPersonne: FC = () => {
         Cell: (personne) => {
           return (
             <div className="d-flex" style={{ justifyContent: "end" }}>
-              <Link
-                to={LINKS.personnes.view(personne.id)}
-                className="btn btn-sm btn-light"
-              >
+              <Button size="sm" variant="light">
                 voir
-              </Link>
+              </Button>
               {personne.type !== "scout" && (
                 <PersonneActions personne={personne} />
               )}

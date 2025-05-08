@@ -96,6 +96,7 @@ const ListMessage: FC = () => {
         <ListResult.Table<MessageResource>
           columns={columns}
           data={results?.data || []}
+          headerClassName="bg-light"
         />
         {results?.data && (
           <ListResult.Paginate

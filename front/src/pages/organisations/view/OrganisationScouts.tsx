@@ -96,10 +96,7 @@ export const OrganisationScouts: FC<OrganisationScoutsProps> = ({
         description: "Les scouts de l'unité",
       }}
       data={data}
-      search={{
-        onSearch: searchByCriteres,
-        placeholder: "",
-      }}
+      onSearch={searchByCriteres}
       columns={columns}
       isLoading={query.isLoading}
       error={query.error}

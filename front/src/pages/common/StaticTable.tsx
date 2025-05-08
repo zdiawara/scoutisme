@@ -1,7 +1,7 @@
 import { View } from "components";
 import { Columns, ListResult } from "pages/common";
 import { ReactNode, useMemo, useState } from "react";
-import { Button, Card, Form, InputGroup, Stack } from "react-bootstrap";
+import { Button, Card, Form, InputGroup } from "react-bootstrap";
 
 type StaticTableProps<T> = {
   data: T[] | undefined;
@@ -10,11 +10,7 @@ type StaticTableProps<T> = {
   columns: Columns<T>[];
   actions?: ReactNode;
   header: { label: string; description?: string; icon?: string };
-  search?: {
-    onSearch: (search: string, data: T[]) => T[];
-    placeholder: string;
-  };
-  renderCount?: (total: number) => ReactNode;
+  onSearch?: (search: string, data: T[]) => T[];
 };
 
 export function StaticTable<T>({
@@ -24,10 +20,9 @@ export function StaticTable<T>({
   error,
   actions,
   header,
-  search,
-  renderCount,
+  onSearch,
 }: StaticTableProps<T>) {
-  const [searchText, setSearchText] = useState<string | undefined>();
+  const [search, setSearch] = useState<string | undefined>();
   const [query, setQuery] = useState<any>({
     pageSize: 10,
     pageActive: 0,
@@ -36,8 +31,8 @@ export function StaticTable<T>({
 
   const result = useMemo(() => {
     let _data = [];
-    if (search?.onSearch && query.search) {
-      _data = search.onSearch(query.search, data || []);
+    if (onSearch && query.search) {
+      _data = onSearch(query.search, data || []);
     } else {
       _data = data || [];
     }
@@ -50,8 +45,7 @@ export function StaticTable<T>({
       total: _data.length,
       pageCount: Math.ceil(_data.length / query.pageSize),
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, query, search?.onSearch]);
+  }, [data, query, onSearch]);
 
   const renderContent = () => {
     if (isLoading) {
@@ -67,7 +61,7 @@ export function StaticTable<T>({
     return (
       <>
         <ListResult.Table<T>
-          headerClassName="shadow-sm"
+          headerClassName="bg-light"
           columns={columns}
           data={result.data || []}
         />
@@ -88,54 +82,38 @@ export function StaticTable<T>({
     );
   };
 
-  const searchInput = (
+  const right = (
     <div className="d-flex align-items-center">
-      {search && (
+      {onSearch && (
         <InputGroup>
           <Form.Control
-            placeholder={search.placeholder}
+            placeholder="Rechercher"
             aria-label="Text input with checkbox"
-            onChange={(e) => setSearchText(e.target.value)}
+            onChange={(e) => setSearch(e.target.value)}
             onKeyUp={(event) => {
               if (event.key === "Enter") {
                 event.preventDefault();
-                setQuery((prev: any) => ({
-                  ...prev,
-                  search: searchText,
-                  pageActive: 0,
-                }));
+                setQuery((prev: any) => ({ ...prev, search, pageActive: 0 }));
               }
             }}
           />
           <Button
             onClick={() =>
-              setQuery((prev: any) => ({
-                ...prev,
-                search: searchText,
-                pageActive: 0,
-              }))
+              setQuery((prev: any) => ({ ...prev, search, pageActive: 0 }))
             }
-            variant="secondary"
           >
             OK
           </Button>
         </InputGroup>
       )}
+      {actions}
     </div>
   );
 
   return (
     <Card>
-      <View.Header {...header} right={actions} />
-      <Card.Body>
-        <Stack direction="horizontal" className="align-items-center mb-3">
-          {renderCount && renderCount(result.data.length)}
-          <div style={{ width: "300px" }} className="ms-auto">
-            {searchInput}
-          </div>
-        </Stack>
-        {renderContent()}
-      </Card.Body>
+      <View.Header {...header} right={right} />
+      <Card.Body>{renderContent()}</Card.Body>
     </Card>
   );
 }

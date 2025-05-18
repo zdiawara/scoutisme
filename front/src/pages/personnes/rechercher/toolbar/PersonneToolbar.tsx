@@ -1,5 +1,12 @@
 import { View } from "components";
-import { Badge, Button, Form, Spinner, Stack } from "react-bootstrap";
+import {
+  Badge,
+  Button,
+  Form,
+  InputGroup,
+  Spinner,
+  Stack,
+} from "react-bootstrap";
 import { FC, useState } from "react";
 import { FilterPersonne } from "pages/personnes/FilterPersonne";
 import useToggle from "hooks/useToggle";
@@ -59,38 +66,35 @@ export const PersonneToolbar: FC<PersonneToolbarProps> = ({
     );
   }, 500);
 
-  const actions = (
-    <Stack direction="horizontal">
-      <Button
-        variant="outline-secondary"
-        className="ms-1 d-flex align-items-center"
-        onClick={toggleFilter}
-      >
-        <Icon.Filter className="me-1" /> Filrer
-      </Button>
-      <Button
-        variant="outline-secondary"
-        className="ms-1 d-flex align-items-center"
-        onClick={toggleFilter}
-      >
-        <Icon.SortAlphaDown className="me-1" /> Trier
-      </Button>
-      {/* <Button variant="secondary" className="ms-1">
-        <Icon.ThreeDotsVertical />
-      </Button> */}
-    </Stack>
-  );
+  const actions = <Stack direction="horizontal"></Stack>;
 
   return (
     <>
       <View.Toolbar right={actions}>
         <div className="w-100">
-          <Form.Control
-            defaultValue={searchParams?.search || ""}
-            placeholder="Rechercher ..."
-            onChange={changed}
-            className="w-100"
-          />
+          <InputGroup>
+            <Form.Control
+              defaultValue={searchParams?.search || ""}
+              placeholder="Rechercher ..."
+              onChange={changed}
+            />
+            <Button
+              variant="outline-secondary"
+              // className="ms-1 d-flex align-items-center"
+              onClick={toggleFilter}
+            >
+              <Icon.Filter size="1.3rem" />
+              <span className="ms-1 d-none d-sm-inline">Filrer</span>
+            </Button>
+            <Button
+              variant="outline-secondary"
+              // className="d-flex align-items-center"
+            >
+              <Icon.SortAlphaDown size="1.3rem" />
+              <span className="ms-1 d-none d-sm-inline">Trier</span>
+            </Button>
+          </InputGroup>
+
           <div className="mt-1">
             {Object.entries(searchParams || {}).map(([key, value]) => (
               <Badge key={key} className="me-1" bg="secondary">

@@ -93,7 +93,8 @@ const RechercherPersonne = () => {
         title="Personnes"
         right={
           <Button variant="secondary" className="ms-1">
-            Actions <Icon.ChevronDown />
+            <span className="d-none d-sm-inline me-1">Actions</span>
+            <Icon.ChevronDown />
           </Button>
         }
       />

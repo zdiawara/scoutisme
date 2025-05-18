@@ -19,7 +19,7 @@ class PaiementResource extends JsonResource
                 'cotisation' => new CotisationResource($this->whenLoaded('cotisation')),
                 'valideur' => new UserResource($this->whenLoaded('valideur')),
                 'createur' => new UserResource($this->whenLoaded('createur')),
-                'created_at' => date('d/m/Y H:i', strtotime($this->created_at))
+                'created_at' => date('Y-m-d H:i:s', strtotime($this->created_at))
             ])->all();
     }
 }

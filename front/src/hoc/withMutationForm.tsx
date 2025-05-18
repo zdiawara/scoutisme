@@ -68,9 +68,9 @@ export function withMutationForm(
       onSuccess: (r) => {
         onSuccess && onSuccess(r?.data);
         toast("Modifications enregistrées !", {
-          type: toast.TYPE.INFO,
+          type: toast.TYPE.SUCCESS,
           autoClose: 5000,
-          position: "bottom-right",
+          position: "top-right",
         });
       },
     });
@@ -88,9 +88,10 @@ export function withMutationForm(
         <>
           <Button
             className="me-1"
-            variant="danger"
+            variant="outline-primary"
             onClick={onExit}
             disabled={isLoading}
+            size="sm"
           >
             {labels?.cancelLabel || "Annuler"}
           </Button>
@@ -98,6 +99,7 @@ export function withMutationForm(
             onClick={methods.handleSubmit(onSubmit, onError)}
             variant="primary"
             disabled={isLoading}
+            size="sm"
           >
             {isLoading && (
               <Spinner

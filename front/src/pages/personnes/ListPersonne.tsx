@@ -21,6 +21,7 @@ import { ListPersonneActions } from "./common/ListPersonneActions";
 import { NATURE, QUERY_KEY } from "utils/constants";
 import { PersonneActions } from "./common/PersonneActions";
 import { useAuth } from "hooks";
+import { PersonneUtils } from "utils/PersonneUtils";
 
 const renderOrganisation = ({ organisation }: PersonneResource) => {
   if (organisation) {
@@ -174,10 +175,13 @@ const ListPersonne: FC = () => {
         Cell: (personne) => {
           return (
             <div className="d-flex" style={{ justifyContent: "end" }}>
-              <Button size="sm" variant="light">
+              <Link
+                to={LINKS.personnes.view(personne.id)}
+                className="btn btn-sm btn-light"
+              >
                 voir
-              </Button>
-              {personne.type !== "scout" && (
+              </Link>
+              {PersonneUtils.isAdulte(personne) && (
                 <PersonneActions personne={personne} />
               )}
             </div>

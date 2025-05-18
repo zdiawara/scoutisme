@@ -15,12 +15,31 @@ class Personne extends Model
     use HasUuids, HasFactory, Filterable, Audit;
 
     protected $fillable = [
-        'nom', 'prenom', 'photo', 'code', 'adresse', 'email', 'telephone', 'etat', 'personne_a_contacter',
-        'profession', 'date_naissance', 'lieu_naissance', 'type', 'genre_id', 'ville_id', 'niveau_formation_id',
-        'organisation_id', 'fonction_id', 'date_fin', 'date_debut', 'modified_by', 'created_by'
+        'nom',
+        'prenom',
+        'photo',
+        'code',
+        'adresse',
+        'email',
+        'telephone',
+        'etat',
+        'personne_a_contacter',
+        'profession',
+        'date_naissance',
+        'lieu_naissance',
+        'type',
+        'genre_id',
+        'ville_id',
+        'formations',
+        'organisation_id',
+        'fonction_id',
+        'date_fin',
+        'date_debut',
+        'modified_by',
+        'created_by'
     ];
 
-    protected $casts = ['personne_a_contacter' => 'array'];
+    protected $casts = ['personne_a_contacter' => 'array', 'formations' => 'array'];
 
     public function niveauFormation()
     {

@@ -14,6 +14,7 @@ import { FonctionResource, PersonneResource } from "types/personne.type";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { NATURE, QUERY_KEY } from "utils/constants";
 import { useFormContext } from "react-hook-form";
+import { PersonneUtils } from "utils/PersonneUtils";
 
 const Form: FC<WrapperV2Props> = (props) => {
   const { watch, setValue } = useFormContext();
@@ -121,15 +122,15 @@ export const AffecterPersonneModal: FC<AffecterPersonneModalProps> = ({
 
   const fonctionScoutQuery = useQuery({
     queryKey: [QUERY_KEY.fonctions, "scout"],
-    networkMode: "offlineFirst",
-    queryFn: () => {
-      return fonctionApi
-        .findAll<FonctionResource>({ code: "scout" })
-        .then((data) => data.data[0] || undefined);
+    queryFn: async () => {
+      const data = await fonctionApi.findAll<FonctionResource>({
+        code: "scout",
+      });
+      return data.data[0] || undefined;
     },
   });
 
-  const isScout = personne.type === "scout";
+  const isScout = PersonneUtils.isScout(personne);
 
   const defaultValues = useMemo(() => {
     const fonction = isScout

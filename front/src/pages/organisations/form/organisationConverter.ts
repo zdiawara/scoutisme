@@ -12,6 +12,20 @@ const toBody = (data: Record<string, any>) => {
     adresse: data.adresse,
   };
 };
+const toIdentiteBody = (data: Record<string, any>) => {
+  return {
+    nom: data.nom,
+    code: data.code,
+  };
+};
+
+const toAdresseBody = (data: Record<string, any>) => {
+  return {
+    ville_id: selectHelper.getValue(data.ville),
+    adresse: data.adresse,
+  };
+};
+
 const toInput = (data: OrganisationResource) => {
   const { parent, nature, type, ville } = data;
   return {
@@ -27,5 +41,7 @@ const toInput = (data: OrganisationResource) => {
 };
 export const organisationConverter = {
   toBody,
+  toIdentiteBody,
+  toAdresseBody,
   toInput,
 };

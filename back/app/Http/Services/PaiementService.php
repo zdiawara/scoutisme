@@ -19,7 +19,11 @@ class PaiementService
         $this->cotisationService = $cotisationService;
         $prefix = date("ym");
         $this->config = [
-            'table' => 'paiements', 'field' => 'numero', 'length' => 8, 'prefix' => $prefix . '-', 'reset_on_change' => 'prefix'
+            'table' => 'paiements',
+            'field' => 'numero',
+            'length' => 8,
+            'prefix' => $prefix . '-',
+            'reset_on_change' => 'prefix'
         ];
     }
 

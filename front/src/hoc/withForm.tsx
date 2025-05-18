@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FC, ReactNode, useState } from "react";
-import { Alert, Button, Form } from "react-bootstrap";
+import { Alert, Button, Form, Stack } from "react-bootstrap";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -18,6 +18,7 @@ type HocCompomentProps = {
 export type WrapperProps = {
   isEditMode: boolean;
   renderButtons: () => ReactNode;
+  renderButtonsActions: () => ReactNode;
   renderGeneralError: () => ReactNode;
   onSubmit: () => void;
   goBack: () => void;
@@ -54,19 +55,19 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
             goBack ? goBack() : _goBack();
           }
           toast("Modifications enregistrées !", {
-            type: toast.TYPE.INFO,
+            type: toast.TYPE.SUCCESS,
             autoClose: 5000,
-            position: "bottom-right",
+            position: "top-right",
           });
         })
         .catch((e) => {
           let message = "";
-          if (e.status === 422) {
+          if (e?.status === 422) {
             Object.keys(e.errors || {}).forEach((key) => {
               methods.setError(key, { message: e.errors[key] });
             });
             message = "Les données soumises ne sont pas valides";
-          } else if (e.status === 400) {
+          } else if (e?.status === 400) {
             message = e.message;
           } else {
             console.error(e);
@@ -100,18 +101,41 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
     const renderButtons = () => {
       return (
         <>
-          <Button className="me-1" variant="danger" onClick={goBack || _goBack}>
+          <Button
+            className="me-1"
+            variant="danger"
+            size="sm"
+            onClick={goBack || _goBack}
+          >
             Annuler
           </Button>
           <Button
             onClick={methods.handleSubmit(onSubmit, onError)}
             variant="primary"
+            size="sm"
           >
             Enregistrer
           </Button>
         </>
       );
     };
+
+    const renderButtonsActions = () => (
+      <Stack direction="horizontal" className="mt-3">
+        <div className="ms-auto">
+          <Button
+            variant="outline-primary"
+            className="me-1"
+            onClick={goBack || _goBack}
+          >
+            Annuler
+          </Button>
+          <Button onClick={methods.handleSubmit(onSubmit, onError)}>
+            Enregistrer
+          </Button>
+        </div>
+      </Stack>
+    );
 
     const renderGeneralError = () =>
       methods.formState.errors["_message"] && (
@@ -133,6 +157,7 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
             renderGeneralError={renderGeneralError}
             title={title}
             subtitle={subtitle}
+            renderButtonsActions={renderButtonsActions}
           />
         </Form>
       </FormProvider>

@@ -36,7 +36,7 @@ export const TextInput: FC<TextInputProps> = ({
   return (
     <Form.Group className="position-relative">
       {label && (
-        <Form.Label htmlFor={name}>
+        <Form.Label className="text-muted text-uppercase fs-6" htmlFor={name}>
           {label}
           {isRequired ? <strong className="text-danger">&nbsp;*</strong> : null}
           {description && <TooltipHelper description={description} />}
@@ -51,7 +51,7 @@ export const TextInput: FC<TextInputProps> = ({
               <MaskedInput
                 mask={mask}
                 id={name}
-                className={classNames("form-control text-black fw-semibold", {
+                className={classNames("form-control", {
                   "is-invalid": !!error,
                 })}
                 {...field}
@@ -62,7 +62,7 @@ export const TextInput: FC<TextInputProps> = ({
         </>
       ) : (
         <Form.Control
-          className="text-primary fw-semibold"
+          // className="text-primary fw-semibold"
           id={name}
           {...rest}
           {...register(name)}

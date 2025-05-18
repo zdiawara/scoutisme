@@ -1,5 +1,4 @@
 import {
-  Radio,
   SelectFonction,
   SelectGenre,
   SelectOrganisation,
@@ -13,11 +12,16 @@ import { Col } from "react-bootstrap";
 const FilterPersonneForm: FC = () => {
   return (
     <>
-      <Col xs={6}>
-        <SelectGenre name="genre" label="Genre" isClearable />
+      <Col xs={12}>
+        <SelectGenre name="genre" label="Genre" isClearable placeholder="" />
       </Col>
       <Col xs={12}>
-        <SelectFonction name="fonction" label="Fonction" isClearable />
+        <SelectFonction
+          name="fonction"
+          label="Fonction"
+          isClearable
+          placeholder=""
+        />
       </Col>
 
       <Col xs={12}>
@@ -25,16 +29,7 @@ const FilterPersonneForm: FC = () => {
           name="organisation"
           label="Organisation"
           isClearable
-        />
-      </Col>
-
-      <Col>
-        <Radio
-          name="inclureSousOrganisation"
-          label="Inclure les sous organisations"
-          type="switch"
-          inline
-          value="true"
+          placeholder=""
         />
       </Col>
 
@@ -43,11 +38,17 @@ const FilterPersonneForm: FC = () => {
           name="niveauFormation"
           label="Niveau formation"
           isClearable
+          placeholder=""
         />
       </Col>
 
       <Col xs={12}>
-        <SelectVille name="ville" label="Ville de résidence" isClearable />
+        <SelectVille
+          name="ville"
+          label="Ville de residence"
+          isClearable
+          placeholder=""
+        />
       </Col>
     </>
   );

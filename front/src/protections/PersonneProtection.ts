@@ -1,4 +1,4 @@
-import { PersonneResource } from "types/personne.type";
+import { PersonneResource, TypePersonne } from "types/personne.type";
 import { UserDroit } from "utils/droits";
 import { AbstractProtection } from "./AbstractProtection";
 
@@ -29,9 +29,9 @@ export class PersonneProtection extends AbstractProtection {
       return false;
     }
     switch (personne.type) {
-      case "scout":
+      case TypePersonne.scout:
         return this.scouts.creer;
-      case "adulte":
+      case TypePersonne.adulte:
         return this.adultes.creer;
       default:
         return false;
@@ -43,9 +43,9 @@ export class PersonneProtection extends AbstractProtection {
       return false;
     }
     switch (personne.type) {
-      case "scout":
+      case TypePersonne.scout:
         return this.scouts.affecter;
-      case "adulte":
+      case TypePersonne.adulte:
         return this.adultes.affecter;
       default:
         return false;

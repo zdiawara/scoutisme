@@ -1,11 +1,11 @@
 import { FC, ReactNode } from "react";
-import { Badge, Stack } from "react-bootstrap";
+import { Badge, ListGroup, Stack } from "react-bootstrap";
 
 type EmptyProps = {
   label?: string;
 };
-const Empty: FC<EmptyProps> = ({ label = "non renseingé" }) => {
-  return <span className="text-muted fs-10 fst-italic">{label}</span>;
+const Empty: FC<EmptyProps> = ({ label = "-" }) => {
+  return <span className="fw-semibold fs-10 fst-italic">{label}</span>;
 };
 
 type ItemProps = {
@@ -15,13 +15,13 @@ type ItemProps = {
 const Item: FC<ItemProps> = ({ label, children }) => {
   return (
     <>
-      {label && <div className="font-12 text-black m-0 mb-1">{label} </div>}
-      {children === undefined || children === null ? (
+      {label && (
+        <div className="text-muted text-uppercase fs-6 m-0 mb-1">{label} </div>
+      )}
+      {children === undefined || children === null || children === "" ? (
         <Empty />
       ) : (
-        <div className="m-0 text-primary fw-semibold" style={{}}>
-          {children}
-        </div>
+        <div className="m-0 text-black fw-bold">{children}</div>
       )}
     </>
   );
@@ -39,13 +39,10 @@ const Header: FC<HeaderProps> = ({
   description,
   icon,
   right,
-  className,
+  className = "shadow-sm p-2",
 }) => {
   return (
-    <Stack
-      direction="horizontal"
-      className={`text-primary bg-white shadow-sm p-2 ${className}`}
-    >
+    <Stack direction="horizontal" className={`text-primary ${className}`}>
       {icon && <i className={`me-1 fs-3 align-self-start ${icon}`}></i>}
       <Stack>
         <div className={`fs-3 text-black fw-semibold`}>{label}</div>
@@ -68,9 +65,31 @@ const Etat: FC<EtatProps> = ({ value }) => {
   );
 };
 
+type ToolbarProps = {
+  icon?: ReactNode;
+  label?: string;
+  right?: ReactNode;
+  children?: ReactNode;
+};
+const Toolbar: FC<ToolbarProps> = ({ label, children, icon, right }) => {
+  return (
+    <ListGroup.Item className="d-flex align-items-center bg-gray-100">
+      {(label || icon) && (
+        <div>
+          {icon}
+          <span className="fs-5">{label}</span>
+        </div>
+      )}
+      {children}
+      {right && <div className="ms-auto d-block align-self-start">{right}</div>}
+    </ListGroup.Item>
+  );
+};
+
 export const View = {
   Item,
   Header,
   Etat,
   Empty,
+  Toolbar,
 };

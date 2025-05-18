@@ -47,8 +47,10 @@ class AttributionService
 
     public function update(Attribution $attribution, array $body)
     {
+        DB::beginTransaction();
         $attribution->update($body);
         $this->updatePersonne($attribution);
+        DB::commit();
         return $attribution;
     }
 

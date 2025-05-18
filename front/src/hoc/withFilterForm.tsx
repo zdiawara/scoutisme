@@ -3,7 +3,8 @@ import { Button, Col, Form, Offcanvas, Row } from "react-bootstrap";
 import { FormProvider, useForm } from "react-hook-form";
 
 type HocCompomentProps = {
-  applyFiler: (data: any) => void;
+  applyFiler: (data?: any) => void;
+  onReset?: () => Record<string, any>;
   defaultValues?: Record<string, any>;
   show: boolean;
   close: () => void;
@@ -14,6 +15,7 @@ export type FilterWrapperProps = {};
 export function withFilterForm(Wrapper: FC<FilterWrapperProps>) {
   const HocCompoment: FC<HocCompomentProps> = ({
     applyFiler,
+    onReset,
     defaultValues,
     show,
     close,
@@ -32,13 +34,28 @@ export function withFilterForm(Wrapper: FC<FilterWrapperProps>) {
           </Offcanvas.Title>
         </Offcanvas.Header>
 
-        <Offcanvas.Body className="bg-light">
+        <Offcanvas.Body className="bg-gray-100">
           <FormProvider {...methods}>
             <Form onSubmit={methods.handleSubmit(onSubmit)}>
               <Row className="g-3">
                 <Wrapper />
                 <Col xs={12} className="text-end">
-                  <Button className="me-2" variant="outline-danger">
+                  <Button
+                    onClick={() => {
+                      if (onReset) {
+                        methods.reset(
+                          {},
+                          { keepDefaultValues: false, keepValues: false }
+                        );
+                        Object.keys(defaultValues || {}).forEach((key) => {
+                          methods.resetField(key);
+                        });
+                      }
+                      applyFiler();
+                    }}
+                    className="me-2"
+                    variant="outline-danger"
+                  >
                     Ré-initialiser
                   </Button>
                   <Button onClick={methods.handleSubmit(onSubmit)}>

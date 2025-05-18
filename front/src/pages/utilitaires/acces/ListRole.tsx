@@ -93,7 +93,10 @@ export const ListRole = () => {
           description: "Liste des rôles disponibles",
         }}
         data={query.data}
-        onSearch={searchByCriteres}
+        search={{
+          onSearch: searchByCriteres,
+          placeholder: "",
+        }}
         columns={columns}
         isLoading={query.isLoading}
         error={query.error}

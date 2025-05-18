@@ -25,7 +25,8 @@ export const LINKS = {
   },
   organisations: {
     base: ORGANISATIONS,
-    view: (id: string) => `${ORGANISATIONS}/${id}`,
+    view: (id: string, page?: string) =>
+      `${ORGANISATIONS}/${id}${page ? `?p=${page}` : ""}`,
     edit: (id: string) => `${ORGANISATIONS}/${id}/edit`,
     create: `${ORGANISATIONS}/create`,
   },

@@ -16,3 +16,14 @@ export const personneSchema = yup.object({
     .nullable(), */
   genre: yup.object().required().nullable(),
 });
+
+export const personneIdentiteSchema = yup.object({
+  nom: yup.string().required(),
+  prenom: yup.string().required(),
+  email: yup.string().email().nullable(),
+  genre: yup.object().required().nullable(),
+});
+
+export const personneFormationSchema = yup.object({
+  niveau_formation: yup.object().required().nullable(),
+});

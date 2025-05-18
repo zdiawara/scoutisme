@@ -32,37 +32,43 @@ export const SupprimerAttribution: FC<SupprimerAttributionProps> = ({
   });
 
   return (
-    <Modal show={true} onHide={closeModal}>
-      <Modal.Header closeButton>
-        <Modal.Title className="text-black">
-          Supprimer une attribution
-        </Modal.Title>
-      </Modal.Header>
+    <>
+      <Modal show={true} centered onHide={closeModal}>
+        <Modal.Header closeButton>
+          <Modal.Title className="text-black">
+            Supprimer une attribution
+          </Modal.Title>
+        </Modal.Header>
 
-      <Modal.Body>
-        <p>
-          Vous êtes sur le point de supprimer la mission de&nbsp;
-          <strong className="text-black">
-            {attribution.personne.prenom} {attribution.personne.nom}
-          </strong>
-          &nbsp; au poste de&nbsp;
-          <strong className="text-black">{attribution.fonction.nom}</strong>
-        </p>
-      </Modal.Body>
-      <Modal.Footer className="border-0">
-        <Button variant="light" onClick={closeModal} disabled={isLoading}>
-          Annuler
-        </Button>
-        <Button
-          variant="danger"
-          onClick={() => {
-            mutate();
-          }}
-          disabled={isLoading}
-        >
-          Continuer
-        </Button>
-      </Modal.Footer>
-    </Modal>
+        <Modal.Body>
+          <p>
+            Vous êtes sur le point de supprimer la mission de&nbsp;
+            <strong className="text-black">
+              {attribution.personne.prenom} {attribution.personne.nom}
+            </strong>
+            &nbsp; au poste de&nbsp;
+            <strong className="text-black">{attribution.fonction.nom}</strong>
+          </p>
+        </Modal.Body>
+        <Modal.Footer className="border-0">
+          <Button
+            variant="outline-primary"
+            onClick={closeModal}
+            disabled={isLoading}
+          >
+            Annuler
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() => {
+              mutate();
+            }}
+            disabled={isLoading}
+          >
+            Continuer
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 };

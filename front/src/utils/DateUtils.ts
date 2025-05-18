@@ -1,4 +1,5 @@
 import { format, isAfter, isBefore } from "date-fns";
+import frLocale from "date-fns/locale/fr";
 
 export class DateUtils {
   public static isActive(
@@ -33,6 +34,8 @@ export class DateFormater {
   private static DATE = "dd/MM/yyyy";
   private static DATE_TIME = "dd/MM/yyyy HH:mm";
   private static EMPTY = "";
+  private static DATE_TEXT = "dd MMMM yyyy";
+  private static DATE_TEXT_TIME = "dd MMMM yyyy à HH:mm";
 
   public static toISO(date?: Date): string | undefined {
     try {
@@ -50,7 +53,9 @@ export class DateFormater {
   private static format(date?: string, pattern = DateFormater.DATE) {
     try {
       return date
-        ? format(new Date(date?.replace(" ", "T").concat(".000Z")), pattern)
+        ? format(new Date(date?.replace(" ", "T").concat(".000Z")), pattern, {
+            locale: frLocale,
+          })
         : DateFormater.EMPTY;
     } catch (error) {
       console.error(error);
@@ -59,6 +64,17 @@ export class DateFormater {
   }
 
   public static toDate(date?: string, pattern = DateFormater.DATE) {
+    return DateFormater.format(date, pattern);
+  }
+
+  public static toDateText(date?: string, pattern = DateFormater.DATE_TEXT) {
+    return DateFormater.format(date, pattern);
+  }
+
+  public static toDateTextTime(
+    date?: string,
+    pattern = DateFormater.DATE_TEXT_TIME
+  ) {
     return DateFormater.format(date, pattern);
   }
 

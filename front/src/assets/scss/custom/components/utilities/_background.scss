@@ -2,11 +2,9 @@
 
 @each $color, $value in $theme-colors {
   .bg-#{$color}-lighten {
-      @include bg-variant-light($value);
+    @include bg-variant-light($value);
   }
 }
-
-
 
 // Dark Mode
 body[data-layout-color="dark"] {
@@ -20,4 +18,3 @@ body[data-layout-color="dark"] {
     }
   }
 }
-

@@ -1,6 +1,6 @@
 import { FC, useMemo } from "react";
-import { Card, Col, ListGroup, Row } from "react-bootstrap";
-import { ICONS, PageHeader } from "pages/common";
+import { Badge, Col, ListGroup, Nav, Row } from "react-bootstrap";
+import { ICONS } from "pages/common";
 import {
   Link,
   useLocation,
@@ -12,27 +12,23 @@ import { useQuery } from "@tanstack/react-query";
 import { NATURE, QUERY_KEY } from "utils/constants";
 import { organisationApi } from "api";
 import { OrganisationResource } from "types/organisation.type";
-import {
-  DetailOrganisation,
-  Organigramme,
-  OrganisationMembres,
-  OrganisationScouts,
-  SousOrganisation,
-} from "../view";
-import classNames from "classnames";
-import { useDroits } from "hooks/useDroits";
+// import { useDroits } from "hooks/useDroits";
+import * as Icon from "react-bootstrap-icons";
+import { View } from "components";
+import { DetailOrganisation } from "../consultation/details";
+import { OrganisationDirection } from "../consultation/direction";
+import { SousOrganisation } from "../consultation/sousOrganisations";
+import { ListOrganisationScout } from "../consultation/scouts";
+import { Header } from "layout/Header";
 
 type OrganisationProps = {
   organisationId: string;
-  showBackBtn?: boolean;
 };
-export const Organisation: FC<OrganisationProps> = ({
-  organisationId,
-  showBackBtn,
-}) => {
+
+export const Organisation: FC<OrganisationProps> = ({ organisationId }) => {
   const [searchParams] = useSearchParams();
-  const page = searchParams.get("p") || "fiche";
-  const protection = useDroits();
+  const page = searchParams.get("p") || "details";
+  // const protection = useDroits();
   const navigation = useNavigate();
   const location = useLocation();
 
@@ -51,12 +47,13 @@ export const Organisation: FC<OrganisationProps> = ({
       return [];
     }
 
+    const { nature, type } = organisation;
+
     const TABS = [
-      { label: "Détails", code: "fiche", icon: ICONS.detail, visible: true },
       {
-        label: "Organisation",
-        code: "organisations",
-        icon: ICONS.organisation,
+        label: "Détails",
+        code: "details",
+        Icon: Icon.FileEarmarkText,
         visible: true,
       },
       {
@@ -64,12 +61,29 @@ export const Organisation: FC<OrganisationProps> = ({
         code: "direction",
         icon: ICONS.direction,
         visible: true,
+        Icon: Icon.People,
+      },
+      {
+        label:
+          nature.code === NATURE.region
+            ? "Unités/Groupes"
+            : nature.code === NATURE.groupe
+            ? "Unités"
+            : nature.code === NATURE.national &&
+              type?.code === "equipe_nationale"
+            ? "Régions"
+            : "Equipe nationale",
+        code: "organisations",
+        icon: ICONS.organisation,
+        visible: true,
+        Icon: Icon.Building,
       },
       {
         label: "Scouts",
         code: "scouts",
         icon: ICONS.personne,
-        visible: Object.values(protection.personne.scouts).some((e) => e),
+        visible: true, //Object.values(protection.personne.scouts).some((e) => e),
+        Icon: Icon.Person,
       },
     ];
 
@@ -82,7 +96,7 @@ export const Organisation: FC<OrganisationProps> = ({
       }
       return true;
     });
-  }, [organisation, protection.personne.scouts]);
+  }, [organisation]);
 
   const onSelectPage = (pageSelected: string) => () => {
     navigation(`${location.pathname}?p=${pageSelected}`, {
@@ -96,9 +110,9 @@ export const Organisation: FC<OrganisationProps> = ({
     }
     switch (page) {
       case "direction":
-        return <OrganisationMembres organisation={organisation} />;
+        return <OrganisationDirection organisation={organisation} />;
       case "scouts":
-        return <OrganisationScouts organisation={organisation} />;
+        return <ListOrganisationScout organisation={organisation} />;
       case "organisations":
         return <SousOrganisation organisation={organisation} />;
       default:
@@ -110,67 +124,62 @@ export const Organisation: FC<OrganisationProps> = ({
     return <span>chargement ...</span>;
   }
 
-  const renderActions = () => {
-    if (!organisation || !protection.organisation.creer || page !== "fiche") {
-      return null;
-    }
-
-    return (
-      <Link
-        className="rounded-corner btn btn-danger"
-        to={LINKS.organisations.edit(organisation.id)}
-      >
-        <i className="uil-edit-alt"></i>
-        <span className="d-none d-sm-inline">Modifier</span>
-      </Link>
-    );
-  };
-
   return (
     <>
-      <PageHeader.View
-        title={organisation.nom}
-        right={renderActions()}
-        className="my-4"
-        showBackBtn={showBackBtn}
-      />
-      <Row>
-        <Col xl={3} lg={3}>
-          <Card className="text-black mb-1">
-            <Card.Body className="p-1">
-              <Organigramme
-                parents={organisation.parents}
-                organisation={{
-                  nature: organisation.nature.nom,
-                  nom: organisation.nom,
-                }}
-              />
-            </Card.Body>
-          </Card>
+      <Header title="Consulter" />
 
-          <Card className="text-black">
-            <Card.Body className="p-1">
-              <ListGroup defaultActiveKey="#link1">
-                {menus.map((item) => (
-                  <ListGroup.Item
-                    key={item.code}
-                    className={classNames("border-0 rounded", {
-                      active: item.code === page,
-                    })}
-                    action
-                    onClick={onSelectPage(item.code)}
+      <ListGroup className="mb-2 mt-4">
+        <ListGroup.Item>
+          <Row className="g-3">
+            <Col xs={6}>
+              <View.Item label="Nom">{organisation.nom}</View.Item>
+            </Col>
+            <Col xs={6}>
+              <View.Item label="Nature">
+                <Badge bg="secondary">{organisation.nature.nom}</Badge>
+              </View.Item>
+            </Col>
+          </Row>
+        </ListGroup.Item>
+        <ListGroup.Item>
+          <Row className="g-3">
+            <Col xs={12}>
+              <View.Item label="Parent">
+                {organisation.parent ? (
+                  <Link
+                    to={LINKS.organisations.view(organisation.parent.id)}
+                    className="text-decoration-underline text-black"
                   >
-                    <i className={`${item.icon} me-1`}></i>&nbsp;{item.label}
-                  </ListGroup.Item>
-                ))}
-              </ListGroup>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col xl={9} lg={9}>
-          {renderContent()}
-        </Col>
-      </Row>
+                    {organisation.parent.nom}
+                  </Link>
+                ) : null}
+              </View.Item>
+            </Col>
+          </Row>
+        </ListGroup.Item>
+      </ListGroup>
+
+      <Nav
+        variant="pills"
+        style={{ overflow: "scroll" }}
+        className="flex-nowrap py-2 mb-2"
+        defaultActiveKey="/home"
+      >
+        {menus.map((item) => (
+          <Nav.Item key={item.code}>
+            <Nav.Link
+              active={item.code === page}
+              onClick={onSelectPage(item.code)}
+              href="#"
+              className="d-flex align-items-center"
+            >
+              <item.Icon size="1.1rem" className="me-1" />
+              {item.label}
+            </Nav.Link>
+          </Nav.Item>
+        ))}
+      </Nav>
+      {renderContent()}
     </>
   );
 };

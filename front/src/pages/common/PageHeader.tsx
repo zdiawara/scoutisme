@@ -1,6 +1,7 @@
 import { FC, ReactNode } from "react";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import * as Icon from "react-bootstrap-icons";
 
 type HeaderProps = {
   title?: string;
@@ -60,12 +61,12 @@ export const PageHeader = {
           <>
             {showBackBtn && (
               <Button
-                variant="default"
+                variant="secondary"
                 size="sm"
-                className="text-dark"
+                // className="text-dark"
                 onClick={() => navigation(-1)}
               >
-                <i className="uil-arrow-left fs-5 me-1"></i>
+                <Icon.ArrowLeftCircleFill className="me-1" />
                 <span className="d-none d-sm-inline">Retour</span>
               </Button>
             )}

@@ -22,7 +22,7 @@ export const DeleteConfirmationModal: FC<ModalProps> = ({
   };
 
   return (
-    <Modal show={true} onHide={closeModal} size="sm" animation={false}>
+    <Modal show={true} onHide={closeModal} centered size="sm" animation={false}>
       <div className="bg-light">
         <Modal.Body className="p-4">
           <div className="text-center">
@@ -35,7 +35,7 @@ export const DeleteConfirmationModal: FC<ModalProps> = ({
               Non
             </Button>
             <Button
-              variant="danger"
+              variant="outline-primary"
               className="shadow-sm"
               onClick={deleteTypeUnite}
             >

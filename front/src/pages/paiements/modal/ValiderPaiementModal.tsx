@@ -1,18 +1,18 @@
 import { FC } from "react";
 import { paiementApi } from "api";
-import { PaiementResource, PersonneResource } from "types/personne.type";
+import { PaiementResource } from "types/personne.type";
 import { ConfirmationModal } from "pages/common";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEY } from "utils/constants";
 
 type PersonneCotisationModalProps = {
-  personne: PersonneResource;
+  personneId: string;
   paiement: PaiementResource;
   closeModal: () => void;
 };
 
 export const ValiderPaiementModal: FC<PersonneCotisationModalProps> = ({
-  personne,
+  personneId,
   paiement,
   closeModal,
 }) => {
@@ -21,8 +21,7 @@ export const ValiderPaiementModal: FC<PersonneCotisationModalProps> = ({
   const validerPaiement = async () => {
     await paiementApi.valider(paiement.id);
     closeModal();
-    query.invalidateQueries([QUERY_KEY.paiements, personne.id]);
-    query.invalidateQueries([QUERY_KEY.paiements]);
+    query.invalidateQueries([QUERY_KEY.cotisations]);
   };
 
   return (

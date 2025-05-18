@@ -62,7 +62,7 @@ const columns: Columns<PaiementResource>[] = [
     Cell: (paiement) => {
       return (
         <PaiementActions
-          personne={paiement.cotisation.personne!}
+          personne={paiement?.cotisation?.personne!}
           paiement={paiement}
         />
       );
@@ -142,7 +142,6 @@ const ListPaiement: FC = () => {
         <ListResult.Table<PaiementResource>
           columns={columns}
           data={results?.data || []}
-          headerClassName="bg-light"
         />
         {results?.data && (
           <ListResult.Paginate

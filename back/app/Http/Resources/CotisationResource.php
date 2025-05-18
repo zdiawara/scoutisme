@@ -17,6 +17,7 @@ class CotisationResource extends JsonResource
         return collect(parent::toArray($request))->except(['personne'])
             ->merge([
                 'personne' => new PersonneResource($this->whenLoaded('personne')),
+                'paiements' => PaiementResource::collection($this->whenLoaded('paiements')),
             ])->all();
     }
 }

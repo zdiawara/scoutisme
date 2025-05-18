@@ -126,7 +126,7 @@ class OrganisationSeeder extends Seeder
             }
 
 
-            $nbUnite = fake()->numberBetween(2, 6);
+            /*$nbUnite = fake()->numberBetween(2, 6);
 
             for ($j = 0; $j <= $nbUnite; $j++) {
                 $this->organisationService->create([
@@ -136,7 +136,7 @@ class OrganisationSeeder extends Seeder
                     'type_id' => $types->random()->id,
                     'code' => fake()->unique()->numerify('###') . $j,
                 ]);
-            }
+            }*/
         });
     }
 }

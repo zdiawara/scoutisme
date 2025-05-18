@@ -31,7 +31,7 @@ export const TextEditor = ({ name, label }: TextEditorProps) => {
           <>
             <Form.Group className="position-relative">
               {label && (
-                <Form.Label>
+                <Form.Label className="text-muted text-uppercase fs-6">
                   {label}
                   <strong className="text-danger">&nbsp;*</strong>
                 </Form.Label>
@@ -45,7 +45,7 @@ export const TextEditor = ({ name, label }: TextEditorProps) => {
                 formats={TextEditor.formats}
                 bounds=".app"
                 placeholder="Contenu du message ..."
-                className={classNames("text-dark fs-4", {
+                className={classNames("text-dark bg-white fs-4", {
                   "is-invalid": !!error,
                 })}
               />

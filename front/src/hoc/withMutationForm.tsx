@@ -91,7 +91,6 @@ export function withMutationForm(
             variant="outline-primary"
             onClick={onExit}
             disabled={isLoading}
-            size="sm"
           >
             {labels?.cancelLabel || "Annuler"}
           </Button>
@@ -99,15 +98,9 @@ export function withMutationForm(
             onClick={methods.handleSubmit(onSubmit, onError)}
             variant="primary"
             disabled={isLoading}
-            size="sm"
           >
             {isLoading && (
-              <Spinner
-                size="sm"
-                className="me-2"
-                animation="border"
-                role="status"
-              >
+              <Spinner className="me-2" animation="border" role="status">
                 <span className="visually-hidden">Loading...</span>
               </Spinner>
             )}

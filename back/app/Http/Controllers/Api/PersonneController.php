@@ -63,6 +63,7 @@ class PersonneController extends Controller
     {
         $query = Personne::filter($params, PersonneFilter::class);
         $request = collect($params);
+
         if ($request->has('organisationId')) {
             $organisationId = $request->get('organisationId');
             if ($request->has('perimetres')) {

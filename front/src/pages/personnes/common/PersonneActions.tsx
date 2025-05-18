@@ -4,6 +4,8 @@ import { PersonneResource } from "types/personne.type";
 import { CreateUserFromPersonneModal } from "../modal/CreateUserFromPersonneModal";
 import { ThreeDotsVertical } from "react-bootstrap-icons";
 import * as Icon from "react-bootstrap-icons";
+import { useNavigate } from "react-router-dom";
+import { LINKS } from "utils";
 
 type PersonneActionsProps = {
   personne: PersonneResource;
@@ -23,20 +25,20 @@ const ACTIONS = [
     code: "consulter",
     Icon: Icon.Eye,
   },
-  {
-    label: "Carte adhésion",
-    icon: "uil-user",
-    description: "Telecharger la carte d'adhésion",
-    code: "carte",
-    Icon: Icon.Download,
-  },
-  {
-    label: "Cotisation",
-    icon: "uil-user",
-    description: "Payer la cotisation",
-    code: "carte",
-    Icon: Icon.Send,
-  },
+  // {
+  //   label: "Carte adhésion",
+  //   icon: "uil-user",
+  //   description: "Telecharger la carte d'adhésion",
+  //   code: "carte",
+  //   Icon: Icon.Download,
+  // },
+  // {
+  //   label: "Cotisation",
+  //   icon: "uil-user",
+  //   description: "Payer la cotisation",
+  //   code: "carte",
+  //   Icon: Icon.Send,
+  // },
   {
     label: "Convertir",
     icon: "uil-user",
@@ -63,9 +65,14 @@ const CustomToggle = forwardRef(({ onClick }: any, ref) => (
 
 export const PersonneActions: FC<PersonneActionsProps> = ({ personne }) => {
   const [action, setAction] = useState<string | undefined>();
+  const navigate = useNavigate();
 
   const onSelect = (code: string) => () => {
-    setAction(code);
+    if (code === "consulter") {
+      navigate(LINKS.personnes.view(personne.id));
+    } else {
+      setAction(code);
+    }
   };
 
   const closeModal = () => {

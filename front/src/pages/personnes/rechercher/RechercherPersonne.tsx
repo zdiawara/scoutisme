@@ -1,7 +1,7 @@
 // import FeatherIcon from "feather-icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { personneApi } from "api";
-import { Button, ListGroup, Spinner } from "react-bootstrap";
+import { ListGroup, Spinner } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 import { PersonneResource } from "types/personne.type";
 import { QUERY_KEY } from "utils/constants";
@@ -11,7 +11,7 @@ import { useMemo } from "react";
 import { PersonneToolbar } from "./toolbar/PersonneToolbar";
 import { selectHelper } from "utils/functions";
 import { PersonneItem } from "./personne/PersonneItem";
-import * as Icon from "react-bootstrap-icons";
+import { RechercherPersonneActions } from "./action/RechercherPersonneActions";
 
 const parseParams = (searchParams: URLSearchParams) => {
   const ville = searchParams.get("ville");
@@ -53,9 +53,7 @@ const buildRequestParams = (filter: Record<string, any>) => {
     organisationId: filter.organisation
       ? selectHelper.getValue(JSON.parse(filter.organisation))
       : null,
-    perimetres: filter.inclureSousOrganisation
-      ? filter?.perimetres?.join(";")
-      : undefined,
+    perimetres: "region;groupe;unite",
     search: filter.search,
     page: parseInt(filter.page) || 1,
     size: parseInt(filter.size) || 10,
@@ -92,10 +90,7 @@ const RechercherPersonne = () => {
       <Header
         title="Personnes"
         right={
-          <Button variant="secondary" className="ms-1">
-            <span className="d-none d-sm-inline me-1">Actions</span>
-            <Icon.ChevronDown />
-          </Button>
+          <RechercherPersonneActions params={buildRequestParams(queryParams)} />
         }
       />
 

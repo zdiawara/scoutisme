@@ -78,20 +78,13 @@ export const PersonneToolbar: FC<PersonneToolbarProps> = ({
               placeholder="Rechercher ..."
               onChange={changed}
             />
-            <Button
-              variant="outline-secondary"
-              // className="ms-1 d-flex align-items-center"
-              onClick={toggleFilter}
-            >
-              <Icon.Filter size="1.3rem" />
-              <span className="ms-1 d-none d-sm-inline">Filrer</span>
-            </Button>
-            <Button
-              variant="outline-secondary"
-              // className="d-flex align-items-center"
-            >
+            <Button variant="outline-secondary">
               <Icon.SortAlphaDown size="1.3rem" />
               <span className="ms-1 d-none d-sm-inline">Trier</span>
+            </Button>
+            <Button variant="secondary" onClick={toggleFilter}>
+              <Icon.Filter size="1.3rem" />
+              <span className="ms-1 d-none d-sm-inline">Filrer</span>
             </Button>
           </InputGroup>
 

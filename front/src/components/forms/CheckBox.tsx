@@ -21,22 +21,24 @@ export const Radio: BsPrefixRefForwardingComponent<"input", FormCheckProps> = (
       <Controller
         name={props.name || "mode"}
         control={control}
-        render={({ field: { onChange, value } }) => {
+        render={({ field: { value } }) => {
           return (
-            <Form.Check
-              {...props}
-              id={props.id || props.name}
-              onChange={(e) => {
-                const value = e.target.checked ? e.target.value : undefined;
-                if (props.name) {
-                  setValue(props.name, value);
-                }
-                if (props.onChange) {
-                  props.onChange(e);
-                }
-              }}
-              defaultChecked={value === props.value}
-            />
+            <>
+              <Form.Check
+                {...props}
+                id={props.id || props.name}
+                onChange={(e) => {
+                  const value = e.target.checked ? e.target.value : undefined;
+                  if (props.name) {
+                    setValue(props.name, value);
+                  }
+                  if (props.onChange) {
+                    props.onChange(e);
+                  }
+                }}
+                defaultChecked={value === props.value}
+              />
+            </>
           );
         }}
       />

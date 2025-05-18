@@ -14,12 +14,16 @@ const Form: FC<WrapperV2Props> = (props) => {
         saveLabel: "Envoyer",
         cancelLabel: "Annuler",
       }}
-      modalBodyClassName="bg-light p-3"
+      modalBodyClassName="bg-gray-100 p-1"
       onClose={props.onExit}
+      modalProps={{
+        scrollable: true,
+        size: "lg",
+      }}
     >
-      <Alert className="text  bg-white text-dark shadow-sm" variant="default">
-        <Alert.Heading>Informations</Alert.Heading>
-        <p>
+      <Alert variant="info">
+        {/* <Alert.Heading>Informations</Alert.Heading> */}
+        <p className="m-0">
           Ce mail sera envoyé aux personnes présentes dans le tableau de
           recherche
         </p>
@@ -65,11 +69,7 @@ export const EnvoyerMailModal: FC<EnvoyerMailModalProps> = ({
   return (
     <EnvoyerMailModalForm
       onSave={sendMail}
-      title="Envoyer mail"
-      // meta={{
-      //   info: `Ce mail sera envoyé à ${nombrePers} personne(s)`,
-      //   nombrePers,
-      // }}
+      title="Envoyer un mail"
       onSuccess={closeModal}
       onExit={closeModal}
     />

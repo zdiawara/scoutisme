@@ -2,7 +2,7 @@ import { FC, forwardRef, Fragment, useState } from "react";
 import { Button, Dropdown } from "react-bootstrap";
 import { PersonneResource } from "types/personne.type";
 import { CreateUserFromPersonneModal } from "../modal/CreateUserFromPersonneModal";
-import { Eye, EyeFill, ThreeDotsVertical } from "react-bootstrap-icons";
+import { ThreeDotsVertical } from "react-bootstrap-icons";
 import * as Icon from "react-bootstrap-icons";
 
 type PersonneActionsProps = {

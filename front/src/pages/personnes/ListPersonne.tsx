@@ -21,6 +21,7 @@ import { ListPersonneActions } from "./common/ListPersonneActions";
 import { NATURE, QUERY_KEY } from "utils/constants";
 import { PersonneActions } from "./common/PersonneActions";
 import { useAuth } from "hooks";
+import { PersonneUtils } from "utils/PersonneUtils";
 
 const renderOrganisation = ({ organisation }: PersonneResource) => {
   if (organisation) {
@@ -180,7 +181,7 @@ const ListPersonne: FC = () => {
               >
                 voir
               </Link>
-              {personne.type !== "scout" && (
+              {PersonneUtils.isAdulte(personne) && (
                 <PersonneActions personne={personne} />
               )}
             </div>

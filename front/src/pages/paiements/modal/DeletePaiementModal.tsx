@@ -21,7 +21,7 @@ export const DeletePaiementModal: FC<ModalProps> = ({
     <DeleteConfirmationModal
       closeModal={closeModal}
       onDelete={deletePaiement}
-      query_key={QUERY_KEY.paiements}
+      query_key={QUERY_KEY.cotisations}
     />
   );
 };

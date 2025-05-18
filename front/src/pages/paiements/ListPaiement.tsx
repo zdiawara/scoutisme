@@ -62,7 +62,7 @@ const columns: Columns<PaiementResource>[] = [
     Cell: (paiement) => {
       return (
         <PaiementActions
-          personne={paiement.cotisation.personne!}
+          personne={paiement?.cotisation?.personne!}
           paiement={paiement}
         />
       );

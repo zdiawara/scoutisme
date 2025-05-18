@@ -1,11 +1,9 @@
 import { FC, ReactNode, useMemo } from "react";
-import { Badge, Card, Col, ListGroup, Nav, Row, Stack } from "react-bootstrap";
-import { ICONS } from "pages/common";
+import { Badge, Col, ListGroup, Nav, Row, Stack } from "react-bootstrap";
 import { useQuery } from "@tanstack/react-query";
-import { NATURE, QUERY_KEY } from "utils/constants";
+import { QUERY_KEY } from "utils/constants";
 import { personneApi } from "api";
 import { PersonneResource } from "types/personne.type";
-import { PersonneBox } from "./PersonneBox";
 import { View } from "components";
 import {
   Link,
@@ -14,23 +12,21 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { LINKS } from "utils";
-import classNames from "classnames";
-import {
-  PersonneCard,
-  PersonneCotisations,
-  PersonneDetails,
-  PersonneFonctions,
-} from ".";
 import { useDroits } from "hooks/useDroits";
 import * as Icon from "react-bootstrap-icons";
-import PersonneDetail from "../consultation/PersonneDetail";
+import { PersonneProfil } from "../consultation/profil";
+import { PersonneCarte } from "../consultation/carte";
+import { PersonneCotisation } from "../consultation/cotisation";
+import { PersonneFonctions } from "./PersonneFonctions";
+import { Header } from "layout/Header";
 
 type PersonneProps = {
   personneId: string;
   header?: (personne: PersonneResource, page?: string) => ReactNode;
+  title: string;
 };
 
-export const Personne: FC<PersonneProps> = ({ personneId, header }) => {
+export const Personne: FC<PersonneProps> = ({ personneId, title }) => {
   const [searchParams] = useSearchParams();
   const page = searchParams.get("p") || "fiche";
   const protection = useDroits();
@@ -69,10 +65,8 @@ export const Personne: FC<PersonneProps> = ({ personneId, header }) => {
 
   const { data: personne, isLoading } = useQuery({
     queryKey: [QUERY_KEY.personnes, personneId],
-    networkMode: "offlineFirst",
-    queryFn: ({ queryKey }) => {
-      return personneApi.findById<PersonneResource>(queryKey[1] as string);
-    },
+    queryFn: ({ queryKey }) =>
+      personneApi.findById<PersonneResource>(queryKey[1] as string),
   });
 
   const onSelectPage = (pageSelected: string) => () => {
@@ -87,13 +81,13 @@ export const Personne: FC<PersonneProps> = ({ personneId, header }) => {
     }
     switch (page) {
       case "carte":
-        return <PersonneCard personne={personne} />;
+        return <PersonneCarte personne={personne} />;
       case "fonctions":
         return <PersonneFonctions personne={personne} />;
       case "cotisations":
-        return <PersonneCotisations personne={personne} />;
+        return <PersonneCotisation personne={personne} />;
       default:
-        return <PersonneDetail personne={personne} />;
+        return <PersonneProfil personne={personne} />;
     }
   };
 
@@ -101,16 +95,38 @@ export const Personne: FC<PersonneProps> = ({ personneId, header }) => {
     return <span>chargement ...</span>;
   }
 
+  const menu = (
+    <Nav
+      variant="pills"
+      style={{ overflow: "scroll" }}
+      className="flex-nowrap py-2"
+    >
+      {menus.map((item) => (
+        <Nav.Item key={item.code}>
+          <Nav.Link
+            active={item.code === page}
+            onClick={onSelectPage(item.code)}
+            href="#"
+            className="d-flex align-items-center"
+          >
+            <item.Icon size="1.1rem" className="me-1" />
+            {item.label}
+          </Nav.Link>
+        </Nav.Item>
+      ))}
+    </Nav>
+  );
+
   return (
     <>
-      {header && header(personne, page)}
+      <Header title={title} />
 
-      <Stack direction="horizontal">
-        <div className="avatar-md">
+      <Stack direction="horizontal" className="mt-4">
+        <div className="avatar-lg">
           {personne.photo ? (
             <img
               src={personne.photo}
-              className="rounded-circle avatar-md img-thumbnail"
+              className=" avatar-lg rounded img-thumbnail"
               alt=""
               style={{
                 width: "100%",
@@ -122,87 +138,74 @@ export const Personne: FC<PersonneProps> = ({ personneId, header }) => {
               }}
             />
           ) : (
-            <span className="avatar-title bg-secondary-lighten text-secondary font-20 rounded-circle">
+            <span className="avatar-title rounded bg-secondary-lighten text-secondary font-20 ">
               Photo
             </span>
           )}
         </div>
-        <div className="ms-1">
-          <span className="fw-bold fs-3">
+        <div className="ms-2">
+          <span className="fs-3">
             {personne.nom} {personne.prenom}
           </span>
           <div className="fw-light mt-1">{personne.fonction?.nom}</div>
         </div>
       </Stack>
 
-      <div className="shadow-sm rounded p-3 bg-white mt-3 mb-2">
-        <Row className="g-3">
-          <Col xs={6}>
-            <View.Item label="Numero scout">{personne.code}</View.Item>
-          </Col>
-          <Col xs={6}>
-            <View.Item label="Cotisation">
-              <Badge bg="success">A jour</Badge>
-            </View.Item>
-          </Col>
-          <Col xs={6}>
-            <View.Item label="Fonction">{personne.fonction?.nom}</View.Item>
-          </Col>
-          <Col xs={6}>
-            <View.Item label="Organisation">
-              {personne?.organisation ? (
-                <>
-                  {personne.organisation.parents
-                    ?.filter((parent) =>
-                      [NATURE.unite, NATURE.groupe].includes(
-                        personne.organisation?.nature?.code!
-                      )
-                        ? NATURE.national !== parent.nature
-                        : true
-                    )
-                    ?.map((parent) => (
-                      <span className="fw-light" key={parent.id}>
-                        {parent.nom}
-                        &nbsp;/&nbsp;
-                      </span>
-                    ))}
+      <ListGroup className="mb-2 mt-4">
+        <ListGroup.Item>
+          <Row className="g-3">
+            <Col xs={6}>
+              <View.Item label="Numero">{personne.code}</View.Item>
+            </Col>
+            <Col xs={6}>
+              <View.Item label="Cotisation">
+                <Badge bg="success">A jour</Badge>
+              </View.Item>
+            </Col>
+          </Row>
+        </ListGroup.Item>
+        <ListGroup.Item>
+          <Row className="g-3">
+            <Col xs={12}>
+              <View.Item label="Fonction">{personne.fonction?.nom}</View.Item>
+            </Col>
+          </Row>
+        </ListGroup.Item>
+        <ListGroup.Item>
+          <Row className="g-3">
+            <Col xs={6}>
+              <View.Item label="Organisation">
+                {personne?.organisation && (
                   <Link
                     to={LINKS.organisations.view(personne.organisation.id)}
                     className="text-decoration-underline text-black"
                   >
+                    <Icon.Link size="1.2rem" className="me-1" />
                     {personne.organisation.nom}
                   </Link>
-                </>
-              ) : null}
-            </View.Item>
-          </Col>
-        </Row>
-      </div>
+                )}
+              </View.Item>
+            </Col>
+            <Col xs={6}>
+              <View.Item label="Nature">
+                <Badge bg="secondary">
+                  {personne.organisation?.nature?.nom}
+                </Badge>
+              </View.Item>
+            </Col>
+          </Row>
+        </ListGroup.Item>
+      </ListGroup>
 
       <Row className="g-2">
-        <Col xs={12} sm={3}>
-          <Nav
-            variant="pills"
-            style={{ overflow: "scroll" }}
-            className="border-bottom flex-nowrap py-1 flex-sm-column"
-            defaultActiveKey="/home"
-          >
-            {menus.map((item) => (
-              <Nav.Item key={item.code}>
-                <Nav.Link
-                  active={item.code === page}
-                  onClick={onSelectPage(item.code)}
-                  href="#"
-                  className="d-flex align-items-center"
-                >
-                  <item.Icon size="1.1rem" className="me-1" />
-                  {item.label}
-                </Nav.Link>
-              </Nav.Item>
-            ))}
-          </Nav>
+        <Col xs={12} sm={12}>
+          {/* <Card className="d-sm-block d-none">
+            <Card.Header>Menu</Card.Header>
+            <Card.Body className="p-1">{menu}</Card.Body>
+          </Card> */}
+          <div className="d-sm-nones">{menu}</div>
         </Col>
-        <Col xs={12} sm={9}>
+        <Col xs={12} sm={12}>
           {renderContent()}
         </Col>
       </Row>

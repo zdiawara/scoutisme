@@ -6,11 +6,7 @@ const MonProfil = () => {
   const personne = user?.personne;
 
   if (personne) {
-    return (
-      <div className="mt-4">
-        <Personne personneId={personne.id} />
-      </div>
-    );
+    return <Personne personneId={personne.id} title="Mon profil" />;
   }
 
   return (

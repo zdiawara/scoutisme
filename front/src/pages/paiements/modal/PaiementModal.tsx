@@ -23,6 +23,7 @@ const Form: FC<WrapperV2Props> = (props) => {
             placeholder="Renseignez le montant payé"
             description="Il s'agit du montant payé par la personne"
             isRequired
+            type="number"
           />
         </Col>
       </Row>
@@ -46,7 +47,7 @@ export const CreerPaiementModal: FC<CreerPaiementModalProps> = ({
   const query = useQueryClient();
 
   const { data: cotisation, isLoading } = useQuery({
-    queryKey: [QUERY_KEY.personnes, "cotisations", annee],
+    queryKey: [QUERY_KEY.cotisations, personne.id, annee],
     networkMode: "offlineFirst",
     cacheTime: 0,
     queryFn: () => {
@@ -76,14 +77,13 @@ export const CreerPaiementModal: FC<CreerPaiementModalProps> = ({
       onSave={payer}
       title={`Payer cotisation de ${personne.prenom} ${personne.nom}`}
       onSuccess={() => {
-        query.invalidateQueries([QUERY_KEY.paiements, personne.id]);
-        query.invalidateQueries([QUERY_KEY.cotisations, personne.id, annee]);
+        query.invalidateQueries([QUERY_KEY.cotisations]);
         closeModal();
       }}
       onExit={closeModal}
       modalProps={{
         animation: false,
-        centered: false,
+        centered: true,
       }}
     />
   );
@@ -114,13 +114,13 @@ export const ModifierPaiementModal: FC<ModifierPaiementModalProps> = ({
         montant: paiement.montant,
       }}
       onSuccess={() => {
-        query.invalidateQueries([QUERY_KEY.paiements]);
+        query.invalidateQueries([QUERY_KEY.cotisations]);
         closeModal();
       }}
       onExit={closeModal}
       modalProps={{
         animation: false,
-        centered: false,
+        centered: true,
       }}
     />
   );

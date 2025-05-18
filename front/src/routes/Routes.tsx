@@ -1,6 +1,5 @@
 import { Suspense, lazy } from "react";
 import {
-  Navigate,
   Outlet,
   Route,
   createBrowserRouter,
@@ -17,6 +16,7 @@ import {
 } from "./FilterOutlet";
 import { organisationApi, personneApi } from "api";
 import { Acces } from "pages/utilitaires/acces/Acces";
+import { HomePage } from "pages/home/HomePage";
 
 const loading = () => <div className=""></div>;
 
@@ -30,8 +30,8 @@ export const Loadable = (Component: any) => (props: any) =>
 // const ListPersonne = Loadable(
 //   lazy(() => import("pages/personnes/ListPersonne"))
 // );
-const SearchPersonne = Loadable(
-  lazy(() => import("pages/personnes/search/SearchPersonne"))
+const RechercherPersonne = Loadable(
+  lazy(() => import("pages/personnes/rechercher/RechercherPersonne"))
 );
 const ViewPersonne = Loadable(
   lazy(() => import("pages/personnes/ViewPersonne"))
@@ -111,14 +111,14 @@ export const router = createBrowserRouter(
       <Route path="login" element={<Login />} />
       <Route path="logout" element={<Logout />} />
       <Route path="/" element={<Layout />}>
-        <Route index element={<Navigate to={LINKS.profil.base} />} />
+        <Route index element={<HomePage />} />
         <Route path={LINKS.organisation.base} element={<MonOrganisation />} />
         <Route path={LINKS.profil.base} element={<Outlet />}>
           <Route index element={<MonProfil />} />
         </Route>
         <Route path={LINKS.personnes.base} element={<PersonneOutlet />}>
           {/* <Route index element={<ListPersonne />} /> */}
-          <Route index element={<SearchPersonne />} />
+          <Route index element={<RechercherPersonne />} />
           <Route element={<CreatePersonne />} path="create" />
           <Route element={<ViewPersonne />} path=":id" />
           <Route

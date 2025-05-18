@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { statApi } from "api";
-import { FC, useMemo } from "react";
-import { Card, Table, ProgressBar, Row, Col, Button } from "react-bootstrap";
+import { FC } from "react";
+import { Card, Table, Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { StatOrgaNature } from "types/stats.type";
 import { LINKS } from "utils";
@@ -17,12 +17,12 @@ type ItemProps = {
   nature: string;
 };
 const Item: FC<ItemProps> = ({ title, rows, nature }) => {
-  const total = useMemo(() => {
-    return rows.map((e) => e.nombre).reduce((c, p) => p + c, 0);
-  }, [rows]);
+  // const total = useMemo(() => {
+  //   return rows.map((e) => e.nombre).reduce((c, p) => p + c, 0);
+  // }, [rows]);
   return (
-    <Card>
-      <Card.Body>
+    <>
+      <Card body>
         <Button variant="light" size="sm" className="float-end">
           Exporter <i className="mdi mdi-download ms-1"></i>
         </Button>
@@ -36,7 +36,7 @@ const Item: FC<ItemProps> = ({ title, rows, nature }) => {
             <tr>
               <th>Région</th>
               <th>Nombre {nature === "groupe" ? "de groupe" : "d'unité"}</th>
-              <th style={{ width: "200px" }}>&nbsp;</th>
+              {/* <th style={{ width: "100px" }}>&nbsp;</th> */}
             </tr>
           </thead>
           <tbody>
@@ -45,25 +45,25 @@ const Item: FC<ItemProps> = ({ title, rows, nature }) => {
                 <td>
                   <Link
                     to={LINKS.organisations.view(row.id)}
-                    className="text-primary text-decoration-underline"
+                    className="text-black"
                   >
                     {row.region}
                   </Link>
                 </td>
                 <td className="text-primary fw-bold">{row.nombre}</td>
-                <td>
+                {/* <td>
                   <ProgressBar
                     variant="info"
                     now={total > 0 ? (row.nombre / total) * 100 : 0}
                     style={{ height: "6px" }}
                   />
-                </td>
+                </td> */}
               </tr>
             ))}
           </tbody>
         </Table>
-      </Card.Body>
-    </Card>
+      </Card>
+    </>
   );
 };
 
@@ -121,7 +121,7 @@ const OrganisationDashBord = () => {
             return convert(b) - convert(a);
           })
           .map((item) => (
-            <Col xs={4} key={item.code}>
+            <Col xs={6} sm={4} key={item.code}>
               <Card className="mb-0">
                 <Card.Body>
                   <div className="float-end">
@@ -137,7 +137,9 @@ const OrganisationDashBord = () => {
               </Card>
             </Col>
           ))}
-        <Col xs={6}>
+      </Row>
+      <Row className="g-3 mt-2">
+        <Col xs={12} sm={6}>
           <Item
             title="Nombre d'Unite par region"
             rows={byRegionQuery.data.map((item: any) => ({
@@ -148,7 +150,7 @@ const OrganisationDashBord = () => {
             nature={NATURE.unite}
           />
         </Col>
-        <Col xs={6}>
+        <Col xs={12} sm={6}>
           <Item
             title="Nombre de Groupe par region"
             rows={byRegionQuery.data.map((item: any) => ({

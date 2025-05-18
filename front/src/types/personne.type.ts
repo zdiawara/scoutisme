@@ -6,18 +6,28 @@ import {
   VilleResource,
 } from "./organisation.type";
 
+export type FormationResource = {
+  reference: NiveauFormationResource;
+  date_formation: string;
+};
+
+export enum TypePersonne {
+  adulte = "adulte",
+  scout = "scout",
+}
+
 export type PersonneResource = {
   id: string;
   nom: string;
   code: string;
   prenom: string;
-  type: string;
+  type: TypePersonne;
   date_naissance?: string;
   lieu_naissance?: string;
   date_adhesion: string;
   profession?: string;
   genre?: GenreResource;
-  niveau_formation?: NiveauFormationResource;
+  formations?: FormationResource[];
   email: string;
   telephone?: string;
   etat: string;
@@ -69,6 +79,7 @@ export type OrganisationPersonne = {
   prenom: string;
   id: string;
   photo?: string;
+  code: string;
 };
 export type OrganisationFonction = { nom: string; id: string };
 
@@ -92,6 +103,7 @@ export type CotisationResource = {
   montant_restant: number;
   montant_paye: number;
   personne?: PersonneResource;
+  paiements: PaiementResource[];
 };
 
 export type PaiementResource = {

@@ -1,4 +1,4 @@
-import { PersonneResource } from "types/personne.type";
+import { PersonneResource, TypePersonne } from "types/personne.type";
 import { UserDroit } from "./droits";
 
 type PaiementAction =
@@ -59,9 +59,9 @@ export class PersonneScreen {
       return true;
     }
     switch (personne.type) {
-      case "scout":
+      case TypePersonne.scout:
         return this.userDroit.has([PersonneScreen.SCOUTS], "modifier");
-      case "adulte":
+      case TypePersonne.adulte:
         return this.userDroit.has([PersonneScreen.ADULTES], "modifier");
       default:
         return false;

@@ -1,15 +1,6 @@
 import { FC, useMemo } from "react";
-import {
-  Badge,
-  Button,
-  Card,
-  Col,
-  ListGroup,
-  Nav,
-  Row,
-  Stack,
-} from "react-bootstrap";
-import { ICONS, PageHeader } from "pages/common";
+import { Badge, Col, ListGroup, Nav, Row } from "react-bootstrap";
+import { ICONS } from "pages/common";
 import {
   Link,
   useLocation,
@@ -21,29 +12,23 @@ import { useQuery } from "@tanstack/react-query";
 import { NATURE, QUERY_KEY } from "utils/constants";
 import { organisationApi } from "api";
 import { OrganisationResource } from "types/organisation.type";
-import {
-  DetailOrganisation,
-  Organigramme,
-  OrganisationMembres,
-  OrganisationScouts,
-  SousOrganisation,
-} from "../view";
-import classNames from "classnames";
-import { useDroits } from "hooks/useDroits";
+// import { useDroits } from "hooks/useDroits";
 import * as Icon from "react-bootstrap-icons";
 import { View } from "components";
+import { DetailOrganisation } from "../consultation/details";
+import { OrganisationDirection } from "../consultation/direction";
+import { SousOrganisation } from "../consultation/sousOrganisations";
+import { ListOrganisationScout } from "../consultation/scouts";
+import { Header } from "layout/Header";
 
 type OrganisationProps = {
   organisationId: string;
-  showBackBtn?: boolean;
 };
-export const Organisation: FC<OrganisationProps> = ({
-  organisationId,
-  showBackBtn,
-}) => {
+
+export const Organisation: FC<OrganisationProps> = ({ organisationId }) => {
   const [searchParams] = useSearchParams();
   const page = searchParams.get("p") || "details";
-  const protection = useDroits();
+  // const protection = useDroits();
   const navigation = useNavigate();
   const location = useLocation();
 
@@ -62,6 +47,8 @@ export const Organisation: FC<OrganisationProps> = ({
       return [];
     }
 
+    const { nature, type } = organisation;
+
     const TABS = [
       {
         label: "Détails",
@@ -74,10 +61,18 @@ export const Organisation: FC<OrganisationProps> = ({
         code: "direction",
         icon: ICONS.direction,
         visible: true,
-        Icon: Icon.FileEarmarkText,
+        Icon: Icon.People,
       },
       {
-        label: "Sous orga.",
+        label:
+          nature.code === NATURE.region
+            ? "Unités/Groupes"
+            : nature.code === NATURE.groupe
+            ? "Unités"
+            : nature.code === NATURE.national &&
+              type?.code === "equipe_nationale"
+            ? "Régions"
+            : "Equipe nationale",
         code: "organisations",
         icon: ICONS.organisation,
         visible: true,
@@ -101,7 +96,7 @@ export const Organisation: FC<OrganisationProps> = ({
       }
       return true;
     });
-  }, [organisation, protection.personne.scouts]);
+  }, [organisation]);
 
   const onSelectPage = (pageSelected: string) => () => {
     navigation(`${location.pathname}?p=${pageSelected}`, {
@@ -115,9 +110,9 @@ export const Organisation: FC<OrganisationProps> = ({
     }
     switch (page) {
       case "direction":
-        return <OrganisationMembres organisation={organisation} />;
+        return <OrganisationDirection organisation={organisation} />;
       case "scouts":
-        return <OrganisationScouts organisation={organisation} />;
+        return <ListOrganisationScout organisation={organisation} />;
       case "organisations":
         return <SousOrganisation organisation={organisation} />;
       default:
@@ -129,60 +124,45 @@ export const Organisation: FC<OrganisationProps> = ({
     return <span>chargement ...</span>;
   }
 
-  const renderActions = () => {
-    if (!organisation || !protection.organisation.creer || page !== "fiche") {
-      return null;
-    }
-
-    return (
-      <Link
-        className="rounded-corner btn btn-danger"
-        to={LINKS.organisations.edit(organisation.id)}
-      >
-        <i className="uil-edit-alt"></i>
-        <span className="d-none d-sm-inline">Modifier</span>
-      </Link>
-    );
-  };
-
   return (
     <>
-      <PageHeader.View
-        // title={organisation.nom}
-        right={renderActions()}
-        className="my-4"
-        showBackBtn={showBackBtn}
-      />
+      <Header title="Consulter" />
 
-      <div className="shadow-sm rounded p-2 bg-white mt-3 mb-2">
-        <Row className="g-3">
-          <Col xs={6}>
-            <View.Item label="Nom">{organisation.nom}</View.Item>
-          </Col>
-          <Col xs={6}>
-            <View.Item label="Nature">
-              <Badge bg="secondary">{organisation.nature.nom}</Badge>
-            </View.Item>
-          </Col>
-          <Col>
-            <View.Item label="Parent">
-              {organisation.parent ? (
-                <Link
-                  to={LINKS.organisations.view(organisation.parent.id)}
-                  className="text-decoration-underline text-black"
-                >
-                  {organisation.parent.nom}
-                </Link>
-              ) : null}
-            </View.Item>
-          </Col>
-        </Row>
-      </div>
+      <ListGroup className="mb-2 mt-4">
+        <ListGroup.Item>
+          <Row className="g-3">
+            <Col xs={6}>
+              <View.Item label="Nom">{organisation.nom}</View.Item>
+            </Col>
+            <Col xs={6}>
+              <View.Item label="Nature">
+                <Badge bg="secondary">{organisation.nature.nom}</Badge>
+              </View.Item>
+            </Col>
+          </Row>
+        </ListGroup.Item>
+        <ListGroup.Item>
+          <Row className="g-3">
+            <Col xs={12}>
+              <View.Item label="Parent">
+                {organisation.parent ? (
+                  <Link
+                    to={LINKS.organisations.view(organisation.parent.id)}
+                    className="text-decoration-underline text-black"
+                  >
+                    {organisation.parent.nom}
+                  </Link>
+                ) : null}
+              </View.Item>
+            </Col>
+          </Row>
+        </ListGroup.Item>
+      </ListGroup>
 
       <Nav
         variant="pills"
         style={{ overflow: "scroll" }}
-        className="flex-nowrap border-bottom py-1 mb-2"
+        className="flex-nowrap py-2 mb-2"
         defaultActiveKey="/home"
       >
         {menus.map((item) => (

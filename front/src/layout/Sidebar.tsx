@@ -3,7 +3,7 @@ import { Button, Col, Nav, Offcanvas } from "react-bootstrap";
 
 import { FC, ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { MENU_ITEMS } from "utils";
+import { getMenuItems } from "utils";
 import * as Icon from "react-bootstrap-icons";
 
 type SidebarProps = {
@@ -24,23 +24,25 @@ export const Sidebar: FC<SidebarProps> = ({
 }) => {
   const content = (
     <Nav className="flex-column">
-      {MENU_ITEMS.filter((item) => item.url).map((nav) => (
-        <Nav.Item
-          key={nav.url}
-          className="nav-item"
-          onClick={handleCloseSidebar}
-        >
-          <Link
-            className="nav-link text-white d-flex align-items-center py-2"
-            aria-current="page"
-            to={nav.url!}
-            // style={{ lineHeight: "2", verticalAlign: "middle" }}
+      {getMenuItems()
+        .filter((item) => item.url)
+        .map((nav) => (
+          <Nav.Item
+            key={nav.url}
+            className="nav-item"
+            onClick={handleCloseSidebar}
           >
-            {nav.key && NAV[nav.key]}
-            {nav.label}
-          </Link>
-        </Nav.Item>
-      ))}
+            <Link
+              className="nav-link text-white d-flex align-items-center py-2"
+              aria-current="page"
+              to={nav.url!}
+              // style={{ lineHeight: "2", verticalAlign: "middle" }}
+            >
+              {nav.key && NAV[nav.key]}
+              {nav.label}
+            </Link>
+          </Nav.Item>
+        ))}
     </Nav>
   );
 

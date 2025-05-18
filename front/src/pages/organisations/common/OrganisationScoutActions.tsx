@@ -1,5 +1,5 @@
 import { AffecterScoutModal } from "pages/attributions/common";
-import { ScoutModal } from "pages/personnes/modal";
+// import { ScoutModal } from "pages/personnes/modal";
 import { FC, useState } from "react";
 import { Button, Dropdown } from "react-bootstrap";
 import { OrganisationResource } from "types/organisation.type";
@@ -61,9 +61,9 @@ export const OrganisationScoutActions: FC<OrganisationScoutActionsProps> = ({
         </Dropdown.Menu>
       </Dropdown>
 
-      {action === "ajouter_scout" && (
+      {/* {action === "ajouter_scout" && (
         <ScoutModal closeModal={closeModal} organisation={organisation} />
-      )}
+      )} */}
 
       {action === "affecter_scout" && (
         <AffecterScoutModal closeModal={closeModal} unite={organisation} />

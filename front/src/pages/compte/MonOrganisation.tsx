@@ -6,9 +6,7 @@ const MonOrganisation = () => {
   const organisation = user?.personne?.organisation;
 
   if (organisation) {
-    return (
-      <Organisation organisationId={organisation.id} showBackBtn={false} />
-    );
+    return <Organisation organisationId={organisation.id} />;
   }
   return (
     <Card className="mt-3" body>

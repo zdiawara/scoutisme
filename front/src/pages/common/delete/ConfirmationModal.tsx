@@ -15,16 +15,20 @@ export const ConfirmationModal: FC<ModalProps> = ({
   description,
 }) => {
   return (
-    <Modal show={true} onHide={onCancel} size="sm" animation={false}>
+    <Modal show={true} onHide={onCancel} size="sm" centered animation>
       <Modal.Body className="p-4">
         <div className="text-center">
           <i className="dripicons-checkmark h1"></i>
           <h4 className="mt-2 text-primary">{title}</h4>
           <div className="mt-3 mb-3">{description}</div>
-          <Button variant="danger" className="me-2" onClick={onCancel}>
+          <Button variant="primary" className="me-2" onClick={onCancel}>
             Non
           </Button>
-          <Button variant="primary" className="shadow-sm" onClick={onValide}>
+          <Button
+            variant="outline-primary"
+            className="shadow-sm"
+            onClick={onValide}
+          >
             Oui
           </Button>
         </div>

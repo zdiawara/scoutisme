@@ -1,21 +1,44 @@
-import { useState } from "react";
-import { Outlet } from "react-router-dom";
-import { Header } from "./Header";
+import { Navigate, Outlet } from "react-router-dom";
 import { Sidebar } from "./Sidebar";
 
 // import "../../assets/styles/main.scss";
 
 import "./Layout.scss";
+import { authApi } from "api";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "hooks";
+import { useState } from "react";
 
 export const Layout = () => {
+  const { setUser } = useAuth();
+
   const [showSidebar, setShowSidebar] = useState(false);
 
   const handleCloseSidebar = () => setShowSidebar(false);
-  const handleShowSidebar = () => setShowSidebar(true);
+  // const handleShowSidebar = () => setShowSidebar(true);
+
+  const query = useQuery({
+    queryKey: ["user-info"],
+    cacheTime: 0,
+    retry: 0,
+    queryFn: async () => {
+      const s = await authApi.userInfo();
+      setUser(s.data);
+      return s;
+    },
+  });
+
+  if (query.isLoading) {
+    return <span>Loading ...</span>;
+  }
+
+  if (query.isError) {
+    setUser(undefined);
+    return <Navigate to="login" />;
+  }
 
   return (
     <>
-      {/* <Header handleShowSidebar={handleShowSidebar} showSidebar={showSidebar} /> */}
       <div className="container-fluid">
         <Sidebar
           showSidebar={showSidebar}

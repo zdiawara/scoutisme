@@ -21,10 +21,11 @@ export const PersonneIdentite: FC<PersonneIdentiteProps> = ({ personne }) => {
         right={
           <Button
             size="sm"
-            variant="outline-primary"
+            variant="secondary"
             onClick={() => toggleForm()}
+            disabled={show}
           >
-            {show ? <Icon.XLg /> : <Icon.Pencil />}
+            <Icon.Pencil />
           </Button>
         }
       />

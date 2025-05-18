@@ -18,7 +18,7 @@ const Item: FC<ItemProps> = ({ label, children }) => {
       {label && (
         <div className="text-muted text-uppercase fs-6 m-0 mb-1">{label} </div>
       )}
-      {children === undefined || children === null ? (
+      {children === undefined || children === null || children === "" ? (
         <Empty />
       ) : (
         <div className="m-0 text-black fw-bold">{children}</div>
@@ -77,11 +77,11 @@ const Toolbar: FC<ToolbarProps> = ({ label, children, icon, right }) => {
       {(label || icon) && (
         <div>
           {icon}
-          <span className="fs-5">Identite</span>
+          <span className="fs-5">{label}</span>
         </div>
       )}
       {children}
-      {right && <div className="ms-auto d-block">{right}</div>}
+      {right && <div className="ms-auto d-block align-self-start">{right}</div>}
     </ListGroup.Item>
   );
 };

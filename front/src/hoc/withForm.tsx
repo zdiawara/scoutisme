@@ -55,9 +55,9 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
             goBack ? goBack() : _goBack();
           }
           toast("Modifications enregistrées !", {
-            type: toast.TYPE.INFO,
+            type: toast.TYPE.SUCCESS,
             autoClose: 5000,
-            position: "bottom-right",
+            position: "top-right",
           });
         })
         .catch((e) => {
@@ -127,11 +127,10 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
             variant="outline-primary"
             className="me-1"
             onClick={goBack || _goBack}
-            size="sm"
           >
             Annuler
           </Button>
-          <Button size="sm" onClick={methods.handleSubmit(onSubmit, onError)}>
+          <Button onClick={methods.handleSubmit(onSubmit, onError)}>
             Enregistrer
           </Button>
         </div>

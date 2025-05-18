@@ -11,6 +11,7 @@
 // 2. Include any default variable overrides here
 @import "./config/variables";
 @import "./config/light-mode";
+@import "./config/dark-mode";
 @import "./config/custom-variables";
 
 // 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets)
@@ -29,3 +30,21 @@
 @import "./components/tables";
 @import "./components/type";
 @import "./components/utilities";
+
+// Vendors
+// @import "vendor/daterangepicker";
+//@import "vendor/bootstrap-datepicker.min";
+// @import "vendor/jquery.toast.min";
+// @import "vendor/select2.min";
+// @import "vendor/jquery.toast.min";
+// @import "vendor/bootstrap-timepicker.min";
+// @import "vendor/jquery.bootstrap-touchspin.min";
+
+// Plugins
+@import "react-datepicker/dist/react-datepicker.css";
+@import "plugins/datepicker"; //react-date picker style
+@import "plugins/simplebar";
+
+@import "plugins/react-select"; // react select style
+
+@import "plugins/toaster";

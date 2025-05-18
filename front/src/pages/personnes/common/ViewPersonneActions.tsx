@@ -1,7 +1,6 @@
 import { FC, useState } from "react";
 import { Dropdown } from "react-bootstrap";
-import { ScoutModal } from "../modal";
-import { OrganisationResource } from "types/organisation.type";
+// import { ScoutModal } from "../modal";
 import { AffecterPersonneModal } from "pages/attributions/common";
 import { PersonneResource } from "types/personne.type";
 
@@ -63,12 +62,12 @@ export const ViewPersonneActions: FC<ViewPersonneActionsProps> = ({
           ))}
         </Dropdown.Menu>
       </Dropdown>
-      {action === "ajouter_scout" && (
+      {/* {action === "ajouter_scout" && (
         <ScoutModal
           closeModal={closeModal}
           organisation={{} as OrganisationResource}
         />
-      )}
+      )} */}
       {action === "affecter" && (
         <AffecterPersonneModal closeModal={closeModal} personne={personne} />
       )}

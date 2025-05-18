@@ -2,7 +2,6 @@ import { FC, ReactNode } from "react";
 import { Card, Table as BsTable, Stack, Spinner } from "react-bootstrap";
 import { ArrowLeft, ArrowRight } from "react-bootstrap-icons";
 import ReactPaginate from "react-paginate";
-import Select from "react-select";
 
 const Container: FC<{ children: ReactNode; isLoading: boolean }> = ({
   children,

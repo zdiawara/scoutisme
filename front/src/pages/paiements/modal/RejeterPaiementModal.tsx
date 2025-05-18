@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { paiementApi } from "api";
-import { PaiementResource, PersonneResource } from "types/personne.type";
+import { PaiementResource } from "types/personne.type";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEY } from "utils/constants";
 import { WrapperV2Props, withMutationForm } from "hoc";
@@ -31,13 +31,13 @@ const Form: FC<WrapperV2Props> = (props) => {
 const RejeterPaiementForm = withMutationForm(Form);
 
 type PersonneCotisationModalProps = {
-  personne: PersonneResource;
+  personneId: string;
   paiement: PaiementResource;
   closeModal: () => void;
 };
 
 export const RejeterPaiementModal: FC<PersonneCotisationModalProps> = ({
-  personne,
+  personneId,
   paiement,
   closeModal,
 }) => {
@@ -46,7 +46,7 @@ export const RejeterPaiementModal: FC<PersonneCotisationModalProps> = ({
   const rejeterPaiement = async (data: any) => {
     await paiementApi.rejeter(paiement.id, data);
     closeModal();
-    query.invalidateQueries([QUERY_KEY.paiements, personne.id]);
+    query.invalidateQueries([QUERY_KEY.cotisations, personneId]);
   };
 
   return (
@@ -55,14 +55,13 @@ export const RejeterPaiementModal: FC<PersonneCotisationModalProps> = ({
       title="Rejeter paiement"
       defaultValues={{}}
       onSuccess={() => {
-        query.invalidateQueries([QUERY_KEY.paiements]);
-        query.invalidateQueries([QUERY_KEY.paiements, personne.id]);
+        query.invalidateQueries([QUERY_KEY.cotisations]);
         closeModal();
       }}
       onExit={closeModal}
       modalProps={{
         animation: false,
-        centered: false,
+        centered: true,
       }}
     />
   );

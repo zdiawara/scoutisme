@@ -6,6 +6,8 @@ import { withForm, WrapperProps } from "hoc";
 import { personneConverter } from "pages/personnes/form";
 import { personneApi } from "api";
 import { personneIdentiteSchema } from "pages/personnes/form/personneSchema";
+import { useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEY } from "utils/constants";
 
 const FormContainer: FC<WrapperProps> = ({ renderButtonsActions }) => {
   return (
@@ -72,11 +74,15 @@ export const PersonneIdentiteEdit: FC<PersonneIdentiteEditProps> = ({
   personne,
   onClose,
 }) => {
+  const clientQuery = useQueryClient();
+
   const update = (input: any) => {
-    return personneApi.update(
-      personne.id,
-      personneConverter.toIdentiteBody(input)
-    );
+    return personneApi
+      .update(personne.id, personneConverter.toIdentiteBody(input))
+      .then((response) => {
+        clientQuery.invalidateQueries([QUERY_KEY.personnes]);
+        return response;
+      });
   };
 
   return (

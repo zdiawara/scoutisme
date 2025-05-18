@@ -1,7 +1,7 @@
 import { View } from "components";
 import { Columns, ListResult } from "pages/common";
 import { ReactNode, useMemo, useState } from "react";
-import { Button, Card, Form, InputGroup, Stack } from "react-bootstrap";
+import { Card, Stack } from "react-bootstrap";
 
 type StaticTableProps<T> = {
   data: T[] | undefined;
@@ -27,7 +27,7 @@ export function StaticTable<T>({
   search,
   renderCount,
 }: StaticTableProps<T>) {
-  const [searchText, setSearchText] = useState<string | undefined>();
+  // const [searchText, setSearchText] = useState<string | undefined>();
   const [query, setQuery] = useState<any>({
     pageSize: 5,
     pageActive: 0,
@@ -88,56 +88,18 @@ export function StaticTable<T>({
     );
   };
 
-  const searchInput = (
-    <div className="d-flex align-items-center">
-      {search && (
-        <InputGroup>
-          <Form.Control
-            placeholder={search.placeholder}
-            aria-label="Text input with checkbox"
-            onChange={(e) => setSearchText(e.target.value)}
-            onKeyUp={(event) => {
-              if (event.key === "Enter") {
-                event.preventDefault();
-                setQuery((prev: any) => ({
-                  ...prev,
-                  search: searchText,
-                  pageActive: 0,
-                }));
-              }
-            }}
-          />
-          <Button
-            onClick={() =>
-              setQuery((prev: any) => ({
-                ...prev,
-                search: searchText,
-                pageActive: 0,
-              }))
-            }
-            variant="secondary"
-          >
-            OK
-          </Button>
-        </InputGroup>
-      )}
-    </div>
+  return (
+    <Card>
+      <View.Header label={header?.label!} right={actions} />
+      <Card.Body>
+        <Stack direction="horizontal" className="align-items-center mb-3">
+          {renderCount && renderCount(result.data.length)}
+          {/* <div style={{ width: "300px" }} className="ms-auto">
+            {searchInput}
+          </div> */}
+        </Stack>
+        {renderContent()}
+      </Card.Body>
+    </Card>
   );
-
-  // return (
-  //   <Card>
-  //     <View.Header {...header} right={actions} />
-  //     <Card.Body>
-  //       <Stack direction="horizontal" className="align-items-center mb-3">
-  //         {renderCount && renderCount(result.data.length)}
-  //         <div style={{ width: "300px" }} className="ms-auto">
-  //           {searchInput}
-  //         </div>
-  //       </Stack>
-  //       {renderContent()}
-  //     </Card.Body>
-  //   </Card>
-  // );
-
-  return <>{renderContent()}</>;
 }

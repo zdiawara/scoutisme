@@ -37,7 +37,7 @@ export const PersonneIdentiteView: FC<PersonneIdentiteViewProps> = ({
         <Row className="g-3">
           <Col xs={6}>
             <View.Item label="Date de naissance">
-              {DateFormater.toDateTime(personne.date_naissance) || undefined}
+              {DateFormater.toDateText(personne.date_naissance) || undefined}
             </View.Item>
           </Col>
           <Col xs={6}>

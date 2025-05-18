@@ -1,31 +1,14 @@
-import { View } from "components";
-import { Columns, ICONS, StaticTable } from "pages/common";
-import { FC, useMemo } from "react";
+import { FC } from "react";
 import { OrganisationResource } from "types/organisation.type";
 import { attributionApi } from "api";
 import { QUERY_KEY } from "utils/constants";
 import { AttributionResource } from "types/personne.type";
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
-import { LINKS } from "utils";
-import { OrganisationScoutActions } from "../common";
-import { AttributionActions } from "pages/attributions/common";
-import { useDroits } from "hooks/useDroits";
-import { DateFormater } from "utils/DateUtils";
-import { Button, Form, InputGroup, ListGroup } from "react-bootstrap";
+import { Button, Form, ListGroup } from "react-bootstrap";
 import * as Icon from "react-bootstrap-icons";
 
 type OrganisationScoutsProps = {
   organisation: OrganisationResource;
-};
-
-const searchByCriteres = (
-  term: string,
-  attributions: AttributionResource[]
-) => {
-  return attributions.filter(({ personne: { nom, prenom } }) =>
-    `${nom} ${prenom}`.match(new RegExp(term, "gi"))
-  );
 };
 
 export const OrganisationScouts: FC<OrganisationScoutsProps> = ({
@@ -42,53 +25,6 @@ export const OrganisationScouts: FC<OrganisationScoutsProps> = ({
         })
         .then((r) => r.data),
   });
-
-  const protection = useDroits();
-
-  const columns = useMemo(() => {
-    const cols: Columns<AttributionResource>[] = [
-      {
-        name: "personne",
-        label: "Nom",
-        Cell: ({ personne }) => (
-          <Link to={LINKS.personnes.view(personne.id)}>
-            <span className="text-primary fw-semibold">
-              {personne.prenom} {personne.nom}
-            </span>
-            <div className="text-muted">{personne.code}</div>
-          </Link>
-        ),
-      },
-      {
-        name: "date_debut",
-        label: "Date début",
-        Cell: ({ date_debut }) =>
-          DateFormater.toDate(date_debut) || <View.Empty />,
-      },
-
-      {
-        name: "date_fin",
-        label: "Date fin",
-        Cell: ({ date_fin }) => DateFormater.toDate(date_fin) || <View.Empty />,
-      },
-    ];
-
-    if (protection.personne.scouts.creer) {
-      cols.push({
-        name: "actions",
-        label: "Actions",
-        headClassName: "text-end",
-        Cell: (attribution) => (
-          <div className="text-end">
-            <AttributionActions attribution={attribution} />
-          </div>
-        ),
-      });
-    }
-    return cols;
-  }, [protection.personne.scouts.creer]);
-
-  const { data } = query;
 
   return (
     <>

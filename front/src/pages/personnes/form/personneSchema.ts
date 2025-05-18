@@ -23,3 +23,7 @@ export const personneIdentiteSchema = yup.object({
   email: yup.string().email().nullable(),
   genre: yup.object().required().nullable(),
 });
+
+export const personneFormationSchema = yup.object({
+  niveau_formation: yup.object().required().nullable(),
+});

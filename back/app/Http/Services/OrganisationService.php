@@ -32,7 +32,7 @@ class OrganisationService
         $data = collect(DB::select(
             'SELECT a.id, a.date_debut, a.date_fin, f.type_id,
                 IF(p.id is not null, 
-                    JSON_OBJECT("id", CAST(p.id AS CHAR(200)), "nom", p.nom, "prenom", p.prenom), 
+                    JSON_OBJECT("id", CAST(p.id AS CHAR(200)), "nom", p.nom, "prenom", p.prenom, "code", p.code), 
                     null
                 ) as personne,
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AttributionResource;
+use App\Http\Resources\CotisationResource;
 use App\Http\Resources\PersonneResource;
 use App\Http\Resources\UserResource;
 use App\Http\Services\CotisationService;
@@ -14,6 +15,7 @@ use App\Http\Services\UserService;
 use App\ModelFilters\PersonneFilter;
 use App\Models\Attribution;
 use App\Models\Personne;
+use App\Models\RefFormation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -208,6 +210,36 @@ class PersonneController extends Controller
     public function show(Personne $personne)
     {
         $personne->load(['ville', 'niveauFormation', 'genre', 'fonction', 'organisation.nature']);
+
+        // dd($personne->formations);
+
+        $ids = collect($personne->formations)->map(function ($item) {
+            return $item['niveau_formation_id'];
+        })->unique();
+
+        if (!$ids->isEmpty()) {
+
+            $refFormations = RefFormation::select('id', 'nom')
+                ->whereIn('id', $ids->toArray())
+                ->get()
+                ->groupBy('id');
+
+
+            $personne['formations'] = collect($personne->formations)
+                ->map(function ($item) use ($refFormations) {
+                    $id = $item['niveau_formation_id'];
+                    $formation = $refFormations->get($id)->get(0);
+
+                    return [
+                        'reference' => [
+                            'id' => $formation->id,
+                            'nom' => $formation->nom
+                        ],
+                        'date_formation' => $item['date_formation']
+                    ];
+                })->toArray();
+        }
+
         return new PersonneResource($personne);
     }
 
@@ -228,8 +260,9 @@ class PersonneController extends Controller
 
     public function readCotisation(Personne $personne, Request $request, CotisationService $cotisationService)
     {
+        $cotisation = $cotisationService->find($personne->id, $request->input("annee"));
         return [
-            'data' => $cotisationService->find($personne->id, $request->input("annee"))
+            'data' => isset($cotisation) ? new CotisationResource($cotisation) : null
         ];
     }
 

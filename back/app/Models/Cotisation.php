@@ -13,11 +13,20 @@ class Cotisation extends Model
     use HasUuids, Filterable, SoftDeletes, Audit;
 
     protected $fillable = [
-        'annee', 'montant_total', 'personne_id', 'montant_paye', 'montant_restant'
+        'annee',
+        'montant_total',
+        'personne_id',
+        'montant_paye',
+        'montant_restant'
     ];
 
     public function personne()
     {
         return $this->belongsTo(Personne::class);
+    }
+
+    public function paiements()
+    {
+        return $this->hasMany(Paiement::class);
     }
 }

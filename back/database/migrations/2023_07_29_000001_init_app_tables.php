@@ -132,7 +132,7 @@ return new class extends Migration
             $table->string('profession')->nullable();
             $table->string('type'); // scout; adulte
             $table->json('personne_a_contacter')->nullable();
-            $table->uuid('niveau_formation_id')->nullable();
+            $table->json('formations')->nullable();
 
             $table->uuid('organisation_id')->nullable();
             $table->uuid('fonction_id')->nullable();
@@ -149,7 +149,6 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('ville_id')->references('id')->on('villes');
-            $table->foreign('niveau_formation_id')->references('id')->on('ref_formations');
             $table->foreign('genre_id')->references('id')->on('genres');
             $table->foreign('organisation_id')->references('id')->on('organisations');
             $table->foreign('fonction_id')->references('id')->on('fonctions');
@@ -332,7 +331,11 @@ return new class extends Migration
             'villes',
             'natures',
             'ref_formations',
-            'genres', 'habilitations', 'roles', 'fonctionnalites', 'modules'
+            'genres',
+            'habilitations',
+            'roles',
+            'fonctionnalites',
+            'modules'
         ])
             ->each(function ($table) {
                 Schema::dropIfExists($table);

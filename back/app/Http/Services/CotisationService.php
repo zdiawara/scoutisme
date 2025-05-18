@@ -8,8 +8,9 @@ class CotisationService
 {
     private MontantCotisationService $montantCotisationService;
 
-    public function __construct(MontantCotisationService $montantCotisationService)
-    {
+    public function __construct(
+        MontantCotisationService $montantCotisationService
+    ) {
         $this->montantCotisationService = $montantCotisationService;
     }
 
@@ -17,6 +18,7 @@ class CotisationService
     {
         $cotisation = Cotisation::where('annee', $annee)
             ->where('personne_id', $personneId)
+            ->with(['paiements'])
             ->first();
         return $cotisation;
     }

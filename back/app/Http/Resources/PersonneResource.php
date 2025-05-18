@@ -31,7 +31,6 @@ class PersonneResource extends JsonResource
             ->merge([
                 'nom' => strtoupper($this->nom),
                 'ville' => new VilleResource($this->whenLoaded('ville')),
-                'niveau_formation' => new RefFormationResource($this->whenLoaded('niveauFormation')),
                 'etat' => (string)$this->etat,
                 'genre' => new GenreResource($this->whenLoaded('genre')),
             ])

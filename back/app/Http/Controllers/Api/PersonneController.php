@@ -40,11 +40,13 @@ class PersonneController extends Controller
 
         $query = $this->buildSearchQuery($request->all());
 
+        $query = $this->addSorting($request, $query);
+
         $result = $this->addPaging($request, $query);
+
 
         $data = $result['query']
             ->select('personnes.*')
-            ->orderBy('nom', 'asc')
             ->with([
                 'genre',
                 'fonction',

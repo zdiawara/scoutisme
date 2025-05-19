@@ -12,6 +12,7 @@ import { FilterPersonne } from "pages/personnes/FilterPersonne";
 import useToggle from "hooks/useToggle";
 import * as Icon from "react-bootstrap-icons";
 import { useSearchParams } from "react-router-dom";
+import { TrierPersonne } from "./TrierPersonne";
 
 type PersonneToolbarProps = {
   searchParams?: Record<string, any>;
@@ -78,10 +79,7 @@ export const PersonneToolbar: FC<PersonneToolbarProps> = ({
               placeholder="Rechercher ..."
               onChange={changed}
             />
-            <Button variant="outline-secondary">
-              <Icon.SortAlphaDown size="1.3rem" />
-              <span className="ms-1 d-none d-sm-inline">Trier</span>
-            </Button>
+            <TrierPersonne />
             <Button variant="secondary" onClick={toggleFilter}>
               <Icon.Filter size="1.3rem" />
               <span className="ms-1 d-none d-sm-inline">Filrer</span>

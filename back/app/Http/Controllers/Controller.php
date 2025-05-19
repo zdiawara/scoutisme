@@ -36,6 +36,15 @@ class Controller extends BaseController
         ];
     }
 
+    public function addSorting(Request $request, $query)
+    {
+        if ($request->has("sort")) {
+            $parts = explode(",", $request->get('sort'));
+            return $query->orderBy('personnes.' . $parts[0], $parts[1] == 'asc' ? 'asc' : 'desc');
+        }
+        return $query;
+    }
+
     protected function pdfResponse($output, $filename)
     {
         return response()->make($output, Response::HTTP_OK, [

@@ -33,6 +33,7 @@ const parseParams = (searchParams: URLSearchParams) => {
     search: searchParams.get("search"),
     page: searchParams.get("page") || "1",
     size: searchParams.get("size") || "10",
+    sort: searchParams.get("sort") || "nom,asc",
   };
 };
 
@@ -53,10 +54,11 @@ const buildRequestParams = (filter: Record<string, any>) => {
     organisationId: filter.organisation
       ? selectHelper.getValue(JSON.parse(filter.organisation))
       : null,
-    perimetres: "region;groupe;unite",
+    // perimetres: "region;groupe;unite",
     search: filter.search,
     page: parseInt(filter.page) || 1,
     size: parseInt(filter.size) || 10,
+    sort: filter.sort || "nom,asc",
   };
 };
 

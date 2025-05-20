@@ -12,28 +12,30 @@ type HeaderProps = {
 export const Header: FC<HeaderProps> = ({ title, right, showBack = true }) => {
   const navigate = useNavigate();
   return (
-    <Stack direction="horizontal" className="mt-4">
-      {showBack && (
-        <Button
-          variant="default"
-          className="me-1 bg-white"
-          onClick={() => {
-            navigate(-1);
-          }}
-        >
-          <Icon.ArrowLeft />
-        </Button>
-      )}
-      {title && (
-        <h3 className="mb-0 d-flex align-items-center text-black">{title}</h3>
-      )}
+    <>
+      <Stack direction="horizontal" className="mt-4">
+        {showBack && (
+          <Button
+            variant="default"
+            className="me-1 bg-white"
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            <Icon.ArrowLeft />
+          </Button>
+        )}
+        {title && (
+          <h3 className="mb-0 d-flex align-items-center text-black">{title}</h3>
+        )}
 
-      <Stack className="ms-auto" direction="horizontal">
-        <Button variant="default" className="d-block bg-white">
+        <Stack className="ms-auto" direction="horizontal">
+          {/* <Button variant="default" className="d-block bg-white">
           <Icon.BellFill />
-        </Button>
-        {right}
+        </Button> */}
+          {right}
+        </Stack>
       </Stack>
-    </Stack>
+    </>
   );
 };

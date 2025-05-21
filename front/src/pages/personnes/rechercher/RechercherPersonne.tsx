@@ -67,8 +67,6 @@ const searchPersonne = ({ queryKey }: any) => {
 };
 
 const RechercherPersonne = () => {
-  //   const { userDroit } = useAuth();
-
   const [searchParams, setSearchParams] = useSearchParams();
 
   const queryParams = useMemo(() => {

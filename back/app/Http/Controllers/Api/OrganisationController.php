@@ -26,6 +26,8 @@ class OrganisationController extends Controller
     {
         $query = Organisation::filter($request->all(), OrganisationFilter::class);
 
+        $query = $this->addSorting($request, $query);
+
         if ($request->has('organisationId')) {
             $organisationId = $request->get('organisationId');
             if ($request->has('perimetres')) {

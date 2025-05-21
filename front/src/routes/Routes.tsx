@@ -43,8 +43,8 @@ const EditPersonne = Loadable(
   lazy(() => import("pages/personnes/EditPersonne"))
 );
 
-const ListOrganisation = Loadable(
-  lazy(() => import("pages/organisations/ListOrganisation"))
+const RechercherOrganisation = Loadable(
+  lazy(() => import("pages/organisations/rechercher/RechercheOrganisation"))
 );
 const CreateOrganisation = Loadable(
   lazy(() => import("pages/organisations/CreateOrganisation"))
@@ -130,7 +130,7 @@ export const router = createBrowserRouter(
           />
         </Route>
         <Route path={LINKS.organisations.base} element={<OrganisationOutlet />}>
-          <Route index element={<ListOrganisation />} />
+          <Route index element={<RechercherOrganisation />} />
           <Route element={<CreateOrganisation />} path="create" />
           <Route element={<ViewOrganisation />} path=":id" />
           <Route

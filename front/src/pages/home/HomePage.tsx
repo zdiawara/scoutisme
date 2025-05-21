@@ -13,62 +13,20 @@ import {
 } from "react-bootstrap";
 import * as Icon from "react-bootstrap-icons";
 import { Link } from "react-router-dom";
-import { LINKS } from "utils";
-import { NATURE } from "utils/constants";
+import { getMenuItems } from "utils";
 import d from "../../assets/images/users/avatar-1.jpg";
 import "./HomePage.scss";
 
 export const HomePage = () => {
-  const { user } = useAuth();
-  const personne = user?.personne;
+  const { userDroit, user } = useAuth();
 
   const items = useMemo(() => {
-    const nature = personne?.organisation?.nature?.code;
+    if (!userDroit) {
+      return [];
+    }
+    return getMenuItems(userDroit, user);
+  }, [userDroit, user]);
 
-    return [
-      // {
-      //   title: "Dashboard",
-      //   Icon: Icon.BarChartLineFill,
-      //   url: LINKS.dashbords.organisations,
-      // },
-      {
-        title: "Mon profil",
-        Icon: Icon.PersonBadge,
-        url: LINKS.profil.base,
-      },
-
-      {
-        title:
-          nature === NATURE.unite
-            ? "Mon unité"
-            : nature === NATURE.groupe
-            ? "Mon groupe"
-            : nature === NATURE.region
-            ? "Ma région"
-            : "Eq. Nationale",
-        Icon: Icon.Building,
-        url: LINKS.organisation.base,
-      },
-
-      {
-        title: "Personnes",
-        Icon: Icon.PeopleFill,
-        url: "/personnes",
-      },
-
-      {
-        title: "Mails",
-        Icon: Icon.SendFill,
-        url: "/messages",
-      },
-
-      {
-        title: "Paiements",
-        Icon: Icon.CurrencyDollar,
-        url: "/paiements",
-      },
-    ];
-  }, [personne?.organisation?.nature?.code]);
   return (
     <Container className="mt-0">
       <Row className="mb-3">
@@ -135,12 +93,20 @@ export const HomePage = () => {
             </span>
           </div> */}
           <Row className="g-3 my-3 ">
+            <Col xs={6} sm="4">
+              <Card as={Link} to={"/#"} className="mb-0 border">
+                <Card.Body className="text-center">
+                  <Icon.BarChartLineFill color="#b49d84" size="3rem" />
+                  <div className="mt-2 fs-4 fw-light">Dashboard</div>
+                </Card.Body>
+              </Card>
+            </Col>
             {items.map((menu) => (
               <Col key={menu.url} xs={6} sm="4">
                 <Card as={Link} to={menu.url} className="mb-0 border">
                   <Card.Body className="text-center">
                     <menu.Icon color="#b49d84" size="3rem" />
-                    <div className="mt-2 fs-4 fw-light">{menu.title}</div>
+                    <div className="mt-2 fs-4 fw-light">{menu.label}</div>
                   </Card.Body>
                 </Card>
               </Col>

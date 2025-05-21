@@ -32,7 +32,7 @@ export const Layout = () => {
     return <span>Loading ...</span>;
   }
 
-  if (query.isError) {
+  if (query.isError || !query.data) {
     setUser(undefined);
     return <Navigate to="login" />;
   }

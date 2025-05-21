@@ -65,7 +65,7 @@ class AuthController extends Controller
             ], 401);
         }
         $user['fonctionnalites'] = $userService->findFonctionnalites($user);
-        $user->load(['role', 'personne.organisation.nature']);
+        $user->load(['role', 'personne.organisation.nature', 'personne.organisation.type']);
         return new UserResource($user);
     }
 

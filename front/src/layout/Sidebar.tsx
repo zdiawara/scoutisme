@@ -1,30 +1,31 @@
 // import FeatherIcon, { FeatherIconName } from "feather-icons-react";
 import { Button, Col, Nav, Offcanvas } from "react-bootstrap";
 
-import { FC, ReactNode } from "react";
+import { FC } from "react";
 import { Link } from "react-router-dom";
 import { getMenuItems } from "utils";
-import * as Icon from "react-bootstrap-icons";
+import { useAuth } from "hooks";
 
 type SidebarProps = {
   showSidebar: boolean;
   handleCloseSidebar: () => void;
 };
 
-const NAV: Record<string, ReactNode> = {
-  personnes: <Icon.PeopleFill size="1.25rem" className="me-1" />,
-  organisations: <Icon.BuildingFill size="1.25rem" className="me-1" />,
-  paiements: <Icon.Bank2 size="1.25rem" className="me-1" />,
-  mails: <Icon.EnvelopeFill size="1.25rem" className="me-1" />,
-};
+// const NAV: Record<string, ReactNode> = {
+//   personnes: <Icon.PeopleFill size="1.25rem" className="me-1" />,
+//   organisations: <Icon.BuildingFill size="1.25rem" className="me-1" />,
+//   paiements: <Icon.Bank2 size="1.25rem" className="me-1" />,
+//   mails: <Icon.EnvelopeFill size="1.25rem" className="me-1" />,
+// };
 
 export const Sidebar: FC<SidebarProps> = ({
   showSidebar,
   handleCloseSidebar,
 }) => {
+  const { userDroit } = useAuth();
   const content = (
     <Nav className="flex-column">
-      {getMenuItems()
+      {getMenuItems(userDroit!)
         .filter((item) => item.url)
         .map((nav) => (
           <Nav.Item
@@ -38,7 +39,6 @@ export const Sidebar: FC<SidebarProps> = ({
               to={nav.url!}
               // style={{ lineHeight: "2", verticalAlign: "middle" }}
             >
-              {nav.key && NAV[nav.key]}
               {nav.label}
             </Link>
           </Nav.Item>

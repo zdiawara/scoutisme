@@ -1,25 +1,32 @@
 import { UserResource } from "types/auth.type";
-import { getMenuItems } from "./menu";
+import { MENU } from "./menu";
 
 export class UserDroit {
-  private modules: any[];
+  private modules: string[];
   private fonctionnalites: Record<string, string[]>;
   private user: UserResource;
-  private perimetres: string[];
+  public perimetres: string[];
 
   constructor(user: UserResource) {
     this.user = user;
-    this.modules = this.buildMenu(user);
+    this.modules = this.buildModules(user);
     this.fonctionnalites = this.buildFonctionnalites(user);
     this.perimetres = user.role.perimetres;
   }
 
-  get menus(): any[] {
+  get menus(): string[] {
     return this.modules;
   }
 
   get isAdmin(): boolean {
     return this.user.role.code === "admin";
+  }
+
+  public hasMenu(codeMenu: string): boolean {
+    if (this.isAdmin) {
+      return true;
+    }
+    return this.menus.includes(codeMenu);
   }
 
   public has(keys: string[], droit: string): boolean {
@@ -40,21 +47,19 @@ export class UserDroit {
     }, {} as Record<string, string[]>);
   }
 
-  private buildMenu(user: UserResource): any {
+  private buildModules(user: UserResource): any {
+    let modules: string[] = [];
     if (this.isAdmin) {
-      return getMenuItems();
+      modules = MENU.map((e) => e.code);
+    } else {
+      modules = user.fonctionnalites
+        .filter((e) => Boolean(e.module.parent))
+        .map((e) => e.module.parent)
+        .map((e) => e?.code!);
     }
 
-    const allModuleParents = user.fonctionnalites
-      .filter((e) => Boolean(e.module.parent))
-      .map((e) => e.module.parent);
-
-    return allModuleParents
-      .filter((module, index) => {
-        return (
-          index === allModuleParents.findIndex((o) => module?.id === o?.id)
-        );
-      })
-      .map((e) => e?.code || "");
+    return modules.filter((module, index) => {
+      return index === modules.findIndex((o) => module === o);
+    });
   }
 }

@@ -40,7 +40,7 @@ class Controller extends BaseController
     {
         if ($request->has("sort")) {
             $parts = explode(",", $request->get('sort'));
-            return $query->orderBy('personnes.' . $parts[0], $parts[1] == 'asc' ? 'asc' : 'desc');
+            return $query->orderBy($parts[0], $parts[1] == 'asc' ? 'asc' : 'desc');
         }
         return $query;
     }

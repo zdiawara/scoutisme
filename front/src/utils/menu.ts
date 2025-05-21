@@ -1,137 +1,97 @@
-import { ICONS } from "pages/common";
 // import { MenuItemType } from "../appConstants";
+import * as Icon from "react-bootstrap-icons";
+
 import { LINKS } from "./links";
+import { UserDroit } from "./droits";
+import { UserResource } from "types/auth.type";
+import { NATURE, TYPE_ORGANISATION } from "./constants";
 
-// export const MES_INFORMATIONS = [
-//   {
-//     key: "profil",
-//     label: "Mon profil",
-//     isTitle: false,
-//     url: LINKS.profil.base,
-//     icon: ICONS.account,
-//   },
-//   {
-//     key: "organisation",
-//     label: "Organisation",
-//     isTitle: false,
-//     url: LINKS.organisation.base,
-//     icon: ICONS.organisation,
-//   },
-// ];
+const MON_PROFIL = {
+  code: "profil",
+  label: "Mon profil",
+  url: LINKS.profil.base,
+  Icon: Icon.PersonBadge,
+};
 
+const MON_ORGANISATION = {
+  code: "organisation",
+  label: "Mon organisation",
+  url: LINKS.organisation.base,
+  Icon: Icon.FilterSquare,
+};
+
+export const MES_INFORMATIONS = [MON_PROFIL, MON_ORGANISATION];
+
+export const MENU = [
+  {
+    code: "personnes",
+    label: "Personnes",
+    Icon: Icon.PeopleFill,
+    url: LINKS.personnes.base,
+  },
+  {
+    code: "organisations",
+    label: "Organisations",
+    Icon: Icon.Building,
+    url: LINKS.organisations.base,
+  },
+  {
+    code: "paiements",
+    label: "Paiements",
+    Icon: Icon.CurrencyDollar,
+    url: LINKS.paiements.base,
+  },
+  {
+    code: "mails",
+    label: "Mails",
+    Icon: Icon.SendFill,
+    url: LINKS.messages.base,
+  },
+];
 // export const MENU_ITEMS = ;
 
-export const getMenuItems = () => {
-  // NOTE - You can fetch from server and return here as well
-  return [
-    {
-      key: "dash",
-      label: "Dashboard",
-      isTitle: false,
-      icon: "mdi mdi-view-dashboard-outline",
-      children: [
-        {
-          key: "organisation_1",
-          label: "Organisations",
-          isTitle: false,
-          url: LINKS.dashbords.organisations,
-        },
-        {
-          key: "personnes_1",
-          label: "Personnes",
-          isTitle: false,
-          url: LINKS.dashbords.scouts,
-        },
-        {
-          key: "cotisations_1",
-          label: "Cotisations",
-          isTitle: false,
-          url: LINKS.dashbords.cotisations,
-        },
-      ],
-    },
-    {
-      key: "personnes",
-      label: "Personnes",
-      isTitle: false,
-      icon: ICONS.searchPersonne,
-      url: LINKS.personnes.base,
-    },
-    {
-      key: "organisations",
-      label: "Organisations",
-      isTitle: false,
-      icon: ICONS.organisation,
-      url: LINKS.organisations.base,
-    },
-    {
-      key: "paiements",
-      label: "Paiements",
-      isTitle: false,
-      icon: ICONS.paiement,
-      url: LINKS.paiements.base,
-    },
-    {
-      key: "mails",
-      label: "Mails",
-      isTitle: false,
-      icon: ICONS.message,
-      url: LINKS.messages.base,
-    },
-    /*   {
-      key: "evenements",
-      label: "Evenements",
-      isTitle: false,
-      icon: ICONS.events,
-      url: LINKS.events.base,
-    }, */
-    {
-      key: "params",
-      label: "Paramètres",
-      isTitle: false,
-      icon: ICONS.setting,
+const getLibelleOrganisation = (nature: string, type?: string) => {
+  switch (nature) {
+    case NATURE.unite:
+      return "Mon unité";
+    case NATURE.groupe:
+      return "Mon groupe";
+    case NATURE.region:
+      return "Ma région";
+    case NATURE.national:
+      return type === TYPE_ORGANISATION.equipe_nationale
+        ? "Eq. Nationale"
+        : "Co. National";
 
-      children: [
-        {
-          key: "fonction",
-          label: "Fonctions",
-          isTitle: false,
-          url: LINKS.fonctions.base,
-        },
+    default:
+      break;
+  }
+};
 
-        {
-          key: "types-unites",
-          label: "Types d'unités",
-          isTitle: false,
-          url: LINKS.types_unites.base,
-        },
-        {
-          key: "ref-formation",
-          label: "Réf. formations",
-          isTitle: false,
-          url: LINKS.ref_formations.base,
-        },
-        /*       {
-          key: "instances",
-          label: "Instances",
-          isTitle: false,
-          url: LINKS.instances.base,
-        }, */
-        {
-          key: "cotisations",
-          label: "Cotisations",
-          isTitle: false,
-          url: LINKS.cotisations.base,
-        },
-        {
-          key: "acces",
-          label: "Habilitations",
-          isTitle: false,
-          url: LINKS.acces.base,
-        },
-      ],
-    },
-  ];
+export const getMenuItems = (
+  userDroit: UserDroit,
+  user?: UserResource | null
+) => {
+  const menu = MENU.filter((menu) => userDroit.hasMenu(menu.code));
+
+  if (user?.personne?.organisation) {
+    const nature = user?.personne?.organisation.nature.code;
+    const type = user?.personne?.organisation.type?.code;
+
+    const result = [
+      // MON_PROFIL,
+      { ...MON_ORGANISATION, label: getLibelleOrganisation(nature, type) },
+      ...menu,
+    ];
+    if (
+      userDroit.perimetres.length === 1 &&
+      userDroit.perimetres.includes("unite")
+    ) {
+      return result.filter((r) => r.code !== "organisations");
+    }
+    return result;
+  }
+  return MENU.filter((menu) => userDroit.hasMenu(menu.code));
 };
 
 // export const findAllParent = (menuItems: any[], menuItem: any): string[] => {

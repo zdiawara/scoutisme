@@ -1,37 +1,26 @@
 import { View } from "components";
 import { Badge, Button, Form, InputGroup, Spinner } from "react-bootstrap";
 import { FC } from "react";
-import useToggle from "hooks/useToggle";
 import * as Icon from "react-bootstrap-icons";
 import { useSearch } from "hooks/useSearch";
-import { Trier } from "pages/common/trie";
-import { FilterPaiement } from "pages/paiements/form";
+import { Trie, Trier } from "pages/common/trie";
 
 type ToolbarProps = {
   searchParams?: Record<string, any>;
   isFetching: boolean;
   nombreResultat?: number;
+  toggleFilter?: () => void;
+  tries?: Trie[];
 };
 
-const ACTIONS = [
-  {
-    label: "Date soumission croissante",
-    code: "date_soumission,asc",
-  },
-  {
-    label: "Date soumission décroissante",
-    code: "date_soumission,desc",
-  },
-];
-
-export const PaiementToolbar: FC<ToolbarProps> = ({
+export const SearchToolbar: FC<ToolbarProps> = ({
   searchParams,
   isFetching,
   nombreResultat,
+  toggleFilter,
+  tries,
 }) => {
-  const [showFilter, toggleFilter] = useToggle();
-
-  const { onSearch, onChangeFilter } = useSearch();
+  const { onSearch } = useSearch();
 
   return (
     <>
@@ -43,11 +32,13 @@ export const PaiementToolbar: FC<ToolbarProps> = ({
               placeholder="Rechercher ..."
               onChange={onSearch}
             />
-            <Trier actions={ACTIONS} />
-            <Button variant="secondary" onClick={toggleFilter}>
-              <Icon.Filter size="1.3rem" />
-              <span className="ms-1 d-none d-sm-inline">Filrer</span>
-            </Button>
+            {tries && <Trier actions={tries} />}
+            {toggleFilter && (
+              <Button variant="secondary" onClick={toggleFilter}>
+                <Icon.Filter size="1.3rem" />
+                <span className="ms-1 d-none d-sm-inline">Filrer</span>
+              </Button>
+            )}
           </InputGroup>
 
           <div className="mt-1">
@@ -74,17 +65,6 @@ export const PaiementToolbar: FC<ToolbarProps> = ({
           </div>
         </div>
       </View.Toolbar>
-      {showFilter && (
-        <FilterPaiement
-          applyFiler={(data) => {
-            onChangeFilter(data);
-            toggleFilter();
-          }}
-          defaultValues={searchParams}
-          show={showFilter}
-          close={toggleFilter}
-        />
-      )}
     </>
   );
 };

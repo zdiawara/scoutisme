@@ -19,11 +19,13 @@ const CustomToggle = forwardRef(({ onClick }: any, ref) => (
   </Button>
 ));
 
+export type Trie = {
+  label: string;
+  code: string;
+};
+
 type Props = {
-  actions: Array<{
-    label: string;
-    code: string;
-  }>;
+  actions: Array<Trie>;
 };
 
 export const Trier: FC<Props> = ({ actions }) => {

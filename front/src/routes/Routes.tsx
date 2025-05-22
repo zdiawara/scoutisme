@@ -60,7 +60,9 @@ const ListInstance = Loadable(
   lazy(() => import("pages/utilitaires/instances/ListInstance"))
 );
 
-const ListMessage = Loadable(lazy(() => import("pages/messages/ListMessage")));
+const RechercherMail = Loadable(
+  lazy(() => import("pages/messages/rechercher/RechercherMail"))
+);
 const CreateMessage = Loadable(
   lazy(() => import("pages/messages/CreateMessage"))
 );
@@ -148,7 +150,7 @@ export const router = createBrowserRouter(
           <Route index element={<ListInstance />} />
         </Route>
         <Route path={LINKS.messages.base} element={<MessageOutlet />}>
-          <Route index element={<ListMessage />} />
+          <Route index element={<RechercherMail />} />
           <Route path="create" element={<CreateMessage />} />
           <Route path=":id" element={<ViewMessage />} />
         </Route>

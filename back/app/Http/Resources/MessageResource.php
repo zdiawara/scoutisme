@@ -16,7 +16,7 @@ class MessageResource extends JsonResource
     {
         return collect(parent::toArray($request))->except([])
             ->merge([
-                'created_at' => date('d/m/Y H:i', strtotime($this->created_at))
+                'created_at' => date('Y-m-d H:i:s', strtotime($this->created_at))
             ])->all();
     }
 }

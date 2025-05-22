@@ -6,7 +6,7 @@ type HocCompomentProps = {
   applyFiler: (data?: any) => void;
   onReset?: () => Record<string, any>;
   defaultValues?: Record<string, any>;
-  show: boolean;
+  show?: boolean;
   close: () => void;
 };
 

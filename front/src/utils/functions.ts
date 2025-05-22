@@ -16,6 +16,8 @@ export const selectHelper = {
   getValue: (item?: SelectItem) => {
     return item?.value || null;
   },
+  getValueFromJson: (item: any) =>
+    item ? selectHelper.getValue(JSON.parse(item)) : null,
 };
 
 /**

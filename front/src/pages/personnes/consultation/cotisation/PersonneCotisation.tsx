@@ -8,9 +8,10 @@ import { SelectItem } from "types/form.type";
 import { Cotisation } from "./Cotisation";
 import { ListGroup } from "react-bootstrap";
 import * as Icon from "react-bootstrap-icons";
-import { ListPaiement } from "./paiements";
+
 import { AsyncSelectSimple } from "components";
 import { PayerCotisationAction } from "./payer/PayerCotisationAction";
+import { ListPaiement } from "pages/paiements/rechercher/paiement";
 
 type Props = {
   personne: PersonneResource;
@@ -85,7 +86,7 @@ export const PersonneCotisation: FC<Props> = ({ personne }) => {
             </span>
           </ListGroup.Item>
 
-          <ListPaiement paiements={cotisation?.paiements} personne={personne} />
+          <ListPaiement paiements={cotisation?.paiements} />
         </ListGroup>
       )}
     </>

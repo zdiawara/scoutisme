@@ -93,8 +93,8 @@ const CotisationDashbord = Loadable(
   lazy(() => import("pages/dashbords/cotisations/CotisationDashBoard"))
 );
 
-const ListPaiement = Loadable(
-  lazy(() => import("pages/paiements/ListPaiement"))
+const RechercherPaiement = Loadable(
+  lazy(() => import("pages/paiements/rechercher/RechercherPaiement"))
 );
 
 const Login = Loadable(lazy(() => import("pages/auth/Login")));
@@ -153,7 +153,7 @@ export const router = createBrowserRouter(
           <Route path=":id" element={<ViewMessage />} />
         </Route>
         <Route path={LINKS.paiements.base} element={<PaiementOutlet />}>
-          <Route index element={<ListPaiement />} />
+          <Route index element={<RechercherPaiement />} />
         </Route>
         <Route path={LINKS.fonctions.base} element={<FonctionOutlet />}>
           <Route index element={<ListFonction />} />

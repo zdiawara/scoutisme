@@ -1,36 +1,37 @@
 import { MontantFormatText } from "components";
 import { FC } from "react";
 import { Stack } from "react-bootstrap";
-import { PaiementResource, PersonneResource } from "types/personne.type";
+import { PaiementResource } from "types/personne.type";
 import { DateFormater } from "utils/DateUtils";
 import { EtatPaiement } from "pages/paiements/common";
 import { PaiementActions } from "pages/personnes/common/PaiementActions";
 
 type Props = {
   paiement: PaiementResource;
-  personne: PersonneResource;
 };
 
-export const PaiementItem: FC<Props> = ({ paiement, personne }) => {
+export const PaiementItem: FC<Props> = ({ paiement }) => {
   return (
     <>
       <div>
-        <div className="fw-bold">
+        <div className="fw-bold d-flex align-items-center">
           <MontantFormatText value={paiement.montant} withDevise />
+          &nbsp;
+          <EtatPaiement etat={paiement.etat} />
         </div>
-        <span className="text-muted d-block">
-          Paiement N° {paiement.numero}
-        </span>
+        <span className="fw-light d-block">Paiement N° {paiement.numero}</span>
         <Stack direction="horizontal" className="mt-1 fw-light">
-          {paiement.date_traitement && (
+          {/* {paiement.date_traitement && (
             <span className="me-1">
               Traité le {DateFormater.toDateText(paiement.date_traitement)}
             </span>
-          )}
-          <EtatPaiement etat={paiement.etat} />
+          )} */}
+          <div className="fw-light text-muted">
+            Soumis le {DateFormater.toDateText(paiement.created_at)}
+          </div>
         </Stack>
       </div>
-      <PaiementActions paiement={paiement} personne={personne} />
+      <PaiementActions paiement={paiement} />
     </>
   );
 };

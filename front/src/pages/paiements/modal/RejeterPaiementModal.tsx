@@ -31,13 +31,11 @@ const Form: FC<WrapperV2Props> = (props) => {
 const RejeterPaiementForm = withMutationForm(Form);
 
 type PersonneCotisationModalProps = {
-  personneId: string;
   paiement: PaiementResource;
   closeModal: () => void;
 };
 
 export const RejeterPaiementModal: FC<PersonneCotisationModalProps> = ({
-  personneId,
   paiement,
   closeModal,
 }) => {
@@ -46,7 +44,7 @@ export const RejeterPaiementModal: FC<PersonneCotisationModalProps> = ({
   const rejeterPaiement = async (data: any) => {
     await paiementApi.rejeter(paiement.id, data);
     closeModal();
-    query.invalidateQueries([QUERY_KEY.cotisations, personneId]);
+    query.invalidateQueries([QUERY_KEY.cotisations]);
   };
 
   return (

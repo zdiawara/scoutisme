@@ -1,6 +1,6 @@
 import { FC, useMemo } from "react";
 import { Button, Stack } from "react-bootstrap";
-import { PaiementResource, PersonneResource } from "types/personne.type";
+import { PaiementResource } from "types/personne.type";
 import { useModalAction } from "hooks";
 import {
   ModifierPaiementModal,
@@ -15,14 +15,10 @@ import { DropOption } from "components/options/DropOptions";
 import * as Icon from "react-bootstrap-icons";
 
 type PaiementActionsProps = {
-  personne: PersonneResource;
   paiement: PaiementResource;
 };
 
-export const PaiementActions: FC<PaiementActionsProps> = ({
-  personne,
-  paiement,
-}) => {
+export const PaiementActions: FC<PaiementActionsProps> = ({ paiement }) => {
   const modalAction = useModalAction();
   const { cotisation } = useDroits();
 
@@ -76,7 +72,7 @@ export const PaiementActions: FC<PaiementActionsProps> = ({
   }
   return (
     <>
-      <Stack direction="horizontal" className="ms-auto">
+      <Stack direction="horizontal" className="ms-auto align-self-start">
         <Button
           title="Afficher les détails du paiement"
           size="sm"
@@ -101,14 +97,12 @@ export const PaiementActions: FC<PaiementActionsProps> = ({
         <ValiderPaiementModal
           closeModal={modalAction.close}
           paiement={paiement}
-          personneId={personne.id}
         />
       )}
       {modalAction.action === "rejeter" && (
         <RejeterPaiementModal
           closeModal={modalAction.close}
           paiement={paiement}
-          personneId={personne.id}
         />
       )}
       {modalAction.action === "modifier" && (
@@ -124,11 +118,7 @@ export const PaiementActions: FC<PaiementActionsProps> = ({
         />
       )}
       {modalAction.action === "voir" && (
-        <VoirPaiementModal
-          closeModal={modalAction.close}
-          personne={personne}
-          paiement={paiement}
-        />
+        <VoirPaiementModal closeModal={modalAction.close} paiement={paiement} />
       )}
     </>
   );

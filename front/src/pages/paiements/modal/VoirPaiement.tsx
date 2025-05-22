@@ -1,30 +1,25 @@
 import { MontantFormatText, View } from "components";
 import { FC } from "react";
 import { Button, Col, ListGroup, Modal, Row } from "react-bootstrap";
-import { PaiementResource, PersonneResource } from "types/personne.type";
+import { PaiementResource } from "types/personne.type";
 import { EtatPaiement } from "../common";
 import { DateFormater } from "utils/DateUtils";
 
 type ModalProps = {
   closeModal: () => void;
   paiement: PaiementResource;
-  personne: PersonneResource;
 };
 
-export const VoirPaiementModal: FC<ModalProps> = ({
-  closeModal,
-  paiement,
-  personne,
-}) => {
+export const VoirPaiementModal: FC<ModalProps> = ({ closeModal, paiement }) => {
   return (
     <Modal show={true} onHide={closeModal} size="lg" animation={false}>
       <Modal.Header closeButton>
         <Modal.Title className="text-primary">
           Paiement N° {paiement.numero}
         </Modal.Title>
-        <div className="ms-2">
+        {/* <div className="ms-2">
           {personne?.nom} {personne?.prenom}
-        </div>
+        </div> */}
       </Modal.Header>
       <Modal.Body className="bg-gray-100">
         <ListGroup>

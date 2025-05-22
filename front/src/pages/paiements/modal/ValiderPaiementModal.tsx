@@ -6,13 +6,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEY } from "utils/constants";
 
 type PersonneCotisationModalProps = {
-  personneId: string;
   paiement: PaiementResource;
   closeModal: () => void;
 };
 
 export const ValiderPaiementModal: FC<PersonneCotisationModalProps> = ({
-  personneId,
   paiement,
   closeModal,
 }) => {

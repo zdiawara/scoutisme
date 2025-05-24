@@ -23,13 +23,13 @@ export const PaiementActions: FC<PaiementActionsProps> = ({ paiement }) => {
   const { cotisation } = useDroits();
 
   const actions = useMemo(() => {
-    const ACTIONS = [
+    return [
       {
         label: "Valider",
         description: "Valider le paiement",
         code: "valider",
         visible: cotisation.paiements.valider,
-        // disabled: paiement.etat === "valide",
+        disabled: paiement.etat === "valide",
         Icon: Icon.CheckCircle,
       },
       {
@@ -37,35 +37,35 @@ export const PaiementActions: FC<PaiementActionsProps> = ({ paiement }) => {
         description: "Rejeter le paiement",
         code: "rejeter",
         visible: cotisation.paiements.rejeter,
+
         Icon: Icon.XLg,
       },
       {
         label: "Modifier",
-        icon: "uil-edit-alt",
         description: "Modifier le paiement",
         code: "modifier",
         visible: cotisation.paiements.creer,
         Icon: Icon.Pencil,
+        disabled: paiement.etat === "valide",
       },
       {
         label: "Récu",
-        icon: "uil-file-check-alt",
         description: "Télécharger le récu du paiement",
         code: "telecharger_recu",
         Icon: Icon.Download,
+        disabled: paiement.etat !== "valide",
+        visible: cotisation.paiements.creer,
       },
       {
         label: "Supprimer",
-        icon: "uil-trash-alt",
         description: "Supprimer le paiement",
         code: "supprimer",
         visible: cotisation.paiements.creer,
         Icon: Icon.Trash3,
+        disabled: paiement.etat === "valide",
       },
-    ];
-
-    return ACTIONS; //.filter((e) => e.visible);
-  }, [cotisation]);
+    ].filter((e) => e.visible);
+  }, [cotisation, paiement.etat]);
 
   if (!Boolean(actions.length)) {
     return null;

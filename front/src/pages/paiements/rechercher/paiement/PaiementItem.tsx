@@ -21,11 +21,6 @@ export const PaiementItem: FC<Props> = ({ paiement }) => {
         </div>
         <span className="fw-light d-block">N°{paiement.numero}</span>
         <Stack direction="horizontal" className="mt-1 fw-light">
-          {/* {paiement.date_traitement && (
-            <span className="me-1">
-              Traité le {DateFormater.toDateText(paiement.date_traitement)}
-            </span>
-          )} */}
           <div className="fw-light text-muted">
             Le {DateFormater.toDateTextTime(paiement.created_at)}
           </div>

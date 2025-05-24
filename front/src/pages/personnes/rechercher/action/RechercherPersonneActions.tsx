@@ -1,9 +1,10 @@
 // import FeatherIcon from "feather-icons-react";
 import * as Icon from "react-bootstrap-icons";
 import { Button, Dropdown } from "react-bootstrap";
-import { forwardRef, Fragment, useState } from "react";
+import { forwardRef, Fragment, useMemo, useState } from "react";
 import { ExportPersonneModal } from "pages/personnes/modal";
 import { EnvoyerMailModal } from "pages/personnes/modal/EnvoyerMailModal";
+import { useDroits } from "hooks/useDroits";
 
 const CustomToggle = forwardRef(({ onClick }: any, ref) => (
   <Button
@@ -20,49 +21,13 @@ const CustomToggle = forwardRef(({ onClick }: any, ref) => (
   </Button>
 ));
 
-const ACTIONS = [
-  /*   {
-    label: "Modifier",
-    icon: "uil-edit-alt",
-    description: "Mettre à jour les informations de l'affectation",
-    code: "modifier",
-  }, */
-  {
-    label: "Exporter",
-    icon: "uil-user",
-    description: "Exporter les personnes en CSV",
-    code: "exporter",
-    Icon: Icon.Download,
-  },
-  // {
-  //   label: "Carte adhésion",
-  //   icon: "uil-user",
-  //   description: "Telecharger la carte d'adhésion",
-  //   code: "carte",
-  //   Icon: Icon.Download,
-  // },
-  // {
-  //   label: "Cotisation",
-  //   icon: "uil-user",
-  //   description: "Payer la cotisation",
-  //   code: "carte",
-  //   Icon: Icon.Send,
-  // },
-  {
-    label: "Email",
-    icon: "uil-user",
-    description: "Envoyer un mail aux personnes",
-    code: "email",
-    Icon: Icon.Send,
-  },
-];
-
 export const RechercherPersonneActions = ({
   params,
 }: {
   params: Record<string, any>;
 }) => {
   const [action, setAction] = useState<string | undefined>();
+  const droits = useDroits();
 
   const onSelect = (code: string) => () => {
     setAction(code);
@@ -72,12 +37,38 @@ export const RechercherPersonneActions = ({
     setAction(undefined);
   };
 
+  const menus = useMemo(() => {
+    return [
+      {
+        label: "Ajouter",
+        description: "Créer une nouvelle personne",
+        code: "creer",
+        Icon: Icon.PersonAdd,
+        visible: droits.personne.adultes.creer || droits.personne.scouts.creer,
+      },
+      {
+        label: "Exporter",
+        description: "Exporter les personnes en CSV",
+        code: "exporter",
+        Icon: Icon.Download,
+        visible: true,
+      },
+      {
+        label: "Email",
+        description: "Envoyer un mail aux personnes",
+        code: "email",
+        Icon: Icon.Send,
+        visible: droits.mail.mails.envoyer,
+      },
+    ].filter((e) => e.visible);
+  }, [droits.mail, droits.personne]);
+
   return (
     <>
       <Dropdown className="ms-2">
         <Dropdown.Toggle as={CustomToggle} />
         <Dropdown.Menu className="topbar-dropdown-menu shadow-lg">
-          {ACTIONS.map((item, i) => (
+          {menus.map((item, i) => (
             <Fragment key={item.code}>
               <Dropdown.Item
                 as="button"
@@ -88,7 +79,7 @@ export const RechercherPersonneActions = ({
                 <span className="fw-semibold">{item.label}</span>
                 <div className="fw-light text-muted">{item.description}</div>
               </Dropdown.Item>
-              {i + 1 !== ACTIONS.length && <Dropdown.Divider />}
+              {i + 1 !== menus.length && <Dropdown.Divider />}
             </Fragment>
           ))}
         </Dropdown.Menu>

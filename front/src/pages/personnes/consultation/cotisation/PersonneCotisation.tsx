@@ -12,6 +12,7 @@ import * as Icon from "react-bootstrap-icons";
 import { AsyncSelectSimple } from "components";
 import { PayerCotisationAction } from "./payer/PayerCotisationAction";
 import { ListPaiement } from "pages/paiements/rechercher/paiement";
+import { useDroits } from "hooks/useDroits";
 
 type Props = {
   personne: PersonneResource;
@@ -38,10 +39,10 @@ export const PersonneCotisation: FC<Props> = ({ personne }) => {
       value: year,
     };
   });
+  const droits = useDroits();
 
   const { isLoading, data: cotisation } = useQuery({
     queryKey: [QUERY_KEY.cotisations, annee.value, personne.id],
-    networkMode: "offlineFirst",
     queryFn: () => {
       return personneApi.findCotisation(personne.id, annee.value);
     },
@@ -52,6 +53,10 @@ export const PersonneCotisation: FC<Props> = ({ personne }) => {
     <>
       <ListGroup>
         <ListGroup.Item className="d-flex align-items-center bg-gray-100">
+          <span>
+            <Icon.Cash size="1.2rem" className="me-1" />
+            <span className="fs-5">Cotisation</span>
+          </span>
           <div className="ms-auto d-block d-flex">
             <AsyncSelectSimple
               name="year"
@@ -59,7 +64,7 @@ export const PersonneCotisation: FC<Props> = ({ personne }) => {
               onChange={setAnnee}
               fetchOptions={fetchYears}
             />
-            {cotisation && (
+            {cotisation && droits.cotisation.paiements.creer && (
               <PayerCotisationAction annee={annee.value} personne={personne} />
             )}
           </div>
@@ -79,13 +84,10 @@ export const PersonneCotisation: FC<Props> = ({ personne }) => {
       </ListGroup>
       {!isLoading && (
         <ListGroup className="mt-2 mb-3">
-          <ListGroup.Item className="d-flex align-items-center bg-gray-100 py-2">
-            <span>
-              <Icon.ListCheck size="1.1rem" className="me-1" />
-              <span className="fs-5">Paiements effectués</span>
-            </span>
+          <ListGroup.Item className="d-flex align-items-center bg-gray-100">
+            <Icon.ListCheck size="1.2rem" className="me-1" />
+            <span className="fs-5">Paiements effectués</span>
           </ListGroup.Item>
-
           <ListPaiement paiements={cotisation?.paiements} />
         </ListGroup>
       )}

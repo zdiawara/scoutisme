@@ -61,6 +61,26 @@ Select.defaultProps = {
   isClearable: true,
 };
 
+const Option = (props: any) => {
+  const { innerProps, innerRef } = props;
+  const { label, subtitle } = props.data;
+
+  return (
+    <div
+      ref={innerRef}
+      {...innerProps}
+      style={{
+        backgroundColor: props.isFocused ? "#e9ecef" : "white", // Bootstrap's 'light' background
+        cursor: "pointer",
+      }}
+      className="border-bottom px-2 py-2"
+    >
+      {label}
+      {subtitle && <div className="fw-light fs-6">{subtitle}</div>}
+    </div>
+  );
+};
+
 export const AsyncSelect: FC<AsyncSelectProps> = ({
   label,
   placeholder,
@@ -119,26 +139,7 @@ export const AsyncSelect: FC<AsyncSelectProps> = ({
                 onChange(newValue, action);
                 afterSelected && afterSelected(newValue);
               }}
-              // components={{
-              //   Option: (props) => {
-              //     const { innerProps, innerRef } = props;
-              //     const { label, imageUrl, category, stock } = props.data;
-              //     return (
-              //       <div
-              //         ref={innerRef}
-              //         {...innerProps}
-              //         style={{
-              //           backgroundColor: props.isFocused ? "#e9ecef" : "white", // Bootstrap's 'light' background
-              //           cursor: "pointer",
-              //         }}
-              //         className="border-bottom px-2 py-2"
-              //       >
-              //         {label}
-              //         <div className="fw-light fs-6">Unité</div>
-              //       </div>
-              //     );
-              //   },
-              // }}
+              components={{ Option }}
               className={classNames("react-select", {
                 "is-invalid": !!error,
               })}

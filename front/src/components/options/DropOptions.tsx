@@ -9,6 +9,7 @@ type DropOptionProps = {
     description: string;
     code: string;
     Icon: any;
+    disabled?: boolean;
   }>;
   onSelect: (action: string) => void;
   variant?: ButtonVariant;
@@ -48,6 +49,7 @@ export const DropOption: FC<DropOptionProps> = ({
                 as="button"
                 className="px-3"
                 onClick={() => onSelect(item.code)}
+                disabled={item.disabled}
               >
                 <item.Icon size="1.1rem" className="me-1" />
                 <span className="fw-semibold">{item.label}</span>

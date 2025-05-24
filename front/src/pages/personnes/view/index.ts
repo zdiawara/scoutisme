@@ -1,2 +1,2 @@
 export * from "./PersonneBox";
-export * from "./PersonneFonctions";
+export * from "../consultation/fonction/PersonneFonctions";

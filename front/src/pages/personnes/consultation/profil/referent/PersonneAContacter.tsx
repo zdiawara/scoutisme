@@ -5,6 +5,7 @@ import { View } from "components";
 import { PersonneResource } from "types/personne.type";
 import useToggle from "hooks/useToggle";
 import { EditPersonneAContacter } from "./EditPersonneAContacter";
+import { useDroits } from "hooks/useDroits";
 
 type PersonneCoordonneeProps = {
   personne: PersonneResource;
@@ -14,20 +15,22 @@ export const PersonneAContacter: FC<PersonneCoordonneeProps> = ({
   personne,
 }) => {
   const [show, toggleForm] = useToggle();
+  const droits = useDroits();
   return (
     <>
       <View.Toolbar
         icon={<Icon.Person size="1.1rem" className="me-1" />}
         label="Personne à contacter"
         right={
-          <Button
-            size="sm"
-            variant="secondary"
-            onClick={() => toggleForm()}
-            disabled={show}
-          >
-            <Icon.Pencil />
-          </Button>
+          droits.personne.modifier(personne) && (
+            <Button
+              variant="secondary"
+              onClick={() => toggleForm()}
+              disabled={show}
+            >
+              <Icon.Pencil />
+            </Button>
+          )
         }
       />
       {show ? (

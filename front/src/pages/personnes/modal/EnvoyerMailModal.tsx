@@ -21,7 +21,7 @@ const Form: FC<WrapperV2Props> = (props) => {
         size: "lg",
       }}
     >
-      <Alert variant="info">
+      <Alert variant="secondary">
         {/* <Alert.Heading>Informations</Alert.Heading> */}
         <p className="m-0">
           Ce mail sera envoyé aux personnes présentes dans le tableau de

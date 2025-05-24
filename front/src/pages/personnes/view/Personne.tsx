@@ -17,7 +17,7 @@ import * as Icon from "react-bootstrap-icons";
 import { PersonneProfil } from "../consultation/profil";
 import { PersonneCarte } from "../consultation/carte";
 import { PersonneCotisation } from "../consultation/cotisation";
-import { PersonneFonctions } from "./PersonneFonctions";
+import { PersonneFonctions } from "../consultation/fonction/PersonneFonctions";
 import { Header } from "layout/Header";
 
 type PersonneProps = {
@@ -33,6 +33,12 @@ export const Personne: FC<PersonneProps> = ({ personneId, title }) => {
   const navigation = useNavigate();
   const location = useLocation();
 
+  const { data: personne, isLoading } = useQuery({
+    queryKey: [QUERY_KEY.personnes, personneId],
+    queryFn: ({ queryKey }) =>
+      personneApi.findById<PersonneResource>(queryKey[1] as string),
+  });
+
   const menus = useMemo(() => {
     return [
       {
@@ -45,29 +51,23 @@ export const Personne: FC<PersonneProps> = ({ personneId, title }) => {
         label: "Carte",
         code: "carte",
         icon: "mdi mdi-card-account-details-outline",
-        visible: true,
+        visible: protection.personne.affecter(personne),
         Icon: Icon.PersonVcard,
       },
       {
-        label: "Fonction",
+        label: "Fonctions",
         code: "fonctions",
         Icon: Icon.Briefcase,
         visible: true,
       },
       {
-        label: "Cotisation",
+        label: "Cotisations",
         code: "cotisations",
         Icon: Icon.Bank2,
         visible: protection.cotisation.acces,
       },
     ].filter((e) => e.visible);
-  }, [protection.cotisation.acces]);
-
-  const { data: personne, isLoading } = useQuery({
-    queryKey: [QUERY_KEY.personnes, personneId],
-    queryFn: ({ queryKey }) =>
-      personneApi.findById<PersonneResource>(queryKey[1] as string),
-  });
+  }, [protection, personne]);
 
   const onSelectPage = (pageSelected: string) => () => {
     navigation(`${location.pathname}?p=${pageSelected}`, {
@@ -109,7 +109,7 @@ export const Personne: FC<PersonneProps> = ({ personneId, title }) => {
             href="#"
             className="d-flex align-items-center"
           >
-            <item.Icon size="1.1rem" className="me-1" />
+            <item.Icon size="1.2rem" className="me-1" />
             {item.label}
           </Nav.Link>
         </Nav.Item>

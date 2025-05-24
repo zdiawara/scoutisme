@@ -18,7 +18,6 @@ export const ListOrganisationScoutActions: FC<Props> = ({ organisation }) => {
   return (
     <>
       <Button
-        size="sm"
         variant="secondary"
         className="ms-1"
         onClick={() => {

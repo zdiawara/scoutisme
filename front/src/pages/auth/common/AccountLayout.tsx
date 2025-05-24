@@ -1,7 +1,5 @@
 import React from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import Logo from "assets/images/logo.png";
 
 type AccountLayoutProps = {
   bottomLinks?: React.ReactNode;
@@ -17,12 +15,8 @@ const AccountLayout = ({ bottomLinks, children }: AccountLayoutProps) => {
             <Col md={8} lg={6} xl={5} xxl={4}>
               <Card>
                 {/* logo */}
-                <Card.Header className="pt-4 pb-4 text-center bg-primary">
-                  <Link to="/">
-                    <span>
-                      <img src={Logo} alt="" height="18" />
-                    </span>
-                  </Link>
+                <Card.Header className="pt-3 pb-3 text-center bg-primary">
+                  <div className="text-white fs-3">ASBF</div>
                 </Card.Header>
                 <Card.Body className="p-4">{children}</Card.Body>
               </Card>
@@ -33,7 +27,6 @@ const AccountLayout = ({ bottomLinks, children }: AccountLayoutProps) => {
           </Row>
         </Container>
       </div>
-      <footer className="footer footer-alt">Test</footer>
     </>
   );
 };

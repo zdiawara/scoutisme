@@ -10,14 +10,6 @@ type Props = {
 export const ListPaiement: FC<Props> = ({ paiements }) => {
   if (!paiements?.length) {
     return (
-      <ListGroup.Item className="text-center text-muted">
-        Aucun paiement effectué
-      </ListGroup.Item>
-    );
-  }
-
-  if (!paiements?.length) {
-    return (
       <ListGroup.Item className="fw-light text-center">
         Aucun paiement trouvé
       </ListGroup.Item>

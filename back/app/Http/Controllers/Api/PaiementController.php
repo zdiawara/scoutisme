@@ -32,6 +32,11 @@ class PaiementController extends Controller
 
         $query = Paiement::query();
 
+        if ($request->has("sort")) {
+            $parts = explode(",", $request->get('sort'));
+            $query = $query->orderBy("paiements." . $parts[0], $parts[1] == 'asc' ? 'asc' : 'desc');
+        }
+
         $query->join('cotisations', function ($builder) {
             $builder->on('cotisations.id', 'paiements.cotisation_id');
         });
@@ -67,7 +72,6 @@ class PaiementController extends Controller
 
         $data = $result['query']
             ->select($projection)
-            ->orderBy('paiements.created_at', 'desc')
             ->with(['cotisation.personne', 'valideur', 'createur'])
             ->get();
 

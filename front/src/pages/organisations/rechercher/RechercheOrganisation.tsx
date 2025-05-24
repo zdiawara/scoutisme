@@ -1,16 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { organisationApi } from "api";
-import { useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
 import { OrganisationResource } from "types/organisation.type";
 import { QUERY_KEY } from "utils/constants";
 import { selectHelper } from "utils/functions";
 import { RechercherOrganisationActions } from "./action/RechercherOrganisationActions";
 import { Header } from "layout/Header";
 import { ListGroup, Spinner } from "react-bootstrap";
-import { OrganisationToolbar } from "./toolbar/OrganisationToolbar";
-import { OrganisationItem } from "./organisation/OrganisationItem";
 import { ListResult } from "pages/common";
+import { SearchToolbar } from "pages/common/toolbar";
+import { useSearch } from "hooks/useSearch";
+import useToggle from "hooks/useToggle";
+import { FilterOrganisation } from "./toolbar/FilterOrganisation";
+import { ListOrganisation } from "./organisation/ListOrganisation";
 
 const parseParams = (searchParams: URLSearchParams) => {
   const type = searchParams.get("type");
@@ -45,20 +46,30 @@ const searchOrganisations = ({ queryKey }: any) => {
   );
 };
 
-const RechercherOrganisation = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+const TRIES = [
+  {
+    label: "Nom croissant",
+    code: "nom,asc",
+  },
+  {
+    label: "Nom décroissant",
+    code: "nom,desc",
+  },
+];
 
-  const queryParams = useMemo(() => {
-    return Object.fromEntries(searchParams.entries());
-  }, [searchParams]);
+const RechercherOrganisation = () => {
+  const [showFilter, toggleFilter] = useToggle();
+  const search = useSearch();
+
+  const queryParams = Object.fromEntries(search.searchParams.entries());
+
+  const params = parseParams(search.searchParams);
 
   const query = useQuery({
     queryKey: [QUERY_KEY.organisations, queryParams],
     keepPreviousData: true,
     queryFn: searchOrganisations,
   });
-
-  const params = useMemo(() => parseParams(searchParams), [searchParams]);
 
   const organisations = query.data?.data;
   const meta = query.data?.meta;
@@ -75,10 +86,12 @@ const RechercherOrganisation = () => {
       />
 
       <ListGroup className="mt-4">
-        <OrganisationToolbar
+        <SearchToolbar
+          tries={TRIES}
           isFetching={query.isFetching && !query.isLoading}
-          nombreResultat={query.data?.meta.total}
-          searchParams={params}
+          toggleFilter={toggleFilter}
+          searchParams={search.searchParams}
+          nombreResultat={meta?.total}
         />
 
         {query.isLoading ? (
@@ -88,19 +101,8 @@ const RechercherOrganisation = () => {
             </Spinner>
             <span className="fw-light">chargement ...</span>
           </ListGroup.Item>
-        ) : organisations?.length ? (
-          organisations?.map((organisation) => (
-            <ListGroup.Item
-              className="d-flex justify-content-between align-items-start px-2 px-sm-4"
-              key={organisation.id}
-            >
-              <OrganisationItem organisation={organisation} />
-            </ListGroup.Item>
-          ))
         ) : (
-          <ListGroup.Item className="fw-light text-center">
-            Aucune personne trouvée
-          </ListGroup.Item>
+          <ListOrganisation organisations={organisations} />
         )}
       </ListGroup>
 
@@ -109,18 +111,19 @@ const RechercherOrganisation = () => {
           pageCount={meta.total_page}
           pageActive={parseInt(params.page) - 1}
           total={meta.total}
-          onPageChange={(pageNumber) => {
-            setSearchParams(
-              (prevParams) => {
-                const params = new URLSearchParams(prevParams);
-                params.set("page", (pageNumber + 1).toString());
-                return params;
-              },
-              { replace: true }
-            );
+          onPageChange={search.setPageNumber}
+        />
+      )}
 
-            window.scroll({ top: 0 });
+      {showFilter && (
+        <FilterOrganisation
+          applyFiler={(data) => {
+            search.onChangeFilter(data);
+            toggleFilter();
           }}
+          defaultValues={search.searchParams}
+          close={toggleFilter}
+          show
         />
       )}
     </>

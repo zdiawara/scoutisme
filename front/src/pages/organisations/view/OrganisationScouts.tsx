@@ -16,7 +16,6 @@ export const OrganisationScouts: FC<OrganisationScoutsProps> = ({
 }) => {
   const query = useQuery({
     queryKey: [QUERY_KEY.scouts, organisation.id],
-    networkMode: "offlineFirst",
     queryFn: () =>
       attributionApi
         .findAll<AttributionResource>({
@@ -28,47 +27,10 @@ export const OrganisationScouts: FC<OrganisationScoutsProps> = ({
 
   return (
     <>
-      {/* <StaticTable<AttributionResource>
-      header={{
-        icon: ICONS.personne,
-        label: "Scouts",
-        description: "Les scouts de l'unité",
-      }}
-      data={data}
-      search={{
-        onSearch: searchByCriteres,
-        placeholder: "",
-      }}
-      columns={columns}
-      isLoading={query.isLoading}
-      error={query.error}
-      actions={<OrganisationScoutActions organisation={organisation} />}
-    /> */}
       <ListGroup className="mb-3">
         <ListGroup.Item className="d-flex align-items-center bg-gray-100">
-          {/* <div>
-                <Icon.InfoCircle size="1.1rem" className="me-1" />
-                <span className="fs-5">Organe de direction</span>
-              </div> */}
-          {/* <InputGroup className="me-1">
-            <Form.Control
-              className="text-black"
-              placeholder="Rechercher"
-              size="sm"
-            />
-            <Button variant="outline-primary" size="sm">
-              <Icon.XLg />
-            </Button>
-          </InputGroup> */}
-          <Form.Control
-            className="text-black me-2"
-            placeholder="Rechercher"
-            // size="sm"
-          />
+          <Form.Control className="text-black me-2" placeholder="Rechercher" />
           <div className="ms-auto d-flex">
-            {/* <Button size="sm" variant="outline-primary me-1">
-              <Icon.Search />
-            </Button> */}
             <Button className="me-1" variant="outline-primary">
               <Icon.PlusLg />
             </Button>

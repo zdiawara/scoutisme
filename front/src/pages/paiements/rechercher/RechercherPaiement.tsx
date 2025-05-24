@@ -24,7 +24,7 @@ const parseParams = (searchParams: URLSearchParams) => {
     search: searchParams.get("search"),
     page: searchParams.get("page") || "1",
     size: searchParams.get("size") || "10",
-    sort: searchParams.get("sort") || "nom,asc",
+    sort: searchParams.get("sort") || "created_at,asc",
   };
 };
 
@@ -35,18 +35,18 @@ const buildRequestParams = (filter: Record<string, any>) => {
     search: filter.search,
     page: parseInt(filter.page) || 1,
     size: parseInt(filter.size) || 10,
-    sort: filter.sort || "nom,asc",
+    sort: filter.sort || "created_at,asc",
   };
 };
 
 const ACTIONS = [
   {
     label: "Date soumission croissante",
-    code: "date_soumission,asc",
+    code: "created_at,asc",
   },
   {
     label: "Date soumission décroissante",
-    code: "date_soumission,desc",
+    code: "created_at,desc",
   },
 ];
 
@@ -96,6 +96,7 @@ const RechercherPaiement: FC = () => {
             }}
             defaultValues={searchParams}
             close={toggleFilter}
+            show
           />
         )}
 

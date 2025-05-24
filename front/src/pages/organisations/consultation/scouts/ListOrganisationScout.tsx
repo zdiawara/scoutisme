@@ -51,7 +51,7 @@ export const ListOrganisationScout: FC<Props> = ({ organisation }) => {
 
   return (
     <>
-      <ListGroup className="mb-3 shadow-sm">
+      <ListGroup className="mb-3">
         <View.Toolbar
           right={<ListOrganisationScoutActions organisation={organisation} />}
         >
@@ -60,7 +60,6 @@ export const ListOrganisationScout: FC<Props> = ({ organisation }) => {
               placeholder="Rechercher ..."
               onChange={(e) => setSearchText(e.target.value)}
               value={searchText}
-              size="sm"
             />
           </div>
         </View.Toolbar>

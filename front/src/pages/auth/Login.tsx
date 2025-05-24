@@ -13,15 +13,6 @@ export type UserData = {
 };
 
 const Login = () => {
-  /*   const {
-    loading,
-    userLoggedIn,
-    user,
-    error,
-    schemaResolver,
-    onSubmit,
-    redirectUrl,
-  } = useLogin(); */
   const auth = useAuth();
   const navigate = useNavigate();
 

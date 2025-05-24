@@ -21,7 +21,6 @@ const AccountLayout = ({ bottomLinks, children }: AccountLayoutProps) => {
                 <Card.Body className="p-4">{children}</Card.Body>
               </Card>
 
-              {/* bottom links */}
               {bottomLinks}
             </Col>
           </Row>

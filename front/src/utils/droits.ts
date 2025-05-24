@@ -29,6 +29,14 @@ export class UserDroit {
     return this.menus.includes(codeMenu);
   }
 
+  public hasOnlyPerimetre(perimetre: string) {
+    return this.perimetres.length === 1 && this.perimetres.includes(perimetre);
+  }
+
+  public hasOnlyPerimetreUnite() {
+    return this.hasOnlyPerimetre("unite");
+  }
+
   public has(keys: string[], droit: string): boolean {
     if (this.isAdmin) {
       return true;

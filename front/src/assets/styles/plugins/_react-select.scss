@@ -42,7 +42,10 @@
 .react-select__option {
   padding: $dropdown-item-padding-y $dropdown-item-padding-x !important;
   color: $dropdown-link-color !important;
-
+  border-bottom: 1px solid #{map-get($grays, "200")};
+  &:last-child {
+    border-bottom: 0;
+  }
   &:hover {
     color: $dropdown-link-hover-color !important;
     background-color: $dropdown-link-hover-bg !important;

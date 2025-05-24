@@ -119,6 +119,26 @@ export const AsyncSelect: FC<AsyncSelectProps> = ({
                 onChange(newValue, action);
                 afterSelected && afterSelected(newValue);
               }}
+              // components={{
+              //   Option: (props) => {
+              //     const { innerProps, innerRef } = props;
+              //     const { label, imageUrl, category, stock } = props.data;
+              //     return (
+              //       <div
+              //         ref={innerRef}
+              //         {...innerProps}
+              //         style={{
+              //           backgroundColor: props.isFocused ? "#e9ecef" : "white", // Bootstrap's 'light' background
+              //           cursor: "pointer",
+              //         }}
+              //         className="border-bottom px-2 py-2"
+              //       >
+              //         {label}
+              //         <div className="fw-light fs-6">Unité</div>
+              //       </div>
+              //     );
+              //   },
+              // }}
               className={classNames("react-select", {
                 "is-invalid": !!error,
               })}

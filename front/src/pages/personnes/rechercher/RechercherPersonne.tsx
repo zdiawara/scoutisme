@@ -12,6 +12,7 @@ import { PersonneToolbar } from "./toolbar/PersonneToolbar";
 import { selectHelper } from "utils/functions";
 import { PersonneItem } from "./personne/PersonneItem";
 import { RechercherPersonneActions } from "./action/RechercherPersonneActions";
+import { useAuth } from "hooks";
 
 const parseParams = (searchParams: URLSearchParams) => {
   const ville = searchParams.get("ville");
@@ -59,15 +60,16 @@ const buildRequestParams = (filter: Record<string, any>) => {
     page: parseInt(filter.page) || 1,
     size: parseInt(filter.size) || 10,
     sort: filter.sort || "nom,asc",
+    perimetres: "",
   };
-};
-
-const searchPersonne = ({ queryKey }: any) => {
-  return personneApi.findAll<PersonneResource>(buildRequestParams(queryKey[1]));
 };
 
 const RechercherPersonne = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const auth = useAuth();
+  const isAdmin = auth.userDroit?.isAdmin;
+  const personne = auth.user?.personne;
 
   const queryParams = useMemo(() => {
     return Object.fromEntries(searchParams.entries());
@@ -76,6 +78,19 @@ const RechercherPersonne = () => {
   const params = useMemo(() => {
     return parseParams(searchParams);
   }, [searchParams]);
+
+  const searchPersonne = ({ queryKey }: any) => {
+    const filterParams = buildRequestParams(queryKey[1]);
+    if (
+      !isAdmin &&
+      personne?.organisation?.id &&
+      !filterParams.organisationId
+    ) {
+      filterParams.organisationId = personne?.organisation?.id;
+      filterParams.perimetres = (auth.user?.role?.perimetres || []).join(";");
+    }
+    return personneApi.findAll<PersonneResource>(filterParams);
+  };
 
   const query = useQuery({
     queryKey: [QUERY_KEY.personnes, queryParams],

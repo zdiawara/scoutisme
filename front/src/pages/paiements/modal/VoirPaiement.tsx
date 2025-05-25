@@ -1,6 +1,6 @@
 import { MontantFormatText, View } from "components";
 import { FC } from "react";
-import { Button, Col, ListGroup, Modal, Row } from "react-bootstrap";
+import { Button, Col, ListGroup, Modal, Row, Stack } from "react-bootstrap";
 import { PaiementResource } from "types/personne.type";
 import { EtatPaiement } from "../common";
 import { DateFormater } from "utils/DateUtils";
@@ -17,9 +17,6 @@ export const VoirPaiementModal: FC<ModalProps> = ({ closeModal, paiement }) => {
         <Modal.Title className="text-primary">
           Paiement N° {paiement.numero}
         </Modal.Title>
-        {/* <div className="ms-2">
-          {personne?.nom} {personne?.prenom}
-        </div> */}
       </Modal.Header>
       <Modal.Body className="bg-gray-100">
         <ListGroup>
@@ -30,37 +27,37 @@ export const VoirPaiementModal: FC<ModalProps> = ({ closeModal, paiement }) => {
               </Col>
               <Col xs={6}>
                 <View.Item label="Montant">
-                  <MontantFormatText value={paiement.montant} withDevise />
+                  <Stack direction="horizontal">
+                    <MontantFormatText value={paiement.montant} withDevise />
+                    &nbsp;
+                    <EtatPaiement etat={paiement.etat} />
+                  </Stack>
                 </View.Item>
               </Col>
             </Row>
           </ListGroup.Item>
           <ListGroup.Item>
             <Row className="g-3">
-              <Col xs={6}>
+              <Col xs={12}>
                 <View.Item label="Date soumission">
-                  {DateFormater.toDateTextTime(paiement.created_at)}
+                  {DateFormater.toDateTextTime(paiement.created_at)}&nbsp;
+                  {paiement.createur?.name && (
+                    <>Par {paiement.createur?.name}</>
+                  )}
                 </View.Item>
-              </Col>
-              <Col xs={6}>
-                <View.Item label="Par">{paiement.createur?.name}</View.Item>
               </Col>
             </Row>
           </ListGroup.Item>
           <ListGroup.Item>
-            <View.Item label="Etat">
-              <EtatPaiement etat={paiement.etat} />
-            </View.Item>
-          </ListGroup.Item>
-          <ListGroup.Item>
             <Row className="g-3">
-              <Col xs={6}>
+              <Col xs={12}>
                 <View.Item label="Date traitement">
-                  {DateFormater.toDateTextTime(paiement.date_traitement)}
+                  {DateFormater.toDateTextTime(paiement.date_traitement) || "-"}
+                  &nbsp;
+                  {paiement.valideur?.name && (
+                    <>Par {paiement.valideur?.name}</>
+                  )}
                 </View.Item>
-              </Col>
-              <Col xs={6}>
-                <View.Item label="par">{paiement.valideur?.name}</View.Item>
               </Col>
             </Row>
           </ListGroup.Item>

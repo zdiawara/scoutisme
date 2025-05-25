@@ -1,7 +1,7 @@
 import { FC, forwardRef, Fragment } from "react";
 import { Button, Dropdown } from "react-bootstrap";
-import { ThreeDotsVertical } from "react-bootstrap-icons";
 import { ButtonVariant } from "react-bootstrap/esm/types";
+import * as Icon from "react-bootstrap-icons";
 
 type DropOptionProps = {
   actions: Array<{
@@ -13,10 +13,11 @@ type DropOptionProps = {
   }>;
   onSelect: (action: string) => void;
   variant?: ButtonVariant;
+  menu?: boolean;
 };
 
 const CustomToggle = forwardRef(
-  ({ onClick, variant = "default" }: any, ref) => (
+  ({ onClick, variant = "default", menu = true }: any, ref) => (
     <Button
       // @ts-ignore
       ref={ref}
@@ -24,11 +25,16 @@ const CustomToggle = forwardRef(
         e.preventDefault();
         onClick(e);
       }}
-      // size="sm"
-      // variant="default"
       variant={variant}
     >
-      <ThreeDotsVertical />
+      {menu ? (
+        <Icon.ThreeDotsVertical />
+      ) : (
+        <>
+          <span className="d-none d-sm-inline me-1">Actions</span>
+          <Icon.ChevronDown />
+        </>
+      )}
     </Button>
   )
 );
@@ -37,11 +43,12 @@ export const DropOption: FC<DropOptionProps> = ({
   actions,
   onSelect,
   variant = "default",
+  menu,
 }) => {
   return (
     <>
       <Dropdown>
-        <Dropdown.Toggle variant={variant} as={CustomToggle} />
+        <Dropdown.Toggle variant={variant} menu={menu} as={CustomToggle} />
         <Dropdown.Menu className="topbar-dropdown-menu border shadow-lg">
           {actions.map((item, i) => (
             <Fragment key={item.code}>

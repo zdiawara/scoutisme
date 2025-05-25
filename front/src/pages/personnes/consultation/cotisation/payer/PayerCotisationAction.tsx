@@ -15,7 +15,6 @@ export const PayerCotisationAction: FC<PayerCotisationActionProps> = ({
   annee,
 }) => {
   const [action, setAction] = useState<string | undefined>();
-  // const { cotisation } = useDroits();
   const closeModal = () => {
     setAction(undefined);
   };
@@ -24,9 +23,6 @@ export const PayerCotisationAction: FC<PayerCotisationActionProps> = ({
     setAction(code);
   };
 
-  // if (!cotisation.paiements.creer) {
-  //   return null;
-  // }
   return (
     <>
       <Button

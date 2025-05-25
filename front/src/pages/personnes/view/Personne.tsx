@@ -19,6 +19,7 @@ import { PersonneCarte } from "../consultation/carte";
 import { PersonneCotisation } from "../consultation/cotisation";
 import { PersonneFonctions } from "../consultation/fonction/PersonneFonctions";
 import { Header } from "layout/Header";
+import { ConsulterPersonneActions } from "../consultation/action";
 
 type PersonneProps = {
   personneId: string;
@@ -119,7 +120,10 @@ export const Personne: FC<PersonneProps> = ({ personneId, title }) => {
 
   return (
     <>
-      <Header title={title} />
+      <Header
+        title={title}
+        right={<ConsulterPersonneActions personne={personne} />}
+      />
 
       <Stack direction="horizontal" className="mt-4">
         <div className="avatar-lg">
@@ -166,13 +170,9 @@ export const Personne: FC<PersonneProps> = ({ personneId, title }) => {
         </ListGroup.Item>
         <ListGroup.Item>
           <Row className="g-3">
-            <Col xs={12}>
+            <Col xs={6}>
               <View.Item label="Fonction">{personne.fonction?.nom}</View.Item>
             </Col>
-          </Row>
-        </ListGroup.Item>
-        <ListGroup.Item>
-          <Row className="g-3">
             <Col xs={6}>
               <View.Item label="Organisation">
                 {personne?.organisation && (
@@ -186,24 +186,13 @@ export const Personne: FC<PersonneProps> = ({ personneId, title }) => {
                 )}
               </View.Item>
             </Col>
-            <Col xs={6}>
-              <View.Item label="Nature">
-                <Badge bg="secondary">
-                  {personne.organisation?.nature?.nom}
-                </Badge>
-              </View.Item>
-            </Col>
           </Row>
         </ListGroup.Item>
       </ListGroup>
 
       <Row className="g-2">
         <Col xs={12} sm={12}>
-          {/* <Card className="d-sm-block d-none">
-            <Card.Header>Menu</Card.Header>
-            <Card.Body className="p-1">{menu}</Card.Body>
-          </Card> */}
-          <div className="d-sm-nones">{menu}</div>
+          {menu}
         </Col>
         <Col xs={12} sm={12}>
           {renderContent()}

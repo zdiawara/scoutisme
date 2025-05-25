@@ -56,11 +56,7 @@ export const ProfilDropdown = () => {
           <div onClick={() => {}}>
             {ACTIONS.map((item) => {
               return (
-                <Link
-                  to={item.code}
-                  className="dropdown-item notify-item"
-                  key={item.code}
-                >
+                <Link to={item.code} className="dropdown-item" key={item.code}>
                   <item.Icon className="me-2" />
                   <span>{item.label}</span>
                 </Link>

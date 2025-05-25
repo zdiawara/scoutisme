@@ -18,7 +18,7 @@ class CotisationService
     {
         $cotisation = Cotisation::where('annee', $annee)
             ->where('personne_id', $personneId)
-            ->with(['paiements'])
+            ->with(['paiements.createur', 'paiements.valideur'])
             ->first();
         return $cotisation;
     }

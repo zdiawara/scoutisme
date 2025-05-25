@@ -33,7 +33,7 @@ class CotisationController extends Controller
 
         $data = $result['query']
             ->orderBy('created_at', 'desc')
-            ->with(['personne'])
+            ->with(['personne', 'paiements.createur', 'paiements.valideur'])
             ->get();
 
         return [

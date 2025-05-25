@@ -37,7 +37,7 @@ export const PaiementActions: FC<PaiementActionsProps> = ({ paiement }) => {
         description: "Rejeter le paiement",
         code: "rejeter",
         visible: cotisation.paiements.rejeter,
-
+        disabled: paiement.etat === "valide",
         Icon: Icon.XLg,
       },
       {

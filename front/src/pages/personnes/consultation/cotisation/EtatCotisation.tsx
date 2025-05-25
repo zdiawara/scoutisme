@@ -10,9 +10,7 @@ type EtatCotisationProps = {
 export const EtatCotisation: FC<EtatCotisationProps> = ({ cotisation }) => {
   const montantPaye = cotisation.paiements
     .filter(({ etat }) => etat !== "rejet")
-    .reduce((prev, curr) => {
-      return curr.montant + prev;
-    }, 0);
+    .reduce((prev, curr) => curr.montant + prev, 0);
 
   return (
     <>

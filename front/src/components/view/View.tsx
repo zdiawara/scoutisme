@@ -21,7 +21,7 @@ const Item: FC<ItemProps> = ({ label, children }) => {
       {children === undefined || children === null || children === "" ? (
         <Empty />
       ) : (
-        <div className="m-0 text-black fw-bold">{children}</div>
+        <div className="m-0 text-black fw-semibold">{children}</div>
       )}
     </>
   );

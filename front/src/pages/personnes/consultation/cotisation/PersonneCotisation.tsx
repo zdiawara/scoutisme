@@ -43,9 +43,7 @@ export const PersonneCotisation: FC<Props> = ({ personne }) => {
 
   const { isLoading, data: cotisation } = useQuery({
     queryKey: [QUERY_KEY.cotisations, annee.value, personne.id],
-    queryFn: () => {
-      return personneApi.findCotisation(personne.id, annee.value);
-    },
+    queryFn: () => personneApi.findCotisation(personne.id, annee.value),
     select: ({ data }) => data,
   });
 
@@ -54,7 +52,7 @@ export const PersonneCotisation: FC<Props> = ({ personne }) => {
       <ListGroup>
         <ListGroup.Item className="d-flex align-items-center bg-gray-100">
           <span>
-            <Icon.Cash size="1.2rem" className="me-1" />
+            <Icon.Back size="1.2rem" className="me-1" />
             <span className="fs-5">Cotisation</span>
           </span>
           <div className="ms-auto d-block d-flex">

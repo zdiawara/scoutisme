@@ -30,12 +30,13 @@ class PaiementService
     public function create(string $cotisationId, $montant)
     {
         $cotisation = Cotisation::findOrFail($cotisationId);
+        $user = Auth()->user();
 
         Paiement::create([
             'cotisation_id' => $cotisation->id,
             'montant' => $montant,
             'etat' => 'en_attente',
-            'numero' => UniqueIdGenerator::generate($this->config)
+            'numero' => UniqueIdGenerator::generate($this->config),
         ]);
 
         return $cotisation;

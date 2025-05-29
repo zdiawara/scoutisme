@@ -1,0 +1,139 @@
+import { useQuery } from "@tanstack/react-query";
+import { fonctionApi } from "api";
+import { FC, useState } from "react";
+import { Button, ListGroup } from "react-bootstrap";
+import { QUERY_KEY } from "utils/constants";
+import { Header } from "layout/Header";
+import * as Icon from "react-bootstrap-icons";
+import { LoaderSpinner } from "components/loader";
+import { ListFonction } from "./list";
+import { FonctionResource } from "types/personne.type";
+import { useSearch } from "hooks/useSearch";
+import { RequestParam } from "types/request.type";
+import { selectHelper } from "utils/functions";
+import { SearchToolbar } from "pages/common/toolbar";
+import useToggle from "hooks/useToggle";
+import { FilterFonction } from "./filter/FilterFonction";
+import { EditFonction } from "../edit/EditFonction";
+import { ListResult } from "pages/common";
+
+type Action = {
+  code: "create" | "edit";
+  selected?: FonctionResource;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const searchFonctions = ({ queryKey }: any) =>
+  fonctionApi.findAll<FonctionResource>(buildRequestParams(queryKey[1] as RequestParam));
+
+const parseParams = (searchParams: URLSearchParams) => {
+  const perimetre = searchParams.get("perimetre");
+
+  return {
+    perimetre: perimetre ? JSON.parse(perimetre) : null,
+
+    search: searchParams.get("search"),
+    page: searchParams.get("page") || "1",
+    size: searchParams.get("size") || "10",
+    sort: searchParams.get("sort") || "nom,asc",
+  };
+};
+
+const buildRequestParams = (filter: RequestParam) => {
+  return {
+    nature: selectHelper.getValueFromJson(filter.perimetre),
+
+    search: filter.search,
+    page: parseInt(filter.page as string) || 1,
+    size: parseInt(filter.size as string) || 10,
+    sort: filter.sort || "nom,asc",
+  };
+};
+
+const TRIES = [
+  {
+    label: "Nom croissant",
+    code: "nom,asc",
+  },
+  {
+    label: "Nom décroissante",
+    code: "nom,desc",
+  },
+];
+
+const RechercherFonction: FC = () => {
+  const search = useSearch();
+  const searchParams = parseParams(search.searchParams);
+  const [showFilter, toggleFilter] = useToggle();
+
+  const query = useQuery({
+    queryKey: [QUERY_KEY.fonctions, search.queryParams],
+    keepPreviousData: true,
+    queryFn: searchFonctions,
+  });
+
+  const [action, setAction] = useState<Action | undefined>();
+
+  const editFormation = (selected: FonctionResource) => {
+    setAction({
+      code: "edit",
+      selected,
+    });
+  };
+
+  const actions = (
+    <Button variant="secondary" onClick={() => setAction({ code: "create" })}>
+      <Icon.PlusLg /> <span className="d-none d-sm-inline-block">Ajouter une fonction</span>
+    </Button>
+  );
+
+  const meta = query.data?.meta;
+
+  return (
+    <>
+      <Header title="Fonctions" right={actions} />
+
+      <ListGroup className="mt-4">
+        <SearchToolbar
+          isFetching={query.isFetching && !query.isLoading}
+          searchParams={searchParams}
+          nombreResultat={meta?.total}
+          toggleFilter={toggleFilter}
+          tries={TRIES}
+        />
+        {query.isLoading ? (
+          <ListGroup.Item className="text-center">
+            <LoaderSpinner />
+          </ListGroup.Item>
+        ) : (
+          <ListFonction editFormation={editFormation} fonctions={query.data?.data} />
+        )}
+      </ListGroup>
+
+      {showFilter && (
+        <FilterFonction
+          applyFiler={(data) => {
+            search.onChangeFilter(data);
+            toggleFilter();
+          }}
+          defaultValues={searchParams}
+          close={toggleFilter}
+          show
+        />
+      )}
+
+      {action && <EditFonction closeModal={() => setAction(undefined)} fonction={action.selected} />}
+
+      {meta && (
+        <ListResult.Paginate
+          pageCount={meta.total_page}
+          pageActive={parseInt(searchParams.page) - 1}
+          total={meta.total}
+          onPageChange={search.setPageNumber}
+        />
+      )}
+    </>
+  );
+};
+
+export default RechercherFonction;

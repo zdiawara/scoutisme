@@ -1,0 +1,22 @@
+.dropdown-profile {
+  .dropdown-toggle::after {
+    display: none;
+  }
+}
+.nav-user {
+  text-align: left !important;
+  position: relative;
+  border-width: 0 1px;
+
+  .account-user-avatar {
+    img {
+      height: 40px;
+      width: 40px;
+    }
+  }
+  .account-position {
+    display: block;
+    font-size: 12px;
+    margin-top: -3px;
+  }
+}

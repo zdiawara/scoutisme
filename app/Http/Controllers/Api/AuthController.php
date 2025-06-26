@@ -5,8 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Http\Services\UserService;
+use App\Models\Personne;
+use App\Models\Role;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -20,13 +25,44 @@ class AuthController extends Controller
         //$this->middleware('auth:api', ['except' => ['login']]);
     }
 
+    public function authLogin()
+    {
+        return redirect()->intended('/');
+    }
+
     public function register(Request $request)
     {
 
-        $user = User::create(array_merge(
-            $request->all(),
-            ['password' => bcrypt('secret')]
-        ));
+        DB::beginTransaction();
+        $inputs = $request->validate([
+            'code' => ['required'],
+            'password' => ['required']
+        ]);
+
+        $code = $inputs['code'];
+
+        $message = $this->checkCode($code);
+
+        if (isset($message)) {
+            return response()->json(['errors' => ['message' => [$message]]], 422);
+        }
+
+        $personne = Personne::where('code', $code)
+            ->first();
+
+        $user = User::create([
+            'password' => bcrypt($inputs['password']),
+            'name' => $personne->prenom . ' ' . $personne->nom,
+            'email' => $personne->email,
+            'personne_id' => $personne->id
+        ]);
+
+        // Déclencher l'événement Registered pour envoyer l'e-mail de vérification
+        event(new Registered($user));
+
+        Auth::login($user);
+
+        DB::commit();
 
         return response()->json([
             'message' => 'User successfully registered',
@@ -39,15 +75,21 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login()
+    public function login(Request $request)
     {
-        $credentials = request(['email', 'password']);
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
 
-        if (!$token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        if (Auth::attempt($credentials)) {
+            $user = User::where('email', $request->input('email'))
+                ->first();
+            Auth::login($user);
+            $request->session()->regenerate();
+            return redirect()->intended('/');
         }
-
-        return $this->respondWithToken($token);
+        return response()->json(['error' => 'Unauthorized'], 401);
     }
 
     /**
@@ -57,53 +99,109 @@ class AuthController extends Controller
      */
     public function me(UserService $userService)
     {
-        $user = auth()->user();
+        $user =  Auth::user();
 
         if (!isset($user)) {
             return response()->json([
                 'message' => 'Utilisateur non connecté',
             ], 401);
         }
-        $user['fonctionnalites'] = $userService->findFonctionnalites($user);
-        $user->load(['role', 'personne.organisation.nature', 'personne.organisation.type']);
+
+        if (!isset($user->personne)) {
+            $user['roles'] = Role::where('code', 'admin')
+                ->get();
+            $user['fonctionnalites'] = [];
+        } else {
+            $user['roles'] = Role::where(DB::raw("JSON_CONTAINS(fonctions , '\"" . $user->personne->fonction_id . "\"')"), '=', 1)
+                ->get()
+                ->toArray();
+            $user['fonctionnalites'] = $userService->findFonctionnalites($user['roles']);
+        }
+
+        $user->load([
+            'personne.fonction',
+            'personne.organisation.nature',
+            'personne.organisation.type'
+        ]);
+
         return new UserResource($user);
     }
 
+    private function checkCode($code)
+    {
+        $personne = Personne::where('code', $code)
+            ->first();
+
+        if (!isset($personne)) {
+            return 'Aucune personne associée au code ' . $code;
+        }
+
+        $user = User::where('personne_id', $personne->id)
+            ->first();
+
+        if (isset($user)) {
+            return 'Cet utilisateur possède déjà un compte';
+        }
+
+        return null;
+    }
+
+    public function verifierCode(Request $request)
+    {
+        $inputs = $request->validate([
+            'code' => ['required'],
+        ]);
+
+        $code = $inputs['code'];
+
+        $message = $this->checkCode($code);
+
+        if (isset($message)) {
+            return response()->json([
+                'errors' => ['message' => [$message]]
+            ], 422);
+        }
+
+        $personne = Personne::where('code', $code)
+            ->first();
+
+        return [
+            'data' => [
+                'code' => $personne->code,
+                'email' => $this->maskEmail($personne->email)
+            ]
+        ];
+    }
+
+    function maskEmail($email)
+    {
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $parts = explode('@', $email);
+            $username = $parts[0];
+            $domain = $parts[1];
+
+            $maskedUsername = '';
+            if (strlen($username) > 2) {
+                $maskedUsername = str_repeat('*', strlen($username) - 2) . substr($username, -2);
+            } else {
+                $maskedUsername = str_repeat('*', strlen($username)); // Masque tout si trop court
+            }
+
+            return $maskedUsername . '@' . $domain;
+        }
+        return $email; // Retourne l'email original si invalide
+    }
     /**
      * Log the user out (Invalidate the token).
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function logout()
+    public function logout(Request $request)
     {
-        auth()->logout();
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return response()->json(['message' => 'Successfully logged out']);
-    }
-
-    /**
-     * Refresh a token.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function refresh()
-    {
-        return $this->respondWithToken(auth()->refresh());
-    }
-
-    /**
-     * Get the token array structure.
-     *
-     * @param string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function respondWithToken($token)
-    {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
-        ]);
     }
 }

@@ -8,7 +8,6 @@ export const SelectFonction: FC<SelectProps> = ({ requestParams, ...props }) => 
   return (
     <AsyncSelect
       {...props}
-      isMulti
       fetchOptions={async () => {
         const { data } = await fonctionApi.findAll<FonctionResource>(requestParams);
         return data.map((item) => ({

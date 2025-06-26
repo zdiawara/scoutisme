@@ -51,7 +51,7 @@ const PARAMETRES = [
       },
       {
         title: "Utilisateurs",
-        link: "/formations",
+        link: LINKS.parametres.utilisateurs,
         subtitle: "Créer et modifier le référentiel des formations suivi par les adultes",
         Icon: Icon.PeopleFill,
       },

@@ -47,9 +47,7 @@ class HabilitationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Habilitation $habilitation)
-    {
-    }
+    public function update(Request $request, Habilitation $habilitation) {}
 
     /**
      * Remove the specified resource from storage.

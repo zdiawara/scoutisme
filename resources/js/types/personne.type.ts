@@ -1,10 +1,5 @@
 import { UserResource } from "./auth.type";
-import {
-  NatureResource,
-  OrganisationResource,
-  TypeOrganisationResource,
-  VilleResource,
-} from "./organisation.type";
+import { NatureResource, OrganisationResource, TypeOrganisationResource, VilleResource } from "./organisation.type";
 
 export type FormationResource = {
   reference: NiveauFormationResource;
@@ -15,6 +10,11 @@ export enum TypePersonne {
   adulte = "adulte",
   scout = "scout",
 }
+
+export type AuthPersonne = {
+  code: string;
+  email: string;
+};
 
 export type PersonneResource = {
   id: string;

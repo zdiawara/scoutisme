@@ -25,17 +25,12 @@ const ACTIONS = [
 
 export const ProfilDropdown = () => {
   const [isOpen, toggleProfil] = useToggle();
-  const { user } = useAuth();
+  const { user, userDroit } = useAuth();
   return (
     <>
-      <Dropdown
-        className="dropdown-profile"
-        show={isOpen}
-        onToggle={toggleProfil}
-      >
+      <Dropdown className="dropdown-profile" show={isOpen} onToggle={toggleProfil}>
         <Dropdown.Toggle
           variant="link"
-          // id="dropdown-profile"
           as={Link}
           to="#"
           onClick={toggleProfil}
@@ -46,13 +41,12 @@ export const ProfilDropdown = () => {
           </div>
           <div className="ms-1 d-none d-sm-block">
             <span className="account-user-name">{user?.name}</span>
-            <span className="account-position fw-light">{user?.role?.nom}</span>
+            <span className="account-position fw-light">
+              {userDroit?.isAdmin ? "Admin" : user?.personne?.fonction?.nom}
+            </span>
           </div>
         </Dropdown.Toggle>
-        <Dropdown.Menu
-          align={"end"}
-          className="dropdown-menu-animated shadow-lg border-0"
-        >
+        <Dropdown.Menu align={"end"} className="dropdown-menu-animated shadow-lg border-0">
           <div onClick={() => {}}>
             {ACTIONS.map((item) => {
               return (

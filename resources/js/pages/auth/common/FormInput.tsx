@@ -1,8 +1,9 @@
 import { InputHTMLAttributes } from "react";
-import { Form, InputGroup } from "react-bootstrap";
+import { Button, Form, InputGroup } from "react-bootstrap";
 import classNames from "classnames";
 import { FieldErrors, Control } from "react-hook-form";
 import useToggle from "hooks/useToggle";
+import * as Icon from "react-bootstrap-icons";
 
 type PasswordInputProps = {
   name: string;
@@ -40,7 +41,11 @@ const PasswordInput = ({ name, placeholder, refCallback, errors, register, class
         })}
         data-password={showPassword ? "true" : "false"}
       >
-        <span className="password-eye" onClick={togglePassword}></span>
+        {/* <span className="password-eye" onClick={togglePassword}></span> */}
+        <Icon.Eye onClick={togglePassword} />
+        {/* <Button>
+          <Icon.Lock />
+        </Button> */}
       </div>
     </InputGroup>
   );

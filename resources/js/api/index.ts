@@ -1,5 +1,6 @@
 import {
   AttributionResource,
+  AuthPersonne,
   CotisationResource,
   OrganisationAttribution,
   PaiementResource,
@@ -12,6 +13,7 @@ import { RequestParam } from "types/request.type";
 import { requestParams } from "utils/functions";
 import { UserData } from "pages/auth/Login";
 import { UserResource } from "types/auth.type";
+import { fetchApi } from "./fetchApi";
 
 export * from "./stats";
 
@@ -135,12 +137,65 @@ export const paiementApi = new PaiementApi("paiements");
 
 class AuthApi extends CrudService {
   public async login(data: UserData) {
-    const response = await requestPost<{ access_token: string }>(`${this.base}/login`, data);
+    const response = await fetchApi<{ access_token: string }>({
+      url: "/login",
+      options: {
+        body: JSON.stringify(data || {}),
+        method: "POST",
+      },
+      type: "json",
+    });
     return response;
   }
 
+  public async register(data: { code: string; password: string }) {
+    const response = await fetchApi({
+      url: "/register",
+      options: {
+        body: JSON.stringify(data || {}),
+        method: "POST",
+      },
+      type: "json",
+    });
+    return response;
+  }
+
+  public async verifierCode(code: string) {
+    const response = await fetchApi<{ data: AuthPersonne }>({
+      url: "/verifier-code",
+      options: {
+        body: JSON.stringify({ code }),
+        method: "POST",
+      },
+      type: "json",
+    });
+    return response.data;
+  }
+
   public async userInfo() {
-    const response = await requestPost<{ data: UserResource }>(`${this.base}/me`, {});
+    const response = await fetchApi({
+      url: "/me",
+      options: {
+        method: "GET",
+      },
+      type: "json",
+    });
+    return response;
+  }
+
+  public async getCsrfCookie() {
+    const response = await fetchApi({ url: `/sanctum/csrf-cookie`, options: {}, type: "json" });
+    return response;
+  }
+
+  public async logout() {
+    const response = await fetchApi({
+      url: "/logout",
+      options: {
+        method: "GET",
+      },
+      type: "json",
+    });
     return response;
   }
 }

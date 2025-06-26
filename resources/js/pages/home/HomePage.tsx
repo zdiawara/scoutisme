@@ -38,14 +38,14 @@ export const HomePage = () => {
             </span>
           </div> */}
         <Row className="g-3 my-3 ">
-          <Col xs={6} sm="4">
+          {/* <Col xs={6} sm="4">
             <Card as={Link} to={"/#"} className="mb-0 border">
               <Card.Body className="text-center">
                 <Icon.BarChartLineFill color="#b49d84" size="3rem" />
                 <div className="mt-2 fs-4 fw-light">Dashboard</div>
               </Card.Body>
             </Card>
-          </Col>
+          </Col> */}
           {items.map((menu) => (
             <Col key={menu.url} xs={6} sm="4">
               <Card as={Link} to={menu.url} className="mb-0 border">
@@ -56,14 +56,16 @@ export const HomePage = () => {
               </Card>
             </Col>
           ))}
-          <Col xs={6} sm="4">
-            <Card as={Link} to={"/parametres"} className="mb-0 border">
-              <Card.Body className="text-center">
-                <Icon.GearFill color="#b49d84" size="3rem" />
-                <div className="mt-2 fs-4 fw-light">Paramètres</div>
-              </Card.Body>
-            </Card>
-          </Col>
+          {userDroit?.isAdmin && (
+            <Col xs={6} sm="4">
+              <Card as={Link} to={"/parametres"} className="mb-0 border">
+                <Card.Body className="text-center">
+                  <Icon.GearFill color="#b49d84" size="3rem" />
+                  <div className="mt-2 fs-4 fw-light">Paramètres</div>
+                </Card.Body>
+              </Card>
+            </Col>
+          )}
         </Row>
       </Col>
       {/* </Row> */}

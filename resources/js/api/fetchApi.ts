@@ -47,7 +47,7 @@ export interface RequestData {
 }
 
 const buildOptions = (options: RequestInit, type: string, token?: string) => {
-  const newOptions = { ...options };
+  const newOptions = { ...options, credentials: "include" } as RequestInit;
 
   newOptions.headers = {
     Accept: "application/json",

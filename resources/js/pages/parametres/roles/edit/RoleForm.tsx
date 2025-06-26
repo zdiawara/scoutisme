@@ -1,11 +1,12 @@
 import { HookModalForm, SelectFonction, SelectNature, SwitchBox, TextInput } from "components";
 import { WrapperV2Props, withMutationForm } from "hoc";
-import { FC, Fragment, useState } from "react";
-import { Card, Col, ListGroup, Row } from "react-bootstrap";
+import { FC, Fragment, useMemo, useState } from "react";
+import { Col, ListGroup, Row } from "react-bootstrap";
 import { moduleApi } from "api";
 import { useQuery } from "@tanstack/react-query";
 import { ModuleResource } from "types/auth.type";
 import classNames from "classnames";
+import { useFormContext } from "react-hook-form";
 
 const fetchModules = async () => {
   const results = await moduleApi.findAll<ModuleResource>({
@@ -20,7 +21,10 @@ const fetchModules = async () => {
  * @returns
  */
 const Form: FC<WrapperV2Props> = (props) => {
-  const [page, setPage] = useState<string>("personne");
+  const [page, setPage] = useState<string>("personnes");
+  const { watch } = useFormContext();
+
+  const perimetreId = watch("perimetre")?.value;
 
   const { data: modules } = useQuery({
     queryKey: ["modules"],
@@ -30,6 +34,10 @@ const Form: FC<WrapperV2Props> = (props) => {
   const onSelectPage = (pageSelected: string) => () => {
     setPage(pageSelected);
   };
+
+  const resetDepsFonction = useMemo(() => {
+    return perimetreId ? [perimetreId] : [];
+  }, [perimetreId]);
 
   return (
     <HookModalForm
@@ -43,45 +51,57 @@ const Form: FC<WrapperV2Props> = (props) => {
     >
       <Row className="g-2">
         <Col xs={12} md={6}>
-          <SelectNature label="Perimetre" name="perimetres" isRequired placeholder="" />
+          <SelectNature label="Perimetre" name="perimetre" isRequired placeholder="" />
         </Col>
         <Col xs={12} md={6}>
           <TextInput placeholder="" label="Nom du role" name="nom" isRequired />
         </Col>
         <Col xs={12}>
-          <SelectFonction isRequired name="fonctions" label="Fonctions" placeholder="" />
+          <SelectFonction
+            resetDeps={resetDepsFonction}
+            isRequired
+            name="fonctions"
+            label="Fonctions"
+            placeholder=""
+            isMulti
+            isClearable={false}
+            requestParams={{
+              nature: perimetreId,
+            }}
+          />
         </Col>
         <Col xs={12}>
           <Row>
             <Col xl={3} lg={3}>
-              <Card className="text-black">
-                <Card.Body className="p-1">
-                  <ListGroup defaultActiveKey="#link1">
-                    {modules?.map((item) => (
-                      <ListGroup.Item
-                        key={item.id}
-                        className={classNames("border-0 rounded", {
-                          active: item.code === page,
-                        })}
-                        action
-                        onClick={onSelectPage(item.code)}
-                      >
-                        {/* <i className={`${item.icon} me-1`}></i>&nbsp; */}
-                        {item.nom}
-                      </ListGroup.Item>
-                    ))}
-                  </ListGroup>
-                </Card.Body>
-              </Card>
+              <ListGroup>
+                {modules?.map((item) => (
+                  <ListGroup.Item
+                    key={item.id}
+                    style={{ zIndex: 0 }}
+                    className={classNames({
+                      active: item.code === page,
+                    })}
+                    action
+                    onClick={onSelectPage(item.code)}
+                  >
+                    {item.nom}
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
             </Col>
             <Col xl={9} lg={9}>
-              {/* <Card body> */}
-              <Row>
-                {modules
-                  ?.filter((e) => e.code === page)
-                  ?.map((module) => (
-                    <Fragment>
-                      {module.sous_modules.map((sousModule, i) => (
+              {modules
+                ?.filter((e) => e.code === page)
+                ?.map((module) => (
+                  <Fragment key={module.id}>
+                    {module.sous_modules
+                      .filter((e) => {
+                        if (module.code !== "organisations") {
+                          return true;
+                        }
+                        return e.code.includes(watch("perimetre")?.item?.code);
+                      })
+                      .map((sousModule, i) => (
                         <Col
                           xs={12}
                           key={sousModule.id}
@@ -91,6 +111,7 @@ const Form: FC<WrapperV2Props> = (props) => {
                             <ListGroup.Item>
                               <div className="fw-bold text-dark fs-4">{sousModule.nom}</div>
                             </ListGroup.Item>
+
                             {sousModule.fonctionnalites.map((sm) => (
                               <ListGroup.Item key={sm.id}>
                                 <SwitchBox
@@ -112,10 +133,8 @@ const Form: FC<WrapperV2Props> = (props) => {
                           </ListGroup>
                         </Col>
                       ))}
-                    </Fragment>
-                  ))}
-              </Row>
-              {/* </Card> */}
+                  </Fragment>
+                ))}
             </Col>
           </Row>
         </Col>

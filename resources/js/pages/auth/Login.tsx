@@ -1,11 +1,37 @@
-import { Button } from "react-bootstrap";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import AccountLayout from "./common/AccountLayout";
-import { VerticalForm } from "./common/VerticalForm";
-import FormInput from "./common/FormInput";
-import { authApi } from "api";
-import { useAuth } from "hooks";
-import { LINKS } from "utils";
+import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
+import { withForm, WrapperProps } from "hoc/withForm";
+import { TextInput } from "components";
+import { FC } from "react";
+import { authApi } from "api/index";
+import { LINKS } from "utils/links";
+
+const Form: FC<WrapperProps> = ({ onSubmit }) => (
+  <Row className="g-3">
+    <Col xs={12}>
+      <TextInput name="email" label="Email" placeholder="Votre adresse email" isRequired />
+    </Col>
+
+    <Col xs={12}>
+      <TextInput type="password" name="password" label="Mot de passe" placeholder="Votre mot de passe" isRequired />
+    </Col>
+
+    <Link to="#" className="mt-2 d-block text-primary">
+      Mot de passe oublié ?
+    </Link>
+    <div className="mt-3 mb-0 text-center">
+      <Button variant="primary" onClick={onSubmit} className="d-block w-100" disabled={false}>
+        Connexion
+      </Button>
+      <div className="my-2">Ou</div>
+      <Link to={LINKS.register} className="d-block w-100 btn-outline-primary btn">
+        Créer un compte
+      </Link>
+    </div>
+  </Row>
+);
+
+const AuthForm = withForm(Form);
 
 export type UserData = {
   email: string;
@@ -13,62 +39,42 @@ export type UserData = {
 };
 
 const Login = () => {
-  const auth = useAuth();
+  // const auth = useAuth();
   const navigate = useNavigate();
 
   const logUser = async (body: UserData) => {
-    authApi.login(body).then(({ access_token }) => {
-      localStorage.setItem("@token", access_token);
-      navigate(LINKS.home, {
-        replace: true,
-      });
-    });
+    await authApi.login(body);
+    // authApi
+    //   .login(body)
+    //   .then((resp) => {
+    //     console.log(resp);
+    //   })
+    //   .catch(console.error);
   };
 
   return (
     <>
-      {auth.user && <Navigate to="/" replace />}
+      {/* {auth.user && <Navigate to="/" replace />} */}
 
-      <AccountLayout>
-        <div className="text-center">
-          <h4 className="text-primary text-center mt-0 fw-bold">Authentification</h4>
-          <p className="text-muted mb-4">Entrez votre adresse mail et mot de passe pour vous accèder à l'application</p>
-        </div>
-
-        {/*         {error && (
-          <Alert variant="danger" className="my-2">
-            {error}
-          </Alert>
-        )} */}
-
-        <VerticalForm<UserData>
-          onSubmit={logUser}
-          //resolver={}
-          defaultValues={{
-            email: "admin@asbf.bf",
-            password: "secret",
-          }}
-        >
-          <FormInput label="Email" type="text" name="email" placeholder="Adresse email" containerClass="mb-3" />
-          <FormInput
-            label={"Mot de passe"}
-            type="password"
-            name="password"
-            placeholder="Mot de passe"
-            containerClass="mb-3"
-          >
-            <Link to="/account/forget-password" className="text-muted float-end">
-              <small>Mot de passe oublié ?</small>
-            </Link>
-          </FormInput>
-
-          <div className="mb-3 mb-0 text-center">
-            <Button variant="primary" type="submit" disabled={false}>
-              Se connecter
-            </Button>
-          </div>
-        </VerticalForm>
-      </AccountLayout>
+      <Container className="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5">
+        <Row className="justify-content-center">
+          <Col md={8} lg={6} xl={5} xxl={4}>
+            <Card>
+              <Card.Header className="pt-3 pb-3 text-center bg-primary">
+                <div className="text-white fs-3">ASBF</div>
+              </Card.Header>
+              <Card.Body className="p-4">
+                <AuthForm
+                  onSave={logUser}
+                  onFinished={() => {
+                    navigate(LINKS.home);
+                  }}
+                />
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
     </>
   );
 };

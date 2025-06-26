@@ -10,9 +10,9 @@ class Role extends Model
 {
     use HasUuids, Audit;
 
-    protected $fillable = ['nom', 'code', 'perimetres'];
+    protected $fillable = ['nom', 'code', 'perimetres', 'fonctions'];
 
-    protected $casts = ['perimetres' => 'array'];
+    protected $casts = ['perimetres' => 'array', 'fonctions' => 'array'];
 
     public function habilitations()
     {

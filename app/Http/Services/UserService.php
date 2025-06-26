@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Mail\CreerUserMail;
 use App\Models\Fonctionnalite;
 use App\Models\Personne;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -33,14 +34,19 @@ class UserService
         return $user;
     }
 
-    public function findFonctionnalites(User $user)
+    public function findFonctionnalites($roles)
     {
+
+        $roleIds = collect($roles)->map(function ($role) {
+            return $role['id'];
+        })->toArray();
+
         return Fonctionnalite::query()
             ->with('module.parent')
-            ->join('habilitations as h', function ($builder) {
-                $builder->on('h.fonctionnalite_id', 'fonctionnalites.id');
+            ->join('habilitations as habilitation', function ($builder) {
+                $builder->on('habilitation.fonctionnalite_id', 'fonctionnalites.id');
             })
-            ->where('h.role_id', $user->role_id)
+            ->whereIn('habilitation.role_id', $roleIds)
             ->get();
     }
 

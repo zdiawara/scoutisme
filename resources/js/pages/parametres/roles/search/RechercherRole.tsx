@@ -4,7 +4,6 @@ import { FC, useState } from "react";
 import { Button, ListGroup } from "react-bootstrap";
 import { QUERY_KEY } from "utils/constants";
 import { Header } from "layout/Header";
-import * as Icon from "react-bootstrap-icons";
 import { LoaderSpinner } from "components/loader";
 import { useSearch } from "hooks/useSearch";
 import { RequestParam } from "types/request.type";
@@ -63,7 +62,7 @@ const TRIES = [
 const RechercherRole: FC = () => {
   const search = useSearch();
   const searchParams = parseParams(search.searchParams);
-  const [showFilter, toggleFilter] = useToggle();
+  const [, toggleFilter] = useToggle();
 
   const query = useQuery({
     queryKey: [QUERY_KEY.roles, search.queryParams],
@@ -73,16 +72,9 @@ const RechercherRole: FC = () => {
 
   const [action, setAction] = useState<Action | undefined>();
 
-  const editRole = (selected: RoleResource) => {
-    setAction({
-      code: "edit",
-      selected,
-    });
-  };
-
   const actions = (
     <Button variant="secondary" onClick={() => setAction({ code: "create" })}>
-      <Icon.PlusLg /> <span className="d-none d-sm-inline-block">Ajouter un rôle</span>
+      <span className="d-none d-sm-inline-block">Ajouter un rôle</span>
     </Button>
   );
 
@@ -105,7 +97,7 @@ const RechercherRole: FC = () => {
             <LoaderSpinner />
           </ListGroup.Item>
         ) : (
-          <ListRole edit={editRole} roles={query.data?.data} />
+          <ListRole roles={query.data?.data} />
         )}
       </ListGroup>
 

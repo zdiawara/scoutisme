@@ -17,6 +17,8 @@ return new class extends Migration
         DB::unprepared('DROP FUNCTION IF EXISTS compute_parents');
         DB::unprepared('CREATE FUNCTION compute_parents(organisationId char(36))
             RETURNS JSON
+            DETERMINISTIC
+            READS SQL DATA
             BEGIN
                 DECLARE v_parents JSON;
                 WITH RECURSIVE cte AS (
@@ -66,7 +68,5 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
-    {
-    }
+    public function down(): void {}
 };

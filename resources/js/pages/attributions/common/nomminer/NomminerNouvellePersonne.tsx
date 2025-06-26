@@ -11,11 +11,7 @@ import { TypePersonne } from "types/personne.type";
 import { QUERY_KEY } from "utils/constants";
 import { DateFormater } from "utils/DateUtils";
 import { selectHelper } from "utils/functions";
-import {
-  buildMessageError,
-  NotificationError,
-  NotificationSuccess,
-} from "utils/notification";
+import { buildMessageError, NotificationError, NotificationSuccess } from "utils/notification";
 import * as yup from "yup";
 
 type Props = {
@@ -32,11 +28,7 @@ export const schema = yup.object({
   date_debut: yup.date().required().nullable(),
 });
 
-const onCreate = async (
-  personneInput: Record<string, any>,
-  organisationId: string,
-  fonctionId: string
-) => {
+const onCreate = async (personneInput: Record<string, any>, organisationId: string, fonctionId: string) => {
   const body = {
     nom: personneInput.nom,
     prenom: personneInput.prenom,
@@ -51,12 +43,7 @@ const onCreate = async (
   return await personneApi.create(body);
 };
 
-export const NomminerNouvellePersonne: FC<Props> = ({
-  closeModal,
-  prevStep,
-  organisationId,
-  fonctionId,
-}) => {
+export const NomminerNouvellePersonne: FC<Props> = ({ closeModal, prevStep, organisationId, fonctionId }) => {
   const query = useQueryClient();
 
   const methods = useForm({
@@ -101,28 +88,15 @@ export const NomminerNouvellePersonne: FC<Props> = ({
             <SelectGenre name="genre" label="Genre" placeholder="" isRequired />
           </Col>
           <Col xs={12}>
-            <DatePicker
-              name="date_debut"
-              label="Date debut"
-              useHookForm
-              required
-            />
+            <DatePicker name="date_debut" label="Date debut" useHookForm required />
           </Col>
         </Row>
       </Modal.Body>
       <Modal.Footer>
-        <Button
-          className="me-auto"
-          variant="outline-primary"
-          onClick={() => prevStep()}
-          disabled={isLoading}
-        >
+        <Button className="me-auto" variant="outline-primary" onClick={() => prevStep()} disabled={isLoading}>
           Précédent
         </Button>
-        <SubmitButton
-          isLoading={isLoading}
-          onClick={methods.handleSubmit(onSubmit, onError)}
-        >
+        <SubmitButton isLoading={isLoading} onClick={methods.handleSubmit(onSubmit, onError)}>
           Enregistrer
         </SubmitButton>
       </Modal.Footer>

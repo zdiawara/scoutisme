@@ -17,32 +17,21 @@ type NominerModalProps = {
  * @param param0
  * @returns
  */
-export const NominerModal: FC<NominerModalProps> = ({
-  organisation,
-  fonction,
-  closeModal,
-}) => {
+export const NominerModal: FC<NominerModalProps> = ({ organisation, fonction, closeModal }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [action, setAction] = useState<string>("exist");
 
   const nextStep = () => {
-    setCurrentStep(currentStep + 1);
+    setCurrentStep((prev) => prev + 1);
   };
 
   const prevStep = () => {
-    setCurrentStep(currentStep - 1);
+    setCurrentStep((prev) => prev - 1);
   };
 
   const renderContent = () => {
     if (currentStep === 1) {
-      return (
-        <ChoixPersonne
-          value={action}
-          setValue={setAction}
-          nextStep={nextStep}
-          closeModal={closeModal}
-        />
-      );
+      return <ChoixPersonne value={action} setValue={setAction} nextStep={nextStep} closeModal={closeModal} />;
     }
     if (action === "new") {
       return (

@@ -7,7 +7,11 @@ import { AuthProvider } from "context/AuthContext";
 
 import { ToastContainer } from "react-toastify";
 
+import { useEffect } from "react";
+import { authApi } from "./api";
+
 import "./assets/sass/app.scss";
+import "react-toastify/dist/ReactToastify.css";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,6 +25,13 @@ const queryClient = new QueryClient({
 });
 
 function App() {
+  useEffect(() => {
+    const getCsrfCookie = async () => {
+      await authApi.getCsrfCookie();
+    };
+
+    getCsrfCookie();
+  }, []);
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>

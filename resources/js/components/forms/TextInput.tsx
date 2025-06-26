@@ -15,14 +15,7 @@ type TextInputProps = {
   description?: ReactNode;
 };
 
-export const TextInput: FC<TextInputProps> = ({
-  label,
-  isRequired,
-  name,
-  mask,
-  description,
-  ...rest
-}) => {
+export const TextInput: FC<TextInputProps> = ({ label, isRequired, name, mask, description, ...rest }) => {
   const {
     formState: { errors },
     register,
@@ -30,6 +23,8 @@ export const TextInput: FC<TextInputProps> = ({
   } = useFormContext();
 
   const error = useMemo(() => {
+    console.log(errors);
+
     return errors[name];
   }, [errors, name]);
 
@@ -70,9 +65,7 @@ export const TextInput: FC<TextInputProps> = ({
           isInvalid={!!error}
         />
       )}
-      <Form.Control.Feedback type="invalid">
-        {error?.message?.toString()}
-      </Form.Control.Feedback>
+      <Form.Control.Feedback type="invalid">{error?.message?.toString()}</Form.Control.Feedback>
     </Form.Group>
   );
 };

@@ -46,6 +46,7 @@ const RechercherPaiement = Loadable(lazy(() => import("pages/paiements/recherche
 
 const Login = Loadable(lazy(() => import("pages/auth/Login")));
 const Logout = Loadable(lazy(() => import("pages/auth/Logout")));
+const Register = Loadable(lazy(() => import("pages/auth/Register")));
 
 // const MonProfil = Loadable(lazy(() => import("pages/compte/MonProfil")));
 // const MonOrganisation = Loadable(lazy(() => import("pages/compte/MonOrganisation")));
@@ -57,11 +58,17 @@ const RechercherCotisation = Loadable(lazy(() => import("pages/parametres/cotisa
 const RechercherTypeUnite = Loadable(lazy(() => import("pages/parametres/types-unites/search/RechercherTypeUnite")));
 
 const RechercherRole = Loadable(lazy(() => import("pages/parametres/roles/search/RechercherRole")));
+const ConsulterRole = Loadable(lazy(() => import("pages/parametres/roles/view/ConsulterRole")));
+
+const RechercherUtilisateur = Loadable(
+  lazy(() => import("pages/parametres/utilisateurs/search/RechercherUtilisateur"))
+);
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="login" element={<Login />} />
+      <Route path={LINKS.login} element={<Login />} />
+      <Route path={LINKS.register} element={<Register />} />
       <Route path="logout" element={<Logout />} />
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
@@ -137,6 +144,8 @@ export const router = createBrowserRouter(
           <Route path={LINKS.parametres.cotisations} element={<RechercherCotisation />} />
           <Route path={LINKS.parametres.typesUnites} element={<RechercherTypeUnite />} />
           <Route path={LINKS.parametres.roles} element={<RechercherRole />} />
+          <Route path={LINKS.parametres.roles + "/:id"} element={<ConsulterRole />} />
+          <Route path={LINKS.parametres.utilisateurs} element={<RechercherUtilisateur />} />
         </Route>
       </Route>
     </>

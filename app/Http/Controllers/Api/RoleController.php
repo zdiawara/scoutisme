@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RoleResource;
 use App\Http\Services\RoleService;
+use App\Models\Fonction;
 use App\Models\Habilitation;
 use App\Models\Role;
 use Illuminate\Http\Request;
@@ -45,6 +46,16 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
+        $role->load('habilitations.fonctionnalite');
+        $fonctions = Fonction::whereIn('id', $role->fonctions)
+            ->get()
+            ->map(function ($fonction) {
+                return [
+                    'id' => $fonction->id,
+                    'nom' => $fonction->nom
+                ];
+            });
+        $role->fonctions = $fonctions;
         return new RoleResource($role);
     }
 

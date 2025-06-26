@@ -4,7 +4,7 @@ export type UserResource = {
   id: string;
   name: string;
   email: string;
-  role: RoleResource;
+  roles: RoleResource[];
   fonctionnalites: FonctionnaliteResource[];
   personne?: PersonneResource;
 };
@@ -14,6 +14,10 @@ export type RoleResource = {
   nom: string;
   code: string;
   perimetres: string[];
+  fonctions: Array<{
+    nom: string;
+    id: string;
+  }>;
   habilitations: HabilitationResource[];
 };
 

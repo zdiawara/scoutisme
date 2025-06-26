@@ -11,7 +11,7 @@ export class UserDroit {
     this.user = user;
     this.modules = this.buildModules(user);
     this.fonctionnalites = this.buildFonctionnalites(user);
-    this.perimetres = user.role.perimetres;
+    this.perimetres = user.roles[0].perimetres;
   }
 
   get menus(): string[] {
@@ -19,7 +19,7 @@ export class UserDroit {
   }
 
   get isAdmin(): boolean {
-    return this.user.role.code === "admin";
+    return this.user.roles?.some((e) => e.code === "admin");
   }
 
   public hasMenu(codeMenu: string): boolean {
@@ -63,7 +63,8 @@ export class UserDroit {
       modules = user.fonctionnalites
         .filter((e) => Boolean(e.module.parent))
         .map((e) => e.module.parent)
-        .map((e) => e?.code!);
+        .filter((e) => Boolean(e?.code))
+        .map((e) => e?.code || "");
     }
 
     return modules.filter((module, index) => {

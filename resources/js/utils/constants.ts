@@ -17,6 +17,7 @@ export const QUERY_KEY = {
   scouts: "scouts",
   fraisCotisations: "fraisCotisations",
   roles: "roles",
+  utilisateurs: "utilisateurs",
 };
 
 export const MASK = {

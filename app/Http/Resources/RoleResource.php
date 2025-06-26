@@ -21,6 +21,7 @@ class RoleResource extends JsonResource
             'perimetres' => $this->perimetres,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'fonctions' => $this->fonctions,
             'habilitations' =>  HabilitationResource::collection($this->whenLoaded('habilitations')),
         ];
     }

@@ -17,7 +17,7 @@ const MON_ORGANISATION = {
   code: "organisation",
   label: "Mon organisation",
   url: LINKS.organisation.base,
-  Icon: Icon.FilterSquare,
+  Icon: Icon.Building,
 };
 
 export const MES_INFORMATIONS = [MON_PROFIL, MON_ORGANISATION];
@@ -32,7 +32,7 @@ export const MENU = [
   {
     code: "organisations",
     label: "Organisations",
-    Icon: Icon.Building,
+    Icon: Icon.BuildingGear,
     url: LINKS.organisations.base,
   },
   {
@@ -59,19 +59,14 @@ const getLibelleOrganisation = (nature: string, type?: string) => {
     case NATURE.region:
       return "Ma région";
     case NATURE.national:
-      return type === TYPE_ORGANISATION.equipe_nationale
-        ? "Eq. Nationale"
-        : "Co. National";
+      return type === TYPE_ORGANISATION.equipe_nationale ? "Eq. Nationale" : "Co. National";
 
     default:
       break;
   }
 };
 
-export const getMenuItems = (
-  userDroit: UserDroit,
-  user?: UserResource | null
-) => {
+export const getMenuItems = (userDroit: UserDroit, user?: UserResource | null) => {
   const menu = MENU.filter((menu) => userDroit.hasMenu(menu.code));
 
   if (user?.personne?.organisation) {
@@ -83,10 +78,7 @@ export const getMenuItems = (
       { ...MON_ORGANISATION, label: getLibelleOrganisation(nature, type) },
       ...menu,
     ];
-    if (
-      userDroit.perimetres.length === 1 &&
-      userDroit.perimetres.includes("unite")
-    ) {
+    if (userDroit.perimetres.length === 1 && userDroit.perimetres.includes("unite")) {
       return result.filter((r) => r.code !== "organisations");
     }
     return result;

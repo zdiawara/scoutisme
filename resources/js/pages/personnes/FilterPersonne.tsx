@@ -7,6 +7,8 @@ import { Col } from "react-bootstrap";
 const FilterPersonneForm: FC = () => {
   const { userDroit, user } = useAuth();
 
+  console.log(userDroit);
+
   return (
     <>
       <Col xs={12}>

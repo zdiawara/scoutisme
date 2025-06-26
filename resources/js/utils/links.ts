@@ -11,6 +11,8 @@ const COTISATIONS = "/cotisations";
 const PARAMETRES = "/parametres";
 
 export const LINKS = {
+  login: "/auth/login",
+  register: "/auth/register",
   home: "/",
   personnes: {
     base: PERSONNES,
@@ -73,6 +75,7 @@ export const LINKS = {
     cotisations: `${PARAMETRES}/cotisations`,
     typesUnites: `${PARAMETRES}/types-unites`,
     roles: `${PARAMETRES}/roles`,
+    utilisateurs: `${PARAMETRES}/utilisateurs`,
   },
   dashbords: {
     base: "dashbords",

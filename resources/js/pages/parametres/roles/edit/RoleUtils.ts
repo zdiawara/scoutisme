@@ -1,14 +1,16 @@
 import { RoleResource } from "types/auth.type";
+import { SelectItem } from "types/form.type";
 import * as yup from "yup";
 
 export const roleSchema = yup.object({
   nom: yup.string().required(),
 });
 
-const toBody = (data: Record<string, any>) => {
+const toBody = (data: Record<string, string | SelectItem | SelectItem[]>) => {
   return {
     nom: data.nom,
-    perimetres: data.perimetres,
+    perimetres: [(data.perimetre as SelectItem & { item: { code: string } }).item.code],
+    fonctions: (data.fonctions as SelectItem[]).map((e) => e.value),
   };
 };
 

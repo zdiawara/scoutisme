@@ -154,13 +154,13 @@ return new class extends Migration
                 $this->createModuleWithFonctionnalities($item);
             });
 
-        $roleAdmin = Role::create(['nom' => 'Administrateur', 'code' => 'admin', 'perimetres' => []]);
+        $roleAdmin = Role::create(['nom' => 'Administrateur', 'code' => 'admin', 'perimetres' => [], 'fonctions' => []]);
 
         User::create([
             'name' => 'Administrateur',
             'email' => 'admin@asbf.bf',
             'password' => bcrypt('secret'),
-            'role_id' => $roleAdmin->id
+            'email_verified_at' => now()
         ]);
     }
 
@@ -293,7 +293,5 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
-    {
-    }
+    public function down(): void {}
 };

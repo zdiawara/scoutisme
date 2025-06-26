@@ -26,7 +26,7 @@ export const EditRole: FC<EditRoleProps> = ({ closeModal, role }) => {
     if (role?.id) {
       return roleApi.update(role.id, body);
     }
-    return roleApi.create(data);
+    return roleApi.create(body);
   };
 
   return (

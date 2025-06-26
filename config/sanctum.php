@@ -15,9 +15,16 @@ return [
     |
     */
 
+    'stateful_domains' => [
+        // Exemple pour le développement local
+        'localhost',
+        '127.0.0.1',
+        'my-spa-domain.com', // En production
+    ],
+
     'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', sprintf(
         '%s%s',
-        'localhost,localhost:3000,127.0.0.1,127.0.0.1:8000,::1',
+        'localhost,localhost:9025,localhost:4000,127.0.0.1,127.0.0.1:8000,::1',
         Sanctum::currentApplicationUrlWithPort()
     ))),
 

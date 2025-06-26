@@ -90,18 +90,20 @@ export const AsyncSelect: FC<AsyncSelectProps> = ({
   afterSelected,
   resetDeps,
   description,
-  isMulti,
+  isMulti = false,
 }) => {
   const [options, setOptions] = useState<SelectItem[]>([]);
   const {
     formState: { errors },
     control,
     watch,
+    setValue,
   } = useFormContext();
 
   useEffect(() => {
     setOptions([]);
-  }, [resetDeps]);
+    setValue(name, null);
+  }, [name, resetDeps, setValue]);
 
   const error = useMemo(() => {
     return errors[name];

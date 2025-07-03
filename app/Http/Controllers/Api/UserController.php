@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Http\Services\UserService;
-use App\Models\Fonction;
-use App\Models\Fonctionnalite;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -25,11 +23,13 @@ class UserController extends Controller
     public function index()
     {
         $query = User::query()
-            ->with('role')
             ->orderBy('name', 'asc');
 
         return [
-            "data" => UserResource::collection($query->get()),
+            "data" => UserResource::collection($query->get()
+                ->each(function ($user) {
+                    $this->userService->addFonctionnalitesAndRoles($user);
+                })),
         ];
     }
 
@@ -39,8 +39,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $user = $this->userService->create($request->all());
-        $user->load(['role']);
-        $user['fonctionnalites'] = $this->userService->findFonctionnalites($user);
+        $this->userService->addFonctionnalitesAndRoles($user);
         return new UserResource($user);
     }
 
@@ -58,8 +57,7 @@ class UserController extends Controller
     public function update(User $user, Request $request)
     {
         $user = $this->userService->update($user, $request->all());
-        $user->load(['role']);
-        $user['fonctionnalites'] = $this->userService->findFonctionnalites($user);
+        $this->userService->addFonctionnalitesAndRoles($user);
         return new UserResource($user);
     }
 }

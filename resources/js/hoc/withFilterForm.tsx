@@ -13,13 +13,7 @@ type HocCompomentProps = {
 export type FilterWrapperProps = {};
 
 export function withFilterForm(Wrapper: FC<FilterWrapperProps>) {
-  const HocCompoment: FC<HocCompomentProps> = ({
-    applyFiler,
-    onReset,
-    defaultValues,
-    show,
-    close,
-  }) => {
+  const HocCompoment: FC<HocCompomentProps> = ({ applyFiler, onReset, defaultValues, show, close }) => {
     const methods = useForm({ defaultValues });
 
     const onSubmit = (data: any) => {
@@ -29,9 +23,7 @@ export function withFilterForm(Wrapper: FC<FilterWrapperProps>) {
     return (
       <Offcanvas show={show} onHide={close} placement="end">
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title className="text-dark">
-            Recherche avancée
-          </Offcanvas.Title>
+          <Offcanvas.Title className="text-dark">Recherche avancée</Offcanvas.Title>
         </Offcanvas.Header>
 
         <Offcanvas.Body className="bg-gray-100">
@@ -43,10 +35,7 @@ export function withFilterForm(Wrapper: FC<FilterWrapperProps>) {
                   <Button
                     onClick={() => {
                       if (onReset) {
-                        methods.reset(
-                          {},
-                          { keepDefaultValues: false, keepValues: false }
-                        );
+                        methods.reset({}, { keepDefaultValues: false, keepValues: false });
                         Object.keys(defaultValues || {}).forEach((key) => {
                           methods.resetField(key);
                         });
@@ -58,9 +47,7 @@ export function withFilterForm(Wrapper: FC<FilterWrapperProps>) {
                   >
                     Ré-initialiser
                   </Button>
-                  <Button onClick={methods.handleSubmit(onSubmit)}>
-                    Appliquer
-                  </Button>
+                  <Button onClick={methods.handleSubmit(onSubmit)}>Appliquer</Button>
                 </Col>
               </Row>
             </Form>

@@ -1,18 +1,20 @@
 // import FeatherIcon from "feather-icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { personneApi } from "api";
-import { ListGroup, Spinner } from "react-bootstrap";
-import { useSearchParams } from "react-router-dom";
+import { ListGroup } from "react-bootstrap";
 import { PersonneResource } from "types/personne.type";
 import { QUERY_KEY } from "utils/constants";
 import { ListResult } from "pages/common";
 import { Header } from "layout/Header";
-import { useMemo } from "react";
-import { PersonneToolbar } from "./toolbar/PersonneToolbar";
 import { selectHelper } from "utils/functions";
-import { PersonneItem } from "./personne/PersonneItem";
 import { RechercherPersonneActions } from "./action/RechercherPersonneActions";
 import { useAuth } from "hooks";
+import { useSearch } from "hooks/useSearch";
+import useToggle from "hooks/useToggle";
+import { LoaderSpinner } from "components/loader";
+import { ListPersonne } from "./personne/ListPersonne";
+import { FilterPersonne } from "../FilterPersonne";
+import { SearchToolbar } from "pages/common/toolbar";
 
 const parseParams = (searchParams: URLSearchParams) => {
   const ville = searchParams.get("ville");
@@ -21,16 +23,10 @@ const parseParams = (searchParams: URLSearchParams) => {
   const organisation = searchParams.get("organisation");
 
   return {
-    // type: selectHelper.getValue(filter.type),
-    // etat: selectHelper.getValue(filter.etat),
-    // niveauFormationId: selectHelper.getValue(filter.niveauFormation),
     ville: ville ? JSON.parse(ville) : null,
     genre: genre ? JSON.parse(genre) : null,
     fonction: fonction ? JSON.parse(fonction) : null,
     organisation: organisation ? JSON.parse(organisation) : null,
-    // perimetres: filter.inclureSousOrganisation
-    //   ? filter?.perimetres?.join(";")
-    //   : undefined,
     search: searchParams.get("search"),
     page: searchParams.get("page") || "1",
     size: searchParams.get("size") || "10",
@@ -40,14 +36,10 @@ const parseParams = (searchParams: URLSearchParams) => {
 
 const buildRequestParams = (filter: Record<string, any>) => {
   return {
-    // type: selectHelper.getValue(filter.type),
-    // etat: selectHelper.getValue(filter.etat),
-    // niveauFormationId: selectHelper.getValue(filter.niveauFormation),
-    villeId: filter.ville ? selectHelper.getValue(JSON.parse(filter.ville)) : null,
-    genreId: filter.genre ? selectHelper.getValue(JSON.parse(filter.genre)) : null,
-    fonctionId: filter.fonction ? selectHelper.getValue(JSON.parse(filter.fonction)) : null,
-    organisationId: filter.organisation ? selectHelper.getValue(JSON.parse(filter.organisation)) : null,
-    // perimetres: "region;groupe;unite",
+    villeId: selectHelper.getValueFromJson(filter.ville),
+    genreId: selectHelper.getValueFromJson(filter.genre),
+    fonctionId: selectHelper.getValueFromJson(filter.fonction),
+    organisationId: selectHelper.getValueFromJson(filter.organisation),
     search: filter.search,
     page: parseInt(filter.page) || 1,
     size: parseInt(filter.size) || 10,
@@ -56,83 +48,89 @@ const buildRequestParams = (filter: Record<string, any>) => {
   };
 };
 
+const TRIES = [
+  {
+    label: "Nom  de famille croissant",
+    code: "nom,asc",
+  },
+  {
+    label: "Nom de famille décroissant",
+    code: "nom,desc",
+  },
+  {
+    label: "Prénom croissant",
+    code: "prenom,asc",
+  },
+  {
+    label: "Prénom décroissant",
+    code: "prenom,desc",
+  },
+];
+
 const RechercherPersonne = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const search = useSearch();
+  const [showFilter, toggleFilter] = useToggle();
 
   const auth = useAuth();
-  const isAdmin = auth.userDroit?.isAdmin;
-  const personne = auth.user?.personne;
-
-  const queryParams = useMemo(() => {
-    return Object.fromEntries(searchParams.entries());
-  }, [searchParams]);
-
-  const params = useMemo(() => {
-    return parseParams(searchParams);
-  }, [searchParams]);
 
   const searchPersonne = ({ queryKey }: any) => {
+    const isAdmin = auth.userDroit?.isAdmin;
+    const personne = auth.user?.personne;
     const filterParams = buildRequestParams(queryKey[1]);
     if (!isAdmin && personne?.organisation?.id && !filterParams.organisationId) {
       filterParams.organisationId = personne?.organisation?.id;
-      filterParams.perimetres = (auth.user?.role?.perimetres || []).join(";");
+      filterParams.perimetres = (auth.userDroit?.perimetres || []).join(";");
     }
     return personneApi.findAll<PersonneResource>(filterParams);
   };
 
   const query = useQuery({
-    queryKey: [QUERY_KEY.personnes, queryParams],
+    queryKey: [QUERY_KEY.personnes, search.queryParams],
     keepPreviousData: true,
     queryFn: searchPersonne,
   });
 
-  const { data } = query;
+  const applyFilter = (data: any) => {
+    search.onChangeFilter(data);
+    toggleFilter();
+  };
+
+  const personnes = query.data?.data;
+  const meta = query.data?.meta;
+  const searchParams = parseParams(search.searchParams);
 
   return (
     <>
-      <Header title="Personnes" right={<RechercherPersonneActions params={buildRequestParams(queryParams)} />} />
+      <Header title="Personnes" right={<RechercherPersonneActions params={buildRequestParams(search.queryParams)} />} />
 
       <ListGroup className="mt-4">
-        <PersonneToolbar
+        <SearchToolbar
+          tries={TRIES}
           isFetching={query.isFetching && !query.isLoading}
-          nombreResultat={query.data?.meta.total}
-          searchParams={params}
+          toggleFilter={toggleFilter}
+          searchParams={searchParams}
+          nombreResultat={meta?.total}
         />
+
+        {showFilter && (
+          <FilterPersonne applyFiler={applyFilter} defaultValues={searchParams} close={toggleFilter} show />
+        )}
 
         {query.isLoading ? (
           <ListGroup.Item className="text-center">
-            <Spinner className="me-1" size="sm" animation="grow" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </Spinner>
-            <span className="fw-light">chargement ...</span>
+            <LoaderSpinner />
           </ListGroup.Item>
-        ) : data?.data?.length ? (
-          data?.data?.map((personne) => (
-            <ListGroup.Item className="d-flex justify-content-between align-items-start px-2 px-sm-4" key={personne.id}>
-              <PersonneItem personne={personne} />
-            </ListGroup.Item>
-          ))
         ) : (
-          <ListGroup.Item className="fw-light text-center">Aucune personne trouvée</ListGroup.Item>
+          <ListPersonne personnes={personnes} />
         )}
       </ListGroup>
-      {data?.meta && (
-        <ListResult.Paginate
-          pageCount={data.meta.total_page}
-          pageActive={parseInt(params.page) - 1}
-          total={data.meta.total}
-          onPageChange={(pageNumber) => {
-            setSearchParams(
-              (prevParams) => {
-                const params = new URLSearchParams(prevParams);
-                params.set("page", (pageNumber + 1).toString());
-                return params;
-              },
-              { replace: true }
-            );
 
-            window.scroll({ top: 0 });
-          }}
+      {meta && (
+        <ListResult.Paginate
+          pageCount={meta.total_page}
+          pageActive={parseInt(searchParams.page) - 1}
+          total={meta.total}
+          onPageChange={search.setPageNumber}
         />
       )}
     </>

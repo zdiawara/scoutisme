@@ -1,7 +1,7 @@
 import { paiementApi } from "api";
 import { ListResult } from "pages/common";
 import { FC } from "react";
-import { ListGroup, Spinner } from "react-bootstrap";
+import { ListGroup } from "react-bootstrap";
 import { PaiementResource } from "types/personne.type";
 import { RequestParam } from "types/request.type";
 import { QUERY_KEY } from "utils/constants";
@@ -14,6 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import { SearchToolbar } from "pages/common/toolbar";
 import useToggle from "hooks/useToggle";
 import { FilterPaiement } from "../form";
+import { LoaderSpinner } from "components/loader";
 
 const parseParams = (searchParams: URLSearchParams) => {
   const etat = searchParams.get("etat");
@@ -61,6 +62,11 @@ const RechercherPaiement: FC = () => {
     queryFn: ({ queryKey }) => paiementApi.findAll<PaiementResource>(buildRequestParams(queryKey[1] as RequestParam)),
   });
 
+  const applyFilter = (data: any) => {
+    search.onChangeFilter(data);
+    toggleFilter();
+  };
+
   const paiements = query.data?.data;
   const meta = query.data?.meta;
   const searchParams = parseParams(search.searchParams);
@@ -77,29 +83,20 @@ const RechercherPaiement: FC = () => {
           searchParams={searchParams}
           nombreResultat={meta?.total}
         />
+
         {showFilter && (
-          <FilterPaiement
-            applyFiler={(data) => {
-              search.onChangeFilter(data);
-              toggleFilter();
-            }}
-            defaultValues={searchParams}
-            close={toggleFilter}
-            show
-          />
+          <FilterPaiement applyFiler={applyFilter} defaultValues={searchParams} close={toggleFilter} show />
         )}
 
         {query.isLoading ? (
           <ListGroup.Item className="text-center">
-            <Spinner className="me-1" size="sm" animation="grow" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </Spinner>
-            <span className="fw-light">chargement ...</span>
+            <LoaderSpinner />
           </ListGroup.Item>
         ) : (
           <ListPaiement paiements={paiements} />
         )}
       </ListGroup>
+
       {meta && (
         <ListResult.Paginate
           pageCount={meta.total_page}

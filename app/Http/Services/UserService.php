@@ -34,20 +34,34 @@ class UserService
         return $user;
     }
 
-    public function findFonctionnalites($roles)
+    public function addFonctionnalitesAndRoles($user)
     {
+        if (!isset($user->personne)) {
+            $user['roles'] = Role::where('code', 'admin')
+                ->get();
+            $user['fonctionnalites'] = [];
+        } else {
 
-        $roleIds = collect($roles)->map(function ($role) {
-            return $role['id'];
-        })->toArray();
+            $fonctionId = $user->personne->fonction_id;
 
-        return Fonctionnalite::query()
-            ->with('module.parent')
-            ->join('habilitations as habilitation', function ($builder) {
-                $builder->on('habilitation.fonctionnalite_id', 'fonctionnalites.id');
-            })
-            ->whereIn('habilitation.role_id', $roleIds)
-            ->get();
+            $user['roles'] = Role::where(DB::raw("JSON_CONTAINS(fonctions , '\"" . $fonctionId . "\"')"), '=', 1)
+                ->get()
+                ->toArray();
+
+            $roleIds = Role::where(DB::raw("JSON_CONTAINS(fonctions , '\"" . $fonctionId . "\"')"), '=', 1)
+                ->get()
+                ->map(function ($role) {
+                    return $role['id'];
+                })->toArray();
+
+            $user['fonctionnalites'] = Fonctionnalite::query()
+                ->with('module.parent')
+                ->join('habilitations as habilitation', function ($builder) {
+                    $builder->on('habilitation.fonctionnalite_id', 'fonctionnalites.id');
+                })
+                ->whereIn('habilitation.role_id', $roleIds)
+                ->get();
+        }
     }
 
     public function createFromPersonne(Personne $personne, array $body)

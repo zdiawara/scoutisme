@@ -27,17 +27,10 @@ export type WrapperProps = {
 };
 
 export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
-  const HocCompoment: FC<HocCompomentProps> = ({
-    onSave,
-    onFinished,
-    defaultValues,
-    title,
-    subtitle,
-    goBack,
-  }) => {
+  const HocCompoment: FC<HocCompomentProps> = ({ onSave, onFinished, defaultValues, title, subtitle, goBack }) => {
     const methods = useForm({
       resolver: schema ? yupResolver(schema) : undefined,
-      defaultValues,
+      defaultValues: { ...defaultValues, genre: { label: "Femme", value: "9f4ae7c4-228f-4493-9f63-a900fbaa2ea8" } },
       mode: "onChange",
       reValidateMode: "onChange",
     });
@@ -71,8 +64,7 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
             message = e.message;
           } else {
             console.error(e);
-            message =
-              "Une erreur technique est survenue lors de l'enregistrement";
+            message = "Une erreur technique est survenue lors de l'enregistrement";
           }
 
           toast(message, {
@@ -101,19 +93,10 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
     const renderButtons = () => {
       return (
         <>
-          <Button
-            className="me-1"
-            variant="danger"
-            size="sm"
-            onClick={goBack || _goBack}
-          >
+          <Button className="me-1" variant="danger" size="sm" onClick={goBack || _goBack}>
             Annuler
           </Button>
-          <Button
-            onClick={methods.handleSubmit(onSubmit, onError)}
-            variant="primary"
-            size="sm"
-          >
+          <Button onClick={methods.handleSubmit(onSubmit, onError)} variant="primary" size="sm">
             Enregistrer
           </Button>
         </>
@@ -123,16 +106,10 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
     const renderButtonsActions = () => (
       <Stack direction="horizontal" className="mt-3">
         <div className="ms-auto">
-          <Button
-            variant="outline-primary"
-            className="me-1"
-            onClick={goBack || _goBack}
-          >
+          <Button variant="outline-primary" className="me-1" onClick={goBack || _goBack}>
             Annuler
           </Button>
-          <Button onClick={methods.handleSubmit(onSubmit, onError)}>
-            Enregistrer
-          </Button>
+          <Button onClick={methods.handleSubmit(onSubmit, onError)}>Enregistrer</Button>
         </div>
       </Stack>
     );

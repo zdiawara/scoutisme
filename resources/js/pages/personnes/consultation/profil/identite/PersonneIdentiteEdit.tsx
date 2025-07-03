@@ -14,47 +14,23 @@ const FormContainer: FC<WrapperProps> = ({ renderButtonsActions }) => {
     <>
       <Row className="g-3">
         <Col xs={6} sm={6}>
-          <TextInput
-            name="nom"
-            label="Nom"
-            placeholder="Ex. Ouattara"
-            isRequired
-          />
+          <TextInput name="nom" label="Nom" placeholder="Ex. Ouattara" isRequired />
         </Col>
         <Col xs={6} sm={6}>
-          <TextInput
-            name="prenom"
-            label="Prenom"
-            placeholder="Ex. Moussa"
-            isRequired
-          />
+          <TextInput name="prenom" label="Prenom" placeholder="Ex. Moussa" isRequired />
         </Col>
         <Col xs={6} sm={6}>
           <SelectGenre name="genre" label="Genre" isRequired />
         </Col>
         <Col xs={6} sm={6}>
-          <TextInput
-            name="profession"
-            label="Profession"
-            placeholder="Profession"
-          />
+          <TextInput name="profession" label="Profession" placeholder="Profession" />
         </Col>
         <Col xs={6} sm={6}>
-          <DatePicker
-            name="date_naissance"
-            label="Date naissance"
-            useHookForm
-            maxDate={new Date()}
-            isClearable
-          />
+          <DatePicker name="date_naissance" label="Date naissance" useHookForm maxDate={new Date()} isClearable />
         </Col>
 
         <Col xs={6} sm={6}>
-          <TextInput
-            name="lieu_naissance"
-            label="Lieu naissance"
-            placeholder="Ex. Bobo Dioulasso"
-          />
+          <TextInput name="lieu_naissance" label="Lieu naissance" placeholder="Ex. Bobo Dioulasso" />
         </Col>
       </Row>
 
@@ -70,30 +46,19 @@ type PersonneIdentiteEditProps = {
   onClose: () => void;
 };
 
-export const PersonneIdentiteEdit: FC<PersonneIdentiteEditProps> = ({
-  personne,
-  onClose,
-}) => {
+export const PersonneIdentiteEdit: FC<PersonneIdentiteEditProps> = ({ personne, onClose }) => {
   const clientQuery = useQueryClient();
 
   const update = (input: any) => {
-    return personneApi
-      .update(personne.id, personneConverter.toIdentiteBody(input))
-      .then((response) => {
-        clientQuery.invalidateQueries([QUERY_KEY.personnes]);
-        return response;
-      });
+    return personneApi.update(personne.id, personneConverter.toIdentiteBody(input)).then((response) => {
+      clientQuery.invalidateQueries([QUERY_KEY.personnes]);
+      return response;
+    });
   };
 
   return (
-    <>
-      <ListGroup.Item>
-        <PersonneIdentiteForm
-          onSave={update}
-          defaultValues={personneConverter.toInput(personne)}
-          goBack={onClose}
-        />
-      </ListGroup.Item>
-    </>
+    <ListGroup.Item>
+      <PersonneIdentiteForm onSave={update} defaultValues={personneConverter.toInput(personne)} goBack={onClose} />
+    </ListGroup.Item>
   );
 };

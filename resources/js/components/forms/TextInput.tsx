@@ -23,8 +23,6 @@ export const TextInput: FC<TextInputProps> = ({ label, isRequired, name, mask, d
   } = useFormContext();
 
   const error = useMemo(() => {
-    console.log(errors);
-
     return errors[name];
   }, [errors, name]);
 

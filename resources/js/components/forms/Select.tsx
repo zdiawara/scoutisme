@@ -97,13 +97,12 @@ export const AsyncSelect: FC<AsyncSelectProps> = ({
     formState: { errors },
     control,
     watch,
-    setValue,
+    // setValue,
   } = useFormContext();
 
   useEffect(() => {
     setOptions([]);
-    setValue(name, null);
-  }, [name, resetDeps, setValue]);
+  }, [resetDeps]);
 
   const error = useMemo(() => {
     return errors[name];
@@ -137,7 +136,9 @@ export const AsyncSelect: FC<AsyncSelectProps> = ({
               value={watch(name)}
               onChange={(newValue, action) => {
                 onChange(newValue, action);
-                afterSelected && afterSelected(newValue);
+                if (afterSelected) {
+                  afterSelected(newValue);
+                }
               }}
               components={{ Option }}
               className={classNames("react-select", {

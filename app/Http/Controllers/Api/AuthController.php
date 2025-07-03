@@ -107,16 +107,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        if (!isset($user->personne)) {
-            $user['roles'] = Role::where('code', 'admin')
-                ->get();
-            $user['fonctionnalites'] = [];
-        } else {
-            $user['roles'] = Role::where(DB::raw("JSON_CONTAINS(fonctions , '\"" . $user->personne->fonction_id . "\"')"), '=', 1)
-                ->get()
-                ->toArray();
-            $user['fonctionnalites'] = $userService->findFonctionnalites($user['roles']);
-        }
+        $userService->addFonctionnalitesAndRoles($user);
 
         $user->load([
             'personne.fonction',

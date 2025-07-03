@@ -27,7 +27,12 @@ export const ListUtilisateur: FC<Props> = ({ users }) => {
               {user.name}
             </Link>
             <span className="ms-1 fs-6 fw-light">{user.email}</span>
-            {user.role && <div className="fw-light text-muted mt-1">{user.role.nom}</div>}
+            {user.roles &&
+              user.roles.map((role) => (
+                <div key={role.id} className="fw-light text-muted mt-1">
+                  {role.nom}
+                </div>
+              ))}
           </div>
         </ListGroup.Item>
       ))}

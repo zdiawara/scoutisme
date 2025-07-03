@@ -12,10 +12,7 @@ export const ScoutItem: FC<Props> = ({ personne }) => {
   return (
     <>
       <div className="me-auto">
-        <Link
-          className="fw-semibold mb-1 text-black"
-          to={LINKS.personnes.view(personne.id)}
-        >
+        <Link className="fw-semibold mb-1 text-black" to={LINKS.personnes.view(personne.id)}>
           {personne?.prenom} {personne?.nom}
         </Link>
         <div className="fw-light">{personne.code}</div>

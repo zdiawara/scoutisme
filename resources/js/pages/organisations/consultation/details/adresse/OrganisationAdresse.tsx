@@ -5,6 +5,7 @@ import { View } from "components";
 import * as Icon from "react-bootstrap-icons";
 import useToggle from "hooks/useToggle";
 import { EditOrganisationAdresse } from "./EditOrganisationAdresse";
+import { useDroits } from "hooks/useDroits";
 
 type Props = {
   organisation: OrganisationResource;
@@ -12,27 +13,22 @@ type Props = {
 
 export const OrganisationAdresse: FC<Props> = ({ organisation }) => {
   const [show, toggleForm] = useToggle();
+  const droits = useDroits();
   return (
     <>
       <View.Toolbar
         icon={<Icon.GeoAlt size="1.1rem" className="me-1" />}
         label="Adresse"
         right={
-          <Button
-            size="sm"
-            variant="secondary"
-            onClick={() => toggleForm()}
-            disabled={show}
-          >
-            <Icon.Pencil />
-          </Button>
+          droits.organisation.creer && (
+            <Button size="sm" variant="secondary" onClick={() => toggleForm()} disabled={show}>
+              <Icon.Pencil />
+            </Button>
+          )
         }
       />
       {show ? (
-        <EditOrganisationAdresse
-          organisation={organisation}
-          onClose={toggleForm}
-        />
+        <EditOrganisationAdresse organisation={organisation} onClose={toggleForm} />
       ) : (
         <ListGroup.Item>
           <Row>

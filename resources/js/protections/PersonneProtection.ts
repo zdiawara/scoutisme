@@ -18,10 +18,7 @@ export class PersonneProtection extends AbstractProtection {
   constructor(userDroit: UserDroit) {
     super(userDroit);
     this._scouts = this.buildActions(SCOUT_ACTIONS, PersonneProtection.SCOUTS);
-    this._adultes = this.buildActions(
-      ADULTE_ACTIONS,
-      PersonneProtection.ADULTES
-    );
+    this._adultes = this.buildActions(ADULTE_ACTIONS, PersonneProtection.ADULTES);
   }
 
   modifier(personne?: PersonneResource): boolean {

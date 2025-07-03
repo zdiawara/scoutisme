@@ -18,14 +18,12 @@ export const ListUtilisateur: FC<Props> = ({ users }) => {
       {users.map((user) => (
         <ListGroup.Item
           as={Link}
-          to={`${LINKS.parametres}/${user.id}`}
+          to={`${LINKS.parametres.utilisateurs}/${user.id}`}
           key={user.id}
           className="d-flex justify-content-between align-items-start"
         >
           <div className="ms-2 me-auto align-self-center">
-            <Link to={`${LINKS.parametres.utilisateurs}/${user.id}`} className="fw-semibold fs-5 text-black">
-              {user.name}
-            </Link>
+            <span className="fw-semibold fs-5 text-black">{user.name}</span>
             <span className="ms-1 fs-6 fw-light">{user.email}</span>
             {user.roles &&
               user.roles.map((role) => (

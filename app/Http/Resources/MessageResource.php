@@ -15,7 +15,9 @@ class MessageResource extends JsonResource
     public function toArray(Request $request): array
     {
         return collect(parent::toArray($request))->except([])
+
             ->merge([
+                'createdBy' => new UserResource($this->whenLoaded('createdBy')),
                 'created_at' => date('Y-m-d H:i:s', strtotime($this->created_at))
             ])->all();
     }

@@ -13,6 +13,7 @@ import { AsyncSelectSimple } from "components";
 import { PayerCotisationAction } from "./payer/PayerCotisationAction";
 import { ListPaiement } from "pages/paiements/rechercher/paiement";
 import { useDroits } from "hooks/useDroits";
+import { LoaderSpinner } from "components/loader";
 
 type Props = {
   personne: PersonneResource;
@@ -56,12 +57,7 @@ export const PersonneCotisation: FC<Props> = ({ personne }) => {
             <span className="fs-5">Cotisation</span>
           </span>
           <div className="ms-auto d-block d-flex">
-            <AsyncSelectSimple
-              name="year"
-              value={annee}
-              onChange={setAnnee}
-              fetchOptions={fetchYears}
-            />
+            <AsyncSelectSimple name="year" value={annee} onChange={setAnnee} fetchOptions={fetchYears} />
             {cotisation && droits.cotisation.paiements.creer && (
               <PayerCotisationAction annee={annee.value} personne={personne} />
             )}
@@ -69,15 +65,15 @@ export const PersonneCotisation: FC<Props> = ({ personne }) => {
         </ListGroup.Item>
 
         {isLoading ? (
-          <ListGroup.Item className="text-muted">chargement ...</ListGroup.Item>
+          <ListGroup.Item className="text-center">
+            <LoaderSpinner />
+          </ListGroup.Item>
         ) : cotisation ? (
           <ListGroup.Item>
             <Cotisation cotisation={cotisation} />
           </ListGroup.Item>
         ) : (
-          <ListGroup.Item className="text-muted">
-            Aucune ligne de cotisation pour l'année {annee.label}
-          </ListGroup.Item>
+          <ListGroup.Item className="text-muted">Aucune ligne de cotisation pour l'année {annee.label}</ListGroup.Item>
         )}
       </ListGroup>
       {!isLoading && (

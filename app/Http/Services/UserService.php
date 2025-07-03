@@ -64,6 +64,28 @@ class UserService
         }
     }
 
+    public function findFonctionnalites($user)
+    {
+        if (!isset($user->personne)) {
+            return [];
+        } else {
+            $fonctionId = $user->personne->fonction_id;
+            $roleIds = Role::where(DB::raw("JSON_CONTAINS(fonctions , '\"" . $fonctionId . "\"')"), '=', 1)
+                ->get()
+                ->map(function ($role) {
+                    return $role['id'];
+                })->toArray();
+
+            return Fonctionnalite::query()
+                ->with('module.parent')
+                ->join('habilitations as habilitation', function ($builder) {
+                    $builder->on('habilitation.fonctionnalite_id', 'fonctionnalites.id');
+                })
+                ->whereIn('habilitation.role_id', $roleIds)
+                ->get();
+        }
+    }
+
     public function createFromPersonne(Personne $personne, array $body)
     {
         return $this->create([

@@ -39,23 +39,14 @@ export type UserData = {
 };
 
 const Login = () => {
-  // const auth = useAuth();
   const navigate = useNavigate();
 
   const logUser = async (body: UserData) => {
     await authApi.login(body);
-    // authApi
-    //   .login(body)
-    //   .then((resp) => {
-    //     console.log(resp);
-    //   })
-    //   .catch(console.error);
   };
 
   return (
     <>
-      {/* {auth.user && <Navigate to="/" replace />} */}
-
       <Container className="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5">
         <Row className="justify-content-center">
           <Col md={8} lg={6} xl={5} xxl={4}>
@@ -69,6 +60,7 @@ const Login = () => {
                   onFinished={() => {
                     navigate(LINKS.home);
                   }}
+                  withNotification={false}
                 />
               </Card.Body>
             </Card>

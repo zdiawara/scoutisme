@@ -23,9 +23,7 @@ export const OrganisationItem: FC<Props> = ({ organisation }) => {
 
         <div className="fw-light">
           {organisation.nature.nom}
-          {organisation.nature.code === NATURE.unite && (
-            <span> / {organisation.type?.nom}</span>
-          )}
+          {organisation.nature.code === NATURE.unite && <span> / {organisation.type?.nom}</span>}
         </div>
       </div>
 

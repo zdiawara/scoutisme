@@ -4,10 +4,7 @@ import { useSearchParams } from "react-router-dom";
 type SomeFunction = (...args: any[]) => void;
 type Timer = ReturnType<typeof setTimeout>;
 
-export function useDebounce<Func extends SomeFunction>(
-  func: Func,
-  delay = 1000
-) {
+export function useDebounce<Func extends SomeFunction>(func: Func, delay = 1000) {
   const [timer, setTimer] = useState<Timer>();
 
   const debouncedFunction = ((...args) => {
@@ -46,7 +43,6 @@ export const useSearch = () => {
     const params = new URLSearchParams(prevParams);
     if (!data) {
       Array.from(params.keys()).forEach((key) => {
-        console.log("deleting " + key);
         if (key !== "search") {
           params.delete(key);
         }
@@ -64,11 +60,7 @@ export const useSearch = () => {
       .filter(([, value]) => Boolean(value))
       .forEach(([key, value]) => {
         let val: any = value;
-        if (
-          value instanceof Object &&
-          value.hasOwnProperty("value") &&
-          value.hasOwnProperty("label")
-        ) {
+        if (value instanceof Object && value.hasOwnProperty("value") && value.hasOwnProperty("label")) {
           const _val = value as Record<string, any>;
           val = JSON.stringify({
             value: _val.value,

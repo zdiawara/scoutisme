@@ -14,6 +14,7 @@ use App\Http\Services\PersonneService;
 use App\Http\Services\UserService;
 use App\ModelFilters\PersonneFilter;
 use App\Models\Attribution;
+use App\Models\Cotisation;
 use App\Models\Personne;
 use App\Models\RefFormation;
 use Illuminate\Http\Request;
@@ -214,7 +215,11 @@ class PersonneController extends Controller
     {
         $personne->load(['ville', 'niveauFormation', 'genre', 'fonction', 'organisation.nature']);
 
-        // dd($personne->formations);
+        $cotisation = Cotisation::select('etat')->where('personne_id', $personne->id)
+            ->where('annee', date('Y'))
+            ->first();
+
+        $personne['etatCotisation'] = isset($cotisation) ? $cotisation->etat : 'non_a_jour';
 
         $ids = collect($personne->formations)->map(function ($item) {
             return $item['niveau_formation_id'];

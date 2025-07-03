@@ -40,6 +40,7 @@ export type PersonneResource = {
   fonction?: FonctionResource;
   date_debut?: string;
   date_fin?: string;
+  etatCotisation: string;
 };
 
 export type PersonneSansFonctionResource = {
@@ -102,6 +103,7 @@ export type CotisationResource = {
   montant_total: number;
   montant_restant: number;
   montant_paye: number;
+  etat: string;
   personne?: PersonneResource;
   paiements: PaiementResource[];
 };

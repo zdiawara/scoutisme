@@ -220,6 +220,7 @@ return new class extends Migration
             $table->integer('montant_total');
             $table->integer('montant_paye')->nullable();
             $table->integer('montant_restant')->nullable();
+            $table->string('etat')->default('non_a_jour');
             $table->timestamps();
             $table->softDeletes();
             $table->uuid('created_by')->nullable();

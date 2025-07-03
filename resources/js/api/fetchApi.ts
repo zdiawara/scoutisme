@@ -89,6 +89,9 @@ export const fetchApi = async <T>(requestData: RequestData): Promise<T> => {
       if (requestData.type === "json") return data as T;
       return response as any;
     }
+    if ([401, 403].includes(response.status)) {
+      window.location.href = "/auth/login";
+    }
     return Promise.reject(buildErrors(response.status, data));
   } catch (error) {
     return Promise.reject(buildErrors(500));

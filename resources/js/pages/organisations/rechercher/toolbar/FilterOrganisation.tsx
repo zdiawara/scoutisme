@@ -1,12 +1,19 @@
 import { SelectNature, SelectTypeOrganisation } from "components";
 import { withFilterForm } from "hoc";
+import { useAuth } from "hooks/useAuth";
 import { FC, useMemo } from "react";
 import { Col } from "react-bootstrap";
 import { useFormContext } from "react-hook-form";
-import { selectHelper } from "utils/functions";
+import { buildPerimetres, selectHelper } from "utils/functions";
 
 const FilterOrganisationForm: FC = () => {
   const { watch } = useFormContext();
+
+  const { user } = useAuth();
+
+  const codeNature = user?.personne?.organisation?.nature?.code;
+
+  const perimetres = codeNature ? buildPerimetres(codeNature).join(";") : null;
 
   const nature = selectHelper.getValue(watch("nature"));
   const resetDeps = useMemo(() => {
@@ -15,7 +22,7 @@ const FilterOrganisationForm: FC = () => {
   return (
     <>
       <Col xs={12}>
-        <SelectNature name="nature" label="Niveau" isClearable placeholder="" />
+        <SelectNature requestParams={{ code: perimetres }} name="nature" label="Niveau" isClearable placeholder="" />
       </Col>
       <Col xs={12}>
         <SelectTypeOrganisation
@@ -24,6 +31,7 @@ const FilterOrganisationForm: FC = () => {
           isClearable
           placeholder=""
           resetDeps={resetDeps}
+          isDisabled={!nature}
           requestParams={nature ? { nature_id: nature } : {}}
         />
       </Col>

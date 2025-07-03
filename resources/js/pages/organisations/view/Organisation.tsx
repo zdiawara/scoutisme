@@ -1,12 +1,7 @@
 import { FC, useMemo } from "react";
 import { Badge, Col, ListGroup, Nav, Row } from "react-bootstrap";
 import { ICONS } from "pages/common";
-import {
-  Link,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { LINKS } from "utils";
 import { useQuery } from "@tanstack/react-query";
 import { NATURE, QUERY_KEY } from "utils/constants";
@@ -36,9 +31,7 @@ export const Organisation: FC<OrganisationProps> = ({ organisationId }) => {
     queryKey: [QUERY_KEY.organisations, organisationId],
     networkMode: "offlineFirst",
     queryFn: ({ queryKey }) => {
-      return organisationApi.findById<OrganisationResource>(
-        queryKey[1] as string
-      );
+      return organisationApi.findById<OrganisationResource>(queryKey[1] as string);
     },
   });
 
@@ -69,8 +62,7 @@ export const Organisation: FC<OrganisationProps> = ({ organisationId }) => {
             ? "Unités/Groupes"
             : nature.code === NATURE.groupe
             ? "Unités"
-            : nature.code === NATURE.national &&
-              type?.code === "equipe_nationale"
+            : nature.code === NATURE.national && type?.code === "equipe_nationale"
             ? "Régions"
             : "Equipe nationale",
         code: "organisations",
@@ -159,12 +151,7 @@ export const Organisation: FC<OrganisationProps> = ({ organisationId }) => {
         </ListGroup.Item>
       </ListGroup>
 
-      <Nav
-        variant="pills"
-        style={{ overflow: "scroll" }}
-        className="flex-nowrap py-2 mb-2"
-        defaultActiveKey="/home"
-      >
+      <Nav variant="pills" style={{ overflow: "auto" }} className="flex-nowrap py-2 mb-2" defaultActiveKey="/home">
         {menus.map((item) => (
           <Nav.Item key={item.code}>
             <Nav.Link

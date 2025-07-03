@@ -9,10 +9,7 @@ type ModalProps = {
   element: PaiementResource;
 };
 
-export const DeletePaiementModal: FC<ModalProps> = ({
-  closeModal,
-  element,
-}) => {
+export const DeletePaiementModal: FC<ModalProps> = ({ closeModal, element }) => {
   const deletePaiement = () => {
     return paiementApi.delete(element.id);
   };
@@ -21,7 +18,7 @@ export const DeletePaiementModal: FC<ModalProps> = ({
     <DeleteConfirmationModal
       closeModal={closeModal}
       onDelete={deletePaiement}
-      query_key={QUERY_KEY.cotisations}
+      query_key={(QUERY_KEY.paiements, QUERY_KEY.cotisations)}
     />
   );
 };

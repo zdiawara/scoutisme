@@ -6,7 +6,7 @@ import { PersonneResource } from "types/personne.type";
 import { QUERY_KEY } from "utils/constants";
 import { ListResult } from "pages/common";
 import { Header } from "layout/Header";
-import { selectHelper } from "utils/functions";
+import { buildPerimetres, selectHelper } from "utils/functions";
 import { RechercherPersonneActions } from "./action/RechercherPersonneActions";
 import { useAuth } from "hooks";
 import { useSearch } from "hooks/useSearch";
@@ -21,8 +21,10 @@ const parseParams = (searchParams: URLSearchParams) => {
   const genre = searchParams.get("genre");
   const fonction = searchParams.get("fonction");
   const organisation = searchParams.get("organisation");
+  const etatCotisation = searchParams.get("etatCotisation");
 
   return {
+    etatCotisation: etatCotisation ? JSON.parse(etatCotisation) : null,
     ville: ville ? JSON.parse(ville) : null,
     genre: genre ? JSON.parse(genre) : null,
     fonction: fonction ? JSON.parse(fonction) : null,
@@ -37,6 +39,7 @@ const parseParams = (searchParams: URLSearchParams) => {
 const buildRequestParams = (filter: Record<string, any>) => {
   return {
     villeId: selectHelper.getValueFromJson(filter.ville),
+    etatCotisation: selectHelper.getValueFromJson(filter.etatCotisation),
     genreId: selectHelper.getValueFromJson(filter.genre),
     fonctionId: selectHelper.getValueFromJson(filter.fonction),
     organisationId: selectHelper.getValueFromJson(filter.organisation),
@@ -79,7 +82,7 @@ const RechercherPersonne = () => {
     const filterParams = buildRequestParams(queryKey[1]);
     if (!isAdmin && personne?.organisation?.id && !filterParams.organisationId) {
       filterParams.organisationId = personne?.organisation?.id;
-      filterParams.perimetres = (auth.userDroit?.perimetres || []).join(";");
+      filterParams.perimetres = buildPerimetres(personne?.organisation?.nature.code).join(";");
     }
     return personneApi.findAll<PersonneResource>(filterParams);
   };

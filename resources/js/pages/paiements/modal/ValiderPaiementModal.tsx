@@ -10,16 +10,14 @@ type PersonneCotisationModalProps = {
   closeModal: () => void;
 };
 
-export const ValiderPaiementModal: FC<PersonneCotisationModalProps> = ({
-  paiement,
-  closeModal,
-}) => {
+export const ValiderPaiementModal: FC<PersonneCotisationModalProps> = ({ paiement, closeModal }) => {
   const query = useQueryClient();
 
   const validerPaiement = async () => {
     await paiementApi.valider(paiement.id);
-    closeModal();
     query.invalidateQueries([QUERY_KEY.cotisations]);
+    query.invalidateQueries([QUERY_KEY.personnes]);
+    closeModal();
   };
 
   return (

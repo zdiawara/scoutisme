@@ -20,15 +20,6 @@ export const PersonneProfil: FC<Props> = ({ personne }) => {
       <ListGroup className="mb-2">
         <PersonneCoordonnee personne={personne} />
       </ListGroup>
-
-      {/* {!PersonneUtils.isScout(personne) && (
-        <ListGroup className="mb-2">
-          <PersonneFormation
-            formations={personne.formations || []}
-            personneId={personne.id}
-          />
-        </ListGroup>
-      )} */}
       <ListGroup className="mb-3">
         <PersonneAContacter personne={personne} />
       </ListGroup>

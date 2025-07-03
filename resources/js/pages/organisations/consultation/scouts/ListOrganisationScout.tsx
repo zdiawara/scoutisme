@@ -3,21 +3,19 @@ import { OrganisationResource } from "types/organisation.type";
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "utils/constants";
 import { attributionApi } from "api";
-import { Form, ListGroup, Spinner } from "react-bootstrap";
+import { Form, ListGroup } from "react-bootstrap";
 
 import { View } from "components";
 import { AttributionResource } from "types/personne.type";
 import { ScoutItem } from "./scout/ScoutItem";
 import { ListOrganisationScoutActions } from "./ListOrganisationScoutActions";
+import { LoaderSpinner } from "components/loader";
 
 type Props = {
   organisation: OrganisationResource;
 };
 
-const searchByCriteres = (
-  term: string,
-  attributions: AttributionResource[]
-) => {
+const searchByCriteres = (term: string, attributions: AttributionResource[]) => {
   return attributions.filter(({ personne: { nom, prenom, code } }) =>
     `${nom} ${prenom} ${code}`.match(new RegExp(term, "gi"))
   );
@@ -51,12 +49,35 @@ export const ListOrganisationScout: FC<Props> = ({ organisation }) => {
     return data;
   }, [data, searchText]);
 
+  const renderContent = () => {
+    if (query.isLoading) {
+      return (
+        <ListGroup.Item className="text-center">
+          <LoaderSpinner />
+        </ListGroup.Item>
+      );
+    }
+    if (scouts?.length) {
+      return (
+        <>
+          {scouts?.map(({ personne }) => (
+            <ListGroup.Item className="d-flex justify-content-between align-items-start" key={organisation.id}>
+              <ScoutItem personne={personne} />
+            </ListGroup.Item>
+          ))}
+        </>
+      );
+    }
+    return (
+      <ListGroup.Item className="text-muted text-center">
+        {searchText ? "aucun résultat" : "Aucun scout à afficher"}
+      </ListGroup.Item>
+    );
+  };
   return (
     <>
       <ListGroup className="mb-3">
-        <View.Toolbar
-          right={<ListOrganisationScoutActions organisation={organisation} />}
-        >
+        <View.Toolbar right={<ListOrganisationScoutActions organisation={organisation} />}>
           <div className="w-100">
             <Form.Control
               placeholder="Rechercher ..."
@@ -65,26 +86,7 @@ export const ListOrganisationScout: FC<Props> = ({ organisation }) => {
             />
           </div>
         </View.Toolbar>
-        {query.isLoading ? (
-          <ListGroup.Item className="text-center">
-            <Spinner animation="border" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </Spinner>
-          </ListGroup.Item>
-        ) : scouts?.length ? (
-          scouts?.map(({ personne }) => (
-            <ListGroup.Item
-              className="d-flex justify-content-between align-items-start"
-              key={organisation.id}
-            >
-              <ScoutItem personne={personne} />
-            </ListGroup.Item>
-          ))
-        ) : (
-          <ListGroup.Item className="text-muted text-center">
-            {searchText ? "aucun résultat" : "Aucun scout à afficher"}
-          </ListGroup.Item>
-        )}
+        {renderContent()}
       </ListGroup>
     </>
   );

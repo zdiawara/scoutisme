@@ -3,6 +3,7 @@ import { OrganisationResource } from "types/organisation.type";
 
 import { Button } from "react-bootstrap";
 import { CreerScout } from "./scout/CreerScout";
+import { useDroits } from "hooks/useDroits";
 
 type Props = {
   organisation: OrganisationResource;
@@ -10,6 +11,7 @@ type Props = {
 
 export const ListOrganisationScoutActions: FC<Props> = ({ organisation }) => {
   const [action, setAction] = useState<string | undefined>();
+  const droits = useDroits();
 
   const closeModal = () => {
     setAction(undefined);
@@ -17,19 +19,19 @@ export const ListOrganisationScoutActions: FC<Props> = ({ organisation }) => {
 
   return (
     <>
-      <Button
-        variant="secondary"
-        className="ms-1"
-        onClick={() => {
-          setAction("ajouter");
-        }}
-      >
-        Ajouter
-      </Button>
-
-      {action === "ajouter" && (
-        <CreerScout closeModal={closeModal} organisation={organisation} />
+      {droits.personne.scouts.creer && (
+        <Button
+          variant="secondary"
+          className="ms-1"
+          onClick={() => {
+            setAction("ajouter");
+          }}
+        >
+          Ajouter
+        </Button>
       )}
+
+      {action === "ajouter" && <CreerScout closeModal={closeModal} organisation={organisation} />}
     </>
   );
 };

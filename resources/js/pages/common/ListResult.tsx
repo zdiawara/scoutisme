@@ -3,20 +3,12 @@ import { Card, Table as BsTable, Stack, Spinner } from "react-bootstrap";
 import { ArrowLeft, ArrowRight } from "react-bootstrap-icons";
 import ReactPaginate from "react-paginate";
 
-const Container: FC<{ children: ReactNode; isLoading: boolean }> = ({
-  children,
-  isLoading,
-}) => {
+const Container: FC<{ children: ReactNode; isLoading: boolean }> = ({ children, isLoading }) => {
   if (isLoading) {
     return (
       <Card>
         <Card.Body className="text-center">
-          <Spinner
-            as="span"
-            animation="border"
-            className="avatar-sm"
-            variant="secondary"
-          />
+          <Spinner as="span" animation="border" className="avatar-sm" variant="secondary" />
           <div>Chargement des données</div>
         </Card.Body>
       </Card>
@@ -44,12 +36,7 @@ type TableProps<T> = {
   hover?: boolean;
 };
 
-function Table<T>({
-  columns,
-  data,
-  hover = false,
-  headerClassName,
-}: TableProps<T>) {
+function Table<T>({ columns, data, hover = false, headerClassName }: TableProps<T>) {
   return (
     <>
       <BsTable hover={hover} striped className="table-centered">
@@ -95,20 +82,9 @@ type PaginateProps = {
   onSizeChange?: (size: number) => void;
 };
 
-const Paginate: FC<PaginateProps> = ({
-  pageCount,
-  pageActive,
-  pageSize,
-  total,
-  onPageChange,
-  onSizeChange,
-}) => {
+const Paginate: FC<PaginateProps> = ({ pageCount, pageActive, total, onPageChange }) => {
   return (
-    <Stack
-      direction="horizontal"
-      style={{ overflow: "scroll" }}
-      className="aligns-items-center my-3"
-    >
+    <Stack direction="horizontal" className="aligns-items-center my-3">
       {/* <div style={{ width: "80px" }}>
         <Select
           className="react-select"

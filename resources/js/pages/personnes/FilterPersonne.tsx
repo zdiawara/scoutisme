@@ -1,16 +1,50 @@
-import { SelectFonction, SelectGenre, SelectOrganisation, SelectRefFormation, SelectVille } from "components";
+import {
+  AsyncSelect,
+  CheckBox,
+  SelectFonction,
+  SelectGenre,
+  SelectOrganisation,
+  SelectRefFormation,
+  SelectVille,
+  SwitchBox,
+} from "components";
 import { withFilterForm } from "hoc";
 import { useAuth } from "hooks";
 import { FC } from "react";
 import { Col } from "react-bootstrap";
+import { buildPerimetres } from "utils/functions";
 
 const FilterPersonneForm: FC = () => {
   const { userDroit, user } = useAuth();
+
+  const codeNature = user?.personne?.organisation?.nature?.code;
+
+  const perimetres = codeNature ? buildPerimetres(codeNature).join(";") : null;
 
   return (
     <>
       <Col xs={12}>
         <SelectGenre name="genre" label="Genre" isClearable placeholder="" />
+      </Col>
+      <Col>
+        <AsyncSelect
+          isClearable
+          name="etatCotisation"
+          label="Etat cotisation"
+          placeholder=""
+          fetchOptions={() =>
+            Promise.resolve([
+              {
+                label: "A jour",
+                value: "a_jour",
+              },
+              {
+                label: "Non à jour",
+                value: "non_a_jour",
+              },
+            ])
+          }
+        />
       </Col>
       <Col xs={12}>
         <SelectFonction
@@ -19,7 +53,7 @@ const FilterPersonneForm: FC = () => {
           isClearable
           placeholder=""
           requestParams={{
-            codeNature: userDroit?.perimetres?.join(";"),
+            codeNature: perimetres,
           }}
         />
       </Col>
@@ -32,7 +66,7 @@ const FilterPersonneForm: FC = () => {
             isClearable
             placeholder=""
             requestParams={{
-              perimetres: userDroit?.perimetres?.join(";"),
+              perimetres,
               organisationId: user?.personne?.organisation?.id,
             }}
           />

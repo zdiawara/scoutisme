@@ -13,6 +13,10 @@ type HocCompomentProps = {
   defaultValues?: Record<string, any>;
   title?: string;
   subtitle?: string;
+  withNotification?: boolean;
+  notificationOptions?: {
+    message?: string;
+  };
 };
 
 export type WrapperProps = {
@@ -27,16 +31,29 @@ export type WrapperProps = {
 };
 
 export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
-  const HocCompoment: FC<HocCompomentProps> = ({ onSave, onFinished, defaultValues, title, subtitle, goBack }) => {
+  const HocCompoment: FC<HocCompomentProps> = ({
+    onSave,
+    onFinished,
+    defaultValues,
+    title,
+    subtitle,
+    goBack,
+    withNotification = true,
+    notificationOptions,
+  }) => {
     const methods = useForm({
       resolver: schema ? yupResolver(schema) : undefined,
-      defaultValues: { ...defaultValues, genre: { label: "Femme", value: "9f4ae7c4-228f-4493-9f63-a900fbaa2ea8" } },
+      defaultValues: { ...defaultValues },
       mode: "onChange",
       reValidateMode: "onChange",
     });
     const navigation = useNavigate();
     const [, setSaving] = useState<boolean>(false);
     //const notification = useNotification();
+
+    const _goBack = () => {
+      navigation(-1);
+    };
 
     const onSubmit = (data: any) => {
       setSaving(true);
@@ -45,13 +62,19 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
           if (onFinished) {
             onFinished(element);
           } else {
-            goBack ? goBack() : _goBack();
+            if (goBack) {
+              goBack();
+            } else {
+              _goBack();
+            }
           }
-          toast("Modifications enregistrées !", {
-            type: toast.TYPE.SUCCESS,
-            autoClose: 5000,
-            position: "top-right",
-          });
+          if (withNotification) {
+            toast(notificationOptions?.message || "Modifications enregistrées !", {
+              type: toast.TYPE.SUCCESS,
+              autoClose: 5000,
+              position: "top-right",
+            });
+          }
         })
         .catch((e) => {
           let message = "";
@@ -79,15 +102,8 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
         });
     };
 
-    const _goBack = () => {
-      navigation(-1);
-    };
-
     const onError = (e: any) => {
       console.error(e);
-      /*notification.warning({
-        title: "Les données soumises ne sont pas valides",
-      });*/
     };
 
     const renderButtons = () => {

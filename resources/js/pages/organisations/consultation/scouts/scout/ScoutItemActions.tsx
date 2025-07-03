@@ -6,7 +6,7 @@ import * as Icon from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 import { LINKS } from "utils";
 import { PersonneResource } from "types/personne.type";
-import { useDroits } from "hooks/useDroits";
+// import { useDroits } from "hooks/useDroits";
 
 type Props = {
   personne: PersonneResource;
@@ -15,7 +15,7 @@ type Props = {
 export const ScoutItemActions: FC<Props> = ({ personne }) => {
   const modalAction = useModalAction();
   const navigation = useNavigate();
-  const droits = useDroits();
+  // const droits = useDroits();
   const actions = useMemo(() => {
     const ACTIONS = [
       {
@@ -30,18 +30,18 @@ export const ScoutItemActions: FC<Props> = ({ personne }) => {
         description: "Transferer vers une autre unité",
         code: "supprimer",
         Icon: Icon.Send,
-        visible: droits.personne.scouts.affecter,
+        visible: false, //droits.personne.scouts.affecter,
       },
       {
         label: "Supprimer",
         description: "Supprimer le scout",
         code: "supprimer",
         Icon: Icon.Trash3,
-        visible: droits.personne.scouts.creer,
+        visible: false, // droits.personne.scouts.creer,
       },
     ];
     return ACTIONS.filter((e) => e.visible);
-  }, [droits.personne.scouts.affecter, droits.personne.scouts.creer]);
+  }, []);
 
   return (
     <Stack direction="horizontal" className="ms-auto">

@@ -1,5 +1,5 @@
 services:
-  scoutisme_main:
+  scoutisme_server:
     container_name: scoutisme-serve
     build:
       context: .
@@ -12,6 +12,8 @@ services:
       - "9025:8000"
     depends_on:
       - scoutisme_db
+    networks:
+      - scoutisme_network
 
   # scoutisme_queue:
   #   container_name: scoutisme-queue
@@ -33,6 +35,8 @@ services:
       - scoutisme_db:/var/lib/mysql
     ports:
       - "3320:3306"
+    networks:
+      - scoutisme_network
 
   scoutisme_mailpit:
     image: axllent/mailpit
@@ -40,7 +44,13 @@ services:
     ports:
       - "1025:1025"
       - "8025:8025"
+    networks:
+      - scoutisme_network
 
 volumes:
   scoutisme_db:
     driver: local
+
+networks:
+  scoutisme_network:
+    driver: bridge

@@ -11,7 +11,7 @@ import { useDroits } from "hooks/useDroits";
 import * as Icon from "react-bootstrap-icons";
 import { PersonneProfil } from "../consultation/profil";
 import { PersonneCarte } from "../consultation/carte";
-import { PersonneCotisation } from "../consultation/cotisation";
+import { EtatCotisation, PersonneCotisation } from "../consultation/cotisation";
 import { PersonneFonctions } from "../consultation/fonction/PersonneFonctions";
 import { Header } from "layout/Header";
 import { ConsulterPersonneActions } from "../consultation/action";
@@ -91,7 +91,7 @@ export const Personne: FC<PersonneProps> = ({ personneId, title }) => {
   }
 
   const menu = (
-    <Nav variant="pills" style={{ overflow: "scroll" }} className="flex-nowrap py-2">
+    <Nav variant="pills" style={{ overflow: "auto" }} className="flex-nowrap py-2">
       {menus.map((item) => (
         <Nav.Item key={item.code}>
           <Nav.Link
@@ -148,7 +148,7 @@ export const Personne: FC<PersonneProps> = ({ personneId, title }) => {
             </Col>
             <Col xs={6}>
               <View.Item label="Cotisation">
-                <Badge bg="success">A jour</Badge>
+                <EtatCotisation etat={personne.etatCotisation} />
               </View.Item>
             </Col>
           </Row>

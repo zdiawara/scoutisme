@@ -16,8 +16,7 @@ export const selectHelper = {
   getValue: (item?: SelectItem) => {
     return item?.value || null;
   },
-  getValueFromJson: (item: any) =>
-    item ? selectHelper.getValue(JSON.parse(item)) : null,
+  getValueFromJson: (item: any) => (item ? selectHelper.getValue(JSON.parse(item)) : null),
 };
 
 /**
@@ -36,4 +35,17 @@ export const buildNatureColor = (codeNature: string) => {
     case NATURE.national:
       return "warning";
   }
+};
+
+export const buildPerimetres = (codeNature: string) => {
+  let perimetres = ["national", "region", "groupe", "unite"];
+  if (codeNature === "region") {
+    perimetres = perimetres.filter((n) => n !== "national");
+  } else if (codeNature === "groupe") {
+    perimetres = perimetres.filter((n) => !["national", "region"].includes(n));
+  } else if (codeNature === "unite") {
+    perimetres = perimetres.filter((n) => !["national", "region", "groupe"].includes(n));
+  }
+
+  return perimetres;
 };

@@ -2,16 +2,18 @@ import { useQuery } from "@tanstack/react-query";
 import { organisationApi } from "api";
 import { OrganisationResource } from "types/organisation.type";
 import { QUERY_KEY } from "utils/constants";
-import { selectHelper } from "utils/functions";
+import { buildPerimetres, selectHelper } from "utils/functions";
 import { RechercherOrganisationActions } from "./action/RechercherOrganisationActions";
 import { Header } from "layout/Header";
-import { ListGroup, Spinner } from "react-bootstrap";
+import { ListGroup } from "react-bootstrap";
 import { ListResult } from "pages/common";
 import { SearchToolbar } from "pages/common/toolbar";
 import { useSearch } from "hooks/useSearch";
 import useToggle from "hooks/useToggle";
 import { FilterOrganisation } from "./toolbar/FilterOrganisation";
 import { ListOrganisation } from "./organisation/ListOrganisation";
+import { useAuth } from "hooks/useAuth";
+import { LoaderSpinner } from "components/loader";
 
 const parseParams = (searchParams: URLSearchParams) => {
   const type = searchParams.get("type");
@@ -27,23 +29,22 @@ const parseParams = (searchParams: URLSearchParams) => {
   };
 };
 
-const buildRequestParams = (filter: Record<string, any>) => {
-  return {
-    typeId: filter.type ? selectHelper.getValue(JSON.parse(filter.type)) : null,
-    natureId: filter.nature
-      ? selectHelper.getValue(JSON.parse(filter.nature))
-      : null,
+const buildRequestParams = (filter: Record<string, string>, organisation?: OrganisationResource) => {
+  const data = {
+    typeId: selectHelper.getValueFromJson(filter.type),
+    natureId: selectHelper.getValueFromJson(filter.nature),
     search: filter.search,
     page: parseInt(filter.page) || 1,
     size: parseInt(filter.size) || 10,
     sort: filter.sort || "nom,asc",
-  };
-};
+  } as Record<string, string | number>;
 
-const searchOrganisations = ({ queryKey }: any) => {
-  return organisationApi.findAll<OrganisationResource>(
-    buildRequestParams(queryKey[1])
-  );
+  if (organisation) {
+    data.perimetres = buildPerimetres(organisation.nature.code).join(";");
+    data.organisationId = organisation.id;
+  }
+
+  return data;
 };
 
 const TRIES = [
@@ -64,11 +65,16 @@ const RechercherOrganisation = () => {
   const queryParams = Object.fromEntries(search.searchParams.entries());
 
   const params = parseParams(search.searchParams);
+  const { user } = useAuth();
 
   const query = useQuery({
     queryKey: [QUERY_KEY.organisations, queryParams],
     keepPreviousData: true,
-    queryFn: searchOrganisations,
+    queryFn: ({ queryKey }: any) => {
+      return organisationApi.findAll<OrganisationResource>(
+        buildRequestParams(queryKey[1], user?.personne?.organisation)
+      );
+    },
   });
 
   const organisations = query.data?.data;
@@ -78,11 +84,7 @@ const RechercherOrganisation = () => {
     <>
       <Header
         title="Organisations"
-        right={
-          <RechercherOrganisationActions
-            params={buildRequestParams(queryParams)}
-          />
-        }
+        right={<RechercherOrganisationActions params={buildRequestParams(queryParams, user?.personne?.organisation)} />}
       />
 
       <ListGroup className="mt-4">
@@ -90,16 +92,13 @@ const RechercherOrganisation = () => {
           tries={TRIES}
           isFetching={query.isFetching && !query.isLoading}
           toggleFilter={toggleFilter}
-          searchParams={search.searchParams}
+          searchParams={params}
           nombreResultat={meta?.total}
         />
 
         {query.isLoading ? (
           <ListGroup.Item className="text-center">
-            <Spinner className="me-1" size="sm" animation="grow" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </Spinner>
-            <span className="fw-light">chargement ...</span>
+            <LoaderSpinner />
           </ListGroup.Item>
         ) : (
           <ListOrganisation organisations={organisations} />
@@ -121,7 +120,7 @@ const RechercherOrganisation = () => {
             search.onChangeFilter(data);
             toggleFilter();
           }}
-          defaultValues={search.searchParams}
+          defaultValues={params}
           close={toggleFilter}
           show
         />

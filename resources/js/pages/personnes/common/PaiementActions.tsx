@@ -2,11 +2,7 @@ import { FC, useMemo } from "react";
 import { Button, Stack } from "react-bootstrap";
 import { PaiementResource } from "types/personne.type";
 import { useModalAction } from "hooks";
-import {
-  ModifierPaiementModal,
-  RejeterPaiementModal,
-  ValiderPaiementModal,
-} from "pages/paiements/modal";
+import { ModifierPaiementModal, RejeterPaiementModal, ValiderPaiementModal } from "pages/paiements/modal";
 import { DeletePaiementModal } from "pages/paiements/modal/DeletePaiementModal";
 import { paiementApi } from "api";
 import { VoirPaiementModal } from "pages/paiements/modal/VoirPaiement";
@@ -67,7 +63,7 @@ export const PaiementActions: FC<PaiementActionsProps> = ({ paiement }) => {
     ].filter((e) => e.visible);
   }, [cotisation, paiement.etat]);
 
-  if (!Boolean(actions.length)) {
+  if (!actions.length) {
     return null;
   }
   return (
@@ -85,41 +81,19 @@ export const PaiementActions: FC<PaiementActionsProps> = ({ paiement }) => {
           actions={actions}
           onSelect={(code) => {
             if (code === "telecharger_recu") {
-              paiementApi
-                .download(`${paiement.id}/recus`)
-                .then(modalAction.close);
+              paiementApi.download(`${paiement.id}/recus`).then(modalAction.close);
             }
             modalAction.change(code)();
           }}
         />
       </Stack>
-      {modalAction.action === "valider" && (
-        <ValiderPaiementModal
-          closeModal={modalAction.close}
-          paiement={paiement}
-        />
-      )}
-      {modalAction.action === "rejeter" && (
-        <RejeterPaiementModal
-          closeModal={modalAction.close}
-          paiement={paiement}
-        />
-      )}
+      {modalAction.action === "valider" && <ValiderPaiementModal closeModal={modalAction.close} paiement={paiement} />}
+      {modalAction.action === "rejeter" && <RejeterPaiementModal closeModal={modalAction.close} paiement={paiement} />}
       {modalAction.action === "modifier" && (
-        <ModifierPaiementModal
-          closeModal={modalAction.close}
-          paiement={paiement}
-        />
+        <ModifierPaiementModal closeModal={modalAction.close} paiement={paiement} />
       )}
-      {modalAction.action === "supprimer" && (
-        <DeletePaiementModal
-          closeModal={modalAction.close}
-          element={paiement}
-        />
-      )}
-      {modalAction.action === "voir" && (
-        <VoirPaiementModal closeModal={modalAction.close} paiement={paiement} />
-      )}
+      {modalAction.action === "supprimer" && <DeletePaiementModal closeModal={modalAction.close} element={paiement} />}
+      {modalAction.action === "voir" && <VoirPaiementModal closeModal={modalAction.close} paiement={paiement} />}
     </>
   );
 };

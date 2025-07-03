@@ -20,13 +20,13 @@ export const RechercherPersonneActions = ({ params }: { params: Record<string, a
 
   const menus = useMemo(() => {
     return [
-      {
-        label: "Ajouter",
-        description: "Créer une nouvelle personne",
-        code: "creer",
-        Icon: Icon.PersonAdd,
-        visible: droits.personne.adultes.creer || droits.personne.scouts.creer,
-      },
+      // {
+      //   label: "Ajouter",
+      //   description: "Créer une nouvelle personne",
+      //   code: "creer",
+      //   Icon: Icon.PersonAdd,
+      //   visible: droits.personne.adultes.creer || droits.personne.scouts.creer,
+      // },
       {
         label: "Exporter",
         description: "Exporter les personnes en CSV",
@@ -42,7 +42,7 @@ export const RechercherPersonneActions = ({ params }: { params: Record<string, a
         visible: droits.mail.mails.envoyer,
       },
     ].filter((e) => e.visible);
-  }, [droits.mail, droits.personne]);
+  }, [droits.mail]);
 
   return (
     <>

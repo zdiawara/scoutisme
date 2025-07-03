@@ -9,11 +9,7 @@ import { Col, Row } from "react-bootstrap";
 
 const Form: FC<WrapperV2Props> = (props) => {
   return (
-    <HookModalForm
-      {...props}
-      modalBodyClassName="bg-light p-3"
-      onClose={props.onExit}
-    >
+    <HookModalForm {...props} modalBodyClassName="bg-light p-3" onClose={props.onExit}>
       <Row className="g-2">
         <Col sm={12}>
           <TextInput
@@ -35,16 +31,11 @@ type PersonneCotisationModalProps = {
   closeModal: () => void;
 };
 
-export const RejeterPaiementModal: FC<PersonneCotisationModalProps> = ({
-  paiement,
-  closeModal,
-}) => {
+export const RejeterPaiementModal: FC<PersonneCotisationModalProps> = ({ paiement, closeModal }) => {
   const query = useQueryClient();
 
   const rejeterPaiement = async (data: any) => {
     await paiementApi.rejeter(paiement.id, data);
-    closeModal();
-    query.invalidateQueries([QUERY_KEY.cotisations]);
   };
 
   return (
@@ -54,6 +45,7 @@ export const RejeterPaiementModal: FC<PersonneCotisationModalProps> = ({
       defaultValues={{}}
       onSuccess={() => {
         query.invalidateQueries([QUERY_KEY.cotisations]);
+        query.invalidateQueries([QUERY_KEY.paiements]);
         closeModal();
       }}
       onExit={closeModal}

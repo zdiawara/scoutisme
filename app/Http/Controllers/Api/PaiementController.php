@@ -7,9 +7,12 @@ use App\Http\Resources\CotisationResource;
 use App\Http\Resources\PaiementResource;
 use App\Http\Services\CotisationService;
 use App\Http\Services\PaiementService;
+use App\Http\Services\UserService;
+use App\Models\Fonctionnalite;
 use App\Models\Paiement;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PaiementController extends Controller
@@ -27,10 +30,28 @@ class PaiementController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request, UserService $userService)
     {
 
         $query = Paiement::query();
+
+        $user = Auth::user();
+
+        if (isset($user->personne)) {
+            $fonctionValideur = Fonctionnalite::whereHas('module', function ($subQuery) {
+                $subQuery->where('code', 'paiements');
+            })->where('code', 'valider')
+                ->firstOrFail();
+
+            $isValideur = $userService->findFonctionnalites($user)
+                ->map(function ($fonctionnalite) {
+                    return $fonctionnalite->id;
+                })->contains($fonctionValideur->id);
+
+            if (!$isValideur) {
+                $query->where('paiements.created_by', $user->id);
+            }
+        }
 
         if ($request->has("sort")) {
             $parts = explode(",", $request->get('sort'));
@@ -73,6 +94,7 @@ class PaiementController extends Controller
         $data = $result['query']
             ->select($projection)
             ->with(['cotisation.personne', 'valideur', 'createur'])
+
             ->get();
 
         return [

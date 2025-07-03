@@ -8,6 +8,7 @@ use App\Http\Services\MailService;
 use App\Http\Services\MessageService;
 use App\Models\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class MessageController extends Controller
@@ -17,7 +18,7 @@ class MessageController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Message::query();
+        $query = Message::where('created_by', Auth::user()->id);
 
         if ($request->has('search')) {
             $query->where('objet', 'LIKE', "%" . $request->get('search') . "%");
@@ -31,10 +32,10 @@ class MessageController extends Controller
                 'messages.id',
                 'messages.objet',
                 DB::raw('JSON_LENGTH(messages.destinataires) as nombre_destinataires'),
-                'created_at'
+                'created_at',
             ])
+            ->with(['createdBy'])
             ->get();
-
 
         return [
             'data' => MessageResource::collection($data),

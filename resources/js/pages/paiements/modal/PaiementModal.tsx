@@ -10,11 +10,7 @@ import { paiementSchema } from "../form/paiementUtils";
 
 const Form: FC<WrapperV2Props> = (props) => {
   return (
-    <HookModalForm
-      {...props}
-      modalBodyClassName="bg-light p-3"
-      onClose={props.onExit}
-    >
+    <HookModalForm {...props} modalBodyClassName="bg-light p-3" onClose={props.onExit}>
       <Row className="g-2">
         <Col sm={12}>
           <TextInput
@@ -39,11 +35,7 @@ type CreerPaiementModalProps = {
   closeModal: () => void;
 };
 
-export const CreerPaiementModal: FC<CreerPaiementModalProps> = ({
-  personne,
-  annee,
-  closeModal,
-}) => {
+export const CreerPaiementModal: FC<CreerPaiementModalProps> = ({ personne, annee, closeModal }) => {
   const query = useQueryClient();
 
   const { data: cotisation, isLoading } = useQuery({
@@ -94,10 +86,7 @@ type ModifierPaiementModalProps = {
   closeModal: () => void;
 };
 
-export const ModifierPaiementModal: FC<ModifierPaiementModalProps> = ({
-  paiement,
-  closeModal,
-}) => {
+export const ModifierPaiementModal: FC<ModifierPaiementModalProps> = ({ paiement, closeModal }) => {
   const query = useQueryClient();
 
   const modifier = (data: Record<string, any>) => {
@@ -114,7 +103,7 @@ export const ModifierPaiementModal: FC<ModifierPaiementModalProps> = ({
         montant: paiement.montant,
       }}
       onSuccess={() => {
-        query.invalidateQueries([QUERY_KEY.cotisations]);
+        query.invalidateQueries([QUERY_KEY.paiements, QUERY_KEY.cotisations]);
         closeModal();
       }}
       onExit={closeModal}

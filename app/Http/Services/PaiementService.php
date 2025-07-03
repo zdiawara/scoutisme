@@ -60,9 +60,9 @@ class PaiementService
 
         DB::beginTransaction();
 
-        $cotisation = $this->cotisationService->updateMontant($paiement->cotisation, $paiement->montant);
-
         $valideur = Auth()->user();
+
+        $cotisation = $paiement->cotisation;
 
         $paiement->update([
             'etat' => 'valide',
@@ -91,6 +91,8 @@ class PaiementService
                 ]
             ]
         ]);
+
+        $this->cotisationService->updateMontant($paiement->cotisation, $paiement->montant);
 
         DB::commit();
 

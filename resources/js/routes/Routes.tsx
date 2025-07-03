@@ -49,7 +49,7 @@ const Logout = Loadable(lazy(() => import("pages/auth/Logout")));
 const Register = Loadable(lazy(() => import("pages/auth/Register")));
 
 // const MonProfil = Loadable(lazy(() => import("pages/compte/MonProfil")));
-// const MonOrganisation = Loadable(lazy(() => import("pages/compte/MonOrganisation")));
+const MonOrganisation = Loadable(lazy(() => import("pages/comptes/MonOrganisation")));
 
 const Parametres = Loadable(lazy(() => import("pages/parametres/Parametres")));
 const RechercherFormation = Loadable(lazy(() => import("pages/parametres/formations/rechercher/RechercherFormation")));
@@ -72,6 +72,7 @@ export const router = createBrowserRouter(
       <Route path="logout" element={<Logout />} />
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
+        <Route path={LINKS.organisation.base} element={<MonOrganisation />} />
         {/* <Route path={LINKS.organisation.base} element={<MonOrganisation />} />
         <Route path={LINKS.profil.base} element={<Outlet />}>
           <Route index element={<MonProfil />} />

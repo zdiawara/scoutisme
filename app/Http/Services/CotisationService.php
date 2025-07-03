@@ -2,7 +2,9 @@
 
 namespace App\Http\Services;
 
+use App\Exceptions\BadRequestException;
 use App\Models\Cotisation;
+use App\Models\Paiement;
 
 class CotisationService
 {
@@ -46,11 +48,23 @@ class CotisationService
     {
         $montant_paye = intval($montant) + $cotisation->montant_paye;
 
+        if ($montant_paye > $cotisation->montant_total) {
+            throw new BadRequestException("La somme des montants soumis doit être inférieur à " . $cotisation->montant_total);
+        }
+
         $cotisation->update([
             'montant_paye' => $montant_paye,
             'montant_restant' => $cotisation->montant_total - $montant_paye
         ]);
 
-        return $cotisation;
+        $montantTotal = Paiement::where('cotisation_id', $cotisation->id)
+            ->where('etat', 'valide')
+            ->sum('montant');
+
+        if ($montantTotal >= $cotisation->montant_total) {
+            $cotisation->update([
+                'etat' => 'a_jour'
+            ]);
+        }
     }
 }

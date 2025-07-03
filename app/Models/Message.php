@@ -12,8 +12,16 @@ class Message extends Model
     use HasUuids, Filterable, Audit;
 
     protected $fillable = [
-        'objet', 'contenu', 'destinataires', 'critere'
+        'objet',
+        'contenu',
+        'destinataires',
+        'critere'
     ];
 
     protected $casts = ['destinataires' => 'array', 'critere' => 'array'];
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }

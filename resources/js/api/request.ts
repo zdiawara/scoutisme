@@ -73,8 +73,5 @@ export const requestBlob = async (url: string, options: RequestInit = {}, auth: 
     type: "blob",
   };
 
-  if (auth) {
-    params.token = localStorage.getItem("@token") || undefined;
-  }
   return fetchApi<any>(params).catch(dispatchError);
 };

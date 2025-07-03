@@ -1,9 +1,10 @@
-import { PersonneActions } from "pages/personnes/common/PersonneActions";
 import { FC } from "react";
+import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { PersonneResource } from "types/personne.type";
 import { LINKS } from "utils";
 import { NATURE } from "utils/constants";
+import * as Icon from "react-bootstrap-icons";
 
 type PersonneItemProps = {
   personne: PersonneResource;
@@ -55,23 +56,21 @@ export const PersonneItem: FC<PersonneItemProps> = ({ personne }) => {
         )}
       </div>
       <div className="ms-2 me-auto align-self-center">
-        <Link
-          to={LINKS.personnes.view(personne.id)}
-          className="fw-semibold fs-5 text-black"
-        >
+        <Link to={LINKS.personnes.view(personne.id)} className="fw-semibold fs-5 text-black">
           {personne?.prenom} {personne?.nom}
         </Link>
         <span className="ms-1 fs-6 fw-light">{personne.code}</span>
-        {personne.fonction && (
-          <div className="fw-light">{buidFonction(personne)}</div>
-        )}
-        {personne.organisation && (
-          <div className="fw-light text-muted mt-1">
-            {buidOrganisation(personne)}
-          </div>
-        )}
+        {personne.fonction && <div className="fw-light">{buidFonction(personne)}</div>}
+        {personne.organisation && <div className="fw-light text-muted mt-1">{buidOrganisation(personne)}</div>}
       </div>
-      <PersonneActions personne={personne} />
+      <Button
+        //@ts-ignore
+        as={Link}
+        to={LINKS.personnes.view(personne.id)}
+        variant="default"
+      >
+        <Icon.Eye />
+      </Button>
     </>
   );
 };

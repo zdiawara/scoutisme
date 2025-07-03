@@ -3,9 +3,7 @@ import { Form, FormCheckProps } from "react-bootstrap";
 import { BsPrefixRefForwardingComponent } from "react-bootstrap/esm/helpers";
 import { useFormContext, Controller } from "react-hook-form";
 
-export const Radio: BsPrefixRefForwardingComponent<"input", FormCheckProps> = (
-  props
-) => {
+export const Radio: BsPrefixRefForwardingComponent<"input", FormCheckProps> = (props) => {
   const {
     //  formState: { errors },
     setValue,
@@ -46,10 +44,7 @@ export const Radio: BsPrefixRefForwardingComponent<"input", FormCheckProps> = (
   );
 };
 
-export const CheckBox: BsPrefixRefForwardingComponent<
-  "input",
-  FormCheckProps
-> = (props) => {
+export const CheckBox: BsPrefixRefForwardingComponent<"input", FormCheckProps> = (props) => {
   const { setValue, control, watch } = useFormContext();
 
   const isChecked = (value?: any) => {
@@ -92,10 +87,7 @@ export const CheckBox: BsPrefixRefForwardingComponent<
   );
 };
 
-export const SwitchBox: BsPrefixRefForwardingComponent<
-  "input",
-  FormCheckProps
-> = (props) => {
+export const SwitchBox: BsPrefixRefForwardingComponent<"input", FormCheckProps> = (props) => {
   const { setValue, control, watch } = useFormContext();
 
   const isChecked = (value?: any) => {

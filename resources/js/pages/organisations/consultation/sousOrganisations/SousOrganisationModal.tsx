@@ -1,11 +1,4 @@
-import {
-  HookModalForm,
-  SelectNature,
-  SelectTypeOrganisation,
-  SelectVille,
-  TextInput,
-  View,
-} from "components";
+import { HookModalForm, SelectNature, SelectTypeOrganisation, SelectVille, TextInput, View } from "components";
 import { WrapperV2Props, withMutationForm } from "hoc";
 import { FC, Fragment, useEffect, useMemo } from "react";
 import { Col, ListGroup, Row } from "react-bootstrap";
@@ -46,9 +39,7 @@ const Form: FC<WrapperV2Props> = (props) => {
   }, [parentCodeNature]);
 
   useEffect(() => {
-    const listNatures = natures?.data.filter((n) =>
-      naturesAuthorized.includes(n.code)
-    );
+    const listNatures = natures?.data.filter((n) => naturesAuthorized.includes(n.code));
 
     if (!props.isEditMode && listNatures?.length === 1) {
       setValue("nature", {
@@ -75,10 +66,7 @@ const Form: FC<WrapperV2Props> = (props) => {
   return (
     <HookModalForm {...props} onClose={props.onExit}>
       <ListGroup>
-        <View.Toolbar
-          icon={<InfoCircle size="1.1rem" className="me-1" />}
-          label="Information générale"
-        />
+        <View.Toolbar icon={<InfoCircle size="1.1rem" className="me-1" />} label="Information générale" />
         <ListGroup.Item>
           <Row className="g-2">
             {[NATURE.unite].includes(codeNature) ? (
@@ -102,12 +90,7 @@ const Form: FC<WrapperV2Props> = (props) => {
               </Fragment>
             )}
             <Col sm={6}>
-              <TextInput
-                name="nom"
-                label="Nom"
-                placeholder="Nom de l'organisation"
-                isRequired
-              />
+              <TextInput name="nom" label="Nom" placeholder="Nom de l'organisation" isRequired />
             </Col>
             <Col sm={6}>
               <TextInput
@@ -123,21 +106,13 @@ const Form: FC<WrapperV2Props> = (props) => {
       </ListGroup>
 
       <ListGroup className="mt-2">
-        <View.Toolbar
-          icon={<GeoAlt size="1.1rem" className="me-1" />}
-          label="Adresse"
-        />
+        <View.Toolbar icon={<GeoAlt size="1.1rem" className="me-1" />} label="Adresse" />
         <ListGroup.Item>
           <Row className="g-2">
-            <Col>
-              <SelectVille
-                name="ville"
-                label="Ville"
-                placeholder=""
-                isClearable
-              />
+            <Col xs={12}>
+              <SelectVille name="ville" label="Ville" placeholder="" isClearable />
             </Col>
-            <Col>
+            <Col xs={12}>
               <TextInput name="adresse" label="Lieu" placeholder="Quartier" />
             </Col>
           </Row>
@@ -154,10 +129,7 @@ type SousOrganisationModalProps = {
   organisation: OrganisationResource;
 };
 
-export const SousOrganisationModal: FC<SousOrganisationModalProps> = ({
-  closeModal,
-  organisation,
-}) => {
+export const SousOrganisationModal: FC<SousOrganisationModalProps> = ({ closeModal, organisation }) => {
   const query = useQueryClient();
 
   const createSousOrganisation = (data: Record<string, any>) => {
@@ -186,10 +158,7 @@ export const SousOrganisationModal: FC<SousOrganisationModalProps> = ({
         },
       }}
       onSuccess={() => {
-        query.invalidateQueries([
-          QUERY_KEY.organisation_enfants,
-          organisation.id,
-        ]);
+        query.invalidateQueries([QUERY_KEY.organisation_enfants, organisation.id]);
         closeModal();
       }}
       onExit={closeModal}

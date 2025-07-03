@@ -8,9 +8,7 @@ type AuthContextProps = {
   setUser: (user?: UserResource) => void;
 };
 
-export const AuthContent = createContext<AuthContextProps>(
-  {} as AuthContextProps
-);
+export const AuthContent = createContext<AuthContextProps>({} as AuthContextProps);
 
 type AuthProviderProps = {
   children: ReactNode;
@@ -35,11 +33,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     setDroits(user ? new UserDroit(user) : undefined);
   };
 
-  return (
-    <AuthContent.Provider value={{ user, setUser, userDroit }}>
-      {children}
-    </AuthContent.Provider>
-  );
+  return <AuthContent.Provider value={{ user, setUser, userDroit }}>{children}</AuthContent.Provider>;
 };
 
 export const useAuth = () => {

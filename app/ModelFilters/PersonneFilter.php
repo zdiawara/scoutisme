@@ -56,7 +56,8 @@ class PersonneFilter extends ModelFilter
     {
         return $this->join('cotisations', function ($q) {
             $q->on('personnes.id', 'cotisations.personne_id');
-        })->where('cotisations.etat', $value);
+        })->where('cotisations.etat', $value)
+            ->where('cotisations.annee', date('Y'));
     }
 
     public function niveauFormationId($value)

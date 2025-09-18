@@ -1,75 +1,23 @@
-name: Deploiement sur Recette
+name: Déploiement sur la RECETTE
 
 on:
   push:
     branches:
-      - fusion # ou master, la branche que vous déployez
+      - develop
 
 jobs:
-  web-deploy:
-    name: Deployer Laravel et React
-    runs-on: ubuntu-latest
-    environment: RECETTE
-
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20" # Utilisez une version LTS stable de Node.js
-
-      - name: Install NPM Dependencies
-        run: npm install
-
-      - name: Build Frontend Assets (Vite)
-        run: npm run build
-
-      - name: Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.0
-        with:
-          server: ${{ secrets.ASBF_FTP_HOST }}
-          username: ${{ secrets.ASBF_FTP_USERNAME }}
-          password: ${{ secrets.ASBF_FTP_PASSWORD }}
-          server-dir: ./rec/
-          exclude: |
-            .git/**
-            .github/**
-            .vscode/**
-            node_modules/**
-            vendor/**
-            storage/logs/**
-            .env.example
-            *.md
-            *.log
-            public/hot
-            resources/js/**
-            docker/*
-            .gitignore
-            .prettierrc.json
-            docker-compose.yaml
-            Dockerfile
-            eslint.config.js
-            package.json
-            package-lock.json
-            tsconfig.app.json
-            tsconfig.json
-            tsconfig.node.json
-            vite.config.js
-
-      - name: Install Deps and Migration
-        uses: appleboy/ssh-action@master
-        with:
-          username: ${{ secrets.ASBF_SSH_USERNAME }}
-          host: ${{ secrets.ASBF_SSH_HOST }}
-          port: ${{ secrets.ASBF_SSH_PORT }}
-          password: ${{ secrets.ASBF_SSH_PASSWORD }}
-          script: |
-            cd ./domains/asbf.bf/public_html/rec
-            php ../../../../composer.phar install --no-interaction --prefer-dist --optimize-autoloader
-            php artisan migrate --force
-            php artisan optimize:clear
-            php artisan config:clear
-            php artisan route:clear
-            php artisan view:clear
+  call-deploy-workflow:
+    name: Déploiement
+    uses: ./.github/workflows/deploy-base.yml
+    with:
+      server_dir: "./rec/"
+      branch_name: "develop"
+      env: "RECETTE"
+    secrets:
+      ASBF_FTP_HOST: ${{ secrets.ASBF_FTP_HOST }}
+      ASBF_FTP_USERNAME: ${{ secrets.ASBF_FTP_USERNAME }}
+      ASBF_FTP_PASSWORD: ${{ secrets.ASBF_FTP_PASSWORD }}
+      ASBF_SSH_USERNAME: ${{ secrets.ASBF_SSH_USERNAME }}
+      ASBF_SSH_HOST: ${{ secrets.ASBF_SSH_HOST }}
+      ASBF_SSH_PORT: ${{ secrets.ASBF_SSH_PORT }}
+      ASBF_SSH_PASSWORD: ${{ secrets.ASBF_SSH_PASSWORD }}

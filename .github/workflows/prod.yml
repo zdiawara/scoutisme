@@ -1,0 +1,23 @@
+name: Déploiement sur la PRODUCTION
+
+on:
+  push:
+    branches:
+      - production
+
+jobs:
+  call-deploy-workflow:
+    name: Déploiement
+    uses: ./.github/workflows/deploy-base.yml
+    with:
+      server_dir: "./admin-prod/"
+      branch_name: "production"
+      env: "PROD"
+    secrets:
+      ASBF_FTP_HOST: ${{ secrets.ASBF_FTP_HOST }}
+      ASBF_FTP_USERNAME: ${{ secrets.ASBF_FTP_USERNAME }}
+      ASBF_FTP_PASSWORD: ${{ secrets.ASBF_FTP_PASSWORD }}
+      ASBF_SSH_USERNAME: ${{ secrets.ASBF_SSH_USERNAME }}
+      ASBF_SSH_HOST: ${{ secrets.ASBF_SSH_HOST }}
+      ASBF_SSH_PORT: ${{ secrets.ASBF_SSH_PORT }}
+      ASBF_SSH_PASSWORD: ${{ secrets.ASBF_SSH_PASSWORD }}

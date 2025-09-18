@@ -1,18 +1,18 @@
-name: Déploiement sur la RECETTE
+name: Déploiement sur la PRODUCTION
 
 on:
   push:
     branches:
-      - develop
+      - production
 
 jobs:
   call-deploy-workflow:
     name: Déploiement
     uses: ./.github/workflows/deploy-base.yml
     with:
-      server_dir: "./rec/"
-      branch_name: "develop"
-      env: "RECETTE"
+      server_dir: "./admin-prod/"
+      branch_name: "production"
+      env: "PROD"
     secrets:
       ASBF_FTP_HOST: ${{ secrets.ASBF_FTP_HOST }}
       ASBF_FTP_USERNAME: ${{ secrets.ASBF_FTP_USERNAME }}

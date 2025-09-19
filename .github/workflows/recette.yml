@@ -20,4 +20,4 @@ jobs:
       ASBF_SSH_USERNAME: ${{ secrets.ASBF_SSH_USERNAME }}
       ASBF_SSH_HOST: ${{ secrets.ASBF_SSH_HOST }}
       ASBF_SSH_PORT: ${{ secrets.ASBF_SSH_PORT }}
-      ASBF_SSH_PASSWORD: ${{ secrets.ASBF_SSH_PASSWORD }}
+      ASBF_SSH_PRIVATE_KEY: ${{ secrets.ASBF_SSH_PRIVATE_KEY }}

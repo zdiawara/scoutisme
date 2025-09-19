@@ -29,9 +29,8 @@ on:
         required: true
       ASBF_SSH_PORT:
         required: true
-      ASBF_SSH_PASSWORD:
+      ASBF_SSH_PRIVATE_KEY:
         required: true
-
 jobs:
   web-deploy:
     name: Déployer Laravel et React
@@ -86,13 +85,18 @@ jobs:
             tsconfig.node.json
             vite.config.js
 
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.ASBF_SSH_PRIVATE_KEY }}
+
       - name: Install Deps and Migration
         uses: appleboy/ssh-action@master
         with:
           username: ${{ secrets.ASBF_SSH_USERNAME }}
           host: ${{ secrets.ASBF_SSH_HOST }}
           port: ${{ secrets.ASBF_SSH_PORT }}
-          password: ${{ secrets.ASBF_SSH_PASSWORD }}
+          key: ${{ secrets.ASBF_SSH_PRIVATE_KEY }}
           script: |
             cd ./domains/asbf.bf/public_html/${{ inputs.server_dir }}
             php ../../../../composer.phar install --no-interaction --prefer-dist --optimize-autoloader

@@ -9,15 +9,32 @@ class OrganisationService
 {
     public function create(array $body)
     {
-        return Organisation::create($body);
+        return Organisation::create(collect($body)->merge([
+            'code' => $this->buildCode($body['nom'])
+        ])->toArray());
+    }
+
+    private function buildCode(string $nomOrganisation)
+    {
+        $nom =  strtoupper(str_replace(' ', '', $nomOrganisation));
+        return substr(str_pad($nom, 4, "-", STR_PAD_RIGHT), 0, 4);
     }
 
     public function update(Organisation $organisation, array $body)
     {
-        $organisation->update($body);
 
-        $input = collect($body);
-        if ($input->has('nom')) {
+        $hasNom = isset($body['nom']);
+
+        $data = array_merge(
+            $body,
+            $hasNom ? [
+                'code' => $this->buildCode($body['nom'])
+            ] : []
+        );
+
+        $organisation->update($data);
+
+        if (isset($body['nom'])) {
             DB::unprepared("UPDATE organisations o SET parents = compute_parents(o.parent_id) 
                 WHERE JSON_CONTAINS(JSON_EXTRACT(o.parents, '$[*].id') ,  '\"" . $organisation->id . "\"') = 1;
             ");

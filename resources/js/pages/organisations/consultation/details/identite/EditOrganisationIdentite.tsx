@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { Col, ListGroup, Row } from "react-bootstrap";
+import * as yup from "yup";
 import { TextInput } from "components";
 
 import { withForm, WrapperProps } from "hoc";
@@ -9,15 +10,16 @@ import { QUERY_KEY } from "utils/constants";
 import { OrganisationResource } from "types/organisation.type";
 import { organisationConverter } from "pages/organisations/form";
 
+const schema = yup.object({
+  nom: yup.string().min(4).required(),
+});
+
 const FormContainer: FC<WrapperProps> = ({ renderButtonsActions }) => {
   return (
     <>
       <Row className="g-2">
-        <Col xs={6}>
+        <Col xs={12}>
           <TextInput name="nom" isRequired label="Nom" />
-        </Col>
-        <Col xs={6}>
-          <TextInput name="code" isRequired label="Code" />
         </Col>
       </Row>
 
@@ -26,35 +28,25 @@ const FormContainer: FC<WrapperProps> = ({ renderButtonsActions }) => {
   );
 };
 
-const Form = withForm(FormContainer);
+const Form = withForm(FormContainer, schema);
 
 type Props = {
   organisation: OrganisationResource;
   onClose: () => void;
 };
 
-export const EditOrganisationIdentite: FC<Props> = ({
-  organisation,
-  onClose,
-}) => {
+export const EditOrganisationIdentite: FC<Props> = ({ organisation, onClose }) => {
   const clientQuery = useQueryClient();
 
   const update = async (input: any) => {
-    const response = await organisationApi.update(
-      organisation.id,
-      organisationConverter.toIdentiteBody(input)
-    );
+    const response = await organisationApi.update(organisation.id, organisationConverter.toIdentiteBody(input));
     clientQuery.invalidateQueries([QUERY_KEY.organisations, organisation.id]);
     return response;
   };
 
   return (
     <ListGroup.Item>
-      <Form
-        onSave={update}
-        defaultValues={organisationConverter.toInput(organisation)}
-        goBack={onClose}
-      />
+      <Form onSave={update} defaultValues={organisationConverter.toInput(organisation)} goBack={onClose} />
     </ListGroup.Item>
   );
 };

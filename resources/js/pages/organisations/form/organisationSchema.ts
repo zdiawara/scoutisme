@@ -2,19 +2,13 @@ import { NATURE } from "utils/constants";
 import * as yup from "yup";
 
 export const organisationSchema = yup.object({
-  nom: yup.string().required(),
-  code: yup.string().length(4).required(),
+  nom: yup.string().min(4).required(),
   nature: yup.object().required(),
   parent: yup
     .object()
     .when(["nature"], {
       is: (nature: any) => {
-        return (
-          !!nature?.item?.code &&
-          [NATURE.unite, NATURE.groupe, NATURE.region].includes(
-            nature.item.code
-          )
-        );
+        return !!nature?.item?.code && [NATURE.unite, NATURE.groupe, NATURE.region].includes(nature.item.code);
       },
       then: () => {
         return yup.object().required();
@@ -26,10 +20,7 @@ export const organisationSchema = yup.object({
     .object()
     .when(["nature"], {
       is: (nature: any) => {
-        return (
-          !!nature?.item?.code &&
-          [NATURE.unite, NATURE.national].includes(nature.item.code)
-        );
+        return !!nature?.item?.code && [NATURE.unite, NATURE.national].includes(nature.item.code);
       },
       then: () => {
         return yup.object().required();

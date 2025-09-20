@@ -8,9 +8,7 @@ type DetailOrganisationProps = {
   organisation: OrganisationResource;
 };
 
-export const DetailOrganisation: FC<DetailOrganisationProps> = ({
-  organisation,
-}) => {
+export const DetailOrganisation: FC<DetailOrganisationProps> = ({ organisation }) => {
   return (
     <>
       <ListGroup className="mb-2">

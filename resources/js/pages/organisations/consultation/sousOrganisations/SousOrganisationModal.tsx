@@ -5,7 +5,7 @@ import { Col, ListGroup, Row } from "react-bootstrap";
 import { useFormContext } from "react-hook-form";
 import { natureApi, organisationApi } from "api";
 import { NatureResource, OrganisationResource } from "types/organisation.type";
-import { MASK, NATURE, QUERY_KEY } from "utils/constants";
+import { NATURE, QUERY_KEY } from "utils/constants";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { organisationSchema } from "pages/organisations/form/organisationSchema";
 import { organisationConverter } from "pages/organisations/form";
@@ -89,17 +89,8 @@ const Form: FC<WrapperV2Props> = (props) => {
                 <Col xs={12}>{selectNatureComponent}</Col>
               </Fragment>
             )}
-            <Col sm={6}>
+            <Col sm={12}>
               <TextInput name="nom" label="Nom" placeholder="Nom de l'organisation" isRequired />
-            </Col>
-            <Col sm={6}>
-              <TextInput
-                name="code"
-                label="Code"
-                placeholder="code de l'organisation"
-                isRequired
-                mask={MASK.codeOrganisation}
-              />
             </Col>
           </Row>
         </ListGroup.Item>

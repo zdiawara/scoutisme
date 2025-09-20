@@ -3,7 +3,7 @@ import { OrganisationResource } from "types/organisation.type";
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "utils/constants";
 import { attributionApi } from "api";
-import { Form, ListGroup } from "react-bootstrap";
+import { Alert, Form, ListGroup } from "react-bootstrap";
 
 import { View } from "components";
 import { AttributionResource } from "types/personne.type";
@@ -74,11 +74,21 @@ export const ListOrganisationScout: FC<Props> = ({ organisation }) => {
       </ListGroup.Item>
     );
   };
+
+  const nombreScout = data?.length;
+  const hasScoutLimite = nombreScout && nombreScout >= 32;
   return (
     <>
       <ListGroup className="mb-3">
-        <View.Toolbar right={<ListOrganisationScoutActions organisation={organisation} />}>
+        <View.Toolbar right={!hasScoutLimite && <ListOrganisationScoutActions organisation={organisation} />}>
           <div className="w-100">
+            {hasScoutLimite && (
+              <div>
+                <Alert variant="warning">
+                  Le nombre limite de scout dans une unité est atteint (32 scouts par unité).
+                </Alert>
+              </div>
+            )}
             <Form.Control
               placeholder="Rechercher ..."
               onChange={(e) => setSearchText(e.target.value)}

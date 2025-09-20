@@ -138,7 +138,7 @@ class PersonneService
             'meta' => [
                 'association' => 'ASSOCIATION DES SCOUTS DU BURKINA FASO',
                 'signataire' => [
-                    'libelle' => 'Le président du comité national',
+                    'libelle' => 'Le commissaire général',
                     'nom' => ''
                 ]
             ],

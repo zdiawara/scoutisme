@@ -112,9 +112,18 @@ export const Organisation: FC<OrganisationProps> = ({ organisationId }) => {
     }
   };
 
+  const getRegion = () => {
+    if (!organisation) {
+      return null;
+    }
+    return organisation.parents?.find((p) => p.nature === NATURE.region);
+  };
+
   if (isLoading || !organisation) {
     return <span>chargement ...</span>;
   }
+
+  const region = getRegion();
 
   return (
     <>
@@ -135,18 +144,27 @@ export const Organisation: FC<OrganisationProps> = ({ organisationId }) => {
         </ListGroup.Item>
         <ListGroup.Item>
           <Row className="g-3">
-            <Col xs={12}>
-              <View.Item label="Parent">
-                {organisation.parent ? (
+            {region && (
+              <Col xs={6}>
+                <View.Item label="Region">
+                  <Link to={LINKS.organisations.view(region.id)} className="text-decoration-underline text-black">
+                    {region.nom}
+                  </Link>
+                </View.Item>
+              </Col>
+            )}
+            {organisation.parent && (!region || region.id !== organisation?.parent?.id) ? (
+              <Col xs={6}>
+                <View.Item label="Parent">
                   <Link
                     to={LINKS.organisations.view(organisation.parent.id)}
                     className="text-decoration-underline text-black"
                   >
                     {organisation.parent.nom}
                   </Link>
-                ) : null}
-              </View.Item>
-            </Col>
+                </View.Item>
+              </Col>
+            ) : null}
           </Row>
         </ListGroup.Item>
       </ListGroup>

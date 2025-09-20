@@ -7,11 +7,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { FonctionResource, TypePersonne } from "types/personne.type";
 import { toast } from "react-toastify";
-import {
-  buildMessageError,
-  NotificationError,
-  NotificationSuccess,
-} from "utils/notification";
+import { buildMessageError, NotificationError, NotificationSuccess } from "utils/notification";
 import { Button, Col, Modal, Row } from "react-bootstrap";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -32,11 +28,7 @@ type Props = {
   organisation: OrganisationResource;
 };
 
-const creerScout = async (
-  personneInput: Record<string, any>,
-  organisationId: string,
-  fonctionId: string
-) => {
+const creerScout = async (personneInput: Record<string, any>, organisationId: string, fonctionId: string) => {
   const body = {
     nom: personneInput.nom,
     prenom: personneInput.prenom,
@@ -74,8 +66,7 @@ export const CreerScout: FC<Props> = ({ closeModal, organisation }) => {
     },
   });
   const { mutate, isLoading } = useMutation<any>({
-    mutationFn: (data: any) =>
-      creerScout(data, organisation.id, fonctionScoutQuery.data?.id!),
+    mutationFn: (data: any) => creerScout(data, organisation.id, fonctionScoutQuery.data?.id!),
     onSuccess: () => {
       toast("Scout créé avec succès !", NotificationSuccess);
       query.invalidateQueries([QUERY_KEY.personnes]);
@@ -113,38 +104,20 @@ export const CreerScout: FC<Props> = ({ closeModal, organisation }) => {
                 <TextInput label="Prenom" name="prenom" isRequired />
               </Col>
               <Col xs={12}>
-                <SelectGenre
-                  name="genre"
-                  label="Genre"
-                  placeholder=""
-                  isRequired
-                />
+                <SelectGenre name="genre" label="Genre" placeholder="" isRequired />
               </Col>
               <Col xs={12}>
-                <DatePicker
-                  name="date_debut"
-                  label="Date debut"
-                  useHookForm
-                  required
-                />
+                <DatePicker name="date_debut" label="Date debut" useHookForm required />
               </Col>
             </Row>
           </Modal.Body>
           <Modal.Footer>
-            <Button
-              className="me-auto"
-              variant="outline-primary"
-              onClick={() => closeModal()}
-              disabled={isLoading}
-            >
+            <Button className="me-auto" variant="outline-primary" onClick={() => closeModal()} disabled={isLoading}>
               Annuler
             </Button>
             <SubmitButton
               isLoading={isLoading}
-              onClick={methods.handleSubmit(
-                (data: any) => mutate(data),
-                console.error
-              )}
+              onClick={methods.handleSubmit((data: any) => mutate(data), console.error)}
             >
               Enregistrer
             </SubmitButton>

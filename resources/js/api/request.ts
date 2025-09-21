@@ -40,10 +40,6 @@ export const requestJson = async <T>(url: string, options: RequestInit = {}, aut
     options,
     type: "json",
   };
-
-  if (auth) {
-    params.token = localStorage.getItem("@token") || undefined;
-  }
   return fetchApi<T>(params).catch(dispatchError);
 };
 
@@ -51,15 +47,15 @@ export const requestGet = async <T>(url: string, auth: boolean = true) => {
   return requestJson<T>(url, {}, auth);
 };
 
-export const requestPut = async <T>(url: string, body?: Object, auth = true) => {
+export const requestPut = async <T>(url: string, body?: object, auth = true) => {
   return requestJson<T>(url, { method: "PUT", body: JSON.stringify(body || {}) }, auth);
 };
 
-export const requestPost = async <T>(url: string, body?: Object, auth = true) => {
+export const requestPost = async <T>(url: string, body?: object, auth = true) => {
   return requestJson<T>(url, { method: "POST", body: JSON.stringify(body || {}) }, auth);
 };
 
-export const requestDelete = async (url: string, body?: Object) => {
+export const requestDelete = async (url: string, body?: object) => {
   return requestJson(url, {
     method: "DELETE",
     body: JSON.stringify(body || {}),

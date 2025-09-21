@@ -19,6 +19,8 @@ use App\Models\Personne;
 use App\Models\RefFormation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class PersonneController extends Controller
 {
@@ -328,5 +330,40 @@ class PersonneController extends Controller
         $personne->update($request->only([
             'date_fin'
         ]));
+    }
+
+    public function modifierPhoto(Request $request, Personne $personne)
+    {
+        // Valider l'image
+
+
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+
+        // Vérifier si le fichier existe
+        if ($request->hasFile('image')) {
+
+            $file = $request->file('image');
+
+            // Stocker nouveau fichier
+            $imageName = $personne->code . '-' . Str::random(20) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('images'), $imageName);
+
+            // Supprimer l'ancien fichier
+            if (isset($personne->photo) && Storage::disk('public')->exists($personne->photo)) {
+                Storage::disk('public')->delete($personne->photo);
+            }
+
+            // Mettre à jour photo
+            $personne->update([
+                'photo' => '/images/' . $imageName
+            ]);
+
+            return response()->json(['message' => 'Image uploaded successfully', 'path' => '/images/' . $imageName]);
+        }
+
+        return response()->json(['message' => 'No image uploaded'], 400);
     }
 }

@@ -25,40 +25,41 @@ export const ConsulterPersonneActions = ({ personne }: Props) => {
   const menus = useMemo(() => {
     return [
       {
+        label: "Photo",
+        icon: "uil-edit-alt",
+        description: "Mettre à jour la photo",
+        code: "modifier",
+        Icon: Icon.Image,
+        visible: droits.personne.modifier(personne),
+      },
+      {
         label: "Carte",
         description: "Télécharger la carte d'adhésion",
         code: "carte",
         Icon: Icon.Download,
         visible: droits.personne.affecter(personne),
       },
-      {
-        label: "Transferer",
-        description: "Transferer vers une autre unité",
-        code: "transferer",
-        Icon: Icon.Send,
-        visible: true,
-      },
-      {
-        label: "Supprimer",
-        description: "Supprimer définitimenent la personne",
-        code: "supprimer",
-        Icon: Icon.Trash3,
-        visible: droits.personne.modifier(personne),
-      },
+      // {
+      //   label: "Transferer",
+      //   description: "Transferer vers une autre unité",
+      //   code: "transferer",
+      //   Icon: Icon.Send,
+      //   visible: true,
+      // },
+      // {
+      //   label: "Supprimer",
+      //   description: "Supprimer définitimenent la personne",
+      //   code: "supprimer",
+      //   Icon: Icon.Trash3,
+      //   visible: droits.personne.modifier(personne),
+      // },
     ].filter((e) => e.visible);
   }, [droits.personne, personne]);
 
   return (
     <>
-      <DropOption
-        actions={menus}
-        onSelect={onSelect}
-        menu={false}
-        variant="secondary"
-      />
-      {action === "carte" && (
-        <TelechargerCarteModal personne={personne} closeModal={closeModal} />
-      )}
+      <DropOption actions={menus} onSelect={onSelect} menu={false} variant="secondary" />
+      {action === "carte" && <TelechargerCarteModal personne={personne} closeModal={closeModal} />}
     </>
   );
 };

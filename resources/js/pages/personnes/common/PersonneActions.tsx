@@ -12,12 +12,12 @@ type PersonneActionsProps = {
 };
 
 const ACTIONS = [
-  /*   {
-    label: "Modifier",
+  {
+    label: "Modifier photo",
     icon: "uil-edit-alt",
-    description: "Mettre à jour les informations de l'affectation",
+    description: "Mettre à jour la photo",
     code: "modifier",
-  }, */
+  },
   {
     label: "Consulter",
     icon: "uil-user",
@@ -86,12 +86,7 @@ export const PersonneActions: FC<PersonneActionsProps> = ({ personne }) => {
         <Dropdown.Menu className="topbar-dropdown-menu shadow-lg">
           {ACTIONS.map((item, i) => (
             <Fragment key={item.code}>
-              <Dropdown.Item
-                as="button"
-                className="px-3"
-                onClick={onSelect(item.code)}
-                disabled={!personne.id}
-              >
+              <Dropdown.Item as="button" className="px-3" onClick={onSelect(item.code)} disabled={!personne.id}>
                 <item.Icon size="1.1rem" className="me-1" />
                 <span className="fw-semibold">{item.label}</span>
                 <div className="fw-light text-muted">{item.description}</div>
@@ -101,12 +96,7 @@ export const PersonneActions: FC<PersonneActionsProps> = ({ personne }) => {
           ))}
         </Dropdown.Menu>
       </Dropdown>
-      {action === "convertir" && (
-        <CreateUserFromPersonneModal
-          closeModal={closeModal}
-          personne={personne}
-        />
-      )}
+      {action === "convertir" && <CreateUserFromPersonneModal closeModal={closeModal} personne={personne} />}
     </>
   );
 };

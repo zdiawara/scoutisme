@@ -42,11 +42,10 @@ function buildErrors(status: number, data?: any) {
 export interface RequestData {
   url: string;
   options: RequestInit;
-  token?: string;
-  type: "json" | "blob";
+  type?: "json" | "blob";
 }
 
-const buildOptions = (options: RequestInit, type: string, token?: string) => {
+const buildOptions = (options: RequestInit, type?: string) => {
   const newOptions = { ...options, credentials: "include" } as RequestInit;
 
   newOptions.headers = {
@@ -55,10 +54,6 @@ const buildOptions = (options: RequestInit, type: string, token?: string) => {
 
   if (!options.method) {
     newOptions.method = "GET";
-  }
-
-  if (token) {
-    newOptions.headers.Authorization = `Bearer ${token}`;
   }
 
   if (type === "json") {
@@ -70,10 +65,7 @@ const buildOptions = (options: RequestInit, type: string, token?: string) => {
 
 export const fetchApi = async <T>(requestData: RequestData): Promise<T> => {
   try {
-    const response: Response = await fetch(
-      requestData.url,
-      buildOptions(requestData.options, requestData.type, requestData.token)
-    );
+    const response: Response = await fetch(requestData.url, buildOptions(requestData.options, requestData.type));
     let data;
 
     switch (requestData.type) {
@@ -93,7 +85,7 @@ export const fetchApi = async <T>(requestData: RequestData): Promise<T> => {
       window.location.href = "/auth/login";
     }
     return Promise.reject(buildErrors(response.status, data));
-  } catch (error) {
+  } catch {
     return Promise.reject(buildErrors(500));
   }
 };

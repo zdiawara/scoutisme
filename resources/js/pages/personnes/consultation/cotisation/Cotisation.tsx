@@ -6,13 +6,10 @@ import { EtatCotisation } from "./EtatCotisation";
 
 type CotisationProps = {
   cotisation: CotisationResource;
+  resteAPayer: number;
 };
 
-export const Cotisation: FC<CotisationProps> = ({ cotisation }) => {
-  const montantPaye = cotisation.paiements
-    .filter(({ etat }) => etat !== "rejet")
-    .reduce((prev, curr) => curr.montant + prev, 0);
-
+export const Cotisation: FC<CotisationProps> = ({ cotisation, resteAPayer }) => {
   return (
     <Row className="g-3">
       <Col xs={6} sm={4}>
@@ -22,7 +19,7 @@ export const Cotisation: FC<CotisationProps> = ({ cotisation }) => {
       </Col>
       <Col xs={6} sm={4}>
         <View.Item label="Reste a payer">
-          <MontantFormatText value={cotisation.montant_total - montantPaye} withDevise />
+          <MontantFormatText value={resteAPayer} withDevise />
         </View.Item>
       </Col>
       <Col xs={6} sm={4}>

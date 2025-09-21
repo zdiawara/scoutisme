@@ -33,9 +33,10 @@ type CreerPaiementModalProps = {
   personne: PersonneResource;
   annee: string;
   closeModal: () => void;
+  resteAPayer: number;
 };
 
-export const CreerPaiementModal: FC<CreerPaiementModalProps> = ({ personne, annee, closeModal }) => {
+export const CreerPaiementModal: FC<CreerPaiementModalProps> = ({ resteAPayer, personne, annee, closeModal }) => {
   const query = useQueryClient();
 
   const { data: cotisation, isLoading } = useQuery({
@@ -48,7 +49,7 @@ export const CreerPaiementModal: FC<CreerPaiementModalProps> = ({ personne, anne
     select: ({ data }) => data,
   });
 
-  const payer = (data: Record<string, any>) => {
+  const payer = (data: Record<string, string>) => {
     return paiementApi.create({
       ...data,
       annee,
@@ -77,6 +78,9 @@ export const CreerPaiementModal: FC<CreerPaiementModalProps> = ({ personne, anne
         animation: false,
         centered: true,
       }}
+      defaultValues={{
+        resteAPayer,
+      }}
     />
   );
 };
@@ -89,7 +93,7 @@ type ModifierPaiementModalProps = {
 export const ModifierPaiementModal: FC<ModifierPaiementModalProps> = ({ paiement, closeModal }) => {
   const query = useQueryClient();
 
-  const modifier = (data: Record<string, any>) => {
+  const modifier = (data: Record<string, string>) => {
     return paiementApi.update(paiement.id, {
       montant: data.montant,
     });

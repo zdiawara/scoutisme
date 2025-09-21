@@ -48,6 +48,11 @@ export const PersonneCotisation: FC<Props> = ({ personne }) => {
     select: ({ data }) => data,
   });
 
+  const montantPaye =
+    cotisation?.paiements.filter(({ etat }) => etat !== "rejet").reduce((prev, curr) => curr.montant + prev, 0) || 0;
+
+  const resteAPayer = (cotisation?.montant_total || 0) - montantPaye;
+
   return (
     <>
       <ListGroup>
@@ -59,7 +64,7 @@ export const PersonneCotisation: FC<Props> = ({ personne }) => {
           <div className="ms-auto d-block d-flex">
             <AsyncSelectSimple name="year" value={annee} onChange={setAnnee} fetchOptions={fetchYears} />
             {cotisation && droits.cotisation.paiements.creer && (
-              <PayerCotisationAction annee={annee.value} personne={personne} />
+              <PayerCotisationAction resteAPayer={resteAPayer} annee={annee.value} personne={personne} />
             )}
           </div>
         </ListGroup.Item>
@@ -70,7 +75,7 @@ export const PersonneCotisation: FC<Props> = ({ personne }) => {
           </ListGroup.Item>
         ) : cotisation ? (
           <ListGroup.Item>
-            <Cotisation cotisation={cotisation} />
+            <Cotisation cotisation={cotisation} resteAPayer={resteAPayer} />
           </ListGroup.Item>
         ) : (
           <ListGroup.Item className="text-muted">Aucune ligne de cotisation pour l'année {annee.label}</ListGroup.Item>

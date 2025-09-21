@@ -73,6 +73,22 @@ class PersonneApi extends CrudService {
     );
     return response;
   }
+
+  public async modifierPhoto(personneId: string, body: FormData) {
+    const url = `/api/${this.base}/${personneId}/photo`;
+
+    const response = await fetchApi({
+      url,
+      options: {
+        method: "POST",
+        body,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      },
+    });
+    return response;
+  }
 }
 
 export const personneApi = new PersonneApi("personnes");

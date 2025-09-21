@@ -1,6 +1,6 @@
-import { FC, ReactNode, useMemo } from "react";
-import { Badge, Col, ListGroup, Nav, Row, Stack } from "react-bootstrap";
-import { useQuery } from "@tanstack/react-query";
+import { ChangeEvent, FC, ReactNode, useMemo } from "react";
+import { Col, ListGroup, Nav, Row, Stack } from "react-bootstrap";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEY } from "utils/constants";
 import { personneApi } from "api";
 import { PersonneResource } from "types/personne.type";
@@ -20,6 +20,30 @@ type PersonneProps = {
   personneId: string;
   header?: (personne: PersonneResource, page?: string) => ReactNode;
   title: string;
+};
+
+const ImageUploader: FC<{ personneId: string }> = ({ personneId }) => {
+  const queryClient = useQueryClient();
+
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+
+    if (e.target.files && e.target.files.length > 0) {
+      const formData = new FormData();
+      formData.append("image", e.target.files[0]);
+      await personneApi.modifierPhoto(personneId, formData);
+      queryClient.invalidateQueries([QUERY_KEY.personnes, personneId]);
+    }
+  };
+
+  return (
+    <form>
+      <input className="d-none" type="file" id="upload-image" accept="image/*" onChange={handleFileChange} />
+      <label className="text-muted fs-6 text-center d-block mt-1" style={{ cursor: "pointer" }} htmlFor="upload-image">
+        modifier photo
+      </label>
+    </form>
+  );
 };
 
 export const Personne: FC<PersonneProps> = ({ personneId, title }) => {
@@ -131,6 +155,8 @@ export const Personne: FC<PersonneProps> = ({ personneId, title }) => {
           ) : (
             <span className="avatar-title rounded bg-secondary-lighten text-secondary font-20 ">Photo</span>
           )}
+          {/* <div className="fs-6 text-center text-muted">modifier photo</div> */}
+          <ImageUploader personneId={personne.id} />
         </div>
         <div className="ms-2">
           <span className="fs-3">

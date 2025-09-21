@@ -38,6 +38,7 @@ use App\Http\Controllers\Api\VilleController;
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::apiResource('personnes', PersonneController::class);
     Route::get('/personnes/{personne}/cotisations', [PersonneController::class, 'readCotisation']);
+    Route::post('/personnes/{personne}/photo', [PersonneController::class, 'modifierPhoto']);
 
     Route::post('/personnes/mails', [PersonneController::class, 'envoyerMail']);
     Route::post('/personnes/{personne}/attributions', [PersonneController::class, 'createAttribution']);

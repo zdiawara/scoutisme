@@ -141,11 +141,12 @@ export const Personne: FC<PersonneProps> = ({ personneId, title }) => {
           {personne.photo ? (
             <img
               src={personne.photo}
-              className=" avatar-lg rounded img-thumbnail"
+              className="avatar-lg rounded img-thumbnail"
               alt=""
               style={{
                 width: "100%",
                 height: "100%",
+                minWidth: "96px",
                 textAlign: "center",
                 objectFit: "cover",
                 color: "transparent",

@@ -33,7 +33,7 @@ export const OrganisationItem: FC<Props> = ({ organisation }) => {
         to={link}
         variant="default"
       >
-        <Icon.Eye />
+        <Icon.ArrowRight />
       </Button>
     </>
   );

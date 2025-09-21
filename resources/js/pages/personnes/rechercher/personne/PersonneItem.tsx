@@ -69,7 +69,7 @@ export const PersonneItem: FC<PersonneItemProps> = ({ personne }) => {
         to={LINKS.personnes.view(personne.id)}
         variant="default"
       >
-        <Icon.Eye />
+        <Icon.ArrowRight />
       </Button>
     </>
   );

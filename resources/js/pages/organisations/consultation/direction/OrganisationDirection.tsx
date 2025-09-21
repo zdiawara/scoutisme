@@ -12,10 +12,7 @@ type Props = {
   organisation: OrganisationResource;
 };
 
-const searchByCriteres = (
-  term: string,
-  attributions: OrganisationAttribution[]
-) => {
+const searchByCriteres = (term: string, attributions: OrganisationAttribution[]) => {
   return attributions.filter(({ personne, fonction }) => {
     return [personne?.nom, personne?.prenom, personne?.code, fonction.nom]
       .filter(Boolean)
@@ -27,8 +24,7 @@ const searchByCriteres = (
 export const OrganisationDirection: FC<Props> = ({ organisation }) => {
   const [searchText, setSearchText] = useState<string | undefined>();
 
-  const typeId =
-    organisation.nature.code === NATURE.national ? organisation.type?.id : null;
+  const typeId = organisation.nature.code === NATURE.national ? organisation.type?.id : null;
 
   const { data: direction } = useQuery({
     queryKey: [QUERY_KEY.direction, organisation.id],
@@ -53,14 +49,8 @@ export const OrganisationDirection: FC<Props> = ({ organisation }) => {
           />
         </View.Toolbar>
         {data?.map((item) => (
-          <ListGroup.Item
-            className="d-flex justify-content-between align-items-start"
-            key={item.fonction.id}
-          >
-            <OrganisationMembre
-              attribution={item}
-              organisation={organisation}
-            />
+          <ListGroup.Item className="d-flex justify-content-between align-items-start" key={item.fonction.id}>
+            <OrganisationMembre attribution={item} organisation={organisation} />
           </ListGroup.Item>
         ))}
       </ListGroup>

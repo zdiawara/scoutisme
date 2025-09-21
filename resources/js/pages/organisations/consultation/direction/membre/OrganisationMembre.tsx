@@ -1,10 +1,5 @@
 import { FC, useState } from "react";
-import {
-  AttributionResource,
-  FonctionResource,
-  OrganisationAttribution,
-  PersonneResource,
-} from "types/personne.type";
+import { AttributionResource, FonctionResource, OrganisationAttribution, PersonneResource } from "types/personne.type";
 
 import { Button } from "react-bootstrap";
 import * as Icon from "react-bootstrap-icons";
@@ -19,10 +14,7 @@ type Props = {
   organisation: OrganisationResource;
 };
 
-export const OrganisationMembre: FC<Props> = ({
-  attribution,
-  organisation,
-}) => {
+export const OrganisationMembre: FC<Props> = ({ attribution, organisation }) => {
   const [nomminer, setNominer] = useState<boolean>(false);
 
   const _attribution = {
@@ -45,9 +37,7 @@ export const OrganisationMembre: FC<Props> = ({
               <Icon.Person size="1.1rem" className="me-1" />
               {attribution.personne?.prenom} {attribution.personne?.nom}
             </Link>
-            <span className="fw-light fs-6 text-muted">
-              {attribution.personne?.code}
-            </span>
+            <span className="fw-light fs-6 text-muted">{attribution.personne?.code}</span>
           </>
         ) : (
           <Button

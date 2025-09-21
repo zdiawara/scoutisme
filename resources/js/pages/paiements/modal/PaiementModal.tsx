@@ -1,17 +1,22 @@
-import { HookModalForm, TextInput } from "components";
+import { HookModalForm, MontantFormatText, TextInput } from "components";
 import { WrapperV2Props, withMutationForm } from "hoc";
 import { FC } from "react";
-import { Col, Row } from "react-bootstrap";
+import { Alert, Col, Row } from "react-bootstrap";
 import { paiementApi, personneApi } from "api";
 import { PaiementResource, PersonneResource } from "types/personne.type";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEY } from "utils/constants";
 import { paiementSchema } from "../form/paiementUtils";
+import { useFormContext } from "react-hook-form";
 
 const Form: FC<WrapperV2Props> = (props) => {
+  const { watch } = useFormContext();
   return (
     <HookModalForm {...props} modalBodyClassName="bg-light p-3" onClose={props.onExit}>
       <Row className="g-2">
+        <Alert variant="warning">
+          Le reste à payer est de <MontantFormatText value={watch("resteAPayer")} withDevise />
+        </Alert>
         <Col sm={12}>
           <TextInput
             name="montant"

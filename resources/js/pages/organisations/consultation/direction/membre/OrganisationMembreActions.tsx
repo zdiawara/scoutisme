@@ -36,8 +36,8 @@ export const OrganisationMembreActions: FC<Props> = ({ attribution, nomminer }) 
         visible: droits.organisation.direction(attribution.organisation),
       },
       {
-        label: "Supprimer",
-        description: "Supprimer la fonction",
+        label: "Retirer",
+        description: "Retirer la personne de cette fonction",
         code: "supprimer",
         Icon: Icon.Trash3,
         visible: droits.organisation.direction(attribution.organisation),

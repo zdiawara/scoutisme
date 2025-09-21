@@ -73,10 +73,6 @@ export const router = createBrowserRouter(
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path={LINKS.organisation.base} element={<MonOrganisation />} />
-        {/* <Route path={LINKS.organisation.base} element={<MonOrganisation />} />
-        <Route path={LINKS.profil.base} element={<Outlet />}>
-          <Route index element={<MonProfil />} />
-        </Route> */}
         <Route path={LINKS.personnes.base} element={<Outlet />}>
           <Route index element={<RechercherPersonne />} />
           <Route element={<ViewPersonne />} path=":id" />
@@ -135,9 +131,6 @@ export const router = createBrowserRouter(
           <Route path="cotisations" element={<CotisationDashbord />} /> */}
         </Route>
 
-        {/* <Route path={LINKS.acces.base} element={<Outlet />}>
-          <Route index element={<Acces />} />
-        </Route> */}
         <Route path={LINKS.parametres.base}>
           <Route index element={<Parametres />} />
           <Route path={LINKS.parametres.formations} element={<RechercherFormation />} />

@@ -23,23 +23,13 @@ const CustomToggle = forwardRef(({ onClick }: any, ref) => (
 const ACTIONS = [
   {
     label: "Valider",
-    description: "Valider tous les paiements en attente",
+    description: "Valider tous les paiements",
     code: "valid",
     Icon: Icon.CheckCircle,
   },
-  {
-    label: "Exporter",
-    description: "Exporter les paiements en CSV",
-    code: "exporter",
-    Icon: Icon.Download,
-  },
 ];
 
-export const RechercherPaiementActions = ({
-  params,
-}: {
-  params: Record<string, any>;
-}) => {
+export const RechercherPaiementActions = ({ params }: { params: Record<string, any> }) => {
   const [action, setAction] = useState<string | undefined>();
 
   const onSelect = (code: string) => () => {
@@ -57,11 +47,7 @@ export const RechercherPaiementActions = ({
         <Dropdown.Menu className="topbar-dropdown-menu shadow-lg">
           {ACTIONS.map((item, i) => (
             <Fragment key={item.code}>
-              <Dropdown.Item
-                as="button"
-                className="px-3"
-                onClick={onSelect(item.code)}
-              >
+              <Dropdown.Item as="button" className="px-3" onClick={onSelect(item.code)}>
                 <item.Icon size="1.1rem" className="me-1" />
                 <span className="fw-semibold">{item.label}</span>
                 <div className="fw-light text-muted">{item.description}</div>
@@ -71,12 +57,8 @@ export const RechercherPaiementActions = ({
           ))}
         </Dropdown.Menu>
       </Dropdown>
-      {action === "exporter" && (
-        <ExportPersonneModal filter={params} closeModal={closeModal} />
-      )}
-      {action === "email" && (
-        <EnvoyerMailModal filter={params} closeModal={closeModal} />
-      )}
+      {action === "exporter" && <ExportPersonneModal filter={params} closeModal={closeModal} />}
+      {action === "email" && <EnvoyerMailModal filter={params} closeModal={closeModal} />}
     </>
   );
 };

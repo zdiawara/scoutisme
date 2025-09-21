@@ -4,18 +4,19 @@ import * as Icon from "react-bootstrap-icons";
 import d from "../../../assets/images/users/avatar-1.jpg";
 import useToggle from "hooks/useToggle";
 import { useAuth } from "hooks";
+import { PersonneAvatar } from "pages/personnes/rechercher/personne/PersonneAvatar";
 
 const ACTIONS = [
-  {
-    code: "/compte",
-    Icon: Icon.PersonCircle,
-    label: "Mon compte",
-  },
-  {
-    code: "/aide",
-    Icon: Icon.InfoCircle,
-    label: "Support",
-  },
+  // {
+  //   code: "/compte",
+  //   Icon: Icon.PersonCircle,
+  //   label: "Mon compte",
+  // },
+  // {
+  //   code: "/aide",
+  //   Icon: Icon.InfoCircle,
+  //   label: "Support",
+  // },
   {
     code: "/logout",
     Icon: Icon.BoxArrowLeft,
@@ -36,9 +37,7 @@ export const ProfilDropdown = () => {
           onClick={toggleProfil}
           className="nav-link dropdown-toggle nav-user arrow-none me-0 d-flex"
         >
-          <div className="account-user-avatar">
-            <img src={d} className="rounded-circle" alt="user" />
-          </div>
+          <PersonneAvatar photo={user?.personne?.photo} label="TE" />
           <div className="ms-1 d-none d-sm-block">
             <span className="account-user-name">{user?.name}</span>
             <span className="account-position fw-light">

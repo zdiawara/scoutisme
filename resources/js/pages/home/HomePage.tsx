@@ -1,7 +1,7 @@
 import { useAuth } from "hooks";
 
 import { useMemo } from "react";
-import { Button, Card, Col, Container, Row, Stack } from "react-bootstrap";
+import { Button, Card, Col, Row, Stack } from "react-bootstrap";
 import * as Icon from "react-bootstrap-icons";
 import { Link } from "react-router-dom";
 import { getMenuItems } from "utils";
@@ -24,13 +24,6 @@ export const HomePage = () => {
     <>
       {/* <Row className="mb-3"> */}
       <Col className="mx-auto" md={{ span: 10, offset: 0 }} sm={{ offset: 0, span: 0 }}>
-        <Stack direction="horizontal" className="mt-4">
-          <Button variant="default" className="d-block ms-auto bg-white me-2">
-            <Icon.BellFill />
-          </Button>
-          <ProfilDropdown />
-        </Stack>
-
         {/* <div className="my-4 text-center">
             <span className="fs-4 fw-light">Bienvenue</span>
             <span className="d-block fs-2 mt-2">

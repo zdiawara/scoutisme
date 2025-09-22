@@ -16,9 +16,9 @@ const Form: FC<WrapperProps> = ({ onSubmit }) => (
       <TextInput type="password" name="password" label="Mot de passe" placeholder="Votre mot de passe" isRequired />
     </Col>
 
-    <Link to="#" className="mt-2 d-block text-primary">
+    {/* <Link to="#" className="mt-2 d-block text-primary">
       Mot de passe oublié ?
-    </Link>
+    </Link> */}
     <div className="mt-3 mb-0 text-center">
       <Button variant="primary" onClick={onSubmit} className="d-block w-100" disabled={false}>
         Connexion

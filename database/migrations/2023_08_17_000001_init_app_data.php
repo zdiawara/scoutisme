@@ -1,6 +1,7 @@
 <?php
 
 use App\Helpers\Modules;
+use App\Http\Helper\CodeOrganisationHelper;
 use App\Http\Services\FonctionService;
 use App\Models\Fonction;
 use App\Models\Fonctionnalite;
@@ -216,7 +217,7 @@ return new class extends Migration
 
         $conseilNational = Organisation::create([
             'nom' => 'Conseil national',
-            'code' => 'cna',
+            'code' => CodeOrganisationHelper::buildCode('Conseil national'),
             'nature_id' => $natureConseil->id,
             'type_id' => TypeOrganisation::where('code', 'conseil_national')
                 ->firstOrFail()
@@ -225,7 +226,7 @@ return new class extends Migration
 
         Organisation::create([
             'nom' => 'Equipe nationale',
-            'code' => 'ena',
+            'code' => CodeOrganisationHelper::buildCode('Equipe nationale'),
             'nature_id' => $natureConseil->id,
             'parent_id' => $conseilNational->id,
             'type_id' => TypeOrganisation::where('code', 'equipe_nationale')
@@ -246,23 +247,28 @@ return new class extends Migration
             ->firstOrFail();
 
         collect([
-            ['nom' => 'Boucle du Mouhoun', 'code' => 'bmo'],
-            ['nom' => 'Cascades', 'code' => 'cas'],
-            ['nom' => 'Centre', 'code' => 'cen'],
-            ['nom' => 'Centre-Est', 'code' => 'ces'],
-            ['nom' => 'Centre-Nord', 'code' => 'cno'],
-            ['nom' => 'Centre-Ouest', 'code' => 'cou'],
-            ['nom' => 'Centre-Sud', 'code' => 'csu'],
-            ['nom' => 'Est', 'code' => 'est'],
-            ['nom' => 'Hauts-Bassins', 'code' => 'hba'],
-            ['nom' => 'Nord', 'code' => 'nor'],
-            ['nom' => 'Plateau central', 'code' => 'pce'],
-            ['nom' => 'Sahel', 'code' => 'sah'],
-            ['nom' => 'Sud-Ouest', 'code' => 'sou'],
+            ['nom' => 'Bankui'],
+            ['nom' => 'Djôrô'],
+            ['nom' => 'Goulmou'],
+            ['nom' => 'Guiriko'],
+            ['nom' => 'Kadiogo'],
+            ['nom' => 'Kuilsé'],
+            ['nom' => 'Liptako'],
+            ['nom' => 'Nando'],
+            ['nom' => 'Nakambé'],
+            ['nom' => 'Nazinon'],
+            ['nom' => 'Oubri'],
+            ['nom' => 'Sirba'],
+            ['nom' => 'Soum'],
+            ['nom' => 'Tannounyan'],
+            ['nom' => 'Tapoa'],
+            ['nom' => 'Sourou'],
+            ['nom' => 'Yaadga'],
         ])->each(function ($item) use ($equipeNationale, $natureRegion) {
             Organisation::create(array_merge($item, [
                 'nature_id' => $natureRegion->id,
-                'parent_id' => $equipeNationale->id
+                'parent_id' => $equipeNationale->id,
+                'code' => CodeOrganisationHelper::buildCode($item['nom'])
             ]));
         });
     }

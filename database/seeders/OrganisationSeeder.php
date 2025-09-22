@@ -26,7 +26,7 @@ class OrganisationSeeder extends Seeder
     {
 
         collect([
-            "hba" => [
+            "BANK" => [
                 "groupes" => [
                     [
                         "nom" => "Dinizulu",
@@ -37,7 +37,7 @@ class OrganisationSeeder extends Seeder
                     ]
                 ]
             ],
-            "bmo" => [
+            "DJOR" => [
                 "groupes" => [
                     [
                         "nom" => "Saint Pierre de Gounghin",
@@ -48,41 +48,50 @@ class OrganisationSeeder extends Seeder
                     ]
                 ]
             ],
-            "cas" => [
+            "GOUL" => [
                 "unites" => [["nom" => "Charles Lwang", "code" => "CHL"]]
             ],
-            "cen" => [
+            "GUIR" => [
                 "unites" => [["nom" => "Nelson Mandela", "code" => "NEM"]]
             ],
-            "ces" => [
+            "KADI" => [
                 "unites" => [["nom" => "Boli bama", "code" => "BOB"]]
             ],
-            "cno" => [
+            "KUIL" => [
                 "unites" => [["nom" => "Guimbi Ouattara", "code" => "GUO"]]
             ],
-            "cou" => [
+            "LIPT" => [
                 "unites" => [["nom" => "Luteur King", "code" => "LKI"]]
             ],
-            "csu" => [
+            "NAKA" => [
                 "unites" => [["nom" => "Léopold Sédar Senghor", "code" => "LSS"]]
             ],
-            "est" => [
+            "NAND" => [
                 "unites" => [["nom" => "Balaie", "code" => "BAL"]]
             ],
-            "cou" => [
+            "NAZI" => [
                 "unites" => [["nom" => "Thomas Sang", "code" => "THS"]]
             ],
-            "nor" => [
+            "OUBR" => [
                 "unites" => [["nom" => "Diaba Lompo", "code" => "DIL"]]
             ],
-            "pce" => [
+            "SIRB" => [
                 "unites" => [["nom" => "Fanga", "code" => "FAN"]]
             ],
-            "sah" => [
+            "SOUM" => [
                 "unites" => [["nom" => "Soundiata Keita", "code" => "SOK"]]
             ],
-            "sou" => [
+            "SOUR" => [
                 "unites" => [["nom" => "Massa", "code" => "MAS"]]
+            ],
+            "TANN" => [
+                "unites" => [["nom" => "Mebo", "code" => "MAS"]]
+            ],
+            "TAPO" => [
+                "unites" => [["nom" => "VDP", "code" => "MAS"]]
+            ],
+            "YAAD" => [
+                "unites" => [["nom" => "Faso Bara", "code" => "MAS"]]
             ]
         ])->each(function ($region, $codeOrganisation) {
 

@@ -82,7 +82,7 @@ export const ListOrganisationScout: FC<Props> = ({ organisation }) => {
       <ListGroup className="mb-3">
         <View.Toolbar right={!hasScoutLimite && <ListOrganisationScoutActions organisation={organisation} />}>
           <div className="w-100">
-            {hasScoutLimite && (
+            {Boolean(hasScoutLimite) && (
               <div>
                 <Alert variant="warning">
                   Le nombre limite de scout dans une unité est atteint (32 scouts par unité).

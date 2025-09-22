@@ -7,6 +7,7 @@ export type UserResource = {
   roles: RoleResource[];
   fonctionnalites: FonctionnaliteResource[];
   personne?: PersonneResource;
+  verify: boolean;
 };
 
 export type RoleResource = {

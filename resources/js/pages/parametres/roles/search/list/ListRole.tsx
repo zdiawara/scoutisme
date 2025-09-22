@@ -37,7 +37,7 @@ export const ListRole: FC<Props> = ({ roles }) => {
           </div>
           {role.code !== "admin" && (
             <Button variant="default">
-              <Icon.Eye />
+              <Icon.ArrowRight />
             </Button>
           )}
         </ListGroup.Item>

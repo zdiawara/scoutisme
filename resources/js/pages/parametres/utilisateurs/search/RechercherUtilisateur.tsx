@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { userApi } from "api";
 import { FC, useState } from "react";
-import { Button, ListGroup } from "react-bootstrap";
+import { ListGroup } from "react-bootstrap";
 import { QUERY_KEY } from "utils/constants";
 import { Header } from "layout/Header";
 import { LoaderSpinner } from "components/loader";
@@ -72,17 +72,11 @@ const RechercherUtilisateur: FC = () => {
 
   const [action, setAction] = useState<Action | undefined>();
 
-  const actions = (
-    <Button variant="secondary" onClick={() => setAction({ code: "create" })}>
-      <span className="d-none d-sm-inline-block">Ajouter un utilisateur</span>
-    </Button>
-  );
-
   const meta = query.data?.meta;
 
   return (
     <>
-      <Header title="Utilisateurs" right={actions} />
+      <Header title="Utilisateurs" />
 
       <ListGroup className="mt-4">
         <SearchToolbar
@@ -100,18 +94,6 @@ const RechercherUtilisateur: FC = () => {
           <ListUtilisateur users={query.data?.data} />
         )}
       </ListGroup>
-
-      {/* {showFilter && (
-        <FilterFonction
-          applyFiler={(data) => {
-            search.onChangeFilter(data);
-            toggleFilter();
-          }}
-          defaultValues={searchParams}
-          close={toggleFilter}
-          show
-        />
-      )} */}
 
       {action && <EditUtilisateur closeModal={() => setAction(undefined)} user={action.selected} />}
 

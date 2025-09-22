@@ -15,6 +15,8 @@ export class CrudService {
 
   public async findById<T>(id: string) {
     const { data } = await requestGet<{ data: T }>(`${this.base}/${id}`);
+    console.log(data);
+
     return data;
   }
 

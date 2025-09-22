@@ -18,11 +18,12 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
             'roles' => $this->roles,
+            'verify' => isset($this->email_verified_at),
             'personne' =>  new PersonneResource($this->whenLoaded('personne')),
-            'fonctionnalites' => isset($this->fonctionnalites) ? FonctionnaliteResource::collection($this->fonctionnalites) : null
+            'fonctionnalites' => isset($this->fonctionnalites) ? FonctionnaliteResource::collection($this->fonctionnalites) : null,
+            'created_at' => date('Y-m-d H:i:s', strtotime($this->created_at)),
+            'updated_at' => isset($this->updated_at) ? date('Y-m-d H:i:s', strtotime($this->created_at)) : null,
         ];
     }
 }

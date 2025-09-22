@@ -48,7 +48,9 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return response()->json($user);
+        $user->load(['personne.fonction', 'personne.organisation.nature']);
+        $this->userService->addFonctionnalitesAndRoles($user);
+        return new UserResource($user);
     }
 
     /**

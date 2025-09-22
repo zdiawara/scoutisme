@@ -14,6 +14,7 @@ import { ListResult } from "pages/common";
 import { RoleResource } from "types/auth.type";
 import { ListRole } from "./list/ListRole";
 import { EditRole } from "../edit/EditRole";
+import * as Icon from "react-bootstrap-icons";
 
 type Action = {
   code: "create" | "edit";
@@ -74,6 +75,7 @@ const RechercherRole: FC = () => {
 
   const actions = (
     <Button variant="secondary" onClick={() => setAction({ code: "create" })}>
+      <Icon.Plus className="d-inline-block d-sm-none" />
       <span className="d-none d-sm-inline-block">Ajouter un rôle</span>
     </Button>
   );

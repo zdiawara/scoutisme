@@ -63,6 +63,7 @@ const ConsulterRole = Loadable(lazy(() => import("pages/parametres/roles/view/Co
 const RechercherUtilisateur = Loadable(
   lazy(() => import("pages/parametres/utilisateurs/search/RechercherUtilisateur"))
 );
+const ViewUtilisateur = Loadable(lazy(() => import("pages/parametres/utilisateurs/view/ViewUtilisateur")));
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -140,6 +141,7 @@ export const router = createBrowserRouter(
           <Route path={LINKS.parametres.roles} element={<RechercherRole />} />
           <Route path={LINKS.parametres.roles + "/:id"} element={<ConsulterRole />} />
           <Route path={LINKS.parametres.utilisateurs} element={<RechercherUtilisateur />} />
+          <Route path={LINKS.parametres.viewUtilisateur(":id")} element={<ViewUtilisateur />} />
         </Route>
       </Route>
     </>

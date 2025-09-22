@@ -76,6 +76,7 @@ export const LINKS = {
     typesUnites: `${PARAMETRES}/types-unites`,
     roles: `${PARAMETRES}/roles`,
     utilisateurs: `${PARAMETRES}/utilisateurs`,
+    viewUtilisateur: (id: string) => `${PARAMETRES}/utilisateurs/${id}`,
   },
   dashbords: {
     base: "dashbords",

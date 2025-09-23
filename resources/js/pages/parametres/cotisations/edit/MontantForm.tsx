@@ -4,7 +4,7 @@ import { Col } from "react-bootstrap";
 export const MontantForm = () => {
   return (
     <Col key="tous-montant">
-      <TextInput name="montants.0.value" label="Montant" />
+      <TextInput name="montants.0.value" type="number" label="Montant" />
     </Col>
   );
 };

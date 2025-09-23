@@ -8,6 +8,7 @@ export type UserResource = {
   fonctionnalites: FonctionnaliteResource[];
   personne?: PersonneResource;
   verify: boolean;
+  created_at: string;
 };
 
 export type RoleResource = {

@@ -6,6 +6,7 @@ import { Col, ListGroup, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { UserResource } from "types/auth.type";
 import { QUERY_KEY } from "utils/constants";
+import { DateFormater } from "utils/DateUtils";
 
 const ViewUtilisateur = () => {
   const { id: utilisateurId } = useParams();
@@ -36,6 +37,16 @@ const ViewUtilisateur = () => {
               <View.Item label="Email">{utilisateur.email}</View.Item>
             </Col>
             <Col xs={12}>
+              <View.Item label="Date creation">{DateFormater.toDateText(utilisateur.created_at)}</View.Item>
+            </Col>
+          </Row>
+        </ListGroup.Item>
+      </ListGroup>
+
+      <ListGroup className="mb-2">
+        <ListGroup.Item>
+          <Row className="g-3">
+            <Col xs={12}>
               <View.Item label="Fonction">{utilisateur.personne?.fonction?.nom}</View.Item>
             </Col>
             <Col xs={12}>
@@ -43,6 +54,9 @@ const ViewUtilisateur = () => {
             </Col>
           </Row>
         </ListGroup.Item>
+      </ListGroup>
+
+      <ListGroup className="mb-2">
         <ListGroup.Item>
           <Row className="g-3">
             <Col xs={12}>

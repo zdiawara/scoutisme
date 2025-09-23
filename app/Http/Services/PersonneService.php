@@ -194,7 +194,30 @@ class PersonneService
         $data['lignes'] = $lignes;
 
         return [
-            "data" => $data
+            "data" => [
+                'recto' => $data,
+                'verso' => [
+                    'nom' => 'ASSOCIATION DES SCOUTS DU BURKINA FASO (ASBF)',
+                    'adrese' => [
+                        'label' => 'BP',
+                        'value' => '01 BP 2548 Ouagadougou 01'
+                    ],
+                    'telephone' => [
+                        'label' => 'Tél',
+                        'value' =>  '+226 60 65 80 80 / 76 56 83 07'
+                    ],
+                    'recepisse' => [
+                        'label' => 'Récépissé',
+                        'numero' => '00000632001/MATDCS/SG/DGLPAP/DOASC',
+                        'date' => '30/04/19'
+                    ],
+
+                    'personne_a_contacter' => [
+                        'nom' => $personne->personne_a_contacter['nom'] ?? '',
+                        'telephone' => $personne->personne_a_contacter['telephone'] ?? ''
+                    ]
+                ]
+            ]
         ];
     }
 }

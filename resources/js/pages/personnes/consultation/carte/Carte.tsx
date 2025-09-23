@@ -4,7 +4,7 @@ import tamponEquipeNationale from "../../../../assets/images/signatures/tampon_e
 import signatureTresorerie from "../../../../assets/images/signatures/signature-tresorerie.png";
 
 import "./Carte.scss";
-import { PersonneCarte } from "types/personne.type";
+import { PersonneCarte, PersonneCarteRecto, PersonneCarteVerso } from "types/personne.type";
 
 type Props = {
   carte: PersonneCarte;
@@ -19,9 +19,14 @@ const Item: FC<{ label: string; value?: string }> = (props) => (
   </>
 );
 
-export const Carte: FC<Props> = ({ carte, photo }) => {
+type CarteRectoProps = {
+  carte: PersonneCarteRecto;
+  photo?: string;
+};
+
+export const CarteRecto: FC<CarteRectoProps> = ({ carte, photo }) => {
   return (
-    <div className="carte mx-auto my-2 overflosw-scroll" id="content-id">
+    <div className="carte me-2 overflosw-scroll" id="content-id">
       <div className="carte-content">
         <table className="p-0">
           <tbody>
@@ -87,6 +92,60 @@ export const Carte: FC<Props> = ({ carte, photo }) => {
       <div className="carte-footer">
         <Item label="Validite" value={`Du ${carte.validite.debut} au ${carte.validite.fin}`} />
       </div>
+    </div>
+  );
+};
+
+type CarteVersoProps = {
+  carte: PersonneCarteVerso;
+};
+export const CarteVerso: FC<CarteVersoProps> = ({ carte }) => {
+  return (
+    <div className="carte verso overflosw-scroll" id="content-verso">
+      <div className="carte-content">
+        <table className="p-0">
+          <tbody>
+            <tr>
+              <td className="carte-logo d-flex align-self-start">
+                <img src={logo} alt="Logo" />
+              </td>
+              <td className="pt-2 verso">
+                <div>{carte.nom}</div>
+                <div>
+                  {carte.adrese.label} : {carte.adrese.value}
+                </div>
+                <div>
+                  {carte.telephone.label} : {carte.telephone.value}
+                </div>
+                <div>
+                  <span style={{ fontSize: "9px" }}>
+                    {carte.recepisse.label} n° {carte.recepisse.numero} du&nbsp;
+                    {carte.recepisse.date}
+                  </span>
+                </div>
+                <div style={{ width: "200px", border: "2px solid", borderBottom: 0, padding: "3px", fontSize: "9px" }}>
+                  <p className="text-center m-0">Personne à contacter en cas de besoins </p>
+                  <div style={{ color: "black" }}>Nom : {carte.personne_a_contacter.nom}</div>
+                  <div style={{ color: "black" }}>Tél : {carte.personne_a_contacter.telephone}</div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div className="verso-footer px-1">
+        SCOUTS
+        <div>Creating a Better World</div>
+      </div>
+    </div>
+  );
+};
+
+export const Carte: FC<Props> = ({ carte, photo }) => {
+  return (
+    <div className="d-flex justify-content-center">
+      <CarteRecto carte={carte.recto} photo={photo} />
+      <CarteVerso carte={carte.verso} />
     </div>
   );
 };

@@ -82,3 +82,17 @@ $photo-width: 70px;
     text-transform: uppercase;
   }
 }
+
+.carte.verso {
+  color: $primary;
+  font-weight: 600;
+  background-color: $primary;
+  .carte-content {
+    background-color: white;
+  }
+}
+
+.verso-footer {
+  color: white;
+  font-size: 9px;
+}

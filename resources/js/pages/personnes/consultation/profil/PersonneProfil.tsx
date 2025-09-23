@@ -4,10 +4,6 @@ import { PersonneResource } from "types/personne.type";
 import { PersonneIdentite } from "./identite/PersonneIdentite";
 import { PersonneCoordonnee } from "./coordonnee/PersonneCoordonnee";
 import { PersonneAContacter } from "./referent/PersonneAContacter";
-import { PersonneFormation } from "./formation/PersonneFormation";
-import { PersonneUtils } from "utils/PersonneUtils";
-// import { PersonneFormation } from "./formation/PersonneFormation";
-// import { PersonneUtils } from "utils/PersonneUtils";
 
 type Props = {
   personne: PersonneResource;
@@ -25,11 +21,6 @@ export const PersonneProfil: FC<Props> = ({ personne }) => {
       <ListGroup className="mb-3">
         <PersonneAContacter personne={personne} />
       </ListGroup>
-      {PersonneUtils.isAdulte(personne) && (
-        <ListGroup className="mb-3">
-          <PersonneFormation personneId={personne.id} formations={personne.formations || []} />
-        </ListGroup>
-      )}
     </>
   );
 };

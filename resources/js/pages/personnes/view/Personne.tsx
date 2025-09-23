@@ -15,6 +15,8 @@ import { EtatCotisation, PersonneCotisation } from "../consultation/cotisation";
 import { PersonneFonctions } from "../consultation/fonction/PersonneFonctions";
 import { Header } from "layout/Header";
 import { ConsulterPersonneActions } from "../consultation/action";
+import { PersonneUtils } from "utils/PersonneUtils";
+import { PersonneFormation } from "../consultation/profil/formation/PersonneFormation";
 
 type PersonneProps = {
   personneId: string;
@@ -67,11 +69,10 @@ export const Personne: FC<PersonneProps> = ({ personneId, title }) => {
         visible: true,
       },
       {
-        label: "Carte",
-        code: "carte",
-        icon: "mdi mdi-card-account-details-outline",
-        visible: protection.personne.affecter(personne),
-        Icon: Icon.PersonVcard,
+        label: "Formations",
+        code: "formations",
+        Icon: Icon.GraphUpArrow,
+        visible: personne && PersonneUtils.isAdulte(personne),
       },
       {
         label: "Fonctions",
@@ -84,6 +85,13 @@ export const Personne: FC<PersonneProps> = ({ personneId, title }) => {
         code: "cotisations",
         Icon: Icon.Bank2,
         visible: protection.cotisation.acces,
+      },
+      {
+        label: "Carte",
+        code: "carte",
+        icon: "mdi mdi-card-account-details-outline",
+        visible: protection.personne.affecter(personne),
+        Icon: Icon.PersonVcard,
       },
     ].filter((e) => e.visible);
   }, [protection, personne]);
@@ -105,6 +113,8 @@ export const Personne: FC<PersonneProps> = ({ personneId, title }) => {
         return <PersonneFonctions personne={personne} />;
       case "cotisations":
         return <PersonneCotisation personne={personne} />;
+      case "formations":
+        return <PersonneFormation personneId={personne.id} formations={personne.formations || []} />;
       default:
         return <PersonneProfil personne={personne} />;
     }

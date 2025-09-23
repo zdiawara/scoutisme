@@ -66,7 +66,7 @@ export const PersonneFormation: FC<PersonneCoordonneeProps> = ({ formations, per
   };
 
   return (
-    <>
+    <ListGroup className="mb-4">
       <View.Toolbar
         icon={<Icon.Briefcase size="1.1rem" className="me-1" />}
         label="Formations"
@@ -94,6 +94,6 @@ export const PersonneFormation: FC<PersonneCoordonneeProps> = ({ formations, per
           </ListGroup.Item>
         )}
       </>
-    </>
+    </ListGroup>
   );
 };

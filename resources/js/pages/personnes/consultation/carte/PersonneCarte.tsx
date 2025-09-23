@@ -17,11 +17,7 @@ export const PersonneCarte: FC<Props> = ({ personne }) => {
     <ListGroup className="mb-3">
       <View.Toolbar
         right={
-          <Button
-            variant="secondary"
-            disabled={Boolean(carte?.message) || !carte}
-            onClick={telechargerCarte}
-          >
+          <Button variant="secondary" disabled={Boolean(carte?.message) || !carte} onClick={telechargerCarte}>
             <Icon.Download />
           </Button>
         }

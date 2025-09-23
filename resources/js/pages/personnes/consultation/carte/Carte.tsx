@@ -45,10 +45,7 @@ export const Carte: FC<Props> = ({ carte, photo }) => {
                 <div className="carte-photo">
                   <img alt="indentité" src={photo} />
                 </div>
-                <div
-                  className="carte-signataire"
-                  style={{ position: "relative" }}
-                >
+                <div className="carte-signataire" style={{ position: "relative" }}>
                   <span>{carte.meta.signataire.libelle}</span>
                   <img
                     src={tamponEquipeNationale}
@@ -88,10 +85,7 @@ export const Carte: FC<Props> = ({ carte, photo }) => {
       </div>
 
       <div className="carte-footer">
-        <Item
-          label="Validite"
-          value={`Du ${carte.validite.debut} au ${carte.validite.fin}`}
-        />
+        <Item label="Validite" value={`Du ${carte.validite.debut} au ${carte.validite.fin}`} />
       </div>
     </div>
   );

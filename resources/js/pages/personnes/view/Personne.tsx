@@ -40,7 +40,7 @@ const ImageUploader: FC<{ personneId: string }> = ({ personneId }) => {
     <form>
       <input className="d-none" type="file" id="upload-image" accept="image/*" onChange={handleFileChange} />
       <label className="text-muted fs-6 text-center d-block mt-1" style={{ cursor: "pointer" }} htmlFor="upload-image">
-        modifier photo
+        Modifier photo
       </label>
     </form>
   );

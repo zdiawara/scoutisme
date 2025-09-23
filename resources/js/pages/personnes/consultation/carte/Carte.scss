@@ -7,17 +7,16 @@ $photo-height: 70px;
 $photo-width: 70px;
 
 .carte {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  // display: flex;
+  // flex-direction: column;
+  // justify-content: space-between;
 
   width: 8.89cm;
   height: 5.08cm;
-  font-size: 0.7rem;
+  font-size: 10px;
   color: $dark;
   border: 2px solid #eee;
-  background: #fff center/contain url("../../../../assets/images/bg-logo.png")
-    no-repeat;
+  background: #fff center/contain url("../../../../assets/images/bg-logo.png") no-repeat;
 
   .table-sm > :not(caption) > * > * {
     padding: 0;
@@ -26,7 +25,7 @@ $photo-width: 70px;
     padding: 5px;
   }
   .carte-footer {
-    font-size: 0.55rem;
+    font-size: 8.8px;
     font-weight: 700;
     letter-spacing: 0.5px;
     margin-bottom: 5px;
@@ -50,7 +49,7 @@ $photo-width: 70px;
     color: $primary;
   }
   .carte-membre {
-    margin-bottom: 0.5rem;
+    margin-bottom: 8px;
     .carte-membre--titre {
       background-color: $primary;
       padding: 3px 15px;
@@ -72,7 +71,7 @@ $photo-width: 70px;
       }
     }
     .carte-signataire {
-      font-size: 0.6rem;
+      font-size: 9.6px;
       text-align: center;
       margin-top: 7px;
     }

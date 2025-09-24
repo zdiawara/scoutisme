@@ -10,12 +10,12 @@ $photo-width: 70px;
   // display: flex;
   // flex-direction: column;
   // justify-content: space-between;
-
+  position: relative;
   width: 8.89cm;
   height: 5.08cm;
   font-size: 10px;
   color: $dark;
-  border: 1px solid #eee;
+  border: 0.5px dashed #eee;
   background: #fff center/contain url("../../../../assets/images/bg-logo.png") no-repeat;
 
   .table-sm > :not(caption) > * > * {
@@ -86,7 +86,6 @@ $photo-width: 70px;
 .carte.verso {
   color: $primary;
   font-weight: 600;
-  background-color: $primary;
   .carte-content {
     background-color: white;
   }
@@ -95,4 +94,8 @@ $photo-width: 70px;
 .verso-footer {
   color: white;
   font-size: 9px;
+  background-color: $primary;
+  position: absolute;
+  margin-bottom: 0;
+  width: 8.89cm;
 }

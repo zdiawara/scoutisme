@@ -26,7 +26,7 @@ type CarteRectoProps = {
 
 export const CarteRecto: FC<CarteRectoProps> = ({ carte, photo }) => {
   return (
-    <div className="carte me-2 overflosw-scroll" id="content-id">
+    <div className="carte me-2 overflosw-scroll" id="content-recto">
       <div className="carte-content">
         <table className="p-0">
           <tbody>
@@ -101,7 +101,7 @@ type CarteVersoProps = {
 };
 export const CarteVerso: FC<CarteVersoProps> = ({ carte }) => {
   return (
-    <div className="carte verso overflosw-scroll" id="content-verso">
+    <div className="carte verso overflosw-scroll mt-2" id="content-verso">
       <div className="carte-content">
         <table className="p-0">
           <tbody>
@@ -143,7 +143,7 @@ export const CarteVerso: FC<CarteVersoProps> = ({ carte }) => {
 
 export const Carte: FC<Props> = ({ carte, photo }) => {
   return (
-    <div className="d-flex justify-content-center">
+    <div id="content-full">
       <CarteRecto carte={carte.recto} photo={photo} />
       <CarteVerso carte={carte.verso} />
     </div>

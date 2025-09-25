@@ -9,10 +9,12 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Personne extends Model
 {
-    use HasUuids, HasFactory, Filterable, Audit;
+    use HasUuids, HasFactory, Filterable, Audit, LogsActivity;
 
     protected $fillable = [
         'nom',
@@ -74,5 +76,22 @@ class Personne extends Model
     public function modelFilter()
     {
         return $this->provideFilter(PersonneFilter::class);
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable()          // log automatiquement les attributs fillable
+            ->logOnlyDirty()         // log seulement les changements
+            ->useLogName('personne') // nom du log
+            ->setDescriptionForEvent(function (string $eventName) {
+                if ($eventName === "updated") {
+                    return "Personne " . $this->nom . " " . $this->prenom . " (" . $this->code . ") modifiée";
+                }
+                if ($eventName === "created") {
+                    return "Personne " . $this->nom . " " . $this->prenom . " (" . $this->code . ") créée";
+                }
+                return "Personne {$eventName}";
+            });
     }
 }

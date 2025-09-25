@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Paiement extends Model
 {
-    use HasUuids, Filterable, SoftDeletes, Audit;
+    use HasUuids, Filterable, SoftDeletes, Audit, LogsActivity;
 
     protected $fillable = [
         'cotisation_id',
@@ -39,5 +41,25 @@ class Paiement extends Model
     public function createur(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable()
+            ->logOnlyDirty()
+            ->useLogName('paiement')
+            ->setDescriptionForEvent(function (string $eventName) {
+                if ($eventName === "updated") {
+                    return "Paiement " . $this->numero . " modifié";
+                }
+                if ($eventName === "created") {
+                    return "Paiement " . $this->numero . " créé";
+                }
+                if ($eventName === "deleted") {
+                    return "Paiement " . $this->numero . " supprimé";
+                }
+                return "Paiement {$eventName}";
+            });
     }
 }

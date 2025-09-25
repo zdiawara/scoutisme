@@ -6,13 +6,19 @@ use App\ModelFilters\AttributionFilter;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Attribution extends Model
 {
-    use HasUuids, Filterable;
+    use HasUuids, Filterable, LogsActivity;
 
     protected $fillable = [
-        'personne_id', 'organisation_id', 'fonction_id', 'date_debut', 'date_fin'
+        'personne_id',
+        'organisation_id',
+        'fonction_id',
+        'date_debut',
+        'date_fin'
     ];
 
     public function personne()
@@ -33,5 +39,25 @@ class Attribution extends Model
     public function modelFilter()
     {
         return $this->provideFilter(AttributionFilter::class);
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable()
+            ->logOnlyDirty()
+            ->useLogName('attribution')
+            ->setDescriptionForEvent(function (string $eventName) {
+                if ($eventName === "updated") {
+                    return "Attribution modifiée pour la personne " . $this->personne_id;
+                }
+                if ($eventName === "created") {
+                    return "Attribution créée pour la personne " . $this->personne_id;
+                }
+                if ($eventName === "deleted") {
+                    return "Attribution supprimée pour la personne " . $this->personne_id;
+                }
+                return "Attribution {$eventName}";
+            });
     }
 }

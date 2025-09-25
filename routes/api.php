@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\FonctionController;
 use App\Http\Controllers\Api\GenreController;
 use App\Http\Controllers\Api\HabilitationController;
 use App\Http\Controllers\Api\InstanceController;
+use App\Http\Controllers\Api\LogActivityController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\ModuleController;
 use App\Http\Controllers\Api\MontantCotisationController;
@@ -86,4 +87,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::get('/montants_cotisations', [MontantCotisationController::class, 'index']);
     Route::put('/montants_cotisations/{montant_cotisation}',  [MontantCotisationController::class, 'update']);
+
+    Route::get('/activity_logs', [LogActivityController::class, 'index']);
+    Route::get('/activity_logs/{activity}', [LogActivityController::class, 'show']);
 });

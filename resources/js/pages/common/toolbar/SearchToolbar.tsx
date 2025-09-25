@@ -13,13 +13,7 @@ type ToolbarProps = {
   tries?: Trie[];
 };
 
-export const SearchToolbar: FC<ToolbarProps> = ({
-  searchParams,
-  isFetching,
-  nombreResultat,
-  toggleFilter,
-  tries,
-}) => {
+export const SearchToolbar: FC<ToolbarProps> = ({ searchParams, isFetching, nombreResultat, toggleFilter, tries }) => {
   const { onSearch } = useSearch();
 
   return (
@@ -27,11 +21,7 @@ export const SearchToolbar: FC<ToolbarProps> = ({
       <View.Toolbar>
         <div className="w-100">
           <InputGroup>
-            <Form.Control
-              defaultValue={searchParams?.search || ""}
-              placeholder="Rechercher ..."
-              onChange={onSearch}
-            />
+            <Form.Control defaultValue={searchParams?.search || ""} placeholder="Rechercher ..." onChange={onSearch} />
             {tries && <Trier actions={tries} />}
             {toggleFilter && (
               <Button variant="secondary" onClick={toggleFilter}>
@@ -49,16 +39,9 @@ export const SearchToolbar: FC<ToolbarProps> = ({
             ))}
           </div>
           <div className="fw-light mt-1">
-            {Boolean(nombreResultat) && (
-              <span className="me-1">{nombreResultat} résultat(s)</span>
-            )}
+            {Boolean(nombreResultat) && <span className="me-1">{nombreResultat} résultat(s)</span>}
             {isFetching && (
-              <Spinner
-                className="me-1"
-                size="sm"
-                animation="grow"
-                role="status"
-              >
+              <Spinner className="me-1" size="sm" animation="grow" role="status">
                 <span className="visually-hidden">Loading...</span>
               </Spinner>
             )}

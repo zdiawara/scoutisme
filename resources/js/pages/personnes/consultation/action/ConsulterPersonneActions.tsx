@@ -24,14 +24,14 @@ export const ConsulterPersonneActions = ({ personne }: Props) => {
 
   const menus = useMemo(() => {
     return [
-      {
-        label: "Photo",
-        icon: "uil-edit-alt",
-        description: "Mettre à jour la photo",
-        code: "modifier",
-        Icon: Icon.Image,
-        visible: droits.personne.modifier(personne),
-      },
+      // {
+      //   label: "Photo",
+      //   icon: "uil-edit-alt",
+      //   description: "Mettre à jour la photo",
+      //   code: "modifier",
+      //   Icon: Icon.Image,
+      //   visible: droits.personne.modifier(personne),
+      // },
       {
         label: "Carte",
         description: "Télécharger la carte d'adhésion",

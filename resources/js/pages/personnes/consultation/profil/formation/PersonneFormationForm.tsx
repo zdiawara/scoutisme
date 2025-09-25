@@ -9,21 +9,11 @@ const FormContainer: FC<WrapperProps> = ({ renderButtonsActions }) => {
     <>
       <Row className="g-3">
         <Col xs={12} sm={6}>
-          <SelectRefFormation
-            name="niveau_formation"
-            label="Formation *"
-            placeholder="Choisir"
-          />
+          <SelectRefFormation name="niveau_formation" label="Formation *" placeholder="Choisir" />
         </Col>
 
         <Col xs={12} sm={6}>
-          <DatePicker
-            name="date_formation"
-            label="Date"
-            useHookForm
-            maxDate={new Date()}
-            isClearable
-          />
+          <DatePicker name="date_formation" label="Date formation" useHookForm maxDate={new Date()} isClearable />
         </Col>
       </Row>
 
@@ -32,7 +22,4 @@ const FormContainer: FC<WrapperProps> = ({ renderButtonsActions }) => {
   );
 };
 
-export const PersonneFormationForm = withForm(
-  FormContainer,
-  personneFormationSchema
-);
+export const PersonneFormationForm = withForm(FormContainer, personneFormationSchema);

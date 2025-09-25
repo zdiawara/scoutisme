@@ -245,7 +245,7 @@ class PersonneController extends Controller
                             'id' => $formation->id,
                             'nom' => $formation->nom
                         ],
-                        'date_formation' => $item['date_formation']
+                        'date_formation' => $item['date_formation'] ?? ''
                     ];
                 })->toArray();
         }

@@ -1,6 +1,6 @@
 import { PersonneAvatar } from "pages/personnes/rechercher/personne/PersonneAvatar";
 import { FC } from "react";
-import { Badge, Button, ListGroup } from "react-bootstrap";
+import { Badge, ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { UserResource } from "types/auth.type";
 import { LINKS } from "utils/links";
@@ -40,15 +40,7 @@ export const ListUtilisateur: FC<Props> = ({ users }) => {
               ))}
             {!user.verify && <Badge bg="danger">Email non vérifié</Badge>}
           </div>
-          <Button
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            //@ts-ignore
-            as={Link}
-            to={LINKS.parametres.viewUtilisateur(user.id)}
-            variant="default"
-          >
-            <Icon.ArrowRight />
-          </Button>
+          <Icon.ArrowRight className="align-self-center" />
         </ListGroup.Item>
       ))}
     </>

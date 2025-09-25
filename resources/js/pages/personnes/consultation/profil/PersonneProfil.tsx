@@ -4,8 +4,6 @@ import { PersonneResource } from "types/personne.type";
 import { PersonneIdentite } from "./identite/PersonneIdentite";
 import { PersonneCoordonnee } from "./coordonnee/PersonneCoordonnee";
 import { PersonneAContacter } from "./referent/PersonneAContacter";
-// import { PersonneFormation } from "./formation/PersonneFormation";
-// import { PersonneUtils } from "utils/PersonneUtils";
 
 type Props = {
   personne: PersonneResource;

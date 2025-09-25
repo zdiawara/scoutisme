@@ -20,8 +20,8 @@ class UserService
             ['password' => bcrypt('secret')]
         ));
 
-        Mail::to('zakaridia.diawara@gmail.com')
-            ->send(new CreerUserMail($user));
+        // Mail::to('zakaridia.diawara@gmail.com')
+        //     ->send(new CreerUserMail($user));
 
         DB::commit();
 

@@ -16,12 +16,10 @@ export const PersonneCarte: FC<Props> = ({ personne }) => {
   return (
     <ListGroup className="mb-3">
       <View.Toolbar
+        label="Carte d'adhésion"
+        icon={<Icon.InfoCircle size="1.2rem" className="me-1" />}
         right={
-          <Button
-            variant="secondary"
-            disabled={Boolean(carte?.message) || !carte}
-            onClick={telechargerCarte}
-          >
+          <Button variant="secondary" disabled={Boolean(carte?.message) || !carte} onClick={telechargerCarte}>
             <Icon.Download />
           </Button>
         }

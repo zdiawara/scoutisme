@@ -36,21 +36,14 @@ const toFormations = (data: FormationResource[]): FormationInput[] => {
   }));
 };
 
-export const PersonneFormation: FC<PersonneCoordonneeProps> = ({
-  formations,
-  personneId,
-}) => {
+export const PersonneFormation: FC<PersonneCoordonneeProps> = ({ formations, personneId }) => {
   const clientQuery = useQueryClient();
   const [show, toggleForm] = useToggle();
 
   const updateFormation = (data: Record<string, any>, index: number) => {
     const formationsInputs = toFormations(formations);
 
-    return save([
-      ...formationsInputs.slice(0, index),
-      toFormationBody(data),
-      ...formationsInputs.slice(index + 1),
-    ]);
+    return save([...formationsInputs.slice(0, index), toFormationBody(data), ...formationsInputs.slice(index + 1)]);
   };
 
   const addFormation = async (data: Record<string, any>) => {
@@ -69,25 +62,21 @@ export const PersonneFormation: FC<PersonneCoordonneeProps> = ({
 
   const deleteFormation = (formationId: string) => {
     const formationsInputs = toFormations(formations);
-    return save(
-      formationsInputs.filter((e) => e.niveau_formation_id !== formationId)
-    );
+    return save(formationsInputs.filter((e) => e.niveau_formation_id !== formationId));
   };
 
   return (
-    <>
+    <ListGroup className="mb-4">
       <View.Toolbar
         icon={<Icon.Briefcase size="1.1rem" className="me-1" />}
         label="Formations"
         right={
-          <Button size="sm" variant="secondary" onClick={() => toggleForm()}>
+          <Button variant="secondary" onClick={() => toggleForm()}>
             <Icon.PlusLg />
           </Button>
         }
       />
-      {show && (
-        <AddPersonneFormation onClose={toggleForm} onSave={addFormation} />
-      )}
+      {show && <AddPersonneFormation onClose={toggleForm} onSave={addFormation} />}
 
       <>
         {formations.length ? (
@@ -105,6 +94,6 @@ export const PersonneFormation: FC<PersonneCoordonneeProps> = ({
           </ListGroup.Item>
         )}
       </>
-    </>
+    </ListGroup>
   );
 };

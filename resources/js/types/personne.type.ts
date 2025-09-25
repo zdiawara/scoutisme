@@ -121,7 +121,7 @@ export type PaiementResource = {
   date_traitement?: string;
 };
 
-export type PersonneCarte = {
+export type PersonneCarteRecto = {
   type: string;
   meta: {
     association: string;
@@ -136,15 +136,23 @@ export type PersonneCarte = {
     fonction: string;
   };
   lignes: Array<{ nom: string; value: string }>;
-  /* region?: {
-    nom: string;
-  };
-  unite?: {
-    nom: string;
-    branche: string;
-  }; */
   validite: {
     debut: string;
     fin: string;
   };
+};
+
+export type PersonneCarteVerso = {
+  nom: string;
+  adrese: { label: string; value: string };
+  telephone: { label: string; value: string };
+  recepisse: { label: string; numero: string; date: string };
+  personne_a_contacter: {
+    nom: string;
+    telephone: string;
+  };
+};
+export type PersonneCarte = {
+  recto: PersonneCarteRecto;
+  verso: PersonneCarteVerso;
 };

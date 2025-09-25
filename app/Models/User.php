@@ -9,11 +9,13 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuids;
+    use HasApiTokens, HasFactory, Notifiable, HasUuids, LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -74,5 +76,22 @@ class User extends Authenticatable implements MustVerifyEmail
     public function personne()
     {
         return $this->belongsTo(Personne::class);
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable()
+            ->logOnlyDirty()
+            ->useLogName('user')
+            ->setDescriptionForEvent(function (string $eventName) {
+                if ($eventName === "updated") {
+                    return "Utilisateur " . $this->name . " modifié";
+                }
+                if ($eventName === "created") {
+                    return "Utilisateur " . $this->name .  " créé";
+                }
+                return "Utilisateur {$eventName}";
+            });
     }
 }

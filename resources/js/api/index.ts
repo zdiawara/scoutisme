@@ -237,3 +237,6 @@ export const moduleApi = new ModuleApi("modules");
 
 class MontantCotisationApi extends CrudService {}
 export const montantCotisationApi = new MontantCotisationApi("montants_cotisations");
+
+class LogApi extends CrudService {}
+export const logApi = new LogApi("activity_logs");

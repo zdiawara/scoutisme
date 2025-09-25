@@ -2,20 +2,13 @@ import { format, isAfter, isBefore } from "date-fns";
 import frLocale from "date-fns/locale/fr";
 
 export class DateUtils {
-  public static isActive(
-    dateReference: Date,
-    date_debut?: string,
-    date_fin?: string
-  ) {
+  public static isActive(dateReference: Date, date_debut?: string, date_fin?: string) {
     const dateDebut = DateParser.toDate(date_debut);
     if (!dateDebut) {
       return false;
     }
     const dateFin = DateParser.toDate(date_fin);
-    return (
-      isAfter(dateReference, dateDebut) &&
-      (dateFin ? isBefore(dateReference, dateFin) : true)
-    );
+    return isAfter(dateReference, dateDebut) && (dateFin ? isBefore(dateReference, dateFin) : true);
   }
 }
 
@@ -71,10 +64,7 @@ export class DateFormater {
     return DateFormater.format(date, pattern);
   }
 
-  public static toDateTextTime(
-    date?: string,
-    pattern = DateFormater.DATE_TEXT_TIME
-  ) {
+  public static toDateTextTime(date?: string, pattern = DateFormater.DATE_TEXT_TIME) {
     return DateFormater.format(date, pattern);
   }
 

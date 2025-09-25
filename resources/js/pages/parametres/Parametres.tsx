@@ -52,8 +52,14 @@ const PARAMETRES = [
       {
         title: "Utilisateurs",
         link: LINKS.parametres.utilisateurs,
-        subtitle: "Créer et modifier le référentiel des formations suivi par les adultes",
+        subtitle: "Consulter les utilisateurs qui ont accès à l'application",
         Icon: Icon.PeopleFill,
+      },
+      {
+        title: "Logs",
+        link: LINKS.parametres.logs,
+        subtitle: "Consulter les activités des utilisateurs",
+        Icon: Icon.Activity,
       },
     ],
   },
@@ -63,7 +69,7 @@ const Parametres: FC = () => {
   return (
     <>
       <Header title="Paramètres" />
-      <ListGroup className="mt-4">
+      <ListGroup className="my-4">
         {PARAMETRES.map((parametre) => (
           <Fragment key={parametre.id}>
             <ListGroup.Item className="bg-gray-100 d-flex align-items-center">{parametre.title}</ListGroup.Item>

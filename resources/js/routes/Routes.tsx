@@ -64,6 +64,8 @@ const RechercherUtilisateur = Loadable(
   lazy(() => import("pages/parametres/utilisateurs/search/RechercherUtilisateur"))
 );
 const ViewUtilisateur = Loadable(lazy(() => import("pages/parametres/utilisateurs/view/ViewUtilisateur")));
+const RechercherLog = Loadable(lazy(() => import("pages/parametres/activitylogs/RechercherLog")));
+const ViewLog = Loadable(lazy(() => import("pages/parametres/activitylogs/ViewLog")));
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -142,6 +144,8 @@ export const router = createBrowserRouter(
           <Route path={LINKS.parametres.roles + "/:id"} element={<ConsulterRole />} />
           <Route path={LINKS.parametres.utilisateurs} element={<RechercherUtilisateur />} />
           <Route path={LINKS.parametres.viewUtilisateur(":id")} element={<ViewUtilisateur />} />
+          <Route path={LINKS.parametres.logs} element={<RechercherLog />} />
+          <Route path={`${LINKS.parametres.logs}/:id`} element={<ViewLog />} />
         </Route>
       </Route>
     </>

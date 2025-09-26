@@ -1,16 +1,16 @@
 import { HookModalForm, SelectRole, TextInput } from "components";
 import { WrapperV2Props, withMutationForm } from "hoc";
-import { FC } from "react";
-import { Alert, Col, Row } from "react-bootstrap";
+import { FC, useState } from "react";
+import { Alert, Button, Col, Modal, Row, Spinner } from "react-bootstrap";
 import { personneApi } from "api";
 import { useQueryClient } from "@tanstack/react-query";
 import { PersonneResource } from "types/personne.type";
 
 import * as yup from "yup";
+import { toast } from "react-toastify";
 
 const schema = yup.object({
   email: yup.string().required(),
-  role: yup.object().required().nullable(),
 });
 
 /**
@@ -18,16 +18,12 @@ const schema = yup.object({
  */
 const Form: FC<WrapperV2Props> = (props) => {
   return (
-    <HookModalForm
-      {...props}
-      modalBodyClassName="bg-light p-3"
-      onClose={props.onExit}
-    >
+    <HookModalForm {...props} modalBodyClassName="bg-light p-3" onClose={props.onExit}>
       <Alert className="text  bg-white text-dark shadow-sm" variant="default">
         <Alert.Heading>Création d'un utilisateur</Alert.Heading>
         <p className="mb-2">
-          Vous êtes sur le point de transformer {props.meta.personne} en un
-          utilisateur de l'application. Il s'en suivra les actions suivantes :
+          Vous êtes sur le point de donner l'accès à <strong>{props.meta.personne}</strong> à l'application. Il s'en
+          suivra les actions suivantes :
         </p>
         <ul>
           <li>
@@ -50,15 +46,6 @@ const Form: FC<WrapperV2Props> = (props) => {
             description="Adresse mail avec lequel la personne va s'authentifier dans l'application"
           />
         </Col>
-        <Col xs={12}>
-          <SelectRole
-            placeholder="Rôle"
-            label="Rôle"
-            name="role"
-            isRequired
-            description="Role occupé par la personne au sein de l'application."
-          />
-        </Col>
       </Row>
     </HookModalForm>
   );
@@ -71,33 +58,112 @@ type CreateUserFromPersonneModalProps = {
   personne: PersonneResource;
 };
 
-export const CreateUserFromPersonneModal: FC<
-  CreateUserFromPersonneModalProps
-> = ({ closeModal, personne }) => {
+export const CreateUserFromPersonneModal: FC<CreateUserFromPersonneModalProps> = ({ closeModal, personne }) => {
   const query = useQueryClient();
 
-  const save = (data: Record<string, any>) => {
-    return personneApi.convertir(personne.id, {
-      role_id: data.role.value,
-      email: data.email,
-    });
+  const [isLoading, setLoading] = useState(false);
+
+  const save = async () => {
+    try {
+      setLoading(true);
+      await personneApi.convertir(personne.id);
+      toast("L'utilisateur a bien été créé !", {
+        type: toast.TYPE.SUCCESS,
+        autoClose: 5000,
+        position: "top-right",
+      });
+      closeModal();
+    } catch (err: any) {
+      toast(err.message, {
+        type: toast.TYPE.ERROR,
+        autoClose: 5000,
+        position: "top-right",
+      });
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  if (!personne.email) {
+    return (
+      <Modal show size="lg">
+        <Modal.Header>
+          <Modal.Title>
+            Donner accès à {personne.prenom} {personne.nom}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Alert variant="danger">
+            <Alert.Heading>Action impossible</Alert.Heading>
+            <p>
+              Nous ne pouvons pas continuer cette action car&nbsp;
+              <strong>
+                {personne.prenom} {personne.nom}
+              </strong>
+              &nbsp;ne dispose pas d'adresse e-mail. Pour lui accorder l'accès à l'application, merci de lui attribuer
+              une adresse e-mail.
+            </p>
+          </Alert>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={closeModal}>
+            OK
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+
   return (
-    <UserForm
-      onSave={save}
-      title={`Transformer ${personne.prenom} ${personne.nom} en utilisateur`}
-      defaultValues={{
-        email: personne.email,
-      }}
-      meta={{
-        personne: `${personne.prenom} ${personne.nom}`,
-      }}
-      onSuccess={() => {
-        query.invalidateQueries(["users"]);
-        closeModal();
-      }}
-      onExit={closeModal}
-    />
+    <>
+      <Modal show size="lg">
+        <Modal.Header>
+          <Modal.Title>
+            Donner accès à {personne.prenom} {personne.nom}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Alert variant="warning">
+            <p>
+              Vous êtes sur le point de donner l'accès à&nbsp;
+              <strong>
+                {personne.prenom} {personne.nom}
+              </strong>
+              &nbsp;à l'application.
+            </p>
+            <p>Il s'en suivra les actions suivantes :</p>
+            <ul>
+              <li>
+                Création d'un compte utilisateur pour&nbsp;
+                <strong>
+                  {personne.prenom} {personne.nom}
+                </strong>
+              </li>
+              <li>
+                Envoie d'un mail&nbsp;à&nbsp;
+                <strong>
+                  {personne.prenom} {personne.nom}
+                </strong>
+                &nbsp;contenant ses identifiants et son périmètre d'action à l'adresse <strong>{personne.email}</strong>
+              </li>
+            </ul>
+          </Alert>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button className="me-1" variant="outline-primary" onClick={closeModal} disabled={isLoading}>
+            Annuler
+          </Button>
+          <Button onClick={save} variant="primary" disabled={isLoading}>
+            {isLoading && (
+              <Spinner className="me-2" animation="border" size="sm" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+            )}
+            Valider
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 };

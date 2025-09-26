@@ -5,6 +5,7 @@ import { useDroits } from "hooks/useDroits";
 import { DropOption } from "components/options/DropOptions";
 import { PersonneResource } from "types/personne.type";
 import { TelechargerCarteModal } from "./TelechargerCarteModal";
+import { CreateUserFromPersonneModal } from "pages/personnes/modal/CreateUserFromPersonneModal";
 
 type Props = {
   personne: PersonneResource;
@@ -46,6 +47,13 @@ export const ConsulterPersonneActions = ({ personne }: Props) => {
       //   Icon: Icon.Send,
       //   visible: true,
       // },
+      {
+        label: "Accès à l'application",
+        description: "Donner un accès à l'application à cette personne",
+        code: "acces",
+        Icon: Icon.Link,
+        visible: droits.personne.modifier(personne) || Boolean(personne.fonction?.responsable),
+      },
       // {
       //   label: "Supprimer",
       //   description: "Supprimer définitimenent la personne",
@@ -60,6 +68,7 @@ export const ConsulterPersonneActions = ({ personne }: Props) => {
     <>
       <DropOption actions={menus} onSelect={onSelect} menu={false} variant="secondary" />
       {action === "carte" && <TelechargerCarteModal personne={personne} closeModal={closeModal} />}
+      {action === "acces" && <CreateUserFromPersonneModal closeModal={closeModal} personne={personne} />}
     </>
   );
 };

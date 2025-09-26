@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { genreApi, personneApi } from "api";
-import { CheckBox, DatePicker, RadioBox, SelectGenre, TextInput } from "components";
+import { DatePicker, TextInput } from "components";
 import { SubmitButton } from "components/buttons";
 import { FC } from "react";
 import { Button, ButtonGroup, Col, Form, Modal, Row, ToggleButton } from "react-bootstrap";

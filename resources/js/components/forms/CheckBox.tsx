@@ -25,6 +25,7 @@ export const Radio: BsPrefixRefForwardingComponent<"input", FormCheckProps> = (p
               <Form.Check
                 {...props}
                 id={props.id || props.name}
+                type="radio"
                 onChange={(e) => {
                   const value = e.target.checked ? e.target.value : undefined;
                   if (props.name) {

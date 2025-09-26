@@ -28,13 +28,13 @@ export const OrganisationMembreActions: FC<Props> = ({ attribution, nomminer }) 
         Icon: Icon.Eye,
         visible: true,
       },
-      {
-        label: "Changer",
-        description: "Nomminer une autre personne",
-        code: "nomminer",
-        Icon: Icon.Pencil,
-        visible: droits.organisation.direction(attribution.organisation),
-      },
+      // {
+      //   label: "Changer",
+      //   description: "Nomminer une autre personne",
+      //   code: "nomminer",
+      //   Icon: Icon.Pencil,
+      //   visible: droits.organisation.direction(attribution.organisation),
+      // },
       {
         label: "Retirer",
         description: "Retirer la personne de cette fonction",

@@ -45,11 +45,13 @@ export const useCarte = (personneId: string) => {
   });
 
   const telechargerCarte = async () => {
-    // you can use a function to return the target element besides using React refs
-    const getTargetElement = () => document.getElementById("content-full");
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
-    await generatePDF(getTargetElement, options);
+    await generatePDF(() => document.getElementById("content-recto"), options);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    await generatePDF(() => document.getElementById("content-verso"), options);
   };
 
   return {

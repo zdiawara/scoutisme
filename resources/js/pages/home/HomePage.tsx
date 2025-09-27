@@ -1,12 +1,10 @@
 import { useAuth } from "hooks";
 
 import { useMemo } from "react";
-import { Button, Card, Col, Row, Stack } from "react-bootstrap";
+import { Card, Col, Row } from "react-bootstrap";
 import * as Icon from "react-bootstrap-icons";
 import { Link } from "react-router-dom";
 import { getMenuItems } from "utils";
-
-import { ProfilDropdown } from "./profil/ProfilDropdown";
 
 import "./HomePage.scss";
 

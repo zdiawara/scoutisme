@@ -32,8 +32,8 @@ class PersonneApi extends CrudService {
     return response;
   }
 
-  public async convertir(personneId: string, body: any) {
-    const response = await requestPost<{ data: UserResource }>(`${this.base}/${personneId}/convertir`, body);
+  public async convertir(personneId: string) {
+    const response = await requestPost<{ data: UserResource }>(`${this.base}/${personneId}/convertir`);
     return response;
   }
 
@@ -189,8 +189,19 @@ class AuthApi extends CrudService {
   }
 
   public async userInfo() {
-    const response = await fetchApi({
+    const response = await fetchApi<{ data: UserResource }>({
       url: "/me",
+      options: {
+        method: "GET",
+      },
+      type: "json",
+    });
+    return response;
+  }
+
+  public async userId() {
+    const response = await fetchApi({
+      url: "/user-id",
       options: {
         method: "GET",
       },
@@ -209,6 +220,18 @@ class AuthApi extends CrudService {
       url: "/logout",
       options: {
         method: "GET",
+      },
+      type: "json",
+    });
+    return response;
+  }
+
+  public async resetPassword(body: { password: string; password_confirmation: string }) {
+    const response = await fetchApi<{ access_token: string }>({
+      url: "/reset-password",
+      options: {
+        body: JSON.stringify(body || {}),
+        method: "POST",
       },
       type: "json",
     });

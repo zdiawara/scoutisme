@@ -63,7 +63,7 @@ export const PersonneCotisation: FC<Props> = ({ personne }) => {
           </span>
           <div className="ms-auto d-block d-flex">
             <AsyncSelectSimple name="year" value={annee} onChange={setAnnee} fetchOptions={fetchYears} />
-            {cotisation && droits.cotisation.paiements.creer && (
+            {cotisation && droits.cotisation.can("creer", personne) && (
               <PayerCotisationAction resteAPayer={resteAPayer} annee={annee.value} personne={personne} />
             )}
           </div>
@@ -87,7 +87,7 @@ export const PersonneCotisation: FC<Props> = ({ personne }) => {
             <Icon.ListCheck size="1.2rem" className="me-1" />
             <span className="fs-5">Paiements effectués</span>
           </ListGroup.Item>
-          <ListPaiement paiements={cotisation?.paiements} />
+          <ListPaiement personne={personne} paiements={cotisation?.paiements} />
         </ListGroup>
       )}
     </>

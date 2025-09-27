@@ -10,7 +10,7 @@ export const NotificationError: ToastOptions = {
   type: toast.TYPE.ERROR,
   autoClose: 5000,
   position: "top-right",
-  hideProgressBar: true,
+  hideProgressBar: false,
 };
 
 export const buildMessageError = (e: any) => {
@@ -27,4 +27,16 @@ export const buildMessageError = (e: any) => {
     message = "Une erreur technique est survenue lors de l'enregistrement";
   }
   return message;
+};
+
+const succes = (message: string) => {
+  toast(message, NotificationSuccess);
+};
+
+const erreur = (message: string) => {
+  toast(message, NotificationError);
+};
+export const notifier = {
+  succes,
+  erreur,
 };

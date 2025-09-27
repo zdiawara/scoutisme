@@ -1,16 +1,17 @@
 import { MontantFormatText } from "components";
 import { FC } from "react";
 import { Stack } from "react-bootstrap";
-import { PaiementResource } from "types/personne.type";
+import { PaiementResource, PersonneResource } from "types/personne.type";
 import { DateFormater } from "utils/DateUtils";
 import { EtatPaiement } from "pages/paiements/common";
 import { PaiementActions } from "pages/personnes/common/PaiementActions";
 
 type Props = {
   paiement: PaiementResource;
+  personne?: PersonneResource;
 };
 
-export const PaiementItem: FC<Props> = ({ paiement }) => {
+export const PaiementItem: FC<Props> = ({ paiement, personne }) => {
   return (
     <>
       <div>
@@ -24,12 +25,10 @@ export const PaiementItem: FC<Props> = ({ paiement }) => {
 
         <span className="d-block">Par {paiement?.createur?.name || "-"}</span>
         <Stack direction="horizontal" className="mt-1 fw-light">
-          <div className="fw-light">
-            Le {DateFormater.toDateTextTime(paiement.created_at)}
-          </div>
+          <div className="fw-light">Le {DateFormater.toDateTextTime(paiement.created_at)}</div>
         </Stack>
       </div>
-      <PaiementActions paiement={paiement} />
+      <PaiementActions paiement={paiement} personne={personne} />
     </>
   );
 };

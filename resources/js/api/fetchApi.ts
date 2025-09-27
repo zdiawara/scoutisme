@@ -32,7 +32,7 @@ function buildErrors(status: number, data?: any) {
     results = { message: data.message || "Conflict" };
   } else {
     results = {
-      message: "Impossible de communiquer avec la plateforme !",
+      message: data.message || "Impossible de communiquer avec la plateforme !",
     };
   }
   e.errors = results;

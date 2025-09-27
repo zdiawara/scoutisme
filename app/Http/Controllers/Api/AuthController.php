@@ -12,6 +12,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -89,7 +90,7 @@ class AuthController extends Controller
             $request->session()->regenerate();
             return redirect()->intended('/');
         }
-        return response()->json(['error' => 'Unauthorized'], 401);
+        return response()->json(['message' => 'Vos identifiants sont incorrects'], 400);
     }
 
     /**
@@ -192,6 +193,26 @@ class AuthController extends Controller
         Auth::guard('web')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
+        return response()->json(['message' => 'Successfully logged out']);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'confirmed',
+            ],
+        ]);
+
+        $user = $request->user();
+
+        $user->forceFill([
+            'password' => Hash::make($request->password),
+        ])->save();
 
         return response()->json(['message' => 'Successfully logged out']);
     }

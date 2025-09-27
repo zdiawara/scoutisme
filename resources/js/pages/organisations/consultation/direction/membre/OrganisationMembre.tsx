@@ -8,6 +8,8 @@ import { OrganisationResource } from "types/organisation.type";
 import { Link } from "react-router-dom";
 import { LINKS } from "utils";
 import { NominerModal } from "pages/attributions/common/nomminer/NominerModal";
+import { useDroits } from "hooks/useDroits";
+import { useAuth } from "hooks/useAuth";
 
 type Props = {
   attribution: OrganisationAttribution;
@@ -16,6 +18,8 @@ type Props = {
 
 export const OrganisationMembre: FC<Props> = ({ attribution, organisation }) => {
   const [nomminer, setNominer] = useState<boolean>(false);
+  const droits = useDroits();
+  const { userDroit, user } = useAuth();
 
   const _attribution = {
     ...attribution,
@@ -23,6 +27,29 @@ export const OrganisationMembre: FC<Props> = ({ attribution, organisation }) => 
     organisation,
     personne: attribution.personne as PersonneResource,
   } as AttributionResource;
+
+  const render = () => {
+    if (
+      userDroit?.isAdmin ||
+      (user?.personne?.organisation &&
+        droits.organisation.direction(user?.personne?.organisation) &&
+        droits.personne.isInUserPerimetre(organisation.nature.code))
+    ) {
+      return (
+        <Button
+          variant="outline-secondary"
+          size="sm"
+          onClick={() => {
+            setNominer(true);
+          }}
+        >
+          <Icon.Pencil className="me-1" />
+          Nomminer
+        </Button>
+      );
+    }
+    return <span className="text-muted">Non défini</span>;
+  };
 
   return (
     <>
@@ -40,16 +67,7 @@ export const OrganisationMembre: FC<Props> = ({ attribution, organisation }) => 
             <span className="fw-light fs-6 text-muted">{attribution.personne?.code}</span>
           </>
         ) : (
-          <Button
-            variant="outline-secondary"
-            size="sm"
-            onClick={() => {
-              setNominer(true);
-            }}
-          >
-            <Icon.Pencil className="me-1" />
-            Nomminer
-          </Button>
+          render()
         )}
       </div>
       {attribution.personne && (

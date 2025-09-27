@@ -1,10 +1,11 @@
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { withForm, WrapperProps } from "hoc/withForm";
 import { TextInput } from "components";
 import { FC } from "react";
 import { authApi } from "api/index";
 import { LINKS } from "utils/links";
+import { notifier } from "utils/notification";
 
 const Form: FC<WrapperProps> = ({ onSubmit }) => (
   <Row className="g-3">
@@ -16,18 +17,9 @@ const Form: FC<WrapperProps> = ({ onSubmit }) => (
       <TextInput type="password" name="password" label="Mot de passe" placeholder="Votre mot de passe" isRequired />
     </Col>
 
-    {/* <Link to="#" className="mt-2 d-block text-primary">
-      Mot de passe oublié ?
-    </Link> */}
-    <div className="mt-3 mb-0 text-center">
-      <Button variant="primary" onClick={onSubmit} className="d-block w-100" disabled={false}>
-        Connexion
-      </Button>
-      <div className="my-2">Ou</div>
-      <Link to={LINKS.register} className="d-block w-100 btn-outline-primary btn">
-        Créer un compte
-      </Link>
-    </div>
+    <Button variant="primary" onClick={onSubmit} className="d-block w-100" disabled={false}>
+      Connexion
+    </Button>
   </Row>
 );
 
@@ -42,7 +34,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const logUser = async (body: UserData) => {
-    await authApi.login(body);
+    return await authApi.login(body);
   };
 
   return (

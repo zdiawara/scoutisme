@@ -17,6 +17,7 @@ export const ValiderPaiementModal: FC<PersonneCotisationModalProps> = ({ paiemen
     await paiementApi.valider(paiement.id);
     query.invalidateQueries([QUERY_KEY.cotisations]);
     query.invalidateQueries([QUERY_KEY.personnes]);
+    query.invalidateQueries([QUERY_KEY.paiements]);
     closeModal();
   };
 

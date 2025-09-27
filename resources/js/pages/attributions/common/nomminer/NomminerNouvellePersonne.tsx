@@ -1,16 +1,15 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { personneApi } from "api";
-import { DatePicker, SelectGenre, TextInput } from "components";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { genreApi, personneApi } from "api";
+import { DatePicker, TextInput } from "components";
 import { SubmitButton } from "components/buttons";
 import { FC } from "react";
-import { Button, Col, Modal, Row } from "react-bootstrap";
+import { Button, ButtonGroup, Col, Form, Modal, Row, ToggleButton } from "react-bootstrap";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { TypePersonne } from "types/personne.type";
+import { GenreResource, TypePersonne } from "types/personne.type";
 import { QUERY_KEY } from "utils/constants";
 import { DateFormater } from "utils/DateUtils";
-import { selectHelper } from "utils/functions";
 import { buildMessageError, NotificationError, NotificationSuccess } from "utils/notification";
 import * as yup from "yup";
 
@@ -21,19 +20,21 @@ type Props = {
   fonctionId: string;
 };
 
-export const schema = yup.object({
+const schema = yup.object({
   nom: yup.string().required().nullable(),
   prenom: yup.string().required().nullable(),
-  genre: yup.object().required().nullable(),
+  genre: yup.string().required().nullable(),
   date_debut: yup.date().required().nullable(),
+  email: yup.string().email().nullable(),
 });
 
 const onCreate = async (personneInput: Record<string, any>, organisationId: string, fonctionId: string) => {
   const body = {
     nom: personneInput.nom,
     prenom: personneInput.prenom,
-    genre_id: selectHelper.getValue(personneInput.genre),
+    genre_id: personneInput.genre,
     type: TypePersonne.adulte,
+    email: personneInput.email,
     attribution: {
       organisation_id: organisationId,
       fonction_id: fonctionId,
@@ -45,6 +46,13 @@ const onCreate = async (personneInput: Record<string, any>, organisationId: stri
 
 export const NomminerNouvellePersonne: FC<Props> = ({ closeModal, prevStep, organisationId, fonctionId }) => {
   const query = useQueryClient();
+  const queryGenre = useQuery({
+    queryKey: [QUERY_KEY.genres],
+    queryFn: async () => {
+      const result = await genreApi.findAll<GenreResource>();
+      return result;
+    },
+  });
 
   const methods = useForm({
     resolver: yupResolver(schema),
@@ -74,6 +82,10 @@ export const NomminerNouvellePersonne: FC<Props> = ({ closeModal, prevStep, orga
     console.error(e);
   };
 
+  if (queryGenre.isLoading) {
+    return null;
+  }
+
   return (
     <FormProvider {...methods}>
       <Modal.Body className="bg-gray-100">
@@ -85,10 +97,39 @@ export const NomminerNouvellePersonne: FC<Props> = ({ closeModal, prevStep, orga
             <TextInput label="Prenom" name="prenom" isRequired />
           </Col>
           <Col xs={12}>
-            <SelectGenre name="genre" label="Genre" placeholder="" isRequired />
+            <Form.Group className="position-relative">
+              <Form.Label className="text-muted d-block text-uppercase fs-6">
+                Genre
+                <strong className="text-danger">&nbsp;*</strong>
+              </Form.Label>
+              <ButtonGroup>
+                {queryGenre.data?.data.map((radio, idx) => (
+                  <ToggleButton
+                    key={idx}
+                    id={`radio-${idx}`}
+                    type="radio"
+                    variant={methods.watch("genre") === radio.id ? "outline-secondary" : "outline-secondary"}
+                    name="genre"
+                    value={radio.id}
+                    checked={methods.watch("genre") === radio.id}
+                    onChange={(e) => methods.setValue("genre", e.currentTarget.value)}
+                  >
+                    {radio.nom}
+                  </ToggleButton>
+                ))}
+              </ButtonGroup>
+              {methods.formState?.errors?.genre?.message && (
+                <Form.Control.Feedback className="d-block" type="invalid">
+                  {methods.formState.errors.genre.message}
+                </Form.Control.Feedback>
+              )}
+            </Form.Group>
           </Col>
           <Col xs={12}>
-            <DatePicker name="date_debut" label="Date debut" useHookForm required />
+            <TextInput label="Email" name="email" />
+          </Col>
+          <Col xs={12}>
+            <DatePicker name="date_debut" label="Date nommination" useHookForm required />
           </Col>
         </Row>
       </Modal.Body>

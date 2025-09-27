@@ -3,7 +3,7 @@ import { FC, ReactNode, useState } from "react";
 import { Alert, Button, Form, Stack } from "react-bootstrap";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { notifier } from "utils/notification";
 import { AnyObjectSchema } from "yup";
 
 type HocCompomentProps = {
@@ -69,11 +69,7 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
             }
           }
           if (withNotification) {
-            toast(notificationOptions?.message || "Modifications enregistrées !", {
-              type: toast.TYPE.SUCCESS,
-              autoClose: 5000,
-              position: "top-right",
-            });
+            notifier.succes(notificationOptions?.message || "Modifications enregistrées !");
           }
         })
         .catch((e) => {
@@ -84,18 +80,13 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
             });
             message = "Les données soumises ne sont pas valides";
           } else if (e?.status === 400) {
-            message = e.message;
+            message = e.message || e.errors.message;
           } else {
             console.error(e);
             message = "Une erreur technique est survenue lors de l'enregistrement";
           }
 
-          toast(message, {
-            type: toast.TYPE.ERROR,
-            autoClose: 5000,
-            position: "bottom-right",
-            hideProgressBar: true,
-          });
+          notifier.erreur(message);
         })
         .finally(() => {
           setSaving(false);

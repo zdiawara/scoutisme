@@ -261,9 +261,9 @@ class PersonneController extends Controller
         return new PersonneResource($personne);
     }
 
-    public function convertir(Personne $personne, Request $request)
+    public function convertir(Personne $personne)
     {
-        $user = $this->userService->createFromPersonne($personne, $request->all());
+        $user = $this->userService->createFromPersonne($personne);
 
         return new UserResource($user);
     }

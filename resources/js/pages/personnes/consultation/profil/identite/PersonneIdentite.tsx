@@ -15,6 +15,7 @@ type PersonneIdentiteProps = {
 export const PersonneIdentite: FC<PersonneIdentiteProps> = ({ personne }) => {
   const [show, toggleForm] = useToggle();
   const droits = useDroits();
+
   return (
     <>
       <View.Toolbar
@@ -22,22 +23,14 @@ export const PersonneIdentite: FC<PersonneIdentiteProps> = ({ personne }) => {
         label="Identite"
         right={
           droits.personne.modifier(personne) && (
-            <Button
-              variant="secondary"
-              onClick={() => toggleForm()}
-              disabled={show}
-            >
+            <Button variant="secondary" onClick={() => toggleForm()} disabled={show}>
               <Icon.Pencil />
             </Button>
           )
         }
       />
       {show ? (
-        <PersonneIdentiteEdit
-          personne={personne}
-          onClose={() => toggleForm()}
-          key="edit"
-        />
+        <PersonneIdentiteEdit personne={personne} onClose={() => toggleForm()} key="edit" />
       ) : (
         <>
           <ListGroup.Item>
@@ -64,14 +57,11 @@ export const PersonneIdentite: FC<PersonneIdentiteProps> = ({ personne }) => {
             <Row className="g-3">
               <Col xs={6}>
                 <View.Item label="Date de naissance">
-                  {DateFormater.toDateText(personne.date_naissance) ||
-                    undefined}
+                  {DateFormater.toDateText(personne.date_naissance) || undefined}
                 </View.Item>
               </Col>
               <Col xs={6}>
-                <View.Item label="Lieu de naissance">
-                  {personne.lieu_naissance}
-                </View.Item>
+                <View.Item label="Lieu de naissance">{personne.lieu_naissance}</View.Item>
               </Col>
             </Row>
           </ListGroup.Item>

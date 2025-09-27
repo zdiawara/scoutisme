@@ -20,7 +20,7 @@ export const OrganisationAdresse: FC<Props> = ({ organisation }) => {
         icon={<Icon.GeoAlt size="1.1rem" className="me-1" />}
         label="Adresse"
         right={
-          droits.organisation.creer && (
+          droits.organisation.modifier(organisation) && (
             <Button size="sm" variant="secondary" onClick={() => toggleForm()} disabled={show}>
               <Icon.Pencil />
             </Button>

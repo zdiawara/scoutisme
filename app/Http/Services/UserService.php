@@ -2,26 +2,22 @@
 
 namespace App\Http\Services;
 
-use App\Mail\CreerUserMail;
+use App\Exceptions\BadRequestException;
 use App\Models\Fonctionnalite;
 use App\Models\Personne;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 
 class UserService
 {
     public function create(array $body): User
     {
         DB::beginTransaction();
-        $user = User::create(array_merge(
-            $body,
-            ['password' => bcrypt('secret')]
-        ));
 
-        // Mail::to('zakaridia.diawara@gmail.com')
-        //     ->send(new CreerUserMail($user));
+        $user = User::create($body);
 
         DB::commit();
 
@@ -86,13 +82,31 @@ class UserService
         }
     }
 
-    public function createFromPersonne(Personne $personne, array $body)
+    public function createFromPersonne(Personne $personne)
     {
-        return $this->create([
+        DB::beginTransaction();
+
+        $nbUser = User::where('personne_id', $personne->id)
+            ->count();
+
+        if ($nbUser >= 1) {
+            throw new BadRequestException($personne->nom . " " . $personne->prenom . " possède déjà un compte");
+        }
+
+        $user =  $this->create([
             'name' => $personne->nom . ' ' . $personne->prenom,
-            'email' => $body['email'],
-            'role_id' => $body['role_id'],
+            'email' => $personne->email,
             'personne_id' => $personne->id
         ]);
+
+        $this->addFonctionnalitesAndRoles($user);
+
+        // Déclencher l'événement Registered pour envoyer l'e-mail de vérification
+        event(new Registered($user));
+
+        // Auth::login($user);
+
+        DB::commit();
+        return $user;
     }
 }

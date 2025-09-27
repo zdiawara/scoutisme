@@ -12,21 +12,13 @@ type SousOrganisationProps = {
   organisation: OrganisationResource;
 };
 
-const searchByCriteres = (
-  term: string,
-  attributions: OrganisationResource[]
-) => {
+const searchByCriteres = (term: string, attributions: OrganisationResource[]) => {
   return attributions.filter(({ code, nom, type }) => {
-    return [code, nom, type?.nom]
-      .filter(Boolean)
-      .join(" ")
-      .match(new RegExp(term, "gi"));
+    return [code, nom, type?.nom].filter(Boolean).join(" ").match(new RegExp(term, "gi"));
   });
 };
 
-export const SousOrganisation: FC<SousOrganisationProps> = ({
-  organisation,
-}) => {
+export const SousOrganisation: FC<SousOrganisationProps> = ({ organisation }) => {
   const [searchText, setSearchText] = useState<string | undefined>();
 
   const query = useQuery({
@@ -51,16 +43,7 @@ export const SousOrganisation: FC<SousOrganisationProps> = ({
   return (
     <>
       <ListGroup className="mb-3">
-        <View.Toolbar
-          right={
-            <Stack direction="horizontal">
-              {/* <Button size="sm" variant="outline-secondary ms-1">
-                <Icon.Filter />
-              </Button> */}
-              <SousOrganisationActions organisation={organisation} />
-            </Stack>
-          }
-        >
+        <View.Toolbar right={<SousOrganisationActions organisation={organisation} />}>
           <Form.Control
             placeholder="Rechercher ..."
             onChange={(e) => setSearchText(e.target.value)}
@@ -76,18 +59,13 @@ export const SousOrganisation: FC<SousOrganisationProps> = ({
           </ListGroup.Item>
         ) : organisations?.length ? (
           organisations?.map((organisation) => (
-            <ListGroup.Item
-              className="d-flex justify-content-between align-items-start"
-              key={organisation.id}
-            >
+            <ListGroup.Item className="d-flex justify-content-between align-items-start" key={organisation.id}>
               <OrganisationItem organisation={organisation} />
             </ListGroup.Item>
           ))
         ) : (
           <ListGroup.Item className="text-muted text-center">
-            {searchText
-              ? "aucun résultat"
-              : "Aucune sous organisation à afficher"}
+            {searchText ? "aucun résultat" : "Aucune sous organisation à afficher"}
           </ListGroup.Item>
         )}
       </ListGroup>

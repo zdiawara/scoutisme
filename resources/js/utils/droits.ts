@@ -11,7 +11,7 @@ export class UserDroit {
     this.user = user;
     this.modules = this.buildModules(user);
     this.fonctionnalites = this.buildFonctionnalites(user);
-    this.perimetres = user.roles[0].perimetres;
+    this.perimetres = user.roles.length ? user.roles[0].perimetres : [];
   }
 
   get menus(): string[] {

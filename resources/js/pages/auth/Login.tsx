@@ -5,6 +5,7 @@ import { TextInput } from "components";
 import { FC } from "react";
 import { authApi } from "api/index";
 import { LINKS } from "utils/links";
+import { notifier } from "utils/notification";
 
 const Form: FC<WrapperProps> = ({ onSubmit }) => (
   <Row className="g-3">
@@ -33,7 +34,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const logUser = async (body: UserData) => {
-    await authApi.login(body);
+    return await authApi.login(body);
   };
 
   return (

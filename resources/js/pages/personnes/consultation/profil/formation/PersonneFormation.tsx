@@ -4,17 +4,18 @@ import * as Icon from "react-bootstrap-icons";
 import { View } from "components";
 import useToggle from "hooks/useToggle";
 import { AddPersonneFormation } from "./AddPersonneFormation";
-import { FormationResource } from "types/personne.type";
+import { FormationResource, PersonneResource } from "types/personne.type";
 import { PersonneFormationItem } from "./PersonneFormationItem";
 import { selectHelper } from "utils/functions";
 import { DateFormater } from "utils/DateUtils";
 import { personneApi } from "api";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEY } from "utils/constants";
+import { useDroits } from "hooks/useDroits";
 
 type PersonneCoordonneeProps = {
   formations: FormationResource[];
-  personneId: string;
+  personne: PersonneResource;
 };
 
 type FormationInput = {
@@ -36,9 +37,10 @@ const toFormations = (data: FormationResource[]): FormationInput[] => {
   }));
 };
 
-export const PersonneFormation: FC<PersonneCoordonneeProps> = ({ formations, personneId }) => {
+export const PersonneFormation: FC<PersonneCoordonneeProps> = ({ formations, personne }) => {
   const clientQuery = useQueryClient();
   const [show, toggleForm] = useToggle();
+  const droits = useDroits();
 
   const updateFormation = (data: Record<string, any>, index: number) => {
     const formationsInputs = toFormations(formations);
@@ -71,9 +73,11 @@ export const PersonneFormation: FC<PersonneCoordonneeProps> = ({ formations, per
         icon={<Icon.Briefcase size="1.1rem" className="me-1" />}
         label="Formations"
         right={
-          <Button variant="secondary" onClick={() => toggleForm()}>
-            <Icon.PlusLg />
-          </Button>
+          droits.personne.modifier(personne) && (
+            <Button variant="secondary" onClick={() => toggleForm()}>
+              <Icon.PlusLg />
+            </Button>
+          )
         }
       />
       {show && <AddPersonneFormation onClose={toggleForm} onSave={addFormation} />}

@@ -90,7 +90,7 @@ class AuthController extends Controller
             $request->session()->regenerate();
             return redirect()->intended('/');
         }
-        return response()->json(['error' => 'Unauthorized'], 401);
+        return response()->json(['message' => 'Vos identifiants sont incorrects'], 400);
     }
 
     /**

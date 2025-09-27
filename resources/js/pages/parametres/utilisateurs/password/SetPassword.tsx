@@ -1,4 +1,4 @@
-import { Alert, Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { withForm, WrapperProps } from "hoc/withForm";
 import { TextInput } from "components";
@@ -135,7 +135,7 @@ const SetPasswordx = () => {
   const navigate = useNavigate();
 
   const logUser = async (userData: UserData) => {
-    await authApi.resetPassword({
+    return await authApi.resetPassword({
       password: userData.password,
       password_confirmation: userData.confirmedPassword,
     });

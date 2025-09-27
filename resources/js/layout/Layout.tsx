@@ -7,7 +7,7 @@ import * as Icon from "react-bootstrap-icons";
 import { authApi } from "api";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "hooks";
-import { Button, Container, Stack } from "react-bootstrap";
+import { Alert, Button, Container, Stack } from "react-bootstrap";
 import { LINKS } from "utils/links";
 import { ProfilDropdown } from "pages/home/profil/ProfilDropdown";
 
@@ -35,6 +35,44 @@ export const Layout = () => {
     return <Navigate to={LINKS.login} />;
   }
 
+  const user = query.data.data;
+
+  const renderContent = () => {
+    if (!user.verify) {
+      <Alert className="mt-5" variant="danger">
+        <Alert.Heading>Problème de vérification</Alert.Heading>
+        <p>Votre adresse mail n'est pas vérifiée.</p>
+        <p className="mb-0">
+          <strong>Merci de contacter l'administrateur.</strong>
+        </p>
+      </Alert>;
+    }
+    const isAdmin = user.roles?.some((e) => e.code === "admin");
+    if ((!user.personne?.fonction || !user.personne?.organisation) && !isAdmin) {
+      return (
+        <Alert className="mt-5" variant="danger">
+          <Alert.Heading>Problème d'accès</Alert.Heading>
+          <p>Vous devez occuper une fontion au sein de l'ASBF pour accèder à cette application.</p>
+          <p className="mb-0">
+            <strong>Merci de contacter l'administrateur.</strong>
+          </p>
+        </Alert>
+      );
+    }
+    if (!user.roles.length) {
+      return (
+        <Alert className="mt-5" variant="danger">
+          <Alert.Heading>Problème d'accès</Alert.Heading>
+          <p>Aucun rôle utilisateur n'a été associé à la fonction {user.personne?.fonction?.nom}</p>
+          <p className="mb-0">
+            <strong>Merci de contacter l'administrateur.</strong>
+          </p>
+        </Alert>
+      );
+    }
+    return <Outlet />;
+  };
+
   return (
     <>
       <Stack direction="horizontal" className="p-2 bg-white shadow-sm">
@@ -43,15 +81,7 @@ export const Layout = () => {
         </Button>
         <ProfilDropdown />
       </Stack>
-      <Container>
-        {/* <Sidebar showSidebar={showSidebar} handleCloseSidebar={handleCloseSidebar} /> */}
-        {/* <Row>
-        <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4"> */}
-
-        <Outlet />
-        {/* </main>
-      </Row> */}
-      </Container>
+      <Container>{renderContent()}</Container>
     </>
   );
 };

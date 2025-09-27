@@ -1,6 +1,6 @@
 import { FC, useMemo } from "react";
 import { Button, Stack } from "react-bootstrap";
-import { PaiementResource } from "types/personne.type";
+import { PaiementResource, PersonneResource } from "types/personne.type";
 import { useModalAction } from "hooks";
 import { ModifierPaiementModal, RejeterPaiementModal, ValiderPaiementModal } from "pages/paiements/modal";
 import { DeletePaiementModal } from "pages/paiements/modal/DeletePaiementModal";
@@ -12,9 +12,10 @@ import * as Icon from "react-bootstrap-icons";
 
 type PaiementActionsProps = {
   paiement: PaiementResource;
+  personne?: PersonneResource;
 };
 
-export const PaiementActions: FC<PaiementActionsProps> = ({ paiement }) => {
+export const PaiementActions: FC<PaiementActionsProps> = ({ paiement, personne }) => {
   const modalAction = useModalAction();
   const { cotisation } = useDroits();
 
@@ -24,7 +25,7 @@ export const PaiementActions: FC<PaiementActionsProps> = ({ paiement }) => {
         label: "Valider",
         description: "Valider le paiement",
         code: "valider",
-        visible: cotisation.paiements.valider,
+        visible: cotisation.can("valider", personne),
         disabled: paiement.etat === "valide",
         Icon: Icon.CheckCircle,
       },
@@ -32,40 +33,41 @@ export const PaiementActions: FC<PaiementActionsProps> = ({ paiement }) => {
         label: "Rejeter",
         description: "Rejeter le paiement",
         code: "rejeter",
-        visible: cotisation.paiements.rejeter,
+        visible: cotisation.can("rejeter", personne),
         disabled: paiement.etat === "valide",
         Icon: Icon.XLg,
       },
-      {
-        label: "Modifier",
-        description: "Modifier le paiement",
-        code: "modifier",
-        visible: cotisation.paiements.creer,
-        Icon: Icon.Pencil,
-        disabled: paiement.etat === "valide",
-      },
+      // {
+      //   label: "Modifier",
+      //   description: "Modifier le paiement",
+      //   code: "modifier",
+      //   visible: cotisation.paiements.creer,
+      //   Icon: Icon.Pencil,
+      //   disabled: paiement.etat === "valide",
+      // },
       {
         label: "Récu",
         description: "Télécharger le récu du paiement",
         code: "telecharger_recu",
         Icon: Icon.Download,
         disabled: paiement.etat !== "valide",
-        visible: cotisation.paiements.creer,
+        visible: cotisation.can("telecharger_recu", personne),
       },
       {
         label: "Supprimer",
         description: "Supprimer le paiement",
         code: "supprimer",
-        visible: cotisation.paiements.creer,
+        visible: cotisation.can("creer"),
         Icon: Icon.Trash3,
         disabled: paiement.etat === "valide",
       },
     ].filter((e) => e.visible);
-  }, [cotisation, paiement.etat]);
+  }, [cotisation, paiement.etat, personne]);
 
   if (!actions.length) {
     return null;
   }
+
   return (
     <>
       <Stack direction="horizontal" className="ms-auto align-self-start">

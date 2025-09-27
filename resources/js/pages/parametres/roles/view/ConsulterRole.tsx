@@ -42,7 +42,7 @@ const ConsulterRole = () => {
     }
 
     const menu = (
-      <Nav variant="pills" style={{ overflow: "scroll" }} className="flex-nowrap py-2">
+      <Nav variant="pills" style={{ overflow: "auto" }} className="flex-nowrap py-2">
         {modules?.map((item) => (
           <Nav.Item key={item.code}>
             <Nav.Link
@@ -61,8 +61,6 @@ const ConsulterRole = () => {
     if (!modules) {
       return null;
     }
-
-    console.log(role);
 
     return (
       <>

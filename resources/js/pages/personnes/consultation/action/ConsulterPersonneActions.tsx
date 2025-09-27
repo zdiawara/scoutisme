@@ -52,7 +52,7 @@ export const ConsulterPersonneActions = ({ personne }: Props) => {
         description: "Donner un accès à l'application à cette personne",
         code: "acces",
         Icon: Icon.Link,
-        visible: droits.personne.modifier(personne) || Boolean(personne.fonction?.responsable),
+        visible: droits.personne.modifier(personne),
       },
       // {
       //   label: "Supprimer",
@@ -64,6 +64,9 @@ export const ConsulterPersonneActions = ({ personne }: Props) => {
     ].filter((e) => e.visible);
   }, [droits.personne, personne]);
 
+  if (!menus.length) {
+    return null;
+  }
   return (
     <>
       <DropOption actions={menus} onSelect={onSelect} menu={false} variant="secondary" />

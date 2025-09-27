@@ -3,9 +3,9 @@ import { AbstractProtection } from "./AbstractProtection";
 import { OrganisationResource } from "types/organisation.type";
 import { NATURE, TYPE_ORGANISATION } from "utils/constants";
 
-type CommonAction = "creer" | "consulter" | "direction";
+type CommonAction = "creer" | "consulter" | "direction" | "modifier";
 
-const COMMON_ACTIONS: CommonAction[] = ["creer", "consulter", "direction"];
+const COMMON_ACTIONS: CommonAction[] = ["creer", "consulter", "direction", "modifier"];
 
 export class OrganisationProtection extends AbstractProtection {
   private static UNITE = "unite";
@@ -23,36 +23,22 @@ export class OrganisationProtection extends AbstractProtection {
   constructor(userDroit: UserDroit) {
     super(userDroit);
 
-    this._unite = this.buildActions(
-      COMMON_ACTIONS,
-      OrganisationProtection.UNITE
-    );
-    this._groupe = this.buildActions(
-      COMMON_ACTIONS,
-      OrganisationProtection.GROUPE
-    );
-    this._region = this.buildActions(
-      COMMON_ACTIONS,
-      OrganisationProtection.REGION
-    );
-    this._equipe_nationale = this.buildActions(
-      COMMON_ACTIONS,
-      OrganisationProtection.EQUIPE_NATIONALE
-    );
-    this._conseil_national = this.buildActions(
-      COMMON_ACTIONS,
-      OrganisationProtection.CONSEIL_NATIONAL
-    );
+    this._unite = this.buildActions(COMMON_ACTIONS, OrganisationProtection.UNITE);
+    this._groupe = this.buildActions(COMMON_ACTIONS, OrganisationProtection.GROUPE);
+    this._region = this.buildActions(COMMON_ACTIONS, OrganisationProtection.REGION);
+    this._equipe_nationale = this.buildActions(COMMON_ACTIONS, OrganisationProtection.EQUIPE_NATIONALE);
+    this._conseil_national = this.buildActions(COMMON_ACTIONS, OrganisationProtection.CONSEIL_NATIONAL);
   }
 
   get creer(): boolean {
-    return [
-      this.unite,
-      this.groupe,
-      this.region,
-      this.equipe_nationale,
-      this.conseil_national,
-    ].some((e) => e.creer);
+    return [this.unite, this.groupe, this.region, this.equipe_nationale, this.conseil_national].some((e) => e.creer);
+  }
+
+  modifier(organisation: OrganisationResource): boolean {
+    if (organisation.nature.code === NATURE.unite) {
+      return this.unite.modifier;
+    }
+    return [this.unite, this.groupe, this.region, this.equipe_nationale, this.conseil_national].some((e) => e.creer);
   }
 
   direction(organisation: OrganisationResource): boolean {

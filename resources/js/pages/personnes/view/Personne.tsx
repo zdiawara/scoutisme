@@ -1,5 +1,5 @@
 import { ChangeEvent, FC, ReactNode, useMemo } from "react";
-import { Col, ListGroup, Nav, Row, Stack } from "react-bootstrap";
+import { Button, Col, ListGroup, Nav, Row, Stack } from "react-bootstrap";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEY } from "utils/constants";
 import { personneApi } from "api";
@@ -114,7 +114,7 @@ export const Personne: FC<PersonneProps> = ({ personneId, title }) => {
       case "cotisations":
         return <PersonneCotisation personne={personne} />;
       case "formations":
-        return <PersonneFormation personneId={personne.id} formations={personne.formations || []} />;
+        return <PersonneFormation personne={personne} formations={personne.formations || []} />;
       default:
         return <PersonneProfil personne={personne} />;
     }
@@ -166,8 +166,7 @@ export const Personne: FC<PersonneProps> = ({ personneId, title }) => {
           ) : (
             <span className="avatar-title rounded bg-secondary-lighten text-secondary font-20 ">Photo</span>
           )}
-          {/* <div className="fs-6 text-center text-muted">modifier photo</div> */}
-          <ImageUploader personneId={personne.id} />
+          {protection.personne.modifier(personne) && <ImageUploader personneId={personne.id} />}
         </div>
         <div className="ms-2">
           <span className="fs-3">

@@ -189,7 +189,7 @@ class AuthApi extends CrudService {
   }
 
   public async userInfo() {
-    const response = await fetchApi({
+    const response = await fetchApi<{ data: UserResource }>({
       url: "/me",
       options: {
         method: "GET",

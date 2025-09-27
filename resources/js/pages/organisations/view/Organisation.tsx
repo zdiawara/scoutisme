@@ -15,6 +15,7 @@ import { OrganisationDirection } from "../consultation/direction";
 import { SousOrganisation } from "../consultation/sousOrganisations";
 import { ListOrganisationScout } from "../consultation/scouts";
 import { Header } from "layout/Header";
+import { useDroits } from "hooks/useDroits";
 
 type OrganisationProps = {
   organisationId: string;
@@ -23,7 +24,7 @@ type OrganisationProps = {
 export const Organisation: FC<OrganisationProps> = ({ organisationId }) => {
   const [searchParams] = useSearchParams();
   const page = searchParams.get("p") || "details";
-  // const protection = useDroits();
+  const droits = useDroits();
   const navigation = useNavigate();
   const location = useLocation();
 
@@ -147,21 +148,29 @@ export const Organisation: FC<OrganisationProps> = ({ organisationId }) => {
             {region && (
               <Col xs={6}>
                 <View.Item label="Region">
-                  <Link to={LINKS.organisations.view(region.id)} className="text-decoration-underline text-black">
-                    {region.nom}
-                  </Link>
+                  {droits.personne.isInUserPerimetre(NATURE.region) ? (
+                    <Link to={LINKS.organisations.view(region.id)} className="text-decoration-underline text-black">
+                      {region.nom}
+                    </Link>
+                  ) : (
+                    <span className="text-black">{region.nom}</span>
+                  )}
                 </View.Item>
               </Col>
             )}
             {organisation.parent && (!region || region.id !== organisation?.parent?.id) ? (
               <Col xs={6}>
                 <View.Item label="Parent">
-                  <Link
-                    to={LINKS.organisations.view(organisation.parent.id)}
-                    className="text-decoration-underline text-black"
-                  >
-                    {organisation.parent.nom}
-                  </Link>
+                  {droits.personne.isInUserPerimetre(organisation.parent.nature.code) ? (
+                    <Link
+                      to={LINKS.organisations.view(organisation.parent.id)}
+                      className="text-decoration-underline text-black"
+                    >
+                      {organisation.parent.nom}
+                    </Link>
+                  ) : (
+                    <span className="text-black">{organisation.parent.nom}</span>
+                  )}
                 </View.Item>
               </Col>
             ) : null}

@@ -14,13 +14,14 @@ type Props = {
 export const OrganisationIdentite: FC<Props> = ({ organisation }) => {
   const [show, toggleForm] = useToggle();
   const droits = useDroits();
+
   return (
     <>
       <View.Toolbar
         icon={<Icon.InfoCircle size="1.1rem" className="me-1" />}
         label="Informations générales"
         right={
-          droits.organisation.creer && (
+          droits.organisation.modifier(organisation) && (
             <Button className="ms-auto d-block" size="sm" variant="secondary" onClick={toggleForm} disabled={show}>
               <Icon.Pencil className="me-0" />
             </Button>

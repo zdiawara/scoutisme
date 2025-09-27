@@ -28,22 +28,22 @@ const ViewLog: FC = () => {
       <ListGroup className="mb-2 mt-4">
         <ListGroup.Item>
           <Row className="g-3">
-            <Col xs={6}>
+            <Col xs={12} sm={6}>
               <View.Item label="Nom de la log">{log.log_name}</View.Item>
             </Col>
-            <Col xs={6}>
+            <Col xs={12} sm={6}>
               <View.Item label="Description">{log.description}</View.Item>
             </Col>
-            <Col xs={6}>
+            <Col xs={12} sm={6}>
               <View.Item label="Type evenement">{log.event}</View.Item>
             </Col>
-            <Col xs={6}>
+            <Col xs={12} sm={6}>
               <View.Item label="Date creation">{DateFormater.toDateTextTime(log.created_at)}</View.Item>
             </Col>
-            <Col xs={6}>
+            <Col xs={12} sm={6}>
               <View.Item label="Auteur">{log.causer?.name}</View.Item>
             </Col>
-            <Col xs={6}>
+            <Col xs={12} sm={6}>
               <View.Item label="Adresse IP">{log.ip_address}</View.Item>
             </Col>
             <Col xs={12}>

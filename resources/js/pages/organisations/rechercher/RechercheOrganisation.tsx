@@ -3,7 +3,6 @@ import { organisationApi } from "api";
 import { OrganisationResource } from "types/organisation.type";
 import { QUERY_KEY } from "utils/constants";
 import { buildPerimetres, selectHelper } from "utils/functions";
-import { RechercherOrganisationActions } from "./action/RechercherOrganisationActions";
 import { Header } from "layout/Header";
 import { ListGroup } from "react-bootstrap";
 import { ListResult } from "pages/common";
@@ -82,10 +81,7 @@ const RechercherOrganisation = () => {
 
   return (
     <>
-      <Header
-        title="Organisations"
-        right={<RechercherOrganisationActions params={buildRequestParams(queryParams, user?.personne?.organisation)} />}
-      />
+      <Header title="Organisations" />
 
       <ListGroup className="mt-4">
         <SearchToolbar

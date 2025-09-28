@@ -52,7 +52,7 @@ export const Layout = () => {
       return (
         <Alert className="mt-5" variant="danger">
           <Alert.Heading>Problème d'accès</Alert.Heading>
-          <p>Vous devez occuper une fontion au sein de l'ASBF pour accèder à cette application.</p>
+          <p>Vous devez occuper une fonction au sein de l'ASBF pour accèder à cette application.</p>
           <p className="mb-0">
             <strong>Merci de contacter l'administrateur.</strong>
           </p>

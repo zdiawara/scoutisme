@@ -8,14 +8,10 @@ type ModalProps = {
   onDelete: () => Promise<void>;
 };
 
-export const DeleteConfirmationModal: FC<ModalProps> = ({
-  closeModal,
-  onDelete,
-  query_key,
-}) => {
+export const DeleteConfirmationModal: FC<ModalProps> = ({ closeModal, onDelete, query_key }) => {
   const query = useQueryClient();
 
-  const deleteTypeUnite = async () => {
+  const supprimer = async () => {
     await onDelete();
     query.invalidateQueries([query_key]);
     closeModal();
@@ -28,17 +24,11 @@ export const DeleteConfirmationModal: FC<ModalProps> = ({
           <div className="text-center">
             <i className="dripicons-checkmark h1"></i>
             <h4 className="mt-2">Confirmation</h4>
-            <p className="mt-3">
-              Vous voulez vraiment continuer la suppression ?
-            </p>
+            <p className="mt-3">Vous voulez vraiment continuer la suppression ?</p>
             <Button variant="primary" className="me-2" onClick={closeModal}>
               Non
             </Button>
-            <Button
-              variant="outline-primary"
-              className="shadow-sm"
-              onClick={deleteTypeUnite}
-            >
+            <Button variant="outline-primary" className="shadow-sm" onClick={supprimer}>
               Oui
             </Button>
           </div>

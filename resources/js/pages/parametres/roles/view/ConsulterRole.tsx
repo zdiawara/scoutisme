@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import { ModuleResource, RoleResource } from "types/auth.type";
 import { QUERY_KEY } from "utils/constants";
 import { Module } from "./Module";
+import { RoleAction } from "./RoleAction";
 
 const fetchRole = async ({ queryKey }: Record<string, string[]>) => {
   const result = await roleApi.findById<RoleResource>(queryKey[1] as string);
@@ -64,37 +65,10 @@ const ConsulterRole = () => {
 
     return (
       <>
-        <ListGroup className="mb-2 mt-4">
-          <ListGroup.Item>
-            <Row className="g-3">
-              <Col xs={6}>
-                <View.Item label="Nom">{role.nom}</View.Item>
-              </Col>
-              <Col xs={6}>
-                <View.Item label="Nature">{role.perimetres.join(" , ")}</View.Item>
-              </Col>
-            </Row>
-          </ListGroup.Item>
-          <ListGroup.Item>
-            <Row className="g-3">
-              <Col xs={12}>
-                <View.Item label="Fonctions">
-                  <ul>
-                    {role.fonctions.map((f) => (
-                      <li>{f.nom}</li>
-                    ))}
-                  </ul>
-                </View.Item>
-              </Col>
-            </Row>
-          </ListGroup.Item>
-        </ListGroup>
-
         {menu}
 
         {modules
           .filter((m) => m.code === page)
-          // .filter(e => role.)
           .map((module) => (
             <Fragment key={module.id}>
               {module.sous_modules
@@ -113,7 +87,7 @@ const ConsulterRole = () => {
                         role.habilitations.map((h) => h.fonctionnalite.id).includes(f.id)
                       ),
                     }}
-                    key={sousModule.code}
+                    key={sousModule.id}
                   />
                 ))}
             </Fragment>
@@ -122,11 +96,43 @@ const ConsulterRole = () => {
     );
   };
 
+  if (!role) {
+    return null;
+  }
+
   return (
     <>
-      <Header title="Consulter" />
+      <Header title="Consulter" right={role?.code !== "admin" && <RoleAction role={role} />} />
 
-      {renderContent()}
+      <ListGroup className="mb-2 mt-4">
+        <ListGroup.Item>
+          <Row className="g-3">
+            <Col xs={6}>
+              <View.Item label="Nom">{role.nom}</View.Item>
+            </Col>
+            <Col xs={6}>
+              <View.Item label="Perimetre">{role.perimetre?.nom}</View.Item>
+            </Col>
+          </Row>
+        </ListGroup.Item>
+        <ListGroup.Item>
+          <Row className="g-3">
+            <Col xs={12}>
+              <View.Item label="Fonctions">
+                {role.fonctions.length ? (
+                  <ul>
+                    {role.fonctions.map((f) => (
+                      <li key={f.id}>{f.nom}</li>
+                    ))}
+                  </ul>
+                ) : null}
+              </View.Item>
+            </Col>
+          </Row>
+        </ListGroup.Item>
+      </ListGroup>
+
+      {role?.code !== "admin" && renderContent()}
     </>
   );
 };

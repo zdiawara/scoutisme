@@ -7,6 +7,7 @@ use App\Http\Resources\RoleResource;
 use App\Http\Services\RoleService;
 use App\Models\Fonction;
 use App\Models\Habilitation;
+use App\Models\Nature;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -56,6 +57,7 @@ class RoleController extends Controller
                 ];
             });
         $role->fonctions = $fonctions;
+        $role['perimetre'] = Nature::where('code', $role->perimetres[0] ?? '')->first();
         return new RoleResource($role);
     }
 
@@ -91,6 +93,10 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
+        DB::beginTransaction();
+        Habilitation::where('role_id', $role->id)
+            ->delete();
         $role->delete();
+        DB::commit();
     }
 }

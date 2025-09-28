@@ -23,6 +23,7 @@ class RoleResource extends JsonResource
             'updated_at' => $this->updated_at,
             'fonctions' => $this->fonctions,
             'habilitations' =>  HabilitationResource::collection($this->whenLoaded('habilitations')),
+            'perimetre' => new NatureResource($this->perimetre),
         ];
     }
 }

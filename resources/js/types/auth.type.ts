@@ -1,3 +1,4 @@
+import { NatureResource } from "./organisation.type";
 import { PersonneResource } from "./personne.type";
 
 export type UserResource = {
@@ -16,6 +17,7 @@ export type RoleResource = {
   nom: string;
   code: string;
   perimetres: string[];
+  perimetre: NatureResource;
   fonctions: Array<{
     nom: string;
     id: string;

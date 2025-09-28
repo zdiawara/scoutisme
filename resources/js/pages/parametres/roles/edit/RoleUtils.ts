@@ -17,7 +17,12 @@ const toBody = (data: Record<string, string | SelectItem | SelectItem[]>) => {
 const toInput = (data: RoleResource) => {
   return {
     nom: data.nom,
-    perimetres: data.perimetres,
+    perimetre: {
+      label: data.perimetre.nom,
+      value: data.perimetre.id,
+      item: data.perimetre,
+    },
+    fonctions: data.fonctions.map((fonction) => ({ label: fonction.nom, value: fonction.id })),
     fonctionnalites: data.habilitations.map(({ fonctionnalite }) => fonctionnalite.id),
   };
 };

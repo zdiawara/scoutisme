@@ -206,13 +206,24 @@ class AuthController extends Controller
                 'min:8',
                 'confirmed',
             ],
+            'hash' => [
+                'required',
+                'uuid'
+            ]
         ]);
 
-        $user = $request->user();
+        $hash = $request->input('hash');
+
+        $user = User::where('reset_password_hash', $hash)
+            ->whereNotNull('reset_password_hash')
+            ->firstOrFail();
 
         $user->forceFill([
             'password' => Hash::make($request->password),
+            'reset_password_hash' => null
         ])->save();
+
+        Auth::login($user);
 
         return response()->json(['message' => 'Successfully logged out']);
     }

@@ -1,4 +1,4 @@
-import { HookModalForm, SelectRole, TextInput } from "components";
+import { HookModalForm, TextInput } from "components";
 import { WrapperV2Props, withMutationForm } from "hoc";
 import { FC, useState } from "react";
 import { Alert, Button, Col, Modal, Row, Spinner } from "react-bootstrap";
@@ -96,14 +96,14 @@ export const CreateUserFromPersonneModal: FC<CreateUserFromPersonneModalProps> =
         <Modal.Body>
           <Alert variant="danger">
             <Alert.Heading>Action impossible</Alert.Heading>
+            <p>Vous ne pouvons pas continuer cette action.&nbsp;</p>
             <p>
-              Nous ne pouvons pas continuer cette action car&nbsp;
               <strong>
                 {personne.prenom} {personne.nom}
               </strong>
-              &nbsp;ne dispose pas d'adresse e-mail. Pour lui accorder l'accès à l'application, merci de lui attribuer
-              une adresse e-mail.
+              &nbsp;ne dispose pas d'adresse e-mail.
             </p>
+            <p>Pour lui accorder l'accès à l'application, merci de définir son adresse e-mail.</p>
           </Alert>
         </Modal.Body>
         <Modal.Footer>
@@ -141,11 +141,7 @@ export const CreateUserFromPersonneModal: FC<CreateUserFromPersonneModalProps> =
                 </strong>
               </li>
               <li>
-                Envoie d'un mail&nbsp;à&nbsp;
-                <strong>
-                  {personne.prenom} {personne.nom}
-                </strong>
-                &nbsp;contenant ses identifiants et son périmètre d'action à l'adresse <strong>{personne.email}</strong>
+                Envoie d'un mail de vérification à l'adresse <strong>{personne.email}</strong>
               </li>
             </ul>
           </Alert>

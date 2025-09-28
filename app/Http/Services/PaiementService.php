@@ -68,6 +68,11 @@ class PaiementService
             'etat' => 'valide',
             'date_traitement' => now(),
             'valideur_id' => $valideur->id,
+        ]);
+
+        $this->cotisationService->updateMontant($paiement->cotisation, $paiement->montant);
+
+        $paiement->update([
             'recu' => [
                 'signataire' => [
                     'nom' => $valideur->name,
@@ -91,8 +96,6 @@ class PaiementService
                 ]
             ]
         ]);
-
-        $this->cotisationService->updateMontant($paiement->cotisation, $paiement->montant);
 
         DB::commit();
 

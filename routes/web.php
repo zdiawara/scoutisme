@@ -39,10 +39,10 @@ Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'
     // ->middleware(['signed', 'auth'])
     ->name('verification.verify'); // Important pour la génération de l'URL
 
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('/reset-password', [AuthController::class, 'resetPassword']);
     Route::post('/email/resend', [VerificationController::class, 'resend'])
         ->middleware(['throttle:6,1'])
         ->name('verification.send'); // Important pour la génération de l'URL

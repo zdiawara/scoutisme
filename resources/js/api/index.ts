@@ -226,7 +226,7 @@ class AuthApi extends CrudService {
     return response;
   }
 
-  public async resetPassword(body: { password: string; password_confirmation: string }) {
+  public async resetPassword(body: { password: string; password_confirmation: string; hash: string }) {
     const response = await fetchApi<{ access_token: string }>({
       url: "/reset-password",
       options: {

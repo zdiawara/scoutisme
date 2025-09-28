@@ -5,7 +5,7 @@ import { SousOrganisationModal } from "./SousOrganisationModal";
 import * as Icon from "react-bootstrap-icons";
 import { DropOption } from "components/options/DropOptions";
 import { useDroits } from "hooks/useDroits";
-import { Stack } from "react-bootstrap";
+import { Button, Stack } from "react-bootstrap";
 
 type SousOrganisationActionsProps = {
   organisation: OrganisationResource;
@@ -15,7 +15,7 @@ export const SousOrganisationActions: FC<SousOrganisationActionsProps> = ({ orga
   const [action, setAction] = useState<string | undefined>();
   const droits = useDroits();
 
-  const onSelect = (code: string) => () => {
+  const onSelect = (code: string) => {
     setAction(code);
   };
 
@@ -42,18 +42,17 @@ export const SousOrganisationActions: FC<SousOrganisationActionsProps> = ({ orga
     return actions.filter((e) => e.visible);
   }, [droits.organisation]);
 
-  if (!actions.length) {
+  if (!droits.organisation.creer) {
     return null;
   }
   return (
-    <Stack direction="horizontal">
-      <div className="ms-1">
-        <DropOption onSelect={(code) => onSelect(code)()} actions={actions} variant="secondary" />
-
-        {action === "ajouter_sous_organisation" && (
-          <SousOrganisationModal closeModal={closeModal} organisation={organisation} />
-        )}
-      </div>
-    </Stack>
+    <>
+      <Button variant="secondary" className="ms-1" onClick={() => setAction("ajouter_sous_organisation")}>
+        Ajouter
+      </Button>
+      {action === "ajouter_sous_organisation" && (
+        <SousOrganisationModal closeModal={closeModal} organisation={organisation} />
+      )}
+    </>
   );
 };

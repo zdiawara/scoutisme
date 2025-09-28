@@ -53,9 +53,10 @@ const Form: FC<WrapperV2Props> = (props) => {
   const selectNatureComponent = (
     <SelectNature
       name="nature"
-      label="Nature"
+      label="Perimetre"
       isClearable
       isRequired
+      placeholder=""
       requestParams={{
         code: naturesAuthorized.join(";"),
       }}
@@ -81,6 +82,7 @@ const Form: FC<WrapperV2Props> = (props) => {
                     isRequired={codeNature === NATURE.unite}
                     isDisabled={codeNature !== NATURE.unite}
                     requestParams={{ nature_code: codeNature }}
+                    placeholder=""
                   />
                 </Col>
               </Fragment>
@@ -90,7 +92,7 @@ const Form: FC<WrapperV2Props> = (props) => {
               </Fragment>
             )}
             <Col sm={12}>
-              <TextInput name="nom" label="Nom" placeholder="Nom de l'organisation" isRequired />
+              <TextInput name="nom" label="Nom" isRequired />
             </Col>
           </Row>
         </ListGroup.Item>
@@ -104,7 +106,7 @@ const Form: FC<WrapperV2Props> = (props) => {
               <SelectVille name="ville" label="Ville" placeholder="" isClearable />
             </Col>
             <Col xs={12}>
-              <TextInput name="adresse" label="Lieu" placeholder="Quartier" />
+              <TextInput name="adresse" label="Adresse" placeholder="Ex. Nom du quartier" />
             </Col>
           </Row>
         </ListGroup.Item>

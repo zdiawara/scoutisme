@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class VerificationController extends Controller
 {
@@ -22,20 +21,26 @@ class VerificationController extends Controller
             return redirect(env('FRONTEND_URL') . '/verification-failed');
         }
 
+        $resetPasswordHash = Str::uuid();
+
         // 3. Marquer l'email comme vérifié
         if (!$user->hasVerifiedEmail()) {
             if ($user->markEmailAsVerified()) {
                 event(new Verified($user));
-                return redirect()->intended('/set-password');
+                $user->update([
+                    'reset_password_hash' => $resetPasswordHash
+                ]);
+                return redirect()->intended('/set-password?hash=' . $resetPasswordHash);
             } else {
                 return redirect()->intended('/error');
             }
         } else {
             if (!isset($user->password) || trim($user->password) === '') {
-                Auth::login($user);
-                return redirect()->intended('/set-password');
+                $user->update([
+                    'reset_password_hash' => $resetPasswordHash
+                ]);
+                return redirect()->intended('/set-password?hash=' . $resetPasswordHash);
             } else {
-
                 return redirect()->intended('/');
             }
         }

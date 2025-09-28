@@ -1,5 +1,5 @@
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { withForm, WrapperProps } from "hoc/withForm";
 import { TextInput } from "components";
 import { FC, useMemo } from "react";
@@ -133,11 +133,13 @@ export type UserData = {
 
 const SetPasswordx = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const logUser = async (userData: UserData) => {
     return await authApi.resetPassword({
       password: userData.password,
       password_confirmation: userData.confirmedPassword,
+      hash: searchParams.get("hash") || "",
     });
   };
 

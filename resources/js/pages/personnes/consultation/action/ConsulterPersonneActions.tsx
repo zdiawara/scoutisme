@@ -6,6 +6,7 @@ import { DropOption } from "components/options/DropOptions";
 import { PersonneResource } from "types/personne.type";
 import { TelechargerCarteModal } from "./TelechargerCarteModal";
 import { CreateUserFromPersonneModal } from "pages/personnes/modal/CreateUserFromPersonneModal";
+import { PersonneUtils } from "utils/PersonneUtils";
 
 type Props = {
   personne: PersonneResource;
@@ -52,7 +53,7 @@ export const ConsulterPersonneActions = ({ personne }: Props) => {
         description: "Donner un accès à l'application à cette personne",
         code: "acces",
         Icon: Icon.Link,
-        visible: droits.personne.modifier(personne),
+        visible: droits.personne.modifier(personne) && PersonneUtils.isAdulte(personne),
       },
       // {
       //   label: "Supprimer",

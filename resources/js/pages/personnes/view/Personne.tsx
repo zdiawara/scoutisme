@@ -1,5 +1,5 @@
 import { ChangeEvent, FC, ReactNode, useMemo } from "react";
-import { Button, Col, ListGroup, Nav, Row, Stack } from "react-bootstrap";
+import { Col, ListGroup, Nav, Row, Stack } from "react-bootstrap";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEY } from "utils/constants";
 import { personneApi } from "api";

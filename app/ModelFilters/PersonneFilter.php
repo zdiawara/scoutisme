@@ -43,7 +43,7 @@ class PersonneFilter extends ModelFilter
         } else {
             $val = intval($value);
             if (Str::startsWith($value, "-")) {
-                $borneSup = $val;
+                $borneSup = abs($val);
             } else if (Str::startsWith($value, "+")) {
                 $borneInf = $val;
             } else {

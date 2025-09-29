@@ -23,15 +23,18 @@ const parseParams = (searchParams: URLSearchParams) => {
   const organisation = searchParams.get("organisation");
   const etatCotisation = searchParams.get("etatCotisation");
   const niveauFormation = searchParams.get("niveauFormation");
+  const typePersonne = searchParams.get("typePersonne");
 
   return {
     etatCotisation: etatCotisation ? JSON.parse(etatCotisation) : null,
+    typePersonne: typePersonne ? JSON.parse(typePersonne) : null,
     ville: ville ? JSON.parse(ville) : null,
     genre: genre ? JSON.parse(genre) : null,
     niveauFormation: niveauFormation ? JSON.parse(niveauFormation) : null,
     fonction: fonction ? JSON.parse(fonction) : null,
     organisation: organisation ? JSON.parse(organisation) : null,
     search: searchParams.get("search"),
+    age: searchParams.get("age"),
     page: searchParams.get("page") || "1",
     size: searchParams.get("size") || "10",
     sort: searchParams.get("sort") || "nom,asc",
@@ -42,6 +45,7 @@ const buildRequestParams = (filter: Record<string, any>) => {
   return {
     villeId: selectHelper.getValueFromJson(filter.ville),
     etatCotisation: selectHelper.getValueFromJson(filter.etatCotisation),
+    typePersonne: selectHelper.getValueFromJson(filter.typePersonne),
     genreId: selectHelper.getValueFromJson(filter.genre),
     fonctionId: selectHelper.getValueFromJson(filter.fonction),
     organisationId: selectHelper.getValueFromJson(filter.organisation),
@@ -49,6 +53,7 @@ const buildRequestParams = (filter: Record<string, any>) => {
     search: filter.search,
     page: parseInt(filter.page) || 1,
     size: parseInt(filter.size) || 10,
+    age: filter.age ? encodeURIComponent(filter.age) : "",
     sort: filter.sort || "nom,asc",
     perimetres: "",
   };

@@ -4,6 +4,7 @@ namespace App\ModelFilters;
 
 use EloquentFilter\ModelFilter;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class PersonneFilter extends ModelFilter
 {
@@ -24,12 +25,63 @@ class PersonneFilter extends ModelFilter
         return $this->where('personnes.etat', $value);
     }
 
+    public function age($value)
+    {
+        $values = explode("-", $value);
+
+        $borneInf = null;
+        $borneSup = null;
+        $valeurExcate = null;
+
+        if (sizeof($values) == 2 && isset($values[0]) && $values[0] != "") {
+            if (isset($values[0]) && floatval($values[0])) {
+                $borneInf = floatval($values[0]);
+            }
+            if (isset($values[1]) && floatval($values[1])) {
+                $borneSup = floatval($values[1]);
+            }
+        } else {
+            $val = intval($value);
+            if (Str::startsWith($value, "-")) {
+                $borneSup = $val;
+            } else if (Str::startsWith($value, "+")) {
+                $borneInf = $val;
+            } else {
+                $valeurExcate = $val;
+            }
+        }
+
+        if (isset($valeurExcate)) {
+            return $this->where(DB::raw('TIMESTAMPDIFF(YEAR, personnes.date_naissance, now())'), $valeurExcate)
+                ->whereNotNull('personnes.date_naissance');
+        }
+
+        if (isset($borneInf) && isset($borneSup)) {
+            return $this->whereBetween(DB::raw('TIMESTAMPDIFF(YEAR, personnes.date_naissance, now())'), [$borneInf, $borneSup])
+                ->whereNotNull('personnes.date_naissance');
+        }
+
+        if (isset($borneInf)) {
+            return $this->where(DB::raw('TIMESTAMPDIFF(YEAR, personnes.date_naissance, now())'), '>=', $borneInf)
+                ->whereNotNull('personnes.date_naissance');
+        }
+
+        if (isset($borneSup)) {
+            return $this->where(DB::raw('TIMESTAMPDIFF(YEAR, personnes.date_naissance, now())'), '<=', $borneSup)
+                ->whereNotNull('personnes.date_naissance');
+        }
+
+
+
+        return $this->where('personnes.etat', $value);
+    }
+
     public function genreId($value)
     {
         return $this->where('personnes.genre_id', $value);
     }
 
-    public function type($value)
+    public function typePersonne($value)
     {
         return $this->where('personnes.type', $value);
     }

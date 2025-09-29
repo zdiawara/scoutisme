@@ -14,34 +14,27 @@ type DatepickerInputProps = {
 };
 
 /* Datepicker with Input */
-const DatepickerInput = forwardRef<HTMLInputElement, DatepickerInputProps>(
-  (props, ref) => {
-    const onDateValueChange = () => {};
-    return (
-      <>
-        <input
-          type="text"
-          className={classNames("form-control text-primary fw-semibold", {
-            "is-invalid": !!props.error,
-          })}
-          onClick={props.onClick}
-          value={props.value}
-          onChange={onDateValueChange}
-          ref={ref}
-          placeholder="dd/MM/yyyy"
-        />
-        <Form.Control.Feedback type="invalid">
-          {props.error}
-        </Form.Control.Feedback>
-      </>
-    );
-  }
-);
+const DatepickerInput = forwardRef<HTMLInputElement, DatepickerInputProps>((props, ref) => {
+  const onDateValueChange = () => {};
+  return (
+    <>
+      <input
+        type="text"
+        className={classNames("form-control text-primary fw-semibold", {
+          "is-invalid": !!props.error,
+        })}
+        onClick={props.onClick}
+        value={props.value}
+        onChange={onDateValueChange}
+        ref={ref}
+        placeholder="dd/MM/yyyy"
+      />
+      <Form.Control.Feedback type="invalid">{props.error}</Form.Control.Feedback>
+    </>
+  );
+});
 
-type QuantumPerson = Omit<
-  ReactDatePickerProps<string, boolean>,
-  "onChange" | "name"
->;
+type QuantumPerson = Omit<ReactDatePickerProps<string, boolean>, "onChange" | "name">;
 
 const CustumDatePicker: FC<
   QuantumPerson & {
@@ -68,9 +61,7 @@ const CustumDatePicker: FC<
 
 type DatePickerHookFormProps = Omit<QuantumPerson, "selected">;
 
-const DatePickerHookForm: FC<DatePickerHookFormProps & { name: string }> = (
-  props
-) => {
+const DatePickerHookForm: FC<DatePickerHookFormProps & { name: string }> = (props) => {
   const {
     setValue,
     watch,
@@ -112,7 +103,9 @@ export const DatePicker: FC<
       {...props}
       selected={props.selected || new Date()}
       onChange={(data) => {
-        props.onChange && props.onChange(data);
+        if (props.onChange) {
+          props.onChange(data);
+        }
       }}
     />
   );
@@ -122,9 +115,7 @@ export const DatePicker: FC<
       {label && (
         <Form.Label htmlFor={name} className="text-muted text-uppercase fs-6">
           {label}
-          {props.required ? (
-            <strong className="text-danger">&nbsp;*</strong>
-          ) : null}
+          {props.required ? <strong className="text-danger">&nbsp;*</strong> : null}
         </Form.Label>
       )}
       {Input}

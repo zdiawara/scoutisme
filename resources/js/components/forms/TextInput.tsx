@@ -63,6 +63,11 @@ export const TextInput: FC<TextInputProps> = ({ label, isRequired, name, mask, d
           isInvalid={!!error}
         />
       )}
+      {/* <Form.Text id="basic-addon3">
+        <div>Exactement 10 ans {"=>"} 10</div>
+        <div>Moins de 10 ans &nbsp;&nbsp;&nbsp;{"=>"} -10</div>
+        <div>Plus de 10 ans {"=>"} +10</div>
+      </Form.Text> */}
       <Form.Control.Feedback type="invalid">{error?.message?.toString()}</Form.Control.Feedback>
     </Form.Group>
   );

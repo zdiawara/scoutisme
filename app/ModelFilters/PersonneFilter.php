@@ -29,51 +29,47 @@ class PersonneFilter extends ModelFilter
     {
         $values = explode("-", $value);
 
-        $borneInf = null;
-        $borneSup = null;
+        $borneMin = null;
+        $borneMax = null;
         $valeurExcate = null;
 
         if (sizeof($values) == 2 && isset($values[0]) && $values[0] != "") {
             if (isset($values[0]) && floatval($values[0])) {
-                $borneInf = floatval($values[0]);
+                $borneMin = floatval($values[0]);
             }
             if (isset($values[1]) && floatval($values[1])) {
-                $borneSup = floatval($values[1]);
+                $borneMax = floatval($values[1]);
             }
         } else {
             $val = intval($value);
             if (Str::startsWith($value, "-")) {
-                $borneSup = abs($val);
+                $borneMax = abs($val);
             } else if (Str::startsWith($value, "+")) {
-                $borneInf = $val;
+                $borneMin = $val;
             } else {
                 $valeurExcate = $val;
             }
         }
 
+        $colonneDateNaissance = DB::raw('TIMESTAMPDIFF(YEAR, personnes.date_naissance, now())');
+
+        $query = $this->whereNotNull('personnes.date_naissance');
+
         if (isset($valeurExcate)) {
-            return $this->where(DB::raw('TIMESTAMPDIFF(YEAR, personnes.date_naissance, now())'), $valeurExcate)
-                ->whereNotNull('personnes.date_naissance');
+            return $query->where($colonneDateNaissance, $valeurExcate);
         }
 
-        if (isset($borneInf) && isset($borneSup)) {
-            return $this->whereBetween(DB::raw('TIMESTAMPDIFF(YEAR, personnes.date_naissance, now())'), [$borneInf, $borneSup])
-                ->whereNotNull('personnes.date_naissance');
+        if (isset($borneMin) && isset($borneMax)) {
+            return $query->whereBetween($colonneDateNaissance, [$borneMin, $borneMax]);
         }
 
-        if (isset($borneInf)) {
-            return $this->where(DB::raw('TIMESTAMPDIFF(YEAR, personnes.date_naissance, now())'), '>=', $borneInf)
-                ->whereNotNull('personnes.date_naissance');
+        if (isset($borneMin)) {
+            return $query->where($colonneDateNaissance, '>=', $borneMin);
         }
 
-        if (isset($borneSup)) {
-            return $this->where(DB::raw('TIMESTAMPDIFF(YEAR, personnes.date_naissance, now())'), '<=', $borneSup)
-                ->whereNotNull('personnes.date_naissance');
+        if (isset($borneMax)) {
+            return $query->where($colonneDateNaissance, '<=', $borneMax);
         }
-
-
-
-        return $this->where('personnes.etat', $value);
     }
 
     public function genreId($value)

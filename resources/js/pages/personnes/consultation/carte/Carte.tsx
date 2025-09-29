@@ -135,7 +135,7 @@ export const CarteVerso: FC<CarteVersoProps> = ({ carte }) => {
       </div>
       <div className="verso-footer px-1">
         SCOUTS
-        <div>Creating a Better World</div>
+        <div>Prêt pour la vie</div>
       </div>
     </div>
   );

@@ -12,6 +12,7 @@ import { personneApi } from "api";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEY } from "utils/constants";
 import { useDroits } from "hooks/useDroits";
+import { SelectItem } from "types/form.type";
 
 type PersonneCoordonneeProps = {
   formations: FormationResource[];
@@ -23,10 +24,10 @@ type FormationInput = {
   date_formation?: string;
 };
 
-const toFormationBody = (data: Record<string, any>): FormationInput => {
+const toFormationBody = (data: Record<string, Date | SelectItem>): FormationInput => {
   return {
-    niveau_formation_id: selectHelper.getValue(data.niveau_formation),
-    date_formation: DateFormater.toISO(data.date_formation),
+    niveau_formation_id: selectHelper.getValue(data.niveau_formation as SelectItem),
+    date_formation: DateFormater.toISO(data.date_formation as Date),
   };
 };
 
@@ -42,29 +43,29 @@ export const PersonneFormation: FC<PersonneCoordonneeProps> = ({ formations, per
   const [show, toggleForm] = useToggle();
   const droits = useDroits();
 
-  const updateFormation = (data: Record<string, any>, index: number) => {
+  const updateFormation = (data: Record<string, Date | SelectItem>, index: number) => {
     const formationsInputs = toFormations(formations);
 
     return save([...formationsInputs.slice(0, index), toFormationBody(data), ...formationsInputs.slice(index + 1)]);
   };
 
-  const addFormation = async (data: Record<string, any>) => {
+  const addFormation = async (data: Record<string, Date | SelectItem>) => {
     const formationsInputs = toFormations(formations);
     const body = [...formationsInputs, toFormationBody(data)];
     return save(body);
   };
 
   const save = async (data: FormationInput[]) => {
-    const response = await personneApi.update(personneId, {
+    const response = await personneApi.update<PersonneResource>(personne.id, {
       formations: data,
     });
     clientQuery.invalidateQueries([QUERY_KEY.personnes]);
     return response;
   };
 
-  const deleteFormation = (formationId: string) => {
+  const deleteFormation = (index: number) => {
     const formationsInputs = toFormations(formations);
-    return save(formationsInputs.filter((e) => e.niveau_formation_id !== formationId));
+    return save(formationsInputs.filter((_, i) => i !== index));
   };
 
   return (
@@ -87,9 +88,10 @@ export const PersonneFormation: FC<PersonneCoordonneeProps> = ({ formations, per
           formations.map((item, i) => (
             <PersonneFormationItem
               formation={item}
-              key={item.reference.id}
+              key={item.reference.id + i}
               onSave={(data) => updateFormation(data, i)}
-              onDelete={() => deleteFormation(item.reference.id)}
+              onDelete={() => deleteFormation(i)}
+              droits={{ update: droits.personne.modifier(personne) }}
             />
           ))
         ) : (

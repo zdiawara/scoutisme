@@ -10,11 +10,7 @@ type EditPersonneFormationProps = {
   onSave: (data: Record<string, any>) => Promise<any>;
 };
 
-export const EditPersonneFormation: FC<EditPersonneFormationProps> = ({
-  onClose,
-  formation,
-  onSave,
-}) => {
+export const EditPersonneFormation: FC<EditPersonneFormationProps> = ({ onClose, formation, onSave }) => {
   return (
     <ListGroup.Item>
       <PersonneFormationForm

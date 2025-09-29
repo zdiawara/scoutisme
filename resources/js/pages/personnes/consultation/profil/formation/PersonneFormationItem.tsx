@@ -6,11 +6,13 @@ import { DateFormater } from "utils/DateUtils";
 import * as Icon from "react-bootstrap-icons";
 import { EditPersonneFormation } from "./EditPersonneFormation";
 import { ConfirmationModal } from "pages/common";
+import { useDroits } from "hooks/useDroits";
 
 type Props = {
   formation: FormationResource;
   onSave: (data: Record<string, any>) => Promise<any>;
   onDelete: () => void;
+  droits: { update: boolean };
 };
 
 const ACTIONS = [
@@ -29,33 +31,21 @@ const ACTIONS = [
   },
 ];
 
-export const PersonneFormationItem: FC<Props> = ({
-  onSave,
-  onDelete,
-  formation,
-}) => {
+export const PersonneFormationItem: FC<Props> = ({ onSave, onDelete, formation, droits }) => {
   const [action, setAction] = useState<string | undefined>();
   const close = () => setAction(undefined);
+
   return (
     <>
       {action === "modifier" ? (
-        <EditPersonneFormation
-          onClose={close}
-          formation={formation}
-          onSave={onSave}
-        />
+        <EditPersonneFormation onClose={close} formation={formation} onSave={onSave} />
       ) : (
-        <ListGroup.Item
-          key={formation.reference.id}
-          className="d-flex justify-content-between align-items-start"
-        >
+        <ListGroup.Item key={formation.reference.id} className="d-flex justify-content-between align-items-start">
           <div>
             <div className="fw-bold">{formation.reference.nom}</div>
-            <span className="fw-light">
-              {DateFormater.toDateText(formation.date_formation)}
-            </span>
+            <span className="fw-light">{DateFormater.toDateText(formation.date_formation)}</span>
           </div>
-          <DropOption actions={ACTIONS} onSelect={setAction} />
+          {droits.update && <DropOption actions={ACTIONS} onSelect={setAction} />}
         </ListGroup.Item>
       )}
       {action === "supprimer" && (

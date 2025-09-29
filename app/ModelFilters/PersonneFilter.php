@@ -3,6 +3,7 @@
 namespace App\ModelFilters;
 
 use EloquentFilter\ModelFilter;
+use Illuminate\Support\Facades\DB;
 
 class PersonneFilter extends ModelFilter
 {
@@ -12,20 +13,20 @@ class PersonneFilter extends ModelFilter
     {
         return $this->where(function ($q) use ($search) {
 
-            return $q->where('nom', 'LIKE', "%$search%")
-                ->orWhere('prenom', 'LIKE', "%$search%")
-                ->orWhere('code', 'LIKE', "%$search%");
+            return $q->where('personnes.nom', 'LIKE', "%$search%")
+                ->orWhere('personnes.prenom', 'LIKE', "%$search%")
+                ->orWhere('personnes.code', 'LIKE', "%$search%");
         });
     }
 
     public function etat($value)
     {
-        return $this->where('etat', $value);
+        return $this->where('personnes.etat', $value);
     }
 
     public function genreId($value)
     {
-        return $this->where('genre_id', $value);
+        return $this->where('personnes.genre_id', $value);
     }
 
     public function type($value)
@@ -35,12 +36,12 @@ class PersonneFilter extends ModelFilter
 
     public function villeId($value)
     {
-        return $this->where('ville_id', $value);
+        return $this->where('personnes.ville_id', $value);
     }
 
     public function fonctionId($value)
     {
-        return $this->where('fonction_id', $value);
+        return $this->where('personnes.fonction_id', $value);
     }
 
 
@@ -62,6 +63,6 @@ class PersonneFilter extends ModelFilter
 
     public function niveauFormationId($value)
     {
-        return $this->where('niveau_formation_id', $value);
+        return $this->where(DB::raw("JSON_CONTAINS(JSON_EXTRACT(personnes.formations, '$[*].niveau_formation_id') , '\"" . $value . "\"')"), '=', 1);
     }
 }

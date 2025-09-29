@@ -22,11 +22,13 @@ const parseParams = (searchParams: URLSearchParams) => {
   const fonction = searchParams.get("fonction");
   const organisation = searchParams.get("organisation");
   const etatCotisation = searchParams.get("etatCotisation");
+  const niveauFormation = searchParams.get("niveauFormation");
 
   return {
     etatCotisation: etatCotisation ? JSON.parse(etatCotisation) : null,
     ville: ville ? JSON.parse(ville) : null,
     genre: genre ? JSON.parse(genre) : null,
+    niveauFormation: niveauFormation ? JSON.parse(niveauFormation) : null,
     fonction: fonction ? JSON.parse(fonction) : null,
     organisation: organisation ? JSON.parse(organisation) : null,
     search: searchParams.get("search"),
@@ -43,6 +45,7 @@ const buildRequestParams = (filter: Record<string, any>) => {
     genreId: selectHelper.getValueFromJson(filter.genre),
     fonctionId: selectHelper.getValueFromJson(filter.fonction),
     organisationId: selectHelper.getValueFromJson(filter.organisation),
+    niveauFormationId: selectHelper.getValueFromJson(filter.niveauFormation),
     search: filter.search,
     page: parseInt(filter.page) || 1,
     size: parseInt(filter.size) || 10,

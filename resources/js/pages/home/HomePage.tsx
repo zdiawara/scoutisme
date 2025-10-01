@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import * as Icon from "react-bootstrap-icons";
 import { Link } from "react-router-dom";
-import { getMenuItems } from "utils";
+import { getMenuItems, LINKS } from "utils";
 
 import "./HomePage.scss";
 
@@ -29,14 +29,14 @@ export const HomePage = () => {
             </span>
           </div> */}
         <Row className="g-3 my-3 ">
-          {/* <Col xs={6} sm="4">
-            <Card as={Link} to={"/#"} className="mb-0 border">
+          <Col xs={6} sm="4">
+            <Card as={Link} to={LINKS.dashbords.base} className="mb-0 border">
               <Card.Body className="text-center">
                 <Icon.BarChartLineFill color="#b49d84" size="3rem" />
-                <div className="mt-2 fs-4 fw-light">Dashboard</div>
+                <div className="mt-2 fs-4 fw-light">Statistiques</div>
               </Card.Body>
             </Card>
-          </Col> */}
+          </Col>
           {items.map((menu) => (
             <Col key={menu.url} xs={6} sm="4">
               <Card as={Link} to={menu.url} className="mb-0 border">

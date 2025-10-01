@@ -41,20 +41,31 @@ class OrganisationStatController extends Controller
     public function countAll()
     {
 
-        $data = DB::select("SELECT
-            n.code,
-            SUM(
+        $data = DB::select("SELECT n.code, SUM(
                 CASE
-                    WHEN n.code = 'region' THEN 1
-                    WHEN n.code = 'groupe' THEN 1
-                    WHEN n.code = 'unite' THEN 1
-                    WHEN n.code = 'national' THEN 1
+                    WHEN (
+                        n.code = 'region'
+                        and uo.id is not null
+                    ) THEN 1
+                    WHEN (
+                        n.code = 'groupe'
+                        and uo.id is not null
+                    ) THEN 1
+                    WHEN (
+                        n.code = 'unite'
+                        and uo.id is not null
+                    ) THEN 1
+                    WHEN (
+                        n.code = 'national'
+                        and uo.id is not null
+                    ) THEN 1
                     ELSE 0
                 END
-            ) as nombre
+                ) as nombre
             FROM natures n
-                INNER JOIN organisations uo ON uo.nature_id = n.id
-            GROUP BY n.id
+                LEFT JOIN organisations uo ON uo.nature_id = n.id
+            GROUP BY
+                n.id
             ORDER BY n.code ASC", []);
 
         return [

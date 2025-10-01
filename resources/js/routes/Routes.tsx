@@ -36,11 +36,13 @@ const ViewMessage = Loadable(lazy(() => import("pages/messages/ViewMessage")));
 // const ListRefFormation = Loadable(lazy(() => import("pages/utilitaires/ref-formations/ListRefFormation")));
 // const ListTypeUnite = Loadable(lazy(() => import("pages/utilitaires/types-unites/ListTypeUnite")));
 
-// const OrganisationDashBord = Loadable(lazy(() => import("pages/dashbords/organisations/OrganisationDashBord")));
+const Statistiques = Loadable(lazy(() => import("pages/stats/Statistiques")));
 
-// const ScoutDashbord = Loadable(lazy(() => import("pages/dashbords/personnes/ScoutDashbord")));
+// const OrganisationDashBord = Loadable(lazy(() => import("pages/stats/organisations/OrganisationDashBord")));
 
-// const CotisationDashbord = Loadable(lazy(() => import("pages/dashbords/cotisations/CotisationDashBoard")));
+// const ScoutDashbord = Loadable(lazy(() => import("pages/stats/personnes/ScoutDashbord")));
+
+// const CotisationDashbord = Loadable(lazy(() => import("pages/stats/cotisations/CotisationDashBoard")));
 
 const RechercherPaiement = Loadable(lazy(() => import("pages/paiements/rechercher/RechercherPaiement")));
 
@@ -131,7 +133,7 @@ export const router = createBrowserRouter(
           <Route index element={<ListCotisation />} />
         </Route> */}
 
-        <Route path={LINKS.dashbords.base} element={<Outlet />}>
+        <Route path={LINKS.dashbords.base} element={<Statistiques />}>
           {/* <Route path="organisations" element={<OrganisationDashBord />} />
           <Route path="scouts" element={<ScoutDashbord />} />
           <Route path="cotisations" element={<CotisationDashbord />} /> */}

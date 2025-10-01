@@ -1,0 +1,9 @@
+.dashboard-table {
+  tr {
+    td {
+      &:first-child {
+        text-align: left !important;
+      }
+    }
+  }
+}

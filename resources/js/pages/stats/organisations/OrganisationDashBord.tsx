@@ -28,7 +28,7 @@ const Item: FC<ItemProps> = ({ title, rows, nature }) => {
         </Button>
         <h4 className="fs-5 fw-regular mt-1 mb-3">{title}</h4>
 
-        <Table responsive className="table table-sm table-centered mb-0 font-14">
+        <Table responsive className="table table-sm table-striped table-centered mb-0 font-14">
           <thead className="table-light">
             <tr>
               <th>Région</th>
@@ -94,15 +94,15 @@ const OrganisationDashBord = () => {
     return 1;
   };
 
-  const buildColor = (a: StatOrgaNature) => {
-    if (a.code === "unite") {
-      return "danger";
-    }
-    if (a.code === "groupe") {
-      return "info";
-    }
-    return "warning";
-  };
+  // const buildColor = (a: StatOrgaNature) => {
+  //   if (a.code === "unite") {
+  //     return "danger";
+  //   }
+  //   if (a.code === "groupe") {
+  //     return "info";
+  //   }
+  //   return "warning";
+  // };
 
   return (
     <Container>

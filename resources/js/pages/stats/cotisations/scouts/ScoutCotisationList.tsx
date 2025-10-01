@@ -16,7 +16,7 @@ type ScoutCotisationListProps = {
 
 export const ScoutCotisationList: FC<ScoutCotisationListProps> = ({ colonneNames, etatCotisationNames, data }) => {
   return (
-    <DashBoardTable>
+    <DashBoardTable bordered>
       <DashBoardTableHead>
         <tr>
           {colonneNames?.map((item, i) => (

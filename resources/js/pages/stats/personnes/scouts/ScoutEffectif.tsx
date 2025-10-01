@@ -1,9 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { statApi } from "api";
-import { DashBoardContent, DashBoardDefaultHeader, DashBoardWrapper } from "../../common";
-import { Button, Tab } from "react-bootstrap";
+import { DashBoardWrapper } from "../../common";
+import { Button } from "react-bootstrap";
 import { EffectifScoutList } from "./EffectifScoutList";
-import { EffectifScoutChart } from "./EffectifScoutChart";
 
 export const ScoutEffectifByRegion = () => {
   const query = useQuery({
@@ -25,18 +24,23 @@ export const ScoutEffectifByRegion = () => {
 
   return (
     <DashBoardWrapper defaultActiveKey="liste">
-      <DashBoardDefaultHeader titre="Effectif des scouts" />
-      <DashBoardContent>
+      <Button variant="light" size="sm" className="float-end">
+        Exporter
+      </Button>
+      <h4 className="fs-5 fw-regular mt-1 mb-3">Effectif des scouts par région</h4>
+
+      <EffectifScoutList headers={query.data?.headers} data={query.data?.data} />
+      {/* <DashBoardContent>
         <Tab.Pane eventKey="liste">
           <Button variant="light" size="sm" className="mb-2">
-            Exporter <i className="mdi mdi-download ms-1"></i>
+            Exporter
           </Button>
           <EffectifScoutList headers={query.data?.headers} data={query.data?.data} />
         </Tab.Pane>
         <Tab.Pane eventKey="graphique">
           <EffectifScoutChart data={query.data?.data} />
         </Tab.Pane>
-      </DashBoardContent>
+      </DashBoardContent> */}
     </DashBoardWrapper>
   );
 };

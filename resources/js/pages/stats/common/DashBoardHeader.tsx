@@ -10,7 +10,7 @@ type DashBoardHeaderProps = {
 export const DashBoardHeader: FC<DashBoardHeaderProps> = ({ titre, items }) => {
   return (
     <div className="align-items-center d-sm-flex justify-content-sm-between mb-1">
-      <h4 className="header-title mb-0">{titre}</h4>
+      <h4 className="mb-0">{titre}</h4>
       <Nav as="ul" variant="pills" className="bg-nav-pills p-1 rounded">
         {items.map((item) => (
           <Nav.Item key={item.code} as="li">

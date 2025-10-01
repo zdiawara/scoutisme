@@ -1,9 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { statApi } from "api";
-import { Button, Tab } from "react-bootstrap";
-import { DashBoardContent, DashBoardDefaultHeader, DashBoardWrapper } from "../../common";
+import { Button } from "react-bootstrap";
+import { DashBoardWrapper } from "../../common";
 import { ScoutCotisationList } from "./ScoutCotisationList";
-import { ScoutCotisationChart } from "./ScoutCotisationChart";
 
 export const ScoutCotisation = () => {
   const query = useQuery({
@@ -17,7 +16,7 @@ export const ScoutCotisation = () => {
 
   return (
     <DashBoardWrapper defaultActiveKey="liste">
-      <DashBoardDefaultHeader titre="Etat de la cotisation" />
+      {/* <DashBoardDefaultHeader titre="Etat cotisation des scouts" />
       <DashBoardContent>
         <Tab.Pane eventKey="liste">
           <Button variant="light" size="sm" className="mb-2">
@@ -32,7 +31,17 @@ export const ScoutCotisation = () => {
         <Tab.Pane eventKey="graphique">
           <ScoutCotisationChart data={query.data?.data} />
         </Tab.Pane>
-      </DashBoardContent>
+      </DashBoardContent> */}
+
+      <Button variant="light" size="sm" className="float-end">
+        Exporter
+      </Button>
+      <h4 className="fs-5 fw-regular mt-1 mb-3">Cotisation des scouts</h4>
+      <ScoutCotisationList
+        colonneNames={query.data?.headers}
+        etatCotisationNames={query.data?.headers_2}
+        data={query.data?.data}
+      />
     </DashBoardWrapper>
   );
 };

@@ -1,54 +1,22 @@
-import { Col, Nav, Row } from "react-bootstrap";
-import * as Icon from "react-bootstrap-icons";
-import OrganisationDashBord from "./organisations/OrganisationDashBord";
 import { Header } from "layout/Header";
-
-const menus = [
-  {
-    label: "Organisations",
-    code: "organisation",
-    Icon: Icon.Building,
-  },
-  {
-    label: "Effectifs",
-    code: "effectif",
-    Icon: Icon.PeopleFill,
-  },
-  {
-    label: "Cotisations",
-    code: "cotisation",
-    Icon: Icon.Bank2, //
-  },
-];
+import StatPourEquipeNationale from "./StatPourEquipeNationale";
+import { useDroits } from "hooks/useDroits";
+import { Alert } from "react-bootstrap";
 
 const StatEquipeNationale = () => {
-  const page = "organisation";
+  const droits = useDroits();
 
+  const renderContent = () => {
+    if (droits.organisation.conseil_national.consulter || droits.organisation.equipe_nationale.consulter) {
+      return <StatPourEquipeNationale />;
+    } else {
+      return <Alert className="mt-4">Statistiques en construction pour votre organisation.</Alert>;
+    }
+  };
   return (
     <>
       <Header title="Statistiques" />
-
-      <Row>
-        <Col xs={12}>
-          <Nav variant="pills" style={{ overflow: "auto" }} className="flex-nowrap my-4">
-            {menus.map((item) => (
-              <Nav.Item key={item.code}>
-                <Nav.Link
-                  active={item.code === page}
-                  // onClick={onSelectPage(item.code)}
-                  href="#"
-                  className="d-flex align-items-center d-block"
-                >
-                  <item.Icon size="1rem" className="me-1" />
-                  <span>{item.label}</span>
-                </Nav.Link>
-              </Nav.Item>
-            ))}
-          </Nav>
-        </Col>
-      </Row>
-
-      <OrganisationDashBord />
+      {renderContent()}
     </>
   );
 };

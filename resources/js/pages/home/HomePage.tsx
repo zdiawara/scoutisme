@@ -19,47 +19,37 @@ export const HomePage = () => {
   }, [userDroit, user]);
 
   return (
-    <>
-      {/* <Row className="mb-3"> */}
-      <Col className="mx-auto" md={{ span: 10, offset: 0 }} sm={{ offset: 0, span: 0 }}>
-        {/* <div className="my-4 text-center">
-            <span className="fs-4 fw-light">Bienvenue</span>
-            <span className="d-block fs-2 mt-2">
-              {personne?.prenom} {personne?.nom}
-            </span>
-          </div> */}
-        <Row className="g-3 my-3 ">
-          <Col xs={6} sm="4">
-            <Card as={Link} to={LINKS.dashbords.base} className="mb-0 border">
+    <Col className="mx-auto" md={{ span: 10, offset: 0 }} sm={{ offset: 0, span: 0 }}>
+      <Row className="g-3 my-3 ">
+        <Col xs={6} sm="4">
+          <Card as={Link} to={LINKS.dashbords.base} className="mb-0 border">
+            <Card.Body className="text-center">
+              <Icon.BarChartLineFill color="#b49d84" size="3rem" />
+              <div className="mt-2 fs-4 fw-light">Statistiques</div>
+            </Card.Body>
+          </Card>
+        </Col>
+        {items.map((menu) => (
+          <Col key={menu.url} xs={6} sm="4">
+            <Card as={Link} to={menu.url} className="mb-0 border">
               <Card.Body className="text-center">
-                <Icon.BarChartLineFill color="#b49d84" size="3rem" />
-                <div className="mt-2 fs-4 fw-light">Statistiques</div>
+                <menu.Icon color="#b49d84" size="3rem" />
+                <div className="mt-2 fs-4 fw-light">{menu.label}</div>
               </Card.Body>
             </Card>
           </Col>
-          {items.map((menu) => (
-            <Col key={menu.url} xs={6} sm="4">
-              <Card as={Link} to={menu.url} className="mb-0 border">
-                <Card.Body className="text-center">
-                  <menu.Icon color="#b49d84" size="3rem" />
-                  <div className="mt-2 fs-4 fw-light">{menu.label}</div>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-          {userDroit?.isAdmin && (
-            <Col xs={6} sm="4">
-              <Card as={Link} to={"/parametres"} className="mb-0 border">
-                <Card.Body className="text-center">
-                  <Icon.GearFill color="#b49d84" size="3rem" />
-                  <div className="mt-2 fs-4 fw-light">Paramètres</div>
-                </Card.Body>
-              </Card>
-            </Col>
-          )}
-        </Row>
-      </Col>
-      {/* </Row> */}
-    </>
+        ))}
+        {userDroit?.isAdmin && (
+          <Col xs={6} sm="4">
+            <Card as={Link} to={"/parametres"} className="mb-0 border">
+              <Card.Body className="text-center">
+                <Icon.GearFill color="#b49d84" size="3rem" />
+                <div className="mt-2 fs-4 fw-light">Paramètres</div>
+              </Card.Body>
+            </Card>
+          </Col>
+        )}
+      </Row>
+    </Col>
   );
 };

@@ -23,16 +23,16 @@ export const DashBoardTableFirstCell: FC<CellProps> = ({ value }) => {
   return <td className="text-dark fw-bold">{value}</td>;
 };
 
-export const DashBoardTable: FC<{ children: ReactNode }> = ({ children }) => {
+export const DashBoardTable: FC<{ children: ReactNode; bordered?: boolean }> = ({ children, bordered }) => {
   return (
-    <Table responsive bordered size="sm" className="table-centered mb-0 dashboard-table" hover>
+    <Table responsive striped bordered={bordered} size="sm" className="table-centered mb-0 dashboard-table" hover>
       {children}
     </Table>
   );
 };
 
 export const DashBoardTableHead: FC<{ children: ReactNode }> = ({ children }) => {
-  return <thead className="table-light text-dark fw-bold shadow-sm">{children}</thead>;
+  return <thead className="table-light fw-bold">{children}</thead>;
 };
 
 export const DashBoardTableBody: FC<{ children: ReactNode }> = ({ children }) => {

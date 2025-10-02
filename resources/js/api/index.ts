@@ -13,7 +13,7 @@ import { RequestParam } from "types/request.type";
 import { requestParams } from "utils/functions";
 import { UserData } from "pages/auth/Login";
 import { UserResource } from "types/auth.type";
-import { fetchApi } from "./fetchApi";
+import { fetchApi, RequestData } from "./fetchApi";
 
 export * from "./stats";
 
@@ -151,41 +151,28 @@ class PaiementApi extends CrudService {
 }
 export const paiementApi = new PaiementApi("paiements");
 
+const buildBody = (url: string, body: Record<string, string | number>): RequestData => {
+  return {
+    url,
+    options: {
+      body: JSON.stringify(body || {}),
+      method: "POST",
+    },
+    type: "json",
+  };
+};
+
 class AuthApi extends CrudService {
   public async login(data: UserData) {
-    const response = await fetchApi<{ access_token: string }>({
-      url: "/login",
-      options: {
-        body: JSON.stringify(data || {}),
-        method: "POST",
-      },
-      type: "json",
-    });
-    return response;
+    return await fetchApi(buildBody("/login", data));
   }
 
   public async register(data: { code: string; password: string }) {
-    const response = await fetchApi({
-      url: "/register",
-      options: {
-        body: JSON.stringify(data || {}),
-        method: "POST",
-      },
-      type: "json",
-    });
-    return response;
+    return await fetchApi(buildBody("/register", data));
   }
 
   public async verifierCode(code: string) {
-    const response = await fetchApi<{ data: AuthPersonne }>({
-      url: "/verifier-code",
-      options: {
-        body: JSON.stringify({ code }),
-        method: "POST",
-      },
-      type: "json",
-    });
-    return response.data;
+    return await fetchApi(buildBody("/verifier-code", { code }));
   }
 
   public async userInfo() {
@@ -226,16 +213,20 @@ class AuthApi extends CrudService {
     return response;
   }
 
-  public async resetPassword(body: { password: string; password_confirmation: string; hash: string }) {
-    const response = await fetchApi<{ access_token: string }>({
-      url: "/reset-password",
-      options: {
-        body: JSON.stringify(body || {}),
-        method: "POST",
-      },
-      type: "json",
-    });
-    return response;
+  public async setPassword(body: { password: string; password_confirmation: string; hash: string }) {
+    return await fetchApi(buildBody("/set-password", body));
+  }
+
+  public async resetPassword(body: { password: string; email: string; password_confirmation: string; token: string }) {
+    return await fetchApi(buildBody("/reset-password", body));
+  }
+
+  public async forgotPassword(body: { email: string }) {
+    return await fetchApi(buildBody("/forgot-password", body));
+  }
+
+  public async verifyResetToken(body: { email: string; token: string }) {
+    return await fetchApi(buildBody("/verify-reset-token", body));
   }
 }
 

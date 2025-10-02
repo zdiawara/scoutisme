@@ -18,21 +18,14 @@ type SidebarProps = {
 //   mails: <Icon.EnvelopeFill size="1.25rem" className="me-1" />,
 // };
 
-export const Sidebar: FC<SidebarProps> = ({
-  showSidebar,
-  handleCloseSidebar,
-}) => {
+export const Sidebar: FC<SidebarProps> = ({ showSidebar, handleCloseSidebar }) => {
   const { userDroit } = useAuth();
   const content = (
     <Nav className="flex-column">
       {getMenuItems(userDroit!)
         .filter((item) => item.url)
         .map((nav) => (
-          <Nav.Item
-            key={nav.url}
-            className="nav-item"
-            onClick={handleCloseSidebar}
-          >
+          <Nav.Item key={nav.url} className="nav-item" onClick={handleCloseSidebar}>
             <Link
               className="nav-link text-white d-flex align-items-center py-2"
               aria-current="page"
@@ -69,18 +62,10 @@ export const Sidebar: FC<SidebarProps> = ({
           className="offcanvas-md offcanvas-start"
         >
           <Offcanvas.Header>
-            <Offcanvas.Title id="sidebarMenuLabel">
-              Company name
-            </Offcanvas.Title>
-            <Button
-              variant="close"
-              onClick={handleCloseSidebar}
-              aria-label="Close"
-            />
+            <Offcanvas.Title id="sidebarMenuLabel">Company name</Offcanvas.Title>
+            <Button variant="close" onClick={handleCloseSidebar} aria-label="Close" />
           </Offcanvas.Header>
-          <Offcanvas.Body className="d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
-            {content}
-          </Offcanvas.Body>
+          <Offcanvas.Body className="d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">{content}</Offcanvas.Body>
         </Offcanvas>
       </Col>
     </>

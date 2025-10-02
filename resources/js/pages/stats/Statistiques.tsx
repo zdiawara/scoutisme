@@ -1,7 +1,7 @@
 import { Header } from "layout/Header";
 import StatPourEquipeNationale from "./StatPourEquipeNationale";
 import { useDroits } from "hooks/useDroits";
-import { Alert } from "react-bootstrap";
+import { Alert, Container } from "react-bootstrap";
 
 const StatEquipeNationale = () => {
   const droits = useDroits();
@@ -16,7 +16,7 @@ const StatEquipeNationale = () => {
   return (
     <>
       <Header title="Statistiques" />
-      {renderContent()}
+      <Container>{renderContent()}</Container>
     </>
   );
 };

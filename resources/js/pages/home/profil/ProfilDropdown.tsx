@@ -1,26 +1,22 @@
 import { Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import * as Icon from "react-bootstrap-icons";
-import d from "../../../assets/images/users/avatar-1.jpg";
 import useToggle from "hooks/useToggle";
 import { useAuth } from "hooks";
 import { PersonneAvatar } from "pages/personnes/rechercher/personne/PersonneAvatar";
 
 const ACTIONS = [
-  // {
-  //   code: "/compte",
-  //   Icon: Icon.PersonCircle,
-  //   label: "Mon compte",
-  // },
-  // {
-  //   code: "/aide",
-  //   Icon: Icon.InfoCircle,
-  //   label: "Support",
-  // },
+  {
+    code: "/compte",
+    Icon: Icon.Person,
+    label: "Mon compte",
+    description: "Consulter et gérer mon compte utilisateur",
+  },
   {
     code: "/logout",
     Icon: Icon.BoxArrowLeft,
     label: "Deconnexion",
+    description: "Se déconnecter de l'application",
   },
 ];
 
@@ -45,16 +41,19 @@ export const ProfilDropdown = () => {
             </span>
           </div>
         </Dropdown.Toggle>
-        <Dropdown.Menu align={"end"} className="dropdown-menu-animated shadow-lg border-0">
-          <div onClick={() => {}}>
-            {ACTIONS.map((item) => {
-              return (
-                <Link to={item.code} className="dropdown-item" key={item.code}>
-                  <item.Icon className="me-2" />
-                  <span>{item.label}</span>
-                </Link>
-              );
-            })}
+        <Dropdown.Menu align="start" className="dropdown-menu-animated shadow-lg border-0">
+          <div>
+            {ACTIONS.map((item, i) => (
+              <Link
+                to={item.code}
+                className={`dropdown-item ${i === ACTIONS.length - 1 ? "" : "border-bottom"}`}
+                key={item.code}
+              >
+                <item.Icon className="me-1" />
+                <span>{item.label}</span>
+                <span className="text-muted fw-light d-block">{item.description}</span>
+              </Link>
+            ))}
           </div>
         </Dropdown.Menu>
       </Dropdown>

@@ -5,7 +5,7 @@ import { TextInput } from "components";
 import { FC } from "react";
 import { authApi } from "api/index";
 import { LINKS } from "utils/links";
-import { notifier } from "utils/notification";
+import { Link } from "react-router-dom";
 
 const Form: FC<WrapperProps> = ({ onSubmit }) => (
   <Row className="g-3">
@@ -17,6 +17,9 @@ const Form: FC<WrapperProps> = ({ onSubmit }) => (
       <TextInput type="password" name="password" label="Mot de passe" placeholder="Votre mot de passe" isRequired />
     </Col>
 
+    <Link to="/forgot-password" className="text-primary">
+      Mot de passe oublié ?
+    </Link>
     <Button variant="primary" onClick={onSubmit} className="d-block w-100" disabled={false}>
       Connexion
     </Button>
@@ -38,28 +41,26 @@ const Login = () => {
   };
 
   return (
-    <>
-      <Container className="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5">
-        <Row className="justify-content-center">
-          <Col md={8} lg={6} xl={5} xxl={4}>
-            <Card>
-              <Card.Header className="pt-3 pb-3 text-center bg-primary">
-                <div className="text-white fs-3">ASBF</div>
-              </Card.Header>
-              <Card.Body className="p-4">
-                <AuthForm
-                  onSave={logUser}
-                  onFinished={() => {
-                    navigate(LINKS.home);
-                  }}
-                  withNotification={false}
-                />
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    </>
+    <Container className="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5">
+      <Row className="justify-content-center">
+        <Col md={8} lg={6} xl={5} xxl={4}>
+          <Card>
+            <Card.Header className="pt-3 pb-3 text-center bg-primary">
+              <div className="text-white fs-3">ASBF</div>
+            </Card.Header>
+            <Card.Body className="p-4">
+              <AuthForm
+                onSave={logUser}
+                onFinished={() => {
+                  navigate(LINKS.home);
+                }}
+                withNotification={false}
+              />
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

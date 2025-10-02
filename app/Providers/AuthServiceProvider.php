@@ -4,6 +4,7 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -33,6 +34,14 @@ class AuthServiceProvider extends ServiceProvider
                 ->line(Lang::get('Veuillez cliquer sur le bouton ci-dessous pour vérifier votre adresse email.'))
                 ->action(Lang::get('Vérifier mon Email'), $verificationUrl)
                 ->line(Lang::get('Si vous n\'avez pas créé de compte, vous pouvez ignorer cet email.'));
+        });
+
+
+        // On dit à Laravel d’utiliser le frontend pour les liens de reset
+        ResetPassword::createUrlUsing(function ($user, string $token) {
+            return env("APP_URL")
+                . '/reset-password?token=' . $token
+                . '&email=' . urlencode($user->email);
         });
     }
 }

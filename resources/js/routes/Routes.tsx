@@ -70,6 +70,8 @@ const RechercherLog = Loadable(lazy(() => import("pages/parametres/activitylogs/
 const ViewLog = Loadable(lazy(() => import("pages/parametres/activitylogs/ViewLog")));
 
 const SetPassword = Loadable(lazy(() => import("pages/parametres/utilisateurs/password/SetPassword")));
+const ForgotPassword = Loadable(lazy(() => import("pages/auth/ForgotPassword")));
+const ResetPassword = Loadable(lazy(() => import("pages/auth/ResetPassword")));
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -77,6 +79,8 @@ export const router = createBrowserRouter(
       <Route path={LINKS.login} element={<Login />} />
       <Route path={LINKS.register} element={<Register />} />
       <Route path="logout" element={<Logout />} />
+      <Route path="forgot-password" element={<ForgotPassword />} />
+      <Route path="reset-password" element={<ResetPassword />} />
       <Route path="set-password" element={<SetPassword />} />
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />

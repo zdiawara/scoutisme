@@ -199,6 +199,17 @@ class AuthController extends Controller
         return response()->json(['message' => 'Successfully logged out']);
     }
 
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        auth()->user()->forceFill([
+            'password' => Hash::make($request->password),
+        ])->save();
+    }
+
     public function setPassword(Request $request)
     {
         $request->validate([

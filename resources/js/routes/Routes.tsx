@@ -72,6 +72,9 @@ const ViewLog = Loadable(lazy(() => import("pages/parametres/activitylogs/ViewLo
 const SetPassword = Loadable(lazy(() => import("pages/parametres/utilisateurs/password/SetPassword")));
 const ForgotPassword = Loadable(lazy(() => import("pages/auth/ForgotPassword")));
 const ResetPassword = Loadable(lazy(() => import("pages/auth/ResetPassword")));
+const UpdatePassword = Loadable(lazy(() => import("pages/auth/UpdatePassword")));
+
+const MonCompte = Loadable(lazy(() => import("pages/comptes/MonCompte")));
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -83,6 +86,8 @@ export const router = createBrowserRouter(
       <Route path="reset-password" element={<ResetPassword />} />
       <Route path="set-password" element={<SetPassword />} />
       <Route path="/" element={<Layout />}>
+        <Route path="update-password" element={<UpdatePassword />} />
+
         <Route index element={<HomePage />} />
         <Route path={LINKS.organisation.base} element={<MonOrganisation />} />
         <Route path={LINKS.personnes.base} element={<Outlet />}>
@@ -142,6 +147,8 @@ export const router = createBrowserRouter(
           <Route path="scouts" element={<ScoutDashbord />} />
           <Route path="cotisations" element={<CotisationDashbord />} /> */}
         </Route>
+
+        <Route element={<MonCompte />} path="mon-compte" />
 
         <Route path={LINKS.parametres.base}>
           <Route index element={<Parametres />} />

@@ -5,7 +5,7 @@ import { Header } from "layout/Header";
 import { FC } from "react";
 import { Alert, Button, Card, Col, Container, Row } from "react-bootstrap";
 
-const Form: FC<WrapperProps> = ({ onSubmit }) => (
+const Form: FC<WrapperProps> = ({ onSubmit, goBack }) => (
   <Row className="g-3">
     <Col xs={12}>
       <TextInput name="email" label="Email" placeholder="Votre adresse email" isRequired />
@@ -18,7 +18,7 @@ const Form: FC<WrapperProps> = ({ onSubmit }) => (
 
       <span className="my-2 d-block text-center">OU</span>
 
-      <Button variant="outline-primary" onClick={onSubmit} className="d-block w-100" disabled={false}>
+      <Button variant="outline-primary" onClick={goBack} className="d-block w-100">
         Quitter la page
       </Button>
     </div>

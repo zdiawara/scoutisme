@@ -7,7 +7,7 @@ import { PersonneAvatar } from "pages/personnes/rechercher/personne/PersonneAvat
 
 const ACTIONS = [
   {
-    code: "/compte",
+    code: "/mon-compte",
     Icon: Icon.Person,
     label: "Mon compte",
     description: "Consulter et gérer mon compte utilisateur",

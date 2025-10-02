@@ -151,7 +151,7 @@ class PaiementApi extends CrudService {
 }
 export const paiementApi = new PaiementApi("paiements");
 
-const buildBody = (url: string, body: Record<string, string | number>): RequestData => {
+const postBody = (url: string, body: Record<string, string | number>): RequestData => {
   return {
     url,
     options: {
@@ -162,17 +162,28 @@ const buildBody = (url: string, body: Record<string, string | number>): RequestD
   };
 };
 
+const putBody = (url: string, body: Record<string, string | number>): RequestData => {
+  return {
+    url,
+    options: {
+      body: JSON.stringify(body || {}),
+      method: "PUT",
+    },
+    type: "json",
+  };
+};
+
 class AuthApi extends CrudService {
   public async login(data: UserData) {
-    return await fetchApi(buildBody("/login", data));
+    return await fetchApi(postBody("/login", data));
   }
 
   public async register(data: { code: string; password: string }) {
-    return await fetchApi(buildBody("/register", data));
+    return await fetchApi(postBody("/register", data));
   }
 
   public async verifierCode(code: string) {
-    return await fetchApi(buildBody("/verifier-code", { code }));
+    return await fetchApi(postBody("/verifier-code", { code }));
   }
 
   public async userInfo() {
@@ -214,19 +225,23 @@ class AuthApi extends CrudService {
   }
 
   public async setPassword(body: { password: string; password_confirmation: string; hash: string }) {
-    return await fetchApi(buildBody("/set-password", body));
+    return await fetchApi(postBody("/set-password", body));
   }
 
   public async resetPassword(body: { password: string; email: string; password_confirmation: string; token: string }) {
-    return await fetchApi(buildBody("/reset-password", body));
+    return await fetchApi(postBody("/reset-password", body));
+  }
+
+  public async updatePassword(body: { password: string; password_confirmation: string }) {
+    return await fetchApi(putBody("/update-password", body));
   }
 
   public async forgotPassword(body: { email: string }) {
-    return await fetchApi(buildBody("/forgot-password", body));
+    return await fetchApi(postBody("/forgot-password", body));
   }
 
   public async verifyResetToken(body: { email: string; token: string }) {
-    return await fetchApi(buildBody("/verify-reset-token", body));
+    return await fetchApi(postBody("/verify-reset-token", body));
   }
 }
 

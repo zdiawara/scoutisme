@@ -46,6 +46,7 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('me', [AuthController::class, 'me']);
+    Route::put('/update-password', [AuthController::class, 'updatePassword']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/email/resend', [VerificationController::class, 'resend'])
         ->middleware(['throttle:6,1'])

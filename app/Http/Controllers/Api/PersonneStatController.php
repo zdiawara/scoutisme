@@ -149,8 +149,8 @@ class PersonneStatController extends Controller
                     });
 
                     $prev[$typeOrganisation->code] = [
-                        'homme' => $orgs->map(fn ($item) => $item->nombre_homme)->sum(),
-                        'femme' => $orgs->map(fn ($item) => $item->nombre_femme)->sum(),
+                        'homme' => $orgs->map(fn($item) => $item->nombre_homme)->sum(),
+                        'femme' => $orgs->map(fn($item) => $item->nombre_femme)->sum(),
                     ];
                     return $prev;
                 }, []);
@@ -172,11 +172,11 @@ class PersonneStatController extends Controller
             'data' => $items,
             'headers' => array_merge(
                 [['nom' => 'Région', 'code' => 'nom']],
-                $typesOrganisations->map(fn ($item) => ['nom' => $item->membre, 'code' => $item->code])->toArray(),
+                $typesOrganisations->map(fn($item) => ['nom' => $item->membre, 'code' => $item->code])->toArray(),
                 [['nom' => 'Effectif', 'code' => 'cumul']]
             ),
             'headers_2' => array_merge(
-                $typesOrganisations->flatMap(fn ($item) => [
+                $typesOrganisations->flatMap(fn($item) => [
                     ['nom' => "Homme", 'code' => $item->id . "_homme"],
                     ['nom' => "Femme", 'code' => $item->id . "_femme"]
                 ])->toArray(),
@@ -186,8 +186,8 @@ class PersonneStatController extends Controller
         ];
     }
 
-    public function cotisationScoutByRegion()
+    public function getStatCotisation()
     {
-        return $this->personneStatService->cotisationByScoutAndRegion();
+        return $this->personneStatService->getStatCotisation();
     }
 }

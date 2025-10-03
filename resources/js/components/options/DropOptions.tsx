@@ -16,35 +16,28 @@ type DropOptionProps = {
   menu?: boolean;
 };
 
-const CustomToggle = forwardRef(
-  ({ onClick, variant = "default", menu = true }: any, ref) => (
-    <Button
-      // @ts-ignore
-      ref={ref}
-      onClick={(e) => {
-        e.preventDefault();
-        onClick(e);
-      }}
-      variant={variant}
-    >
-      {menu ? (
-        <Icon.ThreeDotsVertical />
-      ) : (
-        <>
-          <span className="d-none d-sm-inline me-1">Actions</span>
-          <Icon.ChevronDown />
-        </>
-      )}
-    </Button>
-  )
-);
+const CustomToggle = forwardRef(({ onClick, variant = "default", menu = true }: any, ref) => (
+  <Button
+    // @ts-ignore
+    ref={ref}
+    onClick={(e) => {
+      e.preventDefault();
+      onClick(e);
+    }}
+    variant={variant}
+  >
+    {menu ? (
+      <Icon.ThreeDotsVertical />
+    ) : (
+      <>
+        <span className="d-none d-sm-inline me-1">Actions</span>
+        <Icon.ChevronDown />
+      </>
+    )}
+  </Button>
+));
 
-export const DropOption: FC<DropOptionProps> = ({
-  actions,
-  onSelect,
-  variant = "default",
-  menu,
-}) => {
+export const DropOption: FC<DropOptionProps> = ({ actions, onSelect, variant = "default", menu }) => {
   return (
     <>
       <Dropdown>
@@ -52,12 +45,7 @@ export const DropOption: FC<DropOptionProps> = ({
         <Dropdown.Menu className="topbar-dropdown-menu border shadow-lg">
           {actions.map((item, i) => (
             <Fragment key={item.code}>
-              <Dropdown.Item
-                as="button"
-                className="px-3"
-                onClick={() => onSelect(item.code)}
-                disabled={item.disabled}
-              >
+              <Dropdown.Item as="button" className="px-3" onClick={() => onSelect(item.code)} disabled={item.disabled}>
                 <item.Icon size="1.1rem" className="me-1" />
                 <span className="fw-semibold">{item.label}</span>
                 <div className="fw-light text-muted">{item.description}</div>

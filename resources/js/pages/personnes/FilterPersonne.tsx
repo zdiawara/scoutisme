@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { genreApi } from "api/index";
-import { DatePicker, SelectFonction, SelectOrganisation, SelectRefFormation, SelectVille, TextInput } from "components";
+import { SelectFonction, SelectOrganisation, SelectRefFormation, SelectVille, TextInput } from "components";
 import { withFilterForm } from "hoc";
 import { useAuth } from "hooks";
 import { FC } from "react";

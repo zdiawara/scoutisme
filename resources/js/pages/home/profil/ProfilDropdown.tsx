@@ -49,9 +49,9 @@ export const ProfilDropdown = () => {
                 className={`dropdown-item ${i === ACTIONS.length - 1 ? "" : "border-bottom"}`}
                 key={item.code}
               >
-                <item.Icon className="me-1" />
-                <span>{item.label}</span>
-                <span className="text-muted fw-light d-block">{item.description}</span>
+                <item.Icon size="1.1rem" className="me-1" />
+                <span className="fw-semibold">{item.label}</span>
+                <div className="fw-light text-muted">{item.description}</div>
               </Link>
             ))}
           </div>

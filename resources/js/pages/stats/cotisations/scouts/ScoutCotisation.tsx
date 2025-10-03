@@ -3,17 +3,15 @@ import { statApi } from "api";
 import { Button } from "react-bootstrap";
 import { DashBoardWrapper } from "../../common";
 import { ScoutCotisationList } from "./ScoutCotisationList";
+import { FC } from "react";
 
-export const ScoutCotisation = () => {
-  const query = useQuery({
-    queryKey: ["dash_scouts_cotisations_regions"],
-    queryFn: async () => await statApi.personnes.cotisationScoutByRegion(),
-  });
+type ScoutCotisationProps = {
+  data: Array<Record<string, any>>;
+  headers: Array<{ nom: string; code: string }>;
+  headers_2: Array<{ nom: string; code: string }>;
+};
 
-  if (query.isLoading || !query.data) {
-    return null;
-  }
-
+export const ScoutCotisation: FC<ScoutCotisationProps> = ({ data, headers, headers_2 }) => {
   return (
     <DashBoardWrapper defaultActiveKey="liste">
       {/* <DashBoardDefaultHeader titre="Etat cotisation des scouts" />
@@ -37,11 +35,7 @@ export const ScoutCotisation = () => {
         Exporter
       </Button>
       <h4 className="fs-5 fw-regular mt-1 mb-3">Cotisation des scouts</h4>
-      <ScoutCotisationList
-        colonneNames={query.data?.headers}
-        etatCotisationNames={query.data?.headers_2}
-        data={query.data?.data}
-      />
+      <ScoutCotisationList colonneNames={headers} etatCotisationNames={headers_2} data={data} />
     </DashBoardWrapper>
   );
 };

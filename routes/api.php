@@ -76,7 +76,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/stats/organisations', [OrganisationStatController::class, 'countAll']);
     Route::get('/stats/scouts/regions', [PersonneStatController::class, 'statByRegion']);
     Route::get('/stats/scouts/genres', [PersonneStatController::class, 'scoutByGenre']);
-    Route::get('/stats/scouts/cotisations', [PersonneStatController::class, 'cotisationScoutByRegion']);
+    Route::get('/stats/cotisations', [PersonneStatController::class, 'getStatCotisation']);
 
     Route::apiResource('users',  UserController::class);
     Route::apiResource('roles',  RoleController::class);

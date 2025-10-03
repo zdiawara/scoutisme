@@ -1,61 +1,31 @@
 import { ScoutCotisation } from "./scouts";
-
-// const TABS = [
-//   {
-//     label: "Scout",
-//     code: "scouts",
-//     description: "Cotisation des scouts par région",
-//   },
-//   {
-//     label: "Adulte",
-//     code: "adultes",
-//     description: "Etat de cotisations des adultes",
-//   },
-// ];
+import { useQuery } from "@tanstack/react-query";
+import { statApi } from "api/stats";
+import { CotisationAdulte } from "./adulte";
+import { Col, Row } from "react-bootstrap";
 
 const CotisationDashbord = () => {
-  // const [page, setPage] = useState<string>("scouts");
+  const query = useQuery({
+    queryKey: ["stats_cotisations"],
+    queryFn: async () => await statApi.personnes.statCotisation(),
+  });
 
-  // const renderContent = () => {
-  //   switch (page) {
-  //     case "scouts":
-  //       return <ScoutCotisation />;
-  //     default:
-  //       return null;
-  //   }
-  // };
+  if (query.isLoading || !query.data) {
+    return null;
+  }
 
-  // return (
-  //   <Row className="mt-3">
-  //     <Col xs={3}>
-  //       <Card>
-  //         <Card.Header className="bg-light fw-bold text-dark shadow-sm">Cotisation par région</Card.Header>
-  //         <Card.Body className="p-1">
-  //           <ListGroup defaultActiveKey="#link1">
-  //             {TABS.map((item) => (
-  //               <ListGroup.Item
-  //                 key={item.code}
-  //                 className={classNames("border-0 rounded", {
-  //                   active: item.code === page,
-  //                 })}
-  //                 action
-  //                 onClick={() => setPage(item.code)}
-  //               >
-  //                 <span className="fw-bold">{item.label}</span>
-  //                 <div className="text-muted">{item.description}</div>
-  //               </ListGroup.Item>
-  //             ))}
-  //           </ListGroup>
-  //         </Card.Body>
-  //       </Card>
-  //     </Col>
-
-  //     <Col xs={9}>{renderContent()}</Col>
-  //   </Row>
-  // );
   return (
     <>
-      <ScoutCotisation />
+      <Row>
+        <Col xs={12} sm={6}>
+          <CotisationAdulte data={query.data.adultes.data} header={query.data.adultes.header} />
+        </Col>
+      </Row>
+      <ScoutCotisation
+        data={query.data.scouts.data}
+        headers={query.data.scouts.headers}
+        headers_2={query.data.scouts.headers_2}
+      />
     </>
   );
 };

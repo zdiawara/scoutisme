@@ -17,7 +17,7 @@ class PersonneStatService
         $this->typeOrganisationService = $typeOrganisationService;
     }
 
-    public function cotisationByScoutAndRegion()
+    public function getStatCotisationScoutByRegion()
     {
         $data = collect(DB::select("SELECT
                 parent.nom,
@@ -158,6 +158,86 @@ class PersonneStatService
                     'code' => 'effectif_non__a_jour'
                 ]]
             )
+        ];
+    }
+
+
+    public function getStatCotisationAdulte()
+    {
+        $data = DB::select("SELECT
+            n.nom,
+            n.code,
+            SUM(
+                CASE
+                    WHEN c.etat = 'a_jour' THEN 1
+                    ELSE 0
+                END
+            ) as cotisation_a_jour,
+            SUM(
+                CASE
+                    WHEN c.etat = 'non_a_jour' THEN 1
+                    ELSE 0
+                END
+            ) as cotisation_non_a_jour
+        FROM
+            natures n
+            LEFT JOIN organisations o on o.nature_id = n.id
+            LEFT JOIN personnes p on p.organisation_id = o.id
+            LEFT JOIN cotisations c on c.personne_id = p.id
+        WHERE
+            c.annee = YEAR(NOW())
+            AND n.code in (
+                'national',
+                'groupe',
+                'region',
+                'unite'
+            )
+            AND p.type = 'adulte'
+            AND (
+                p.date_fin is null
+                or p.date_fin <= now()
+            )
+        GROUP BY
+            o.nature_id", []);
+
+        return $data;
+    }
+
+    public function getStatCotisation()
+    {
+        $statScout = $this->getStatCotisationScoutByRegion();
+        $statAdulte = collect($this->getStatCotisationAdulte());
+
+
+        $adulteData = [
+            'header' => [
+                'nom' => 'Etat',
+                'code' => 'etat',
+                'unite' => 'Unité',
+                'groupe' => 'Groupe',
+                'region' => 'Région',
+                'nationale' => 'Nationale',
+            ],
+            'data' => [
+                array_merge([
+                    'nom' => 'Cotisation à jour',
+                    'code' => 'cotisation_a_jour',
+                ], $statAdulte->flatMap(fn($item) => [
+                    $item->code => $item->cotisation_a_jour
+                ])->toArray()),
+
+                array_merge([
+                    'nom' => 'Cotisation non à jour',
+                    'code' => 'cotisation_non_a_jour',
+                ], $statAdulte->flatMap(fn($item) => [
+                    $item->code => $item->cotisation_non_a_jour
+                ])->toArray())
+            ]
+        ];
+
+        return [
+            'adultes' => $adulteData,
+            'scouts' => $statScout
         ];
     }
 }

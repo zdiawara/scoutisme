@@ -216,7 +216,7 @@ class PersonneStatService
                 'unite' => 'Unité',
                 'groupe' => 'Groupe',
                 'region' => 'Région',
-                'nationale' => 'Nationale',
+                'national' => 'National     ',
             ],
             'data' => [
                 array_merge([

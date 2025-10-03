@@ -9,7 +9,7 @@ export type CotisationAdulteDataItem = {
   unite: number;
   groupe: number;
   region: number;
-  notional: number;
+  national: number;
 };
 
 export type CotisationAdulteHeader = {
@@ -18,7 +18,7 @@ export type CotisationAdulteHeader = {
   unite: string;
   groupe: string;
   region: string;
-  nationale: string;
+  national: string;
 };
 
 type CotisationAdulteProps = {

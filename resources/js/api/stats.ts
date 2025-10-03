@@ -16,9 +16,9 @@ type AdulteScout = {
     unite: number;
     groupe: number;
     region: number;
-    notional: number;
+    national: number;
   }>;
-  header: { nom: string; code: string; unite: string; groupe: string; region: string; nationale: string };
+  header: { nom: string; code: string; unite: string; groupe: string; region: string; national: string };
 };
 
 export const statApi = {

@@ -16,17 +16,17 @@ export const ListAdulteCotisation: FC<ListAdulteCotisationProps> = ({ header, da
           <th className="text-center">{header.unite}</th>
           <th className="text-center">{header.groupe}</th>
           <th className="text-center">{header.region}</th>
-          <th className="text-center">{header.nationale}</th>
+          <th className="text-center">{header.national}</th>
         </tr>
       </DashBoardTableHead>
       <DashBoardTableBody>
         {data?.map((item) => (
           <tr key={item.code}>
             <DashBoardTableFirstCell value={item.nom} />
-            <DashBoardTableFirstCell value={item.unite} />
-            <DashBoardTableFirstCell value={item.groupe} />
-            <DashBoardTableFirstCell value={item.region} />
-            <DashBoardTableFirstCell value={item.unite} />
+            <DashBoardTableFirstCell value={item.unite || 0} />
+            <DashBoardTableFirstCell value={item.groupe || 0} />
+            <DashBoardTableFirstCell value={item.region || 0} />
+            <DashBoardTableFirstCell value={item.national || 0} />
           </tr>
         ))}
       </DashBoardTableBody>

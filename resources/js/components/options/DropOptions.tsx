@@ -41,7 +41,7 @@ export const DropOption: FC<DropOptionProps> = ({ actions, onSelect, variant = "
   return (
     <Dropdown>
       <Dropdown.Toggle variant={variant} menu={menu} as={CustomToggle} />
-      <Dropdown.Menu className="topbar-dropdown-menu border shadow-lg">
+      <Dropdown.Menu align="end" className="topbar-dropdown-menu border shadow-lg">
         {actions.map((item, i) => (
           <Fragment key={item.code}>
             <Dropdown.Item as="button" className="px-3" onClick={() => onSelect(item.code)} disabled={item.disabled}>

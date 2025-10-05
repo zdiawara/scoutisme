@@ -59,7 +59,7 @@ export const CarteRecto: FC<CarteRectoProps> = ({ carte, photo }) => {
                       width: "85px",
                       position: "absolute",
                       top: 0,
-                      left: 0,
+                      right: 0,
                       zIndex: 10,
                     }}
                   />

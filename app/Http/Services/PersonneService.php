@@ -124,6 +124,14 @@ class PersonneService
             ];
         }
 
+        if (!isset($personne->photo) ||  $personne->photo == null || $personne->photo == "") {
+            return [
+                'message' => "Ajoutez une photo afin de pouvoir télécharger la carte d’adhésion.",
+                'date' => [],
+            ];
+        }
+
+
         $organisation = $personne->organisation;
 
 

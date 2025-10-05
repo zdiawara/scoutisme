@@ -1,11 +1,11 @@
-import { DatePicker, SelectGenre, TextInput } from "components";
+import { DatePicker, SelectGenre, TextInput, ToggleGenre } from "components";
 import { FC } from "react";
-import { fonctionApi, personneApi } from "api";
+import { fonctionApi, genreApi, personneApi } from "api";
 import { OrganisationResource } from "types/organisation.type";
 import { QUERY_KEY } from "utils/constants";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { FonctionResource, TypePersonne } from "types/personne.type";
+import { FonctionResource, GenreResource, TypePersonne } from "types/personne.type";
 import { toast } from "react-toastify";
 import { buildMessageError, NotificationError, NotificationSuccess } from "utils/notification";
 import { Button, Col, Modal, Row } from "react-bootstrap";
@@ -16,10 +16,10 @@ import { selectHelper } from "utils/functions";
 import { DateFormater } from "utils/DateUtils";
 import { SubmitButton } from "components/buttons";
 
-export const schema = yup.object({
+const schema = yup.object({
   nom: yup.string().required().nullable(),
   prenom: yup.string().required().nullable(),
-  genre: yup.object().required().nullable(),
+  genre: yup.string().required().nullable(),
   date_debut: yup.date().required().nullable(),
 });
 
@@ -32,7 +32,7 @@ const creerScout = async (personneInput: Record<string, any>, organisationId: st
   const body = {
     nom: personneInput.nom,
     prenom: personneInput.prenom,
-    genre_id: selectHelper.getValue(personneInput.genre),
+    genre_id: personneInput.genre,
     type: TypePersonne.scout,
     attribution: {
       organisation_id: organisationId,
@@ -104,7 +104,7 @@ export const CreerScout: FC<Props> = ({ closeModal, organisation }) => {
                 <TextInput label="Prenom" name="prenom" isRequired />
               </Col>
               <Col xs={12}>
-                <SelectGenre name="genre" label="Genre" placeholder="" isRequired />
+                <ToggleGenre name="genre" label="Genre" />
               </Col>
               <Col xs={12}>
                 <DatePicker name="date_debut" label="Date debut" useHookForm required />

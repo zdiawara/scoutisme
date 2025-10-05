@@ -137,6 +137,11 @@ class PaiementController extends Controller
         return new PaiementResource($paiement);
     }
 
+    public function validerEnMasse(Request $request)
+    {
+        $this->paiementService->validerEnMasse($request->all());
+    }
+
     public function rejeter(Paiement $paiement, Request $request)
     {
         $paiement = $this->paiementService->rejeter($paiement, $request->all());

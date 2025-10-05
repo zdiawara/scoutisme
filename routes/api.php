@@ -69,6 +69,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::apiResource('cotisations',  CotisationController::class);
     Route::apiResource('paiements',  PaiementController::class);
     Route::put('/paiements/{paiement}/valider', [PaiementController::class, 'valider']);
+    Route::post('/paiements/valider-en-masse', [PaiementController::class, 'validerEnMasse']);
     Route::put('/paiements/{paiement}/rejeter', [PaiementController::class, 'rejeter']);
     Route::get('/paiements/{paiement}/recus', [PaiementController::class, 'telechargerRecu']);
 

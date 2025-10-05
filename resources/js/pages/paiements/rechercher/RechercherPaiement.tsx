@@ -15,6 +15,7 @@ import { SearchToolbar } from "pages/common/toolbar";
 import useToggle from "hooks/useToggle";
 import { FilterPaiement } from "../form";
 import { LoaderSpinner } from "components/loader";
+import { SelectItem } from "types/form.type";
 
 const parseParams = (searchParams: URLSearchParams) => {
   const etat = searchParams.get("etat");
@@ -29,13 +30,21 @@ const parseParams = (searchParams: URLSearchParams) => {
   };
 };
 
-const buildRequestParams = (filter: Record<string, any>) => {
+interface RequestFilter {
+  etat?: string | SelectItem;
+  search?: string;
+  page?: string;
+  size?: string;
+  sort?: string;
+}
+
+const buildRequestParams = (filter: RequestFilter) => {
   return {
     etat: selectHelper.getValueFromJson(filter.etat),
 
     search: filter.search,
-    page: parseInt(filter.page) || 1,
-    size: parseInt(filter.size) || 10,
+    page: parseInt(filter.page as string) || 1,
+    size: parseInt(filter.size as string) || 10,
     sort: filter.sort || "created_at,asc",
   };
 };
@@ -73,7 +82,7 @@ const RechercherPaiement: FC = () => {
 
   return (
     <>
-      <Header title="Paiements" right={<RechercherPaiementActions params={buildRequestParams(search.queryParams)} />} />
+      <Header title="Paiements" right={<RechercherPaiementActions />} />
 
       <ListGroup className="mt-4">
         <SearchToolbar

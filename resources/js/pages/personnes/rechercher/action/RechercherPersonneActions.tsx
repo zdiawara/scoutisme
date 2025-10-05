@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { ExportPersonneModal } from "pages/personnes/modal";
 import { EnvoyerMailModal } from "pages/personnes/modal/EnvoyerMailModal";
 import { useDroits } from "hooks/useDroits";
-import { DropOption } from "components/options/DropOptions";
+import { DropOption } from "components/options";
 
 export const RechercherPersonneActions = ({ params }: { params: Record<string, any> }) => {
   const [action, setAction] = useState<string | undefined>();

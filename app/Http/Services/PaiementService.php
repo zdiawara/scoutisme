@@ -51,14 +51,36 @@ class PaiementService
         return $paiement;
     }
 
+    public function validerEnMasse(array $body)
+    {
+        DB::beginTransaction();
+        collect($body)
+            ->chunk(2)
+            ->each(function ($paiements) {
+
+                $paiementsIds = collect($paiements)
+                    ->map(fn($paiement) => $paiement['id'])
+                    ->toArray();
+
+                Paiement::whereIn('id', $paiementsIds)
+                    ->each(fn($paiement) => $this->validerPaiement($paiement));
+            });
+        DB::commit();
+    }
+
     public function valider(Paiement $paiement)
     {
-
-        if ($paiement->etat != 'en_attente') {
-            throw new BadRequestException("Impossible de valider ce paiement");
-        }
-
         DB::beginTransaction();
+        $this->validerPaiement($paiement);
+        DB::commit();
+        return $paiement;
+    }
+
+    public function validerPaiement(Paiement $paiement)
+    {
+        if ($paiement->etat != 'en_attente') {
+            throw new BadRequestException("Impossible de valider le paiement " . $paiement->id);
+        }
 
         $valideur = Auth()->user();
 
@@ -96,10 +118,6 @@ class PaiementService
                 ]
             ]
         ]);
-
-        DB::commit();
-
-        return $paiement;
     }
 
 

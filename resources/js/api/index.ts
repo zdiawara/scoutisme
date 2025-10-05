@@ -144,6 +144,11 @@ class PaiementApi extends CrudService {
     return response;
   }
 
+  public async validerEnMasse(body: Array<{ id: string }>) {
+    const response = await requestPost<{ data: PaiementResource }>(`${this.base}/valider-en-masse`, body);
+    return response;
+  }
+
   public async rejeter(paiementId: string, body: any) {
     const response = await requestPut<{ data: PaiementResource }>(`${this.base}/${paiementId}/rejeter`, body);
     return response;

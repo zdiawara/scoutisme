@@ -3,8 +3,8 @@ import { useMutation } from "@tanstack/react-query";
 import { FC, ReactNode } from "react";
 import { Alert, Button, ModalHeaderProps, ModalProps, Spinner } from "react-bootstrap";
 import { FormProvider, useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import { ButtonLabel } from "types/request.type";
+import { notifier } from "utils/notification";
 import { AnyObjectSchema } from "yup";
 
 type HocCompomentProps = {
@@ -57,12 +57,14 @@ export function withMutationForm(Wrapper: FC<WrapperV2Props>, schema?: AnyObject
         return onSave(data);
       },
       onSuccess: (r) => {
-        onSuccess && onSuccess(r?.data);
-        toast("Modifications enregistrées !", {
-          type: toast.TYPE.SUCCESS,
-          autoClose: 5000,
-          position: "top-right",
-        });
+        if (onSuccess) {
+          onSuccess(r?.data);
+        } else {
+          notifier.succes("Modifications enregistrées !");
+        }
+      },
+      onError: (error: any) => {
+        notifier.erreur(error.message);
       },
     });
 

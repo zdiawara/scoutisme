@@ -7,6 +7,7 @@ import { PersonneResource } from "types/personne.type";
 import { TelechargerCarteModal } from "./TelechargerCarteModal";
 import { CreateUserFromPersonneModal } from "pages/personnes/modal/CreateUserFromPersonneModal";
 import { PersonneUtils } from "utils/PersonneUtils";
+import { TransfererScout } from "pages/transferts";
 
 type Props = {
   personne: PersonneResource;
@@ -41,13 +42,13 @@ export const ConsulterPersonneActions = ({ personne }: Props) => {
         Icon: Icon.Download,
         visible: droits.personne.affecter(personne),
       },
-      // {
-      //   label: "Transferer",
-      //   description: "Transferer vers une autre unité",
-      //   code: "transferer",
-      //   Icon: Icon.Send,
-      //   visible: true,
-      // },
+      {
+        label: "Transferer",
+        description: "Transferer le scout vers une autre unité",
+        code: "transferer",
+        Icon: Icon.Send,
+        visible: droits.personne.affecter(personne) && PersonneUtils.isScout(personne),
+      },
       {
         label: "Accès à l'application",
         description: "Donner un accès à l'application à cette personne",
@@ -73,6 +74,7 @@ export const ConsulterPersonneActions = ({ personne }: Props) => {
       <DropOption actions={menus} onSelect={onSelect} menu={false} variant="secondary" />
       {action === "carte" && <TelechargerCarteModal personne={personne} closeModal={closeModal} />}
       {action === "acces" && <CreateUserFromPersonneModal closeModal={closeModal} personne={personne} />}
+      {action === "transferer" && <TransfererScout scout={personne} closeModal={closeModal} />}
     </>
   );
 };

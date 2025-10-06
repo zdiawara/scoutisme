@@ -25,6 +25,7 @@ const fetchScouts = async ({ queryKey }: any) => {
   const params = {
     organisationId: queryKey[1],
     fonctionCode: "scout",
+    actif: "true",
   };
 
   const response = await attributionApi.findAll<AttributionResource>(params);
@@ -61,7 +62,7 @@ export const ListOrganisationScout: FC<Props> = ({ organisation }) => {
       return (
         <>
           {scouts?.map(({ personne }) => (
-            <ListGroup.Item className="d-flex justify-content-between align-items-start" key={organisation.id}>
+            <ListGroup.Item className="d-flex justify-content-between align-items-start" key={personne.id}>
               <ScoutItem personne={personne} />
             </ListGroup.Item>
           ))}

@@ -11,6 +11,7 @@ use App\Http\Services\CotisationService;
 use App\Http\Services\MailService;
 use App\Http\Services\MessageService;
 use App\Http\Services\PersonneService;
+use App\Http\Services\TransfertService;
 use App\Http\Services\UserService;
 use App\ModelFilters\PersonneFilter;
 use App\Models\Attribution;
@@ -365,5 +366,12 @@ class PersonneController extends Controller
         }
 
         return response()->json(['message' => 'No image uploaded'], 400);
+    }
+
+
+
+    public function transferer(Request $request, Personne $personne, TransfertService $transfertService)
+    {
+        $transfertService->create($personne, $request->all());
     }
 }

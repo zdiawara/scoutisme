@@ -45,7 +45,7 @@ const buildRequestParams = (filter: RequestFilter) => {
     search: filter.search,
     page: parseInt(filter.page as string) || 1,
     size: parseInt(filter.size as string) || 10,
-    sort: filter.sort || "created_at,asc",
+    sort: filter.sort || "created_at,desc",
   };
 };
 

@@ -1,6 +1,5 @@
 import {
   AttributionResource,
-  AuthPersonne,
   CotisationResource,
   OrganisationAttribution,
   PaiementResource,
@@ -87,6 +86,11 @@ class PersonneApi extends CrudService {
         },
       },
     });
+    return response;
+  }
+
+  public async transferer(personneId: string, body: { codeUniteArrivee: string }) {
+    const response = await requestPost<{ data: PersonneResource }>(`${this.base}/${personneId}/transferer`, body);
     return response;
   }
 }

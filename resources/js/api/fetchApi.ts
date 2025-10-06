@@ -82,6 +82,9 @@ export const fetchApi = async <T>(requestData: RequestData): Promise<T> => {
       return response as any;
     }
     if ([401, 403].includes(response.status)) {
+      const pathname = window.location.pathname;
+      const search = window.location.search;
+      localStorage.setItem("from", pathname + search);
       window.location.href = "/auth/login";
     }
     return Promise.reject(buildErrors(response.status, data));

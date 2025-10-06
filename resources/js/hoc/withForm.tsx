@@ -83,7 +83,7 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
             message = e.message || e.errors.message;
           } else {
             console.error(e);
-            message = "Une erreur technique est survenue lors de l'enregistrement";
+            message = e.message || "Une erreur technique est survenue lors de l'enregistrement";
           }
 
           notifier.erreur(message);
@@ -100,10 +100,10 @@ export function withForm(Wrapper: FC<WrapperProps>, schema?: AnyObjectSchema) {
     const renderButtons = () => {
       return (
         <>
-          <Button className="me-1" variant="danger" size="sm" onClick={goBack || _goBack}>
+          <Button className="me-1" variant="danger" onClick={goBack || _goBack}>
             Annuler
           </Button>
-          <Button onClick={methods.handleSubmit(onSubmit, onError)} variant="primary" size="sm">
+          <Button onClick={methods.handleSubmit(onSubmit, onError)} variant="primary">
             Enregistrer
           </Button>
         </>

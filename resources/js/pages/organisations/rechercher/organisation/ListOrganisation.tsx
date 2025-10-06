@@ -15,7 +15,7 @@ export const ListOrganisation: FC<Props> = ({ organisations }) => {
   return (
     <>
       {organisations?.map((organisation) => (
-        <ListGroup.Item className="d-flex justify-content-between align-items-start px-2 px-sm-4" key={organisation.id}>
+        <ListGroup.Item className="d-flex justify-content-between align-items-start" key={organisation.id}>
           <OrganisationItem organisation={organisation} />
         </ListGroup.Item>
       ))}

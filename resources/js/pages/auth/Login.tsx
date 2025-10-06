@@ -52,7 +52,11 @@ const Login = () => {
               <AuthForm
                 onSave={logUser}
                 onFinished={() => {
-                  navigate(LINKS.home);
+                  const from = localStorage.getItem("from");
+                  if (from) {
+                    localStorage.removeItem("from");
+                  }
+                  navigate(from || LINKS.home);
                 }}
                 withNotification={false}
               />

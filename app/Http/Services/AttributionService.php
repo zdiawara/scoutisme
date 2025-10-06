@@ -29,7 +29,7 @@ class AttributionService
                     ->orWhere('date_fin', '>=', now());
             })
             ->update([
-                'date_fin' => $body['date_debut']
+                'date_fin' => $body['date_debut'] ?? now()
             ]);
 
         // Création de la nouvelle attribution
@@ -54,11 +54,11 @@ class AttributionService
         return $attribution;
     }
 
-    public function cloturer(Attribution $attribution, array $body)
+    public function cloturer(Attribution $attribution, array $body = [])
     {
         DB::beginTransaction();
         $attribution->update([
-            'date_fin' => collect($body)->get('date_fin')
+            'date_fin' => collect($body)->get('date_fin', now())
         ]);
         $this->updatePersonne($attribution);
         DB::commit();
@@ -85,5 +85,20 @@ class AttributionService
             'date_debut' => null,
             'date_fin' => null,
         ]);
+    }
+
+
+    public function findResponsable(string $organisationId): Attribution  | null
+    {
+        return Attribution::where('organisation_id', $organisationId)
+            ->where('date_debut', '<=', now())
+            ->where(function ($q) {
+                $q->whereNull('date_fin')
+                    ->orWhere('date_fin', '>=', now());
+            })
+            ->whereHas('fonction', function ($query) {
+                $query->where('responsable', true);
+            })
+            ->first();
     }
 }

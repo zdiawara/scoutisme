@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\PersonneController;
 use App\Http\Controllers\Api\PersonneStatController;
 use App\Http\Controllers\Api\RefFormationController;
 use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\TransfertController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TypeOrganisationController;
@@ -36,6 +37,10 @@ use App\Http\Controllers\Api\VilleController;
 |
 */
 
+Route::post('/transferts/{transfert}/confirmer', [TransfertController::class, 'confirmer'])
+    ->name('transfert.confirmer')
+    ->middleware(['auth:sanctum', 'signed']);
+
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::apiResource('personnes', PersonneController::class);
     Route::get('/personnes/{personne}/cotisations', [PersonneController::class, 'readCotisation']);
@@ -52,6 +57,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/personnes/exports/csv', [PersonneController::class, 'exportPersonnes']);
     Route::get('/personnes_sans_fonction', [PersonneController::class, 'readPersonnesSansFonction']);
     Route::get('/personnes/{personne}/carte_membre', [PersonneController::class, 'carteMembre']);
+
+    Route::post('/personnes/{personne}/transferer', [PersonneController::class, 'transferer']);
 
     Route::apiResource('organisations', OrganisationController::class);
     Route::get('/organisations/{organisationId}/direction', [OrganisationController::class, 'readDirection']);

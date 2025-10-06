@@ -39,13 +39,15 @@ export const Layout = () => {
 
   const renderContent = () => {
     if (!user.verify) {
-      <Alert className="mt-5" variant="danger">
-        <Alert.Heading>Problème de vérification</Alert.Heading>
-        <p>Votre adresse mail n'est pas vérifiée.</p>
-        <p className="mb-0">
-          <strong>Merci de contacter l'administrateur.</strong>
-        </p>
-      </Alert>;
+      return (
+        <Alert className="mt-5" variant="danger">
+          <Alert.Heading>Problème de vérification</Alert.Heading>
+          <p>Votre adresse mail n'est pas vérifiée.</p>
+          <p className="mb-0">
+            <strong>Merci de contacter l'administrateur.</strong>
+          </p>
+        </Alert>
+      );
     }
     const isAdmin = user.roles?.some((e) => e.code === "admin");
     if ((!user.personne?.fonction || !user.personne?.organisation) && !isAdmin) {

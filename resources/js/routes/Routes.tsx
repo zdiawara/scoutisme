@@ -76,6 +76,8 @@ const UpdatePassword = Loadable(lazy(() => import("pages/auth/UpdatePassword")))
 
 const MonCompte = Loadable(lazy(() => import("pages/comptes/MonCompte")));
 
+const ConfirmerTransfert = Loadable(lazy(() => import("pages/transferts/ConfirmerTransfert")));
+
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -149,6 +151,8 @@ export const router = createBrowserRouter(
         </Route>
 
         <Route element={<MonCompte />} path="mon-compte" />
+
+        <Route element={<ConfirmerTransfert />} path="/transferts/:id/confirmer" />
 
         <Route path={LINKS.parametres.base}>
           <Route index element={<Parametres />} />

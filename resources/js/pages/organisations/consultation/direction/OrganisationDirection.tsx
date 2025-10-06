@@ -28,7 +28,7 @@ export const OrganisationDirection: FC<Props> = ({ organisation }) => {
 
   const { data: direction } = useQuery({
     queryKey: [QUERY_KEY.direction, organisation.id],
-    queryFn: () => organisationApi.findDirection(organisation.id, { typeId }),
+    queryFn: () => organisationApi.findDirection(organisation.id, { typeId, actif: "true" }),
   });
 
   const data = useMemo(() => {

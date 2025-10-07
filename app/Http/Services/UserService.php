@@ -109,4 +109,10 @@ class UserService
         DB::commit();
         return $user;
     }
+
+    public function findByPersonneId(string $personneId): User | null
+    {
+        return User::where('personne_id', $personneId)
+            ->first();
+    }
 }

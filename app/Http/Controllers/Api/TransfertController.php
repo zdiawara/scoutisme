@@ -18,11 +18,10 @@ class TransfertController extends Controller
         $this->transfertService = $transfertService;
     }
 
-
-
     public function confirmer(Transfert $transfert)
     {
+        $this->authorize('confirmTransfer', $transfert);
+
         $this->transfertService->confirmer($transfert);
-        return [];
     }
 }

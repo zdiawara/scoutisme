@@ -30,6 +30,8 @@ function buildErrors(status: number, data?: any) {
     results = data ? formatErrors(data.errors) : { validation: "error de validation des données" };
   } else if ([409, 401, 404, 400].includes(status)) {
     results = { message: data.message || "Conflict" };
+  } else if ([403].includes(status)) {
+    results = { message: data.message || "Conflict" };
   } else {
     results = {
       message: data.message || "Impossible de communiquer avec la plateforme !",
@@ -81,7 +83,7 @@ export const fetchApi = async <T>(requestData: RequestData): Promise<T> => {
       if (requestData.type === "json") return data as T;
       return response as any;
     }
-    if ([401, 403].includes(response.status)) {
+    if ([401].includes(response.status)) {
       const pathname = window.location.pathname;
       const search = window.location.search;
       localStorage.setItem("from", pathname + search);

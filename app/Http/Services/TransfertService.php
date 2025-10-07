@@ -94,6 +94,8 @@ class TransfertService
 
     public function confirmer(Transfert $transfert)
     {
+
+
         if ($transfert->etat == 'accepte') {
             throw new BadRequestException("Ce transfert est déjà accepté.");
         }

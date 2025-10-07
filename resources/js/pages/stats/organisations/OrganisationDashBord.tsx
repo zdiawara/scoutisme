@@ -24,7 +24,7 @@ const Item: FC<ItemProps> = ({ title, rows, nature }) => {
     <>
       <Card body>
         <Button variant="light" size="sm" className="float-end">
-          Exporter <i className="mdi mdi-download ms-1"></i>
+          Exporter
         </Button>
         <h4 className="fs-5 fw-regular mt-1 mb-3">{title}</h4>
 

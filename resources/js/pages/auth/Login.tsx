@@ -1,11 +1,12 @@
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { withForm, WrapperProps } from "hoc/withForm";
 import { TextInput } from "components";
 import { FC } from "react";
 import { authApi } from "api/index";
 import { LINKS } from "utils/links";
 import { Link } from "react-router-dom";
+import { useAuth } from "hooks/useAuth";
 
 const Form: FC<WrapperProps> = ({ onSubmit }) => (
   <Row className="g-3">
@@ -35,10 +36,15 @@ export type UserData = {
 
 const Login = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const logUser = async (body: UserData) => {
     return await authApi.login(body);
   };
+
+  if (user) {
+    return <Navigate to={LINKS.home} />;
+  }
 
   return (
     <Container className="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5">

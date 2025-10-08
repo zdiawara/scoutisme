@@ -12,6 +12,8 @@ return new class extends Migration
     public function up(): void
     {
 
+        Schema::dropIfExists('transferts');
+
         Schema::create('transferts', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('numero')->unique();
@@ -27,7 +29,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('unite_depart_id')->references('id')->on('organisations');
-            $table->foreign('unite_destinatrice_id')->references('id')->on('organisations');
+            $table->foreign('unite_arrivee_id')->references('id')->on('organisations');
             $table->foreign('scout_id')->references('id')->on('personnes');
             $table->foreign('created_by')->references('id')->on('users');
             $table->foreign('modified_by')->references('id')->on('users');

@@ -190,4 +190,75 @@ class PersonneStatController extends Controller
     {
         return $this->personneStatService->getStatCotisation();
     }
+
+    public function getCotisationUnite(Organisation $unite)
+    {
+        $data =  collect(DB::select("SELECT c.etat, SUM(
+                    CASE
+                        WHEN c.etat = 'a_jour' THEN 1
+                        WHEN c.etat = 'non_a_jour' THEN 1
+                        ELSE 0
+                    END
+                ) as total
+            FROM personnes p
+                LEFT JOIN cotisations c on c.personne_id = p.id
+            WHERE
+                c.annee = YEAR(NOW())
+                AND p.type = 'scout'
+                AND (
+                    p.date_fin is null
+                    or p.date_fin <= now()
+                )
+                AND p.organisation_id = :uniteId
+            GROUP BY
+                c.etat", [
+            'uniteId' => $unite->id
+        ]));
+
+        return [
+            [
+                'nom' => 'A jour',
+                'code' => 'a_jour',
+                'total' => $data->filter(function ($item) {
+                    return $item->etat == 'a_jour';
+                })->first()->total ?? 0
+            ],
+            [
+                'nom' => 'Non à jour',
+                'code' => 'non_a_jour',
+                'total' => $data->filter(function ($item) {
+                    return $item->etat == 'non_a_jour';
+                })->first()->total ?? 0
+            ]
+        ];
+    }
+
+    public function getEffectifUnite(Organisation $unite)
+    {
+        return collect(DB::select("SELECT g.nom, g.code, SUM(
+                    CASE
+                        WHEN g.code = 'h' THEN 1
+                        WHEN g.code = 'f' THEN 1
+                        ELSE 0
+                    END
+                ) as total
+            FROM
+                personnes s
+                INNER JOIN organisations o on o.id = s.organisation_id
+                INNER JOIN genres g on g.id = s.genre_id
+            WHERE
+                s.organisation_id = :uniteId
+                AND s.type = 'scout'
+                AND (
+                    s.date_fin is null
+                    or s.date_fin <= now()
+                )
+            GROUP BY
+                s.genre_id", [
+            'uniteId' => $unite->id
+        ]))->map(function ($item) {
+            $item->nom = $item->code == 'h' ? 'Garçon' : 'Fille';
+            return $item;
+        })->toArray();
+    }
 }

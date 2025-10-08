@@ -86,6 +86,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/stats/scouts/genres', [PersonneStatController::class, 'scoutByGenre']);
     Route::get('/stats/cotisations', [PersonneStatController::class, 'getStatCotisation']);
 
+    Route::get('/stats/cotisations/unites/{unite}', [PersonneStatController::class, 'getCotisationUnite']);
+    Route::get('/stats/effectifs/unites/{unite}', [PersonneStatController::class, 'getEffectifUnite']);
+
     Route::apiResource('users',  UserController::class);
     Route::apiResource('roles',  RoleController::class);
     Route::apiResource('habilitations',  HabilitationController::class);

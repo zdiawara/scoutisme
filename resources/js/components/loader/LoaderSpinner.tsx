@@ -1,12 +1,16 @@
+import { FC } from "react";
 import { Spinner } from "react-bootstrap";
 
-export const LoaderSpinner = () => {
+type LoaderSpinnerProps = {
+  className?: string;
+};
+export const LoaderSpinner: FC<LoaderSpinnerProps> = ({ className }) => {
   return (
-    <>
+    <div className={className}>
       <Spinner className="me-1" size="sm" animation="grow" role="status">
-        <span className="visually-hidden">Loading...</span>
+        <span className="visually-hidden">Chargement...</span>
       </Spinner>
-      <span className="fw-light">chargement ...</span>
-    </>
+      <span className="fw-light">Chargement ...</span>
+    </div>
   );
 };

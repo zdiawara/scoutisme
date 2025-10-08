@@ -47,4 +47,24 @@ export const statApi = {
         adultes: AdulteScout;
       }>(`${base}/cotisations`),
   },
+
+  unites: {
+    effectif: (uniteId: string) =>
+      requestGet<
+        Array<{
+          nom: string;
+          code: string;
+          total: string;
+        }>
+      >(`${base}/effectifs/unites/${uniteId}`),
+
+    cotisation: (uniteId: string) =>
+      requestGet<
+        Array<{
+          nom: string;
+          code: string;
+          total: string;
+        }>
+      >(`${base}/cotisations/unites/${uniteId}`),
+  },
 };

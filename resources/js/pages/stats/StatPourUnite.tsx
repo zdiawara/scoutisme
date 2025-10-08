@@ -1,6 +1,6 @@
 import { Col, Nav, Row } from "react-bootstrap";
 import * as Icon from "react-bootstrap-icons";
-import { useState } from "react";
+import { FC, useState } from "react";
 
 import { CotisationScoutUnite, EffectifScoutUnite } from "./personnes/scouts";
 
@@ -22,7 +22,7 @@ const menus = [
   },
 ];
 
-const StatPourUnite = () => {
+const StatPourUnite: FC<{ uniteId: string }> = ({ uniteId }) => {
   const [page, setPage] = useState<Page>(Page.effectif);
 
   const onSelectPage = (pageSelected: Page) => () => {
@@ -51,8 +51,8 @@ const StatPourUnite = () => {
         </Col>
       </Row>
 
-      {page === Page.cotisation && <CotisationScoutUnite />}
-      {page === Page.effectif && <EffectifScoutUnite />}
+      {page === Page.cotisation && <CotisationScoutUnite uniteId={uniteId} />}
+      {page === Page.effectif && <EffectifScoutUnite uniteId={uniteId} />}
     </>
   );
 };

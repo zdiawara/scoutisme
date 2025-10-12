@@ -1,33 +1,44 @@
 import { useAuth } from "hooks/useAuth";
 import { Header } from "layout/Header";
 import { Utilisateur } from "pages/parametres/utilisateurs/view";
-import { ListGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import * as Icon from "react-bootstrap-icons";
+import { DropOption } from "components/options";
+import { useState } from "react";
+
+const MENU = [
+  {
+    label: "Mot de passe",
+    description: "Modification mon mot de passe",
+    code: "mot_de_passe",
+    Icon: Icon.LockFill,
+  },
+];
 
 const MonCompte = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [, setAction] = useState<string | undefined>();
 
-  if (!user) return null;
+  const onSelect = (code: string) => {
+    if (code === "mot_de_passe") {
+      navigate("/update-password");
+    } else {
+      setAction(code);
+    }
+  };
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <>
-      <Header title="Mon compte" />
-
+      <Header
+        title="Mon compte"
+        right={<DropOption actions={MENU} onSelect={onSelect} menu={false} variant="secondary" />}
+      />
       <Utilisateur user={user} />
-
-      <ListGroup className="mb-2">
-        {/* <View.Toolbar icon={<Icon.Sliders size="1.2rem" className="me-1" />} label="Rôle" /> */}
-        <ListGroup.Item
-          as="button"
-          variant="danger"
-          onClick={() => {
-            navigate("/update-password");
-          }}
-        >
-          Modifier mot de passe
-        </ListGroup.Item>
-      </ListGroup>
     </>
   );
 };

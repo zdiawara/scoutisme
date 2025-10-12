@@ -1,7 +1,7 @@
 import { Header } from "layout/Header";
 import StatPourEquipeNationale from "./StatPourEquipeNationale";
 import { useDroits } from "hooks/useDroits";
-import { Alert, Container } from "react-bootstrap";
+import { Alert } from "react-bootstrap";
 import StatPourUnite from "./StatPourUnite";
 import { useAuth } from "hooks/useAuth";
 
@@ -22,7 +22,7 @@ const StatEquipeNationale = () => {
   return (
     <>
       <Header title="Statistiques" />
-      <Container className="mt-4">{renderContent()}</Container>
+      {renderContent()}
     </>
   );
 };

@@ -105,7 +105,7 @@ const OrganisationDashBord = () => {
   // };
 
   return (
-    <Container>
+    <>
       <Row className="g-3">
         {coutAllQuery.data
           .filter((e) => [NATURE.groupe, NATURE.region, NATURE.unite].includes(e.code))
@@ -147,7 +147,7 @@ const OrganisationDashBord = () => {
           />
         </Col>
       </Row>
-    </Container>
+    </>
   );
 };
 

@@ -3,7 +3,7 @@ import { OrganisationResource } from "types/organisation.type";
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "utils/constants";
 import { organisationApi } from "api";
-import { Form, ListGroup, Stack, Spinner } from "react-bootstrap";
+import { Form, ListGroup, Spinner } from "react-bootstrap";
 import { OrganisationItem } from "./organisation";
 import { View } from "components";
 import { SousOrganisationActions } from "./SousOrganisationActions";
@@ -48,7 +48,6 @@ export const SousOrganisation: FC<SousOrganisationProps> = ({ organisation }) =>
             placeholder="Rechercher ..."
             onChange={(e) => setSearchText(e.target.value)}
             value={searchText}
-            // size="sm"
           />
         </View.Toolbar>
         {query.isLoading ? (

@@ -1,7 +1,7 @@
-import { HookModalForm, SelectNature, SelectTypeOrganisation, SelectVille, TextInput, View } from "components";
+import { HookModalForm, SelectTypeOrganisation, SelectVille, TextInput, View } from "components";
 import { WrapperV2Props, withMutationForm } from "hoc";
 import { FC, Fragment, useEffect, useMemo } from "react";
-import { Col, ListGroup, Row } from "react-bootstrap";
+import { ButtonGroup, Col, Form, ListGroup, Row, ToggleButton } from "react-bootstrap";
 import { useFormContext } from "react-hook-form";
 import { natureApi, organisationApi } from "api";
 import { NatureResource, OrganisationResource } from "types/organisation.type";
@@ -11,12 +11,12 @@ import { organisationSchema } from "pages/organisations/form/organisationSchema"
 import { organisationConverter } from "pages/organisations/form";
 import { GeoAlt, InfoCircle } from "react-bootstrap-icons";
 
-const Form: FC<WrapperV2Props> = (props) => {
+const Formulaire: FC<WrapperV2Props> = (props) => {
   const { watch, setValue } = useFormContext();
   const codeNature = watch("nature")?.item?.code;
   const parentCodeNature = watch("parent.codeNature");
 
-  const { data: natures, isLoading } = useQuery({
+  const { data: natures } = useQuery({
     queryKey: [QUERY_KEY.natures],
     networkMode: "offlineFirst",
     queryFn: () => natureApi.findAll<NatureResource>(),
@@ -41,7 +41,7 @@ const Form: FC<WrapperV2Props> = (props) => {
   useEffect(() => {
     const listNatures = natures?.data.filter((n) => naturesAuthorized.includes(n.code));
 
-    if (!props.isEditMode && listNatures?.length === 1) {
+    if (listNatures && listNatures.length !== 0) {
       setValue("nature", {
         label: listNatures[0].nom,
         value: listNatures[0].id,
@@ -50,18 +50,52 @@ const Form: FC<WrapperV2Props> = (props) => {
     }
   }, [naturesAuthorized, props.isEditMode, natures?.data, setValue]);
 
+  // const selectNatureComponent = (
+  //   <SelectNature
+  //     name="nature"
+  //     label="Perimetre"
+  //     isClearable
+  //     isRequired
+  //     placeholder=""
+  //     requestParams={{
+  //       code: naturesAuthorized.join(";"),
+  //     }}
+  //     isDisabled={isLoading}
+  //   />
+  // );
+
   const selectNatureComponent = (
-    <SelectNature
-      name="nature"
-      label="Perimetre"
-      isClearable
-      isRequired
-      placeholder=""
-      requestParams={{
-        code: naturesAuthorized.join(";"),
-      }}
-      isDisabled={isLoading}
-    />
+    <Form.Group className="position-relative">
+      <Form.Label className="text-muted d-block text-uppercase fs-6">Perimetre</Form.Label>
+      <ButtonGroup>
+        {natures?.data
+          ?.filter((e) => naturesAuthorized.includes(e.code))
+          .map((nature) => {
+            const selected = watch("nature")?.value;
+            return (
+              <ToggleButton
+                key={nature.id}
+                id={nature.id}
+                type="checkbox"
+                variant={selected === nature.id ? "outline-secondary" : "outline-secondary"}
+                name="nature"
+                value={nature.id}
+                checked={selected === nature.id}
+                onChange={({ target: { checked, name } }) => {
+                  if (checked) {
+                    const item = natures.data.find((e) => e.id === nature.id)!;
+                    setValue(name, { label: item.nom, value: item.id, item });
+                  } else {
+                    setValue(name, null);
+                  }
+                }}
+              >
+                {nature.nom}
+              </ToggleButton>
+            );
+          })}
+      </ButtonGroup>
+    </Form.Group>
   );
 
   return (
@@ -69,30 +103,38 @@ const Form: FC<WrapperV2Props> = (props) => {
       <ListGroup>
         <View.Toolbar icon={<InfoCircle size="1.1rem" className="me-1" />} label="Information générale" />
         <ListGroup.Item>
-          <Row className="g-2">
-            {[NATURE.unite].includes(codeNature) ? (
+          <Row className="g-3">
+            {naturesAuthorized.length > 1 && <Col sm={12}>{selectNatureComponent}</Col>}
+            {[NATURE.unite].includes(codeNature) && (
               <Fragment>
-                <Col sm={6}>{selectNatureComponent}</Col>
-
-                <Col sm={6}>
+                <Col sm={12}>
                   <SelectTypeOrganisation
                     name="type"
-                    label="Type"
+                    label="Type d'unite"
                     isClearable
                     isRequired={codeNature === NATURE.unite}
                     isDisabled={codeNature !== NATURE.unite}
                     requestParams={{ nature_code: codeNature }}
-                    placeholder=""
+                    placeholder="Ex. Meute"
                   />
                 </Col>
               </Fragment>
-            ) : (
-              <Fragment>
-                <Col xs={12}>{selectNatureComponent}</Col>
-              </Fragment>
             )}
             <Col sm={12}>
-              <TextInput name="nom" label="Nom" isRequired />
+              <TextInput
+                name="nom"
+                label={`Nom ${
+                  codeNature === NATURE.unite
+                    ? "de l'unite"
+                    : codeNature === NATURE.groupe
+                    ? "du groupe"
+                    : codeNature === NATURE.region
+                    ? "de la region"
+                    : ""
+                }`}
+                isRequired
+                placeholder="Ex. Balaie Citoyen"
+              />
             </Col>
           </Row>
         </ListGroup.Item>
@@ -103,7 +145,7 @@ const Form: FC<WrapperV2Props> = (props) => {
         <ListGroup.Item>
           <Row className="g-2">
             <Col xs={12}>
-              <SelectVille name="ville" label="Ville" placeholder="" isClearable />
+              <SelectVille name="ville" label="Ville" placeholder="Ex. Ouagadougou" isClearable />
             </Col>
             <Col xs={12}>
               <TextInput name="adresse" label="Adresse" placeholder="Ex. Nom du quartier" />
@@ -115,7 +157,7 @@ const Form: FC<WrapperV2Props> = (props) => {
   );
 };
 
-const OrganisationMembreForm = withMutationForm(Form, organisationSchema);
+const OrganisationMembreForm = withMutationForm(Formulaire, organisationSchema);
 
 type SousOrganisationModalProps = {
   closeModal: () => void;
@@ -140,6 +182,7 @@ export const SousOrganisationModal: FC<SousOrganisationModalProps> = ({ closeMod
       subtitle={`La nouvelle sous organisation sera rattachée à ${organisation.nom}`}
       modalProps={{
         size: "lg",
+        scrollable: true,
       }}
       modalHeaderProps={{
         closeButton: false,

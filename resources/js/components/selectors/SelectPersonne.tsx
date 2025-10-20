@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { genreApi, personneApi } from "api";
-import { AsyncSelect } from "components/forms/Select";
+import { FetchSelect } from "components/forms/Select";
 import { FC } from "react";
 import { ButtonGroup, Form, ToggleButton } from "react-bootstrap";
 import { useFormContext } from "react-hook-form";
@@ -10,7 +10,7 @@ import { QUERY_KEY } from "utils/constants";
 
 export const SelectPersonne: FC<SelectProps> = ({ requestParams, ...props }) => {
   return (
-    <AsyncSelect
+    <FetchSelect
       {...props}
       fetchOptions={async () => {
         const { data } = await personneApi.findAll<PersonneResource>(requestParams);
@@ -26,7 +26,7 @@ export const SelectPersonne: FC<SelectProps> = ({ requestParams, ...props }) => 
 
 export const SelectPersonneSansFonction: FC<SelectProps> = ({ requestParams, ...props }) => {
   return (
-    <AsyncSelect
+    <FetchSelect
       {...props}
       fetchOptions={async () => {
         const { data } = await personneApi.findPersonnesSansFonction(requestParams);
@@ -41,7 +41,7 @@ export const SelectPersonneSansFonction: FC<SelectProps> = ({ requestParams, ...
 
 export const SelectGenre: FC<SelectProps> = ({ requestParams, ...props }) => {
   return (
-    <AsyncSelect
+    <FetchSelect
       {...props}
       fetchOptions={async () => {
         const { data } = await genreApi.findAll<GenreResource>(requestParams);
@@ -53,7 +53,7 @@ export const SelectGenre: FC<SelectProps> = ({ requestParams, ...props }) => {
 
 export const SelectTypePersonne: FC<SelectProps> = ({ requestParams, ...props }) => {
   return (
-    <AsyncSelect
+    <FetchSelect
       {...props}
       fetchOptions={async () => {
         return [

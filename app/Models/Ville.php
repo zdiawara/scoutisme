@@ -11,7 +11,7 @@ class Ville extends Model
 {
     use HasUuids, LogsActivity;
 
-    protected $fillable = ['nom'];
+    protected $fillable = ['nom', 'type'];
 
     public function getActivitylogOptions(): LogOptions
     {

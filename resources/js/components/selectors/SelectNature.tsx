@@ -1,12 +1,12 @@
 import { natureApi } from "api";
-import { AsyncSelect, AsyncSelectSimple } from "components/forms/Select";
+import { FetchSelect, AsyncSelectSimple } from "components/forms/Select";
 import { FC } from "react";
 import { SelectItem, SelectProps } from "types/form.type";
 import { NatureResource } from "types/organisation.type";
 
 export const SelectNature: FC<SelectProps> = (props) => {
   return (
-    <AsyncSelect
+    <FetchSelect
       {...props}
       fetchOptions={async () => {
         const { data } = await natureApi.findAll<NatureResource>(props.requestParams);

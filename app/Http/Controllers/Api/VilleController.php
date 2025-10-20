@@ -5,17 +5,22 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Ville;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class VilleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $query = Ville::query();
+
+        if ($request->has('recherche')) {
+            $query = $query->where(DB::raw('lower(nom)'), 'like', '%' . strtolower($request->input('recherche')) . '%');
+        }
         return [
-            "data" => Ville::query()
-                ->orderBy('nom', 'asc')
+            "data" => $query->orderBy('nom', 'asc')
                 ->get()
         ];
     }

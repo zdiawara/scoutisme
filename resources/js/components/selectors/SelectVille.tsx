@@ -8,8 +8,8 @@ export const SelectVille: FC<SelectProps> = (props) => {
   return (
     <AsyncSelect
       {...props}
-      fetchOptions={async () => {
-        const { data } = await villeApi.findAll<VilleResource>();
+      fetchOptions={async (recherche?: string) => {
+        const { data } = await villeApi.findAll<VilleResource>({ recherche });
         return data.map((item) => ({ label: item.nom, value: item.id }));
       }}
     />

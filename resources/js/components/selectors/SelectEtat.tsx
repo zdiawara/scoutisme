@@ -1,11 +1,11 @@
-import { AsyncSelect } from "components/forms/Select";
+import { FetchSelect } from "components/forms/Select";
 import { FC } from "react";
 import { SelectProps } from "types/form.type";
 import { ETAT_PAIEMENTS } from "utils/constants";
 
-export const SelectEtat: FC<SelectProps> = ({ requestParams, ...props }) => {
+export const SelectEtat: FC<SelectProps> = (props) => {
   return (
-    <AsyncSelect
+    <FetchSelect
       {...props}
       fetchOptions={async () => {
         return [
@@ -17,12 +17,9 @@ export const SelectEtat: FC<SelectProps> = ({ requestParams, ...props }) => {
   );
 };
 
-export const SelectEtatPaiement: FC<SelectProps> = ({
-  requestParams,
-  ...props
-}) => {
+export const SelectEtatPaiement: FC<SelectProps> = (props) => {
   return (
-    <AsyncSelect
+    <FetchSelect
       {...props}
       fetchOptions={async () => {
         return Object.entries(ETAT_PAIEMENTS).map((entry) => ({

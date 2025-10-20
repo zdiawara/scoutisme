@@ -187,7 +187,6 @@ export const SousOrganisationModal: FC<SousOrganisationModalProps> = ({ closeMod
       modalHeaderProps={{
         closeButton: false,
       }}
-      // modalBodyClassName="bg-gray-100"
       defaultValues={{
         parent: {
           codeNature: organisation.nature.code,

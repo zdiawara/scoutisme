@@ -6,7 +6,7 @@ export type SelectItem = {
 };
 
 export interface AsyncSelectProps extends SelectProps {
-  fetchOptions: () => Promise<SelectItem[]>;
+  fetchOptions: (texte?: string) => Promise<SelectItem[]>;
 }
 
 export type SelectProps = {
@@ -21,7 +21,7 @@ export type SelectProps = {
   requestParams?: RequestParam;
   resetDeps?: string[];
   description?: string;
-  isMulti?:boolean
+  isMulti?: boolean;
 };
 
 export type CrudAction<T> = {

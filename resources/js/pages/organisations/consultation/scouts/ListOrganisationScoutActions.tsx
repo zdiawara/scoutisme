@@ -21,13 +21,14 @@ export const ListOrganisationScoutActions: FC<Props> = ({ organisation }) => {
     <>
       {droits.personne.scouts.creer && (
         <Button
-          variant="secondary"
-          className="ms-1"
           onClick={() => {
             setAction("ajouter");
           }}
+          className="ms-1"
+          variant="secondary"
+          style={{ minWidth: "150px" }}
         >
-          Ajouter
+          Ajouter un scout
         </Button>
       )}
 

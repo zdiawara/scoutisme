@@ -1,10 +1,9 @@
 import { FC, useMemo } from "react";
 import { Badge, Col, ListGroup, Nav, Row } from "react-bootstrap";
-import { ICONS } from "pages/common";
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { LINKS } from "utils";
 import { useQuery } from "@tanstack/react-query";
-import { NATURE, QUERY_KEY } from "utils/constants";
+import { NATURE, QUERY_KEY, TYPE_ORGANISATION } from "utils/constants";
 import { organisationApi } from "api";
 import { OrganisationResource } from "types/organisation.type";
 // import { useDroits } from "hooks/useDroits";
@@ -16,6 +15,7 @@ import { SousOrganisation } from "../consultation/sousOrganisations";
 import { ListOrganisationScout } from "../consultation/scouts";
 import { Header } from "layout/Header";
 import { useDroits } from "hooks/useDroits";
+import { ListSoutienAdulte } from "../consultation/soutien";
 
 type OrganisationProps = {
   organisationId: string;
@@ -47,36 +47,39 @@ export const Organisation: FC<OrganisationProps> = ({ organisationId }) => {
       {
         label: "Détails",
         code: "details",
-        Icon: Icon.FileEarmarkText,
+        Icon: Icon.FileEarmarkTextFill,
         visible: true,
       },
       {
         label: "Direction",
         code: "direction",
-        icon: ICONS.direction,
         visible: true,
-        Icon: Icon.People,
+        Icon: Icon.PeopleFill,
+      },
+      {
+        label: "Soutien aux adultes",
+        code: "soutien_adultes",
+        visible: TYPE_ORGANISATION.equipe_nationale === organisation.type?.code,
+        Icon: Icon.PersonRaisedHand,
       },
       {
         label:
           nature.code === NATURE.region
-            ? "Unités/Groupes"
+            ? "Groupes/Unités"
             : nature.code === NATURE.groupe
             ? "Unités"
             : nature.code === NATURE.national && type?.code === "equipe_nationale"
             ? "Régions"
             : "Equipe nationale",
         code: "organisations",
-        icon: ICONS.organisation,
         visible: true,
-        Icon: Icon.Building,
+        Icon: Icon.BuildingFill,
       },
       {
         label: "Scouts",
         code: "scouts",
-        icon: ICONS.personne,
         visible: true, //Object.values(protection.personne.scouts).some((e) => e),
-        Icon: Icon.Person,
+        Icon: Icon.PersonFill,
       },
     ];
 
@@ -87,7 +90,7 @@ export const Organisation: FC<OrganisationProps> = ({ organisationId }) => {
       if (organisation.nature.code === NATURE.unite) {
         return item.code !== "organisations";
       }
-      return true;
+      return item.visible;
     });
   }, [organisation]);
 
@@ -108,6 +111,8 @@ export const Organisation: FC<OrganisationProps> = ({ organisationId }) => {
         return <ListOrganisationScout organisation={organisation} />;
       case "organisations":
         return <SousOrganisation organisation={organisation} />;
+      case "soutien_adultes":
+        return <ListSoutienAdulte organisation={organisation} />;
       default:
         return <DetailOrganisation organisation={organisation} />;
     }
@@ -186,6 +191,7 @@ export const Organisation: FC<OrganisationProps> = ({ organisationId }) => {
               onClick={onSelectPage(item.code)}
               href="#"
               className="d-flex align-items-center"
+              style={{ whiteSpace: "nowrap" }}
             >
               <item.Icon size="1.1rem" className="me-1" />
               {item.label}

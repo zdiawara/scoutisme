@@ -4,7 +4,7 @@ import { SousOrganisationModal } from "./SousOrganisationModal";
 
 import { useDroits } from "hooks/useDroits";
 import { Button } from "react-bootstrap";
-import { NATURE, TYPE_ORGANISATION } from "utils/constants";
+import { TYPE_ORGANISATION } from "utils/constants";
 
 type SousOrganisationActionsProps = {
   organisation: OrganisationResource;

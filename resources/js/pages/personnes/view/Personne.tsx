@@ -77,7 +77,7 @@ export const Personne: FC<PersonneProps> = ({ personneId, title }) => {
       {
         label: "Fonctions",
         code: "fonctions",
-        Icon: Icon.Briefcase,
+        Icon: Icon.BriefcaseFill,
         visible: true,
       },
       {
@@ -91,7 +91,7 @@ export const Personne: FC<PersonneProps> = ({ personneId, title }) => {
         code: "carte",
         icon: "mdi mdi-card-account-details-outline",
         visible: protection.cotisation.acces,
-        Icon: Icon.PersonVcard,
+        Icon: Icon.PersonVcardFill,
       },
     ].filter((e) => e.visible);
   }, [protection, personne]);

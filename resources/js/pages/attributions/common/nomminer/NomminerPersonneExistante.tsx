@@ -9,15 +9,11 @@ import { Button, Col, Modal, Row } from "react-bootstrap";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { QUERY_KEY } from "utils/constants";
-import {
-  buildMessageError,
-  NotificationError,
-  NotificationSuccess,
-} from "utils/notification";
+import { buildMessageError, NotificationError, NotificationSuccess } from "utils/notification";
 
 import * as yup from "yup";
 
-export const schema = yup.object({
+const schema = yup.object({
   personne: yup.object().required().nullable(),
   date_debut: yup.date().required().nullable(),
 });
@@ -29,11 +25,7 @@ type Props = {
   fonctionId: string;
 };
 
-const ajouterMembre = async (
-  data: Record<string, any>,
-  organisationId: string,
-  fonctionId: string
-) => {
+const ajouterMembre = async (data: Record<string, any>, organisationId: string, fonctionId: string) => {
   const body = {
     ...attributionConverter.toBody(data),
     organisation_id: organisationId,
@@ -42,12 +34,7 @@ const ajouterMembre = async (
   return await attributionApi.create(body);
 };
 
-export const NomminerPersonneExistante: FC<Props> = ({
-  closeModal,
-  prevStep,
-  organisationId,
-  fonctionId,
-}) => {
+export const NomminerPersonneExistante: FC<Props> = ({ closeModal, prevStep, organisationId, fonctionId }) => {
   const query = useQueryClient();
 
   const methods = useForm({
@@ -80,39 +67,18 @@ export const NomminerPersonneExistante: FC<Props> = ({
         <Modal.Body className="bg-gray-100">
           <Row className="g-2">
             <Col xs={12}>
-              <SelectPersonne
-                label="Personne"
-                name="personne"
-                isRequired
-                requestParams={{
-                  type: "adulte",
-                }}
-                placeholder=""
-              />
+              <SelectPersonne label="Personne" name="personne" isRequired placeholder="Rechercher par nom ou Numéro" />
             </Col>
             <Col xs={12}>
-              <DatePicker
-                name="date_debut"
-                label="Date debut"
-                useHookForm
-                required
-              />
+              <DatePicker name="date_debut" label="Date debut fonction" useHookForm required />
             </Col>
           </Row>
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            className="me-auto"
-            variant="outline-primary"
-            onClick={() => prevStep()}
-            disabled={isLoading}
-          >
+          <Button className="me-auto" variant="outline-primary" onClick={() => prevStep()} disabled={isLoading}>
             Précédent
           </Button>
-          <SubmitButton
-            isLoading={isLoading}
-            onClick={methods.handleSubmit(onSubmit, console.error)}
-          >
+          <SubmitButton isLoading={isLoading} onClick={methods.handleSubmit(onSubmit, console.error)}>
             Enregistrer
           </SubmitButton>
         </Modal.Footer>

@@ -33,7 +33,6 @@ export const EditFonction: FC<FonctionModalProps> = ({ closeModal, fonction, nat
     <FonctionForm
       onSave={save}
       title={`${fonction?.id ? "Modifier" : "Ajouter"} une fonction`}
-      subtitle="Fonction occupée par les membres de l'organe de direction"
       defaultValues={fonction?.id ? fonctionConverter.toInput(fonction) : { nature }}
       onSuccess={() => {
         query.invalidateQueries([QUERY_KEY.fonctions]);

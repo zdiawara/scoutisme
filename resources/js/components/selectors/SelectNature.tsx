@@ -3,6 +3,7 @@ import { FetchSelect, AsyncSelectSimple } from "components/forms/Select";
 import { FC } from "react";
 import { SelectItem, SelectProps } from "types/form.type";
 import { NatureResource } from "types/organisation.type";
+import { CATEGORIES } from "utils/constants";
 
 export const SelectNature: FC<SelectProps> = (props) => {
   return (
@@ -14,6 +15,10 @@ export const SelectNature: FC<SelectProps> = (props) => {
       }}
     />
   );
+};
+
+export const SelectCategorie: FC<SelectProps> = (props) => {
+  return <FetchSelect {...props} fetchOptions={async () => CATEGORIES} />;
 };
 
 export const SelectNatureSimple: FC<

@@ -2,6 +2,7 @@ import { FC } from "react";
 import { Button, ListGroup } from "react-bootstrap";
 import * as Icon from "react-bootstrap-icons";
 import { FonctionResource } from "types/personne.type";
+import { CATEGORIES } from "utils/constants";
 
 type Props = {
   fonctions?: FonctionResource[];
@@ -15,23 +16,20 @@ export const ListFonction: FC<Props> = ({ fonctions, editFormation }) => {
 
   return (
     <>
-      {fonctions.map((formation) => {
+      {fonctions.map((fonction) => {
         const infoSupplementaires = [];
-        if (formation.responsable.toString() === "1") {
+        if (fonction.responsable.toString() === "1") {
           infoSupplementaires.push("Responsable");
         }
-        if (formation.duree_mandat) {
-          infoSupplementaires.push(`Durée ${formation.duree_mandat} an(s)`);
-        }
+        infoSupplementaires.push(CATEGORIES.find((e) => fonction.categorie === e.value)?.label, fonction.nature.nom);
         return (
-          <ListGroup.Item key={formation.id} className="d-flex justify-content-between align-items-start">
+          <ListGroup.Item key={fonction.id} className="d-flex justify-content-between align-items-start">
             <div className="test">
-              <div className="fw-semibold fs-5 text-black">{formation.nom}</div>
-              <span>{infoSupplementaires.join(" - ")}</span>
-              <span className="d-block mt-1 fw-light">{formation.nature.nom}</span>
+              <div className="fw-semibold fs-5 text-black">{fonction.nom}</div>
+              <span className="d-block fw-light">{infoSupplementaires.join(" - ")}</span>
             </div>
 
-            <Button variant="default" onClick={() => editFormation(formation)}>
+            <Button variant="default" onClick={() => editFormation(fonction)}>
               <Icon.Pencil />
             </Button>
           </ListGroup.Item>

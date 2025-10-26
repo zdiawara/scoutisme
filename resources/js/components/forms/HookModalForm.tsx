@@ -35,7 +35,7 @@ export const HookModalForm: FC<UtilitaireModalProps> = ({
       {title && (
         <Modal.Header {...modalHeaderProps}>
           <div>
-            <Modal.Title className={classNames("text-primary", { "my-0": !!subtitle })}>{title}</Modal.Title>
+            <Modal.Title className={classNames({ "my-0": !!subtitle })}>{title}</Modal.Title>
             {subtitle && <>{subtitle}</>}
           </div>
         </Modal.Header>

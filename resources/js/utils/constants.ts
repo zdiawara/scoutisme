@@ -59,3 +59,18 @@ export const ETAT_PAIEMENTS: Record<string, string> = {
   rejet: "Rejeté",
   en_attente: "En attente",
 };
+
+export const CATEGORIES = [
+  {
+    label: "Direction",
+    value: "direction",
+  },
+  {
+    label: "Soutien",
+    value: "soutien",
+  },
+  {
+    label: "Scout",
+    value: "scout",
+  },
+];

@@ -65,6 +65,7 @@ export type FonctionResource = {
   responsable: string;
   nature: NatureResource;
   type?: TypeOrganisationResource;
+  categorie: string;
 };
 
 export type AttributionResource = {

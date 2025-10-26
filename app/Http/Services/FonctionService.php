@@ -18,7 +18,7 @@ class FonctionService
 
         // shuffle the result
         $string = str_shuffle($pin);
-        return Fonction::create(array_merge($body, ['code' => $string]));
+        return Fonction::create(array_merge($body, ['code' => $string, 'dure_mandat' => 0]));
     }
 
     public function update(Fonction $fonction, array $body)

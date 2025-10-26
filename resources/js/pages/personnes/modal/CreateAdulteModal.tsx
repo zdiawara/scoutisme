@@ -30,11 +30,7 @@ type CreateAdulteModalProps = {
  * @param param0
  * @returns
  */
-export const CreateAdulteModal: FC<CreateAdulteModalProps> = ({
-  closeModal,
-  organisation,
-  fonction,
-}) => {
+export const CreateAdulteModal: FC<CreateAdulteModalProps> = ({ closeModal, organisation, fonction }) => {
   const query = useQueryClient();
 
   const ajouter = (data: Record<string, any>) => {

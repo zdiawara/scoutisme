@@ -82,8 +82,6 @@ export const ToggleGenre: FC<ToggleGenreProps> = ({ name, label }) => {
 
   const genre = watch(name);
 
-  console.log(formState?.errors[name]?.message);
-
   return (
     <>
       <Form.Group className="position-relative">

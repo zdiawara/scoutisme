@@ -21,7 +21,8 @@ class Fonction extends Model
         'nature_id',
         'duree_mandat',
         'type_id',
-        'responsable'
+        'responsable',
+        'categorie'
     ];
 
     public function modelFilter()

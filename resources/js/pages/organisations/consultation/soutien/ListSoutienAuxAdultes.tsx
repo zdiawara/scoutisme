@@ -1,7 +1,6 @@
 import { FC, useMemo, useState } from "react";
 import { OrganisationResource } from "types/organisation.type";
 import { useQuery } from "@tanstack/react-query";
-import { QUERY_KEY } from "utils/constants";
 import { attributionApi } from "api";
 import { Button, Form, ListGroup } from "react-bootstrap";
 
@@ -11,6 +10,9 @@ import { AttributionResource } from "types/personne.type";
 import { LoaderSpinner } from "components/loader";
 import { Link } from "react-router-dom";
 import { LINKS } from "utils/links";
+import useToggle from "hooks/useToggle";
+import { QUERY_KEY } from "utils/constants";
+import { CreerSoutienAuxAdultesModal } from "pages/personnes/creer";
 
 type Props = {
   organisation: OrganisationResource;
@@ -22,10 +24,10 @@ const searchByCriteres = (term: string, attributions: AttributionResource[]) => 
   );
 };
 
-const fetchScouts = async ({ queryKey }: any) => {
+const fetchSoutienAuxAdultes = async ({ queryKey }: { queryKey: Array<string> }) => {
   const params = {
     organisationId: queryKey[1],
-    fonctionCode: "scout",
+    fonctionCategorie: "soutien",
     actif: "true",
   };
 
@@ -34,17 +36,18 @@ const fetchScouts = async ({ queryKey }: any) => {
   return response.data;
 };
 
-export const ListSoutienAdulte: FC<Props> = ({ organisation }) => {
+export const ListSoutienAuxAdultes: FC<Props> = ({ organisation }) => {
   const [searchText, setSearchText] = useState<string | undefined>();
+  const [isOpen, toggle] = useToggle();
 
   const query = useQuery({
-    queryKey: [QUERY_KEY.scouts, organisation.id],
-    queryFn: fetchScouts,
+    queryKey: [QUERY_KEY.soutien_aux_adultes, organisation.id],
+    queryFn: fetchSoutienAuxAdultes,
   });
 
   const { data } = query;
 
-  const scouts = useMemo(() => {
+  const adultes = useMemo(() => {
     if (searchText) {
       return searchByCriteres(searchText, data || []);
     }
@@ -59,10 +62,10 @@ export const ListSoutienAdulte: FC<Props> = ({ organisation }) => {
         </ListGroup.Item>
       );
     }
-    if (scouts?.length) {
+    if (adultes?.length) {
       return (
         <>
-          {scouts?.map(({ personne }) => (
+          {adultes?.map(({ personne }) => (
             <ListGroup.Item className="d-flex justify-content-between align-items-start" key={personne.id}>
               <div className="me-auto">
                 <Link className="fw-semibold mb-1 text-black" to={LINKS.personnes.view(personne.id)}>
@@ -83,25 +86,23 @@ export const ListSoutienAdulte: FC<Props> = ({ organisation }) => {
   };
 
   return (
-    <>
-      <ListGroup className="mb-3">
-        <View.Toolbar
-          right={
-            <Button className="ms-1" variant="secondary">
-              Ajouter
-            </Button>
-          }
-        >
-          <div className="w-100">
-            <Form.Control
-              placeholder="Rechercher ..."
-              onChange={(e) => setSearchText(e.target.value)}
-              value={searchText}
-            />
-          </div>
-        </View.Toolbar>
-        {renderContent()}
-      </ListGroup>
-    </>
+    <ListGroup className="mb-3">
+      <View.Toolbar
+        right={
+          <Button className="ms-1" variant="secondary" onClick={toggle}>
+            Ajouter
+          </Button>
+        }
+      >
+        <Form.Control
+          placeholder="Rechercher ..."
+          onChange={(e) => setSearchText(e.target.value)}
+          value={searchText}
+          className="w-100"
+        />
+      </View.Toolbar>
+      {renderContent()}
+      {isOpen && <CreerSoutienAuxAdultesModal organisationId={organisation.id} closeModal={toggle} />}
+    </ListGroup>
   );
 };

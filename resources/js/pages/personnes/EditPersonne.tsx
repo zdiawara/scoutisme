@@ -8,7 +8,7 @@ const EditPersonne: FC = () => {
   const personne = useLoaderData() as PersonneResource;
 
   const update = (input: any) => {
-    return personneApi.update(personne.id, personneConverter.toBody(input));
+    return personneApi.update(personne.id, input);
   };
 
   return (

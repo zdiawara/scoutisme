@@ -3,8 +3,8 @@ import { Modal, Stack } from "react-bootstrap";
 import { OrganisationResource } from "types/organisation.type";
 import { FonctionResource } from "types/personne.type";
 import { ChoixPersonne } from "./ChoixPersonne";
-import { NomminerNouvellePersonne } from "./NomminerNouvellePersonne";
 import { NomminerPersonneExistante } from "./NomminerPersonneExistante";
+import { NomminerNouvellePersonne } from "./NomminerNouvellePersonne";
 
 type NominerModalProps = {
   organisation: OrganisationResource;
@@ -12,13 +12,16 @@ type NominerModalProps = {
   closeModal: () => void;
 };
 
-/**
- *
- * @param param0
- * @returns
- */
+export enum Etape {
+  CHOISIR_PERSONNE_EXISTANTE = 1,
+  PERSONNE_IDENTITE = 2,
+  PERSONNE_COORDONNEE = 3,
+  PERSONNE_A_CONTACTER = 4,
+  RESUME = 5,
+}
+
 export const NominerModal: FC<NominerModalProps> = ({ organisation, fonction, closeModal }) => {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(Etape.CHOISIR_PERSONNE_EXISTANTE);
   const [action, setAction] = useState<string>("exist");
 
   const nextStep = () => {
@@ -30,19 +33,23 @@ export const NominerModal: FC<NominerModalProps> = ({ organisation, fonction, cl
   };
 
   const renderContent = () => {
-    if (currentStep === 1) {
+    if (currentStep === Etape.CHOISIR_PERSONNE_EXISTANTE) {
       return <ChoixPersonne value={action} setValue={setAction} nextStep={nextStep} closeModal={closeModal} />;
     }
+
     if (action === "new") {
       return (
         <NomminerNouvellePersonne
           closeModal={closeModal}
+          currentStep={currentStep}
+          fonction={fonction}
+          organisation={organisation}
+          nextStep={nextStep}
           prevStep={prevStep}
-          organisationId={organisation.id}
-          fonctionId={fonction.id}
         />
       );
     }
+
     return (
       <NomminerPersonneExistante
         prevStep={prevStep}
@@ -54,7 +61,7 @@ export const NominerModal: FC<NominerModalProps> = ({ organisation, fonction, cl
   };
 
   return (
-    <Modal centered show={true}>
+    <Modal centered size="lg" show={true}>
       <Modal.Header className="">
         <Stack>
           <Modal.Title className="fw-semibold">Nommination</Modal.Title>

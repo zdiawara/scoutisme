@@ -8,7 +8,6 @@ import { LINKS } from "utils";
 import { PersonneResource } from "types/personne.type";
 import { useDroits } from "hooks/useDroits";
 import { TransfererScout } from "../../../../transferts";
-// import { useDroits } from "hooks/useDroits";
 
 type Props = {
   personne: PersonneResource;

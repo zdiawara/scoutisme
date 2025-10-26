@@ -15,7 +15,7 @@ import { SousOrganisation } from "../consultation/sousOrganisations";
 import { ListOrganisationScout } from "../consultation/scouts";
 import { Header } from "layout/Header";
 import { useDroits } from "hooks/useDroits";
-import { ListSoutienAdulte } from "../consultation/soutien";
+import { ListSoutienAuxAdultes } from "../consultation/soutien";
 
 type OrganisationProps = {
   organisationId: string;
@@ -56,12 +56,7 @@ export const Organisation: FC<OrganisationProps> = ({ organisationId }) => {
         visible: true,
         Icon: Icon.PeopleFill,
       },
-      {
-        label: "Soutien aux adultes",
-        code: "soutien_adultes",
-        visible: TYPE_ORGANISATION.equipe_nationale === organisation.type?.code,
-        Icon: Icon.PersonRaisedHand,
-      },
+
       {
         label:
           nature.code === NATURE.region
@@ -74,6 +69,12 @@ export const Organisation: FC<OrganisationProps> = ({ organisationId }) => {
         code: "organisations",
         visible: true,
         Icon: Icon.BuildingFill,
+      },
+      {
+        label: "Soutien aux adultes",
+        code: "soutien_adultes",
+        visible: TYPE_ORGANISATION.equipe_nationale === organisation.type?.code,
+        Icon: Icon.PersonRaisedHand,
       },
       {
         label: "Scouts",
@@ -112,7 +113,7 @@ export const Organisation: FC<OrganisationProps> = ({ organisationId }) => {
       case "organisations":
         return <SousOrganisation organisation={organisation} />;
       case "soutien_adultes":
-        return <ListSoutienAdulte organisation={organisation} />;
+        return <ListSoutienAuxAdultes organisation={organisation} />;
       default:
         return <DetailOrganisation organisation={organisation} />;
     }

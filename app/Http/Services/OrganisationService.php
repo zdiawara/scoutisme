@@ -59,7 +59,7 @@ class OrganisationService
                 INNER JOIN organisations o on o.nature_id = f.nature_id
                 LEFT JOIN attributions a on (a.fonction_id = f.id and a.organisation_id = o.id and (a.date_fin is null or a.date_fin >= now()) )
                 LEFT JOIN personnes p on p.id = a.personne_id
-            WHERE o.id = :organisationId and f.code != "scout";
+            WHERE o.id = :organisationId and f.categorie = "direction";
             ',
             ['organisationId' => $organisationId]
         ))->map(function ($item) {

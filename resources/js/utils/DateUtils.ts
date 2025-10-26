@@ -30,7 +30,7 @@ export class DateFormater {
   private static DATE_TEXT = "dd MMMM yyyy";
   private static DATE_TEXT_TIME = "dd MMMM yyyy à HH:mm";
 
-  public static toISO(date?: Date): string | undefined {
+  public static toISO(date?: Date | null): string | undefined {
     try {
       if (date) {
         const isoDate = date.toISOString();

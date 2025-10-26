@@ -12,13 +12,7 @@ type ItemProps = {
   title: string;
   description: string;
 };
-const Item: FC<ItemProps & Props> = ({
-  value,
-  setValue,
-  code,
-  title,
-  description,
-}) => {
+const Item: FC<ItemProps & Props> = ({ value, setValue, code, title, description }) => {
   return (
     <ListGroup.Item
       type="button"
@@ -27,7 +21,6 @@ const Item: FC<ItemProps & Props> = ({
       }}
       className={classNames({
         "bg-light": code === value,
-        // "text-white": code === value,
       })}
     >
       <Stack direction="horizontal">
@@ -49,9 +42,12 @@ const Item: FC<ItemProps & Props> = ({
   );
 };
 
-export const ChoixPersonne: FC<
-  Props & { closeModal: () => void; nextStep: () => void }
-> = ({ value, setValue, closeModal, nextStep }) => {
+export const ChoixPersonne: FC<Props & { closeModal: () => void; nextStep: () => void }> = ({
+  value,
+  setValue,
+  closeModal,
+  nextStep,
+}) => {
   return (
     <>
       <Modal.Body className="bg-gray-100">
@@ -73,11 +69,7 @@ export const ChoixPersonne: FC<
         </ListGroup>
       </Modal.Body>
       <Modal.Footer>
-        <Button
-          className="me-auto"
-          variant="outline-primary"
-          onClick={() => closeModal()}
-        >
+        <Button className="me-auto" variant="outline-primary" onClick={() => closeModal()}>
           Annuler
         </Button>
         <Button onClick={() => nextStep()}>Suivant</Button>

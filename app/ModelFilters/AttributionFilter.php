@@ -24,6 +24,12 @@ class AttributionFilter extends ModelFilter
             $q->where('code', $value);
         });
     }
+    public function fonctionCategorie($value)
+    {
+        return $this->whereHas('fonction', function ($q) use ($value) {
+            $q->where('categorie', $value);
+        });
+    }
     public function actif($value)
     {
 

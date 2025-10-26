@@ -20,6 +20,7 @@ export const QUERY_KEY = {
   utilisateurs: "utilisateurs",
   logs: "logs",
   genres: "genres",
+  soutien_aux_adultes: "soutien_aux_adultes",
 };
 
 export const MASK = {

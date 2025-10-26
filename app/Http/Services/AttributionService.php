@@ -40,7 +40,6 @@ class AttributionService
         // Créer une ligne de cotisation
         $this->cotisationService->create($body['personne_id'], date('Y'));
 
-
         DB::commit();
         return $attribution;
     }

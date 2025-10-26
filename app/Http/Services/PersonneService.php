@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Helpers\Nature;
 use App\Http\Resources\PersonneCollection;
 use App\ModelFilters\PersonneFilter;
+use App\Models\Fonction;
 use App\Models\Organisation;
 use App\Models\Personne;
 use Carbon\Carbon;
@@ -39,7 +40,7 @@ class PersonneService
 
         $attribution = [];
 
-        $code = $this->computeCode($body['attribution'] ?? null);
+        $code = $this->computeCode($body['attribution']['organisation_id'] ?? null);
 
         $personne = Personne::create($body->except("attribution")
             ->merge(['code' => $code])
@@ -62,13 +63,105 @@ class PersonneService
         return $personne;
     }
 
-    private function computeCode($attribution)
+
+    public function createSoutienAuxAdultes(array $input): Personne
+    {
+        $body = collect($input);
+
+        DB::beginTransaction();
+
+        $personne = Personne::create($body->merge([
+            'code' => $this->computeCode(),
+            'type' => 'adulte'
+        ])->toArray());
+
+        $attribution = collect($body->get('attribution'));
+
+        $attributionInput = [
+            'organisation_id' => $attribution->get("organisation_id"),
+            'fonction_id' => Fonction::where('code', 'soutienAuxAdultes')->firstOrFail()->id,
+            'personne_id' => $personne->id,
+            'date_debut' => $attribution->get('date_debut'),
+            'date_fin' => $attribution->get('date_fin', null),
+            'type' => 'soutien'
+        ];
+
+        $this->attributinService->create($attributionInput);
+
+        DB::commit();
+
+        return $personne;
+    }
+
+    public function createMembreDirection(array $input): Personne
+    {
+        $body = collect($input);
+
+        DB::beginTransaction();
+
+        $code = $this->computeCode($body['attribution']['organisation_id'] ?? null);
+
+        $personne = Personne::create($body->merge([
+            'code' => $code,
+            'type' => 'adulte'
+        ])->toArray());
+
+        $attribution = collect($body->get('attribution'));
+
+        $attributionInput = [
+            'organisation_id' => $attribution->get("organisation_id"),
+            'fonction_id' =>  $attribution->get("fonction_id"),
+            'personne_id' => $personne->id,
+            'date_debut' => $attribution->get('date_debut'),
+            'date_fin' => $attribution->get('date_fin', null),
+            'type' => 'direction'
+        ];
+
+        $this->attributinService->create($attributionInput);
+
+        DB::commit();
+
+        return $personne;
+    }
+
+    public function createScout(array $input): Personne
+    {
+        $body = collect($input);
+
+        DB::beginTransaction();
+
+        $code = $this->computeCode($body['attribution']['organisation_id'] ?? null);
+
+        $personne = Personne::create($body->merge([
+            'code' => $code,
+            'type' => 'scout'
+        ])->toArray());
+
+        $attribution = collect($body->get('attribution'));
+
+        $attributionInput = [
+            'organisation_id' => $attribution->get("organisation_id"),
+            'fonction_id' => Fonction::where('code', 'scout')->firstOrFail()->id,
+            'personne_id' => $personne->id,
+            'date_debut' => $attribution->get('date_debut'),
+            'date_fin' => $attribution->get('date_fin', null),
+            'type' => 'scout'
+        ];
+
+        $this->attributinService->create($attributionInput);
+
+        DB::commit();
+
+        return $personne;
+    }
+
+    private function computeCode($organisationId = null)
     {
         $prefix = "";
-        if ($attribution == null) {
+        if ($organisationId == null) {
             $prefix = "PERS";
         } else {
-            $organisation = Organisation::findOrFail($attribution['organisation_id']);
+            $organisation = Organisation::findOrFail($organisationId);
             $code = collect([$organisation->code]);
             $prefix = $code
                 ->map(fn($item) => strtoupper($item))

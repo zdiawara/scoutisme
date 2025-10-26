@@ -13,7 +13,7 @@ export const requestParams = (params?: RequestParam) => {
 };
 
 export const selectHelper = {
-  getValue: (item?: SelectItem) => {
+  getValue: (item?: SelectItem | null) => {
     return item?.value || null;
   },
   getValueFromJson: (item: any) => (item ? selectHelper.getValue(JSON.parse(item)) : null),

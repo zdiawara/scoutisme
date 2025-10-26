@@ -1,4 +1,5 @@
 import { UserResource } from "./auth.type";
+import { SelectItem } from "./form.type";
 import { NatureResource, OrganisationResource, TypeOrganisationResource, VilleResource } from "./organisation.type";
 
 export type FormationResource = {
@@ -155,4 +156,38 @@ export type PersonneCarteVerso = {
 export type PersonneCarte = {
   recto: PersonneCarteRecto;
   verso: PersonneCarteVerso;
+};
+
+export type PersonneAContacterInput = {
+  personne_a_contacter?: {
+    nom: string;
+    relation: string;
+    telephone: string;
+  };
+};
+
+export type IdentiteInput = {
+  nom: string;
+  prenom: string;
+  genre: string;
+  profession?: string | null;
+  lieu_naissance?: string | null;
+  date_naissance?: Date | null;
+};
+
+export type CoordonneeInput = {
+  telephone?: string | null;
+  email?: string | null;
+  ville?: SelectItem | null;
+  adresse?: string | null;
+};
+
+export type PersonneInput = {
+  identite: IdentiteInput;
+  coordonnee: CoordonneeInput;
+  personneAContacter: PersonneAContacterInput;
+};
+
+export type PersonneDebutFonctionInput = {
+  date_debut: Date | null;
 };

@@ -2,8 +2,8 @@ import { FC, useState } from "react";
 import { OrganisationResource } from "types/organisation.type";
 
 import { Button } from "react-bootstrap";
-import { CreerScout } from "./scout/CreerScout";
 import { useDroits } from "hooks/useDroits";
+import { CreerScoutModal } from "pages/personnes/creer";
 
 type Props = {
   organisation: OrganisationResource;
@@ -32,7 +32,7 @@ export const ListOrganisationScoutActions: FC<Props> = ({ organisation }) => {
         </Button>
       )}
 
-      {action === "ajouter" && <CreerScout closeModal={closeModal} organisation={organisation} />}
+      {action === "ajouter" && <CreerScoutModal closeModal={closeModal} uniteId={organisation.id} />}
     </>
   );
 };

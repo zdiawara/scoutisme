@@ -17,7 +17,7 @@ const CreatePersonne: FC = () => {
   }, [typePersonne]);
 
   const create = (input: any) => {
-    return personneApi.create(personneConverter.toBody(input));
+    return personneApi.create(input);
   };
 
   return (

@@ -262,6 +262,21 @@ class PersonneController extends Controller
         return new PersonneResource($personne);
     }
 
+    public function createSoutienAuxAdultes(Request $request)
+    {
+        $this->personneService->createSoutienAuxAdultes($request->all());
+    }
+
+    public function createMembreDirection(Request $request)
+    {
+        $this->personneService->createMembreDirection($request->all());
+    }
+
+    public function createScout(Request $request)
+    {
+        $this->personneService->createScout($request->all());
+    }
+
     public function convertir(Personne $personne)
     {
         $user = $this->userService->createFromPersonne($personne);

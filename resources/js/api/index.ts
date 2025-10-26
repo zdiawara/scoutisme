@@ -93,6 +93,21 @@ class PersonneApi extends CrudService {
     const response = await requestPost<{ data: PersonneResource }>(`${this.base}/${personneId}/transferer`, body);
     return response;
   }
+
+  public async createSoutienAuxAdultes(body: any) {
+    const response = await requestPost<{ data: PersonneResource }>(`${this.base}/soutien-aux-adultes`, body);
+    return response;
+  }
+
+  public async createMembreDirection(body: any) {
+    const response = await requestPost<{ data: PersonneResource }>(`${this.base}/membre-direction`, body);
+    return response;
+  }
+
+  public async createScout(body: any) {
+    const response = await requestPost<{ data: PersonneResource }>(`${this.base}/scout`, body);
+    return response;
+  }
 }
 
 export const personneApi = new PersonneApi("personnes");

@@ -44,7 +44,7 @@ export const OrganisationMembre: FC<Props> = ({ attribution, organisation }) => 
           }}
         >
           <Icon.Pencil className="me-1" />
-          Nomminer
+          Nominer
         </Button>
       );
     }

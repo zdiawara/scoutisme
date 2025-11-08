@@ -17,7 +17,7 @@ const Form: FC<WrapperV2Props> = (props) => {
   return (
     <HookModalForm {...props} labels={{ saveLabel: "Envoyer" }} modalBodyClassName="bg-light">
       <Alert variant="warning">
-        <Alert.Heading>Transfert de Zakaridia DIAWARA</Alert.Heading>
+        <Alert.Heading>{props.meta.nomScout}</Alert.Heading>
         Une demande de transfert sera envoyée au chef de l’unité destinataire et devra être validée.
       </Alert>
       <Row>
@@ -45,6 +45,9 @@ export const TransfererScout: FC<Props> = ({ closeModal, scout }) => {
     <TransfertScoutForm
       onSave={creerDemandeTransfert}
       title="Demande de transfert"
+      meta={{
+        nomScout: `Transfert de ${scout.prenom} ${scout.nom}`,
+      }}
       onSuccess={() => {
         notifier.succes("Demande de transfert envoyée avec succès");
         closeModal();

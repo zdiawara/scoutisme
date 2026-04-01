@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Models\Habilitation;
 use App\Models\Role;
+use Illuminate\Support\Facades\Log;
 
 class RoleService
 {
@@ -29,6 +30,12 @@ class RoleService
                 ]);
             });
 
+        Log::info('Rôle créé', [
+            'role_id' => $role->id,
+            'code' => $role->code,
+            'nombre_fonctionnalites' => count($body['fonctionnalites'] ?? []),
+        ]);
+
         return $role;
     }
 
@@ -48,6 +55,11 @@ class RoleService
                 ]);
             });
         }
+
+        Log::info('Rôle mis à jour', [
+            'role_id' => $role->id,
+            'nombre_fonctionnalites' => $fonctionnalites->count(),
+        ]);
 
 
         return $role;

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ModuleResource;
 use App\Models\Module;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ModuleController extends Controller
 {
@@ -31,7 +32,11 @@ class ModuleController extends Controller
      */
     public function store(Request $request)
     {
-        Module::create($request->all());
+        $module = Module::create($request->all());
+
+        Log::info('Module créé via API', [
+            'module_id' => $module->id,
+        ]);
     }
 
     /**
@@ -47,15 +52,18 @@ class ModuleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Module $module)
-    {
-    }
+    public function update(Request $request, Module $module) {}
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Module $module)
     {
+        $moduleId = $module->id;
         $module->delete();
+
+        Log::info('Module supprimé via API', [
+            'module_id' => $moduleId,
+        ]);
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Services\FonctionService;
 use App\ModelFilters\FonctionFilter;
 use App\Models\Fonction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class FonctionController extends Controller
 {
@@ -46,7 +47,11 @@ class FonctionController extends Controller
      */
     public function store(Request $request)
     {
-        $this->fonctionService->create($request->all());
+        $fonction = $this->fonctionService->create($request->all());
+
+        Log::info('Fonction créée via API', [
+            'fonction_id' => $fonction->id,
+        ]);
     }
 
     /**
@@ -62,7 +67,11 @@ class FonctionController extends Controller
      */
     public function update(Request $request, Fonction $fonction)
     {
-        $this->fonctionService->update($fonction, $request->except(['code']));
+        $fonction = $this->fonctionService->update($fonction, $request->except(['code']));
+
+        Log::info('Fonction mise à jour via API', [
+            'fonction_id' => $fonction->id,
+        ]);
     }
 
     /**
@@ -70,6 +79,11 @@ class FonctionController extends Controller
      */
     public function destroy(Fonction $fonction)
     {
+        $fonctionId = $fonction->id;
         $fonction->delete();
+
+        Log::info('Fonction supprimée via API', [
+            'fonction_id' => $fonctionId,
+        ]);
     }
 }

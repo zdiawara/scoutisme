@@ -10,6 +10,7 @@ use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class MessageController extends Controller
 {
@@ -49,11 +50,26 @@ class MessageController extends Controller
     public function store(Request $request, MessageService $messageService, MailService $mailService)
     {
         DB::beginTransaction();
-        $message = $messageService->createFromCriteres($request->all());
-        $mailService->send($message->objet, $message->contenu, $message->destinataires);
-        DB::commit();
 
-        return $message;
+        try {
+            $message = $messageService->createFromCriteres($request->all());
+            $mailService->send($message->objet, $message->contenu, $message->destinataires);
+            DB::commit();
+
+            Log::info('Message envoyé via API', [
+                'message_id' => $message->id,
+            ]);
+
+            return $message;
+        } catch (\Throwable $exception) {
+            DB::rollBack();
+
+            Log::error('Échec de l\'envoi du message via API', [
+                'message' => $exception->getMessage(),
+            ]);
+
+            throw $exception;
+        }
     }
 
     /**

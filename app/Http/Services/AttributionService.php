@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Models\Attribution;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AttributionService
 {
@@ -41,6 +42,14 @@ class AttributionService
         $this->cotisationService->create($body['personne_id'], date('Y'));
 
         DB::commit();
+
+        Log::info('Attribution créée', [
+            'attribution_id' => $attribution->id,
+            'personne_id' => $attribution->personne_id,
+            'organisation_id' => $attribution->organisation_id,
+            'fonction_id' => $attribution->fonction_id,
+        ]);
+
         return $attribution;
     }
 
@@ -50,6 +59,11 @@ class AttributionService
         $attribution->update($body);
         $this->updatePersonne($attribution);
         DB::commit();
+
+        Log::info('Attribution mise à jour', [
+            'attribution_id' => $attribution->id,
+        ]);
+
         return $attribution;
     }
 
@@ -61,6 +75,12 @@ class AttributionService
         ]);
         $this->updatePersonne($attribution);
         DB::commit();
+
+        Log::info('Attribution clôturée', [
+            'attribution_id' => $attribution->id,
+            'date_fin' => $attribution->date_fin,
+        ]);
+
         return $attribution;
     }
 
@@ -77,12 +97,20 @@ class AttributionService
 
     public function delete(Attribution $attribution)
     {
+        $attributionId = $attribution->id;
+        $personneId = $attribution->personne_id;
+
         $attribution->delete();
         $attribution->personne->update([
             'fonction_id' => null,
             'organisation_id' => null,
             'date_debut' => null,
             'date_fin' => null,
+        ]);
+
+        Log::info('Attribution supprimée', [
+            'attribution_id' => $attributionId,
+            'personne_id' => $personneId,
         ]);
     }
 

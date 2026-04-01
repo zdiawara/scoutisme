@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Models\RefFormation;
+use Illuminate\Support\Facades\Log;
 
 class RefFormationService
 {
@@ -18,12 +19,24 @@ class RefFormationService
 
         // shuffle the result
         $string = str_shuffle($pin);
-        return RefFormation::create(array_merge($body, ['code' => $string]));
+        $refFormation = RefFormation::create(array_merge($body, ['code' => $string]));
+
+        Log::info('Référence de formation créée', [
+            'ref_formation_id' => $refFormation->id,
+            'code' => $refFormation->code,
+        ]);
+
+        return $refFormation;
     }
 
     public function update(RefFormation $refFormation, array $body)
     {
         $refFormation->update($body);
+
+        Log::info('Référence de formation mise à jour', [
+            'ref_formation_id' => $refFormation->id,
+        ]);
+
         return $refFormation;
     }
 }

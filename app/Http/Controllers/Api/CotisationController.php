@@ -10,6 +10,7 @@ use App\ModelFilters\CotisationFilter;
 use App\Models\Cotisation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CotisationController extends Controller
 {
@@ -48,10 +49,31 @@ class CotisationController extends Controller
     public function store(Request $request)
     {
         DB::beginTransaction();
-        $cotisation = $this->cotisationService->find($request->get('personne_id'), $request->get('annee'));
-        $this->paiementService->create($cotisation->id, $request->input('montant_paye'));
-        DB::commit();
-        return new CotisationResource($cotisation);
+
+        try {
+            $cotisation = $this->cotisationService->find($request->get('_personne_id'), $request->get('annee'));
+            $this->paiementService->create($cotisation->id, $request->input('montant_paye'));
+
+            DB::commit();
+
+            Log::info('Paiement de cotisation enregistré', [
+                'cotisation_id' => $cotisation->id,
+                'personne_id' => $request->get('personne_id'),
+                'annee' => $request->get('annee'),
+            ]);
+
+            return new CotisationResource($cotisation);
+        } catch (\Throwable $exception) {
+            DB::rollBack();
+
+            Log::error('Échec de l\'enregistrement du paiement de cotisation', [
+                'personne_id' => $request->get('personne_id'),
+                'annee' => $request->get('annee'),
+                'message' => $exception->getMessage(),
+            ]);
+
+            throw $exception;
+        }
     }
 
     /**

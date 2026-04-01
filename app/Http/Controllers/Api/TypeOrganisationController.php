@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Services\TypeOrganisationService;
 use App\Models\TypeOrganisation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class TypeOrganisationController extends Controller
 {
@@ -46,7 +47,11 @@ class TypeOrganisationController extends Controller
      */
     public function store(Request $request)
     {
-        $this->typeOrganisationService->create($request->all());
+        $typeOrganisation = $this->typeOrganisationService->create($request->all());
+
+        Log::info('Type d\'organisation créé via API', [
+            'type_organisation_id' => $typeOrganisation->id,
+        ]);
     }
 
     /**
@@ -62,7 +67,11 @@ class TypeOrganisationController extends Controller
      */
     public function update(Request $request, TypeOrganisation $typeOrganisation)
     {
-        $this->typeOrganisationService->update($typeOrganisation, $request->except(['code']));
+        $typeOrganisation = $this->typeOrganisationService->update($typeOrganisation, $request->except(['code']));
+
+        Log::info('Type d\'organisation mis à jour via API', [
+            'type_organisation_id' => $typeOrganisation->id,
+        ]);
     }
 
     /**
@@ -70,6 +79,11 @@ class TypeOrganisationController extends Controller
      */
     public function destroy(TypeOrganisation $typeOrganisation)
     {
+        $typeOrganisationId = $typeOrganisation->id;
         $typeOrganisation->delete();
+
+        Log::info('Type d\'organisation supprimé via API', [
+            'type_organisation_id' => $typeOrganisationId,
+        ]);
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Cotisation;
 use App\Models\Paiement;
 use sirajcse\UniqueIdGenerator\UniqueIdGenerator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PaiementService
 {
@@ -32,11 +33,18 @@ class PaiementService
         $cotisation = Cotisation::findOrFail($cotisationId);
         $user = Auth()->user();
 
-        Paiement::create([
+        $paiement = Paiement::create([
             'cotisation_id' => $cotisation->id,
             'montant' => $montant,
             'etat' => 'en_attente',
             'numero' => UniqueIdGenerator::generate($this->config),
+        ]);
+
+        Log::info('Paiement créé en attente de validation', [
+            'paiement_id' => $paiement->id,
+            'numero' => $paiement->numero,
+            'cotisation_id' => $cotisation->id,
+            'createur_id' => $user?->id,
         ]);
 
         return $cotisation;
@@ -45,14 +53,28 @@ class PaiementService
     public function update(Paiement $paiement, array $body): Paiement
     {
         if ($paiement->etat == "valide") {
+            Log::warning('Modification refusée: paiement déjà validé', [
+                'paiement_id' => $paiement->id,
+                'numero' => $paiement->numero,
+            ]);
             throw new BadRequestException("Le paiement est déjà validé");
         }
         $paiement->update($body);
+
+        Log::info('Paiement mis à jour', [
+            'paiement_id' => $paiement->id,
+            'numero' => $paiement->numero,
+        ]);
+
         return $paiement;
     }
 
     public function validerEnMasse(array $body)
     {
+        Log::info('Validation en masse démarrée', [
+            'nombre_paiements' => count($body),
+        ]);
+
         DB::beginTransaction();
         collect($body)
             ->chunk(2)
@@ -66,6 +88,10 @@ class PaiementService
                     ->each(fn($paiement) => $this->validerPaiement($paiement));
             });
         DB::commit();
+
+        Log::info('Validation en masse terminée', [
+            'nombre_paiements' => count($body),
+        ]);
     }
 
     public function valider(Paiement $paiement)
@@ -73,12 +99,23 @@ class PaiementService
         DB::beginTransaction();
         $this->validerPaiement($paiement);
         DB::commit();
+
+        Log::info('Paiement validé', [
+            'paiement_id' => $paiement->id,
+            'numero' => $paiement->numero,
+        ]);
+
         return $paiement;
     }
 
     public function validerPaiement(Paiement $paiement)
     {
         if ($paiement->etat != 'en_attente') {
+            Log::warning('Validation refusée: paiement non en attente', [
+                'paiement_id' => $paiement->id,
+                'numero' => $paiement->numero,
+                'etat' => $paiement->etat,
+            ]);
             throw new BadRequestException("Impossible de valider le paiement " . $paiement->id);
         }
 
@@ -125,6 +162,11 @@ class PaiementService
     {
 
         if ($paiement->etat != 'en_attente') {
+            Log::warning('Rejet refusé: paiement non en attente', [
+                'paiement_id' => $paiement->id,
+                'numero' => $paiement->numero,
+                'etat' => $paiement->etat,
+            ]);
             throw new BadRequestException("Impossible de rejeter ce paiement");
         }
 
@@ -139,14 +181,29 @@ class PaiementService
 
         DB::commit();
 
+        Log::info('Paiement rejeté', [
+            'paiement_id' => $paiement->id,
+            'numero' => $paiement->numero,
+        ]);
+
         return $paiement;
     }
 
     public function delete(Paiement $paiement)
     {
         if ($paiement->etat == 'valide') {
+            Log::warning('Suppression refusée: paiement déjà validé', [
+                'paiement_id' => $paiement->id,
+                'numero' => $paiement->numero,
+            ]);
             throw new BadRequestException("Impossible de rejeter ce paiement");
         }
+
+        Log::info('Suppression de paiement', [
+            'paiement_id' => $paiement->id,
+            'numero' => $paiement->numero,
+        ]);
+
         $paiement->delete();
     }
 

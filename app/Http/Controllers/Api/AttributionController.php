@@ -8,6 +8,7 @@ use App\Http\Services\AttributionService;
 use App\ModelFilters\AttributionFilter;
 use App\Models\Attribution;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AttributionController extends Controller
 {
@@ -42,6 +43,11 @@ class AttributionController extends Controller
     {
         $attribution = $this->attributionService->create($request->all());
         $attribution->load(['personne', 'organisation.nature', 'fonction']);
+
+        Log::info('Attribution créée via API', [
+            'attribution_id' => $attribution->id,
+        ]);
+
         return new AttributionResource($attribution);
     }
 
@@ -60,6 +66,11 @@ class AttributionController extends Controller
     {
         $attribution = $this->attributionService->update($attribution, $request->all());
         $attribution->load(['personne', 'organisation.nature', 'fonction']);
+
+        Log::info('Attribution mise à jour via API', [
+            'attribution_id' => $attribution->id,
+        ]);
+
         return new AttributionResource($attribution);
     }
 
@@ -67,6 +78,11 @@ class AttributionController extends Controller
     {
         $attribution = $this->attributionService->cloturer($attribution, $request->all());
         $attribution->load(['personne', 'organisation.nature', 'fonction']);
+
+        Log::info('Attribution clôturée via API', [
+            'attribution_id' => $attribution->id,
+        ]);
+
         return new AttributionResource($attribution);
     }
 
@@ -75,6 +91,10 @@ class AttributionController extends Controller
      */
     public function destroy(Attribution $attribution)
     {
+        Log::info('Suppression d\'attribution demandée via API', [
+            'attribution_id' => $attribution->id,
+        ]);
+
         $attribution = $this->attributionService->delete($attribution);
     }
 }

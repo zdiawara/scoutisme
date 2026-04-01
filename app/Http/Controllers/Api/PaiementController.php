@@ -14,6 +14,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PaiementController extends Controller
 {
@@ -109,10 +110,30 @@ class PaiementController extends Controller
     public function store(Request $request)
     {
         DB::beginTransaction();
-        $cotisation = $this->cotisationService->find($request->get('personne_id'), $request->get('annee'));
-        $this->paiementService->create($cotisation->id, $request->input('montant'));
-        DB::commit();
-        return new CotisationResource($cotisation);
+
+        try {
+            $cotisation = $this->cotisationService->find($request->get('personne_id'), $request->get('annee'));
+            $this->paiementService->create($cotisation->id, $request->input('montant'));
+            DB::commit();
+
+            Log::info('Paiement enregistré avec succès', [
+                'cotisation_id' => $cotisation->id,
+                'personne_id' => $request->get('personne_id'),
+                'annee' => $request->get('annee'),
+            ]);
+
+            return new CotisationResource($cotisation);
+        } catch (\Throwable $exception) {
+            DB::rollBack();
+
+            Log::error('Échec de l\'enregistrement du paiement', [
+                'personne_id' => $request->get('personne_id'),
+                'annee' => $request->get('annee'),
+                'message' => $exception->getMessage(),
+            ]);
+
+            throw $exception;
+        }
     }
 
     /**
@@ -134,6 +155,12 @@ class PaiementController extends Controller
     public function valider(Paiement $paiement)
     {
         $paiement = $this->paiementService->valider($paiement);
+
+        Log::info('Paiement validé avec succès', [
+            'paiement_id' => $paiement->id,
+            'numero' => $paiement->numero,
+        ]);
+
         return new PaiementResource($paiement);
     }
 
@@ -145,12 +172,28 @@ class PaiementController extends Controller
     public function rejeter(Paiement $paiement, Request $request)
     {
         $paiement = $this->paiementService->rejeter($paiement, $request->all());
+
+        Log::info('Paiement rejeté', [
+            'paiement_id' => $paiement->id,
+            'numero' => $paiement->numero,
+        ]);
+
         return new PaiementResource($paiement);
     }
 
     public function destroy(Paiement $paiement)
     {
+        Log::info('Suppression de paiement demandée', [
+            'paiement_id' => $paiement->id,
+            'numero' => $paiement->numero,
+        ]);
+
         $this->paiementService->delete($paiement);
+
+        Log::info('Paiement supprimé', [
+            'paiement_id' => $paiement->id,
+            'numero' => $paiement->numero,
+        ]);
     }
 
     public function telechargerRecu(Paiement $paiement)

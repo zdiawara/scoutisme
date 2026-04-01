@@ -8,6 +8,7 @@ use App\Http\Services\InstanceService;
 use App\Models\Instance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class InstanceController extends Controller
 {
@@ -53,6 +54,11 @@ class InstanceController extends Controller
         DB::beginTransaction();
         $instance = $this->instanceService->create($request->all());
         DB::commit();
+
+        Log::info('Instance créée via API', [
+            'instance_id' => $instance->id,
+        ]);
+
         return new InstanceResource($instance);
     }
 
@@ -61,7 +67,13 @@ class InstanceController extends Controller
      */
     public function update(Request $request, Instance $instance)
     {
-        return new InstanceResource($this->instanceService->update($instance, $request->all()));
+        $instance = $this->instanceService->update($instance, $request->all());
+
+        Log::info('Instance mise à jour via API', [
+            'instance_id' => $instance->id,
+        ]);
+
+        return new InstanceResource($instance);
     }
 
     /**

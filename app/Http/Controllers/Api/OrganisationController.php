@@ -9,6 +9,7 @@ use App\ModelFilters\OrganisationFilter;
 use App\Models\Organisation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class OrganisationController extends Controller
 {
@@ -71,6 +72,11 @@ class OrganisationController extends Controller
     {
         //
         $organisation = $this->organisationService->create($request->all());
+
+        Log::info('Organisation créée via API', [
+            'organisation_id' => $organisation->id,
+        ]);
+
         return new OrganisationResource($organisation);
     }
 
@@ -129,6 +135,11 @@ class OrganisationController extends Controller
     public function update(Request $request, Organisation $organisation)
     {
         $organisation = $this->organisationService->update($organisation, $request->all());
+
+        Log::info('Organisation mise à jour via API', [
+            'organisation_id' => $organisation->id,
+        ]);
+
         return $organisation;
     }
 

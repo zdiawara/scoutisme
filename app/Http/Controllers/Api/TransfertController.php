@@ -8,6 +8,7 @@ use App\Http\Services\TransfertService;
 use App\Models\Attribution;
 use App\Models\Transfert;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class TransfertController extends Controller
 {
@@ -23,5 +24,10 @@ class TransfertController extends Controller
         $this->authorize('confirmTransfer', $transfert);
 
         $this->transfertService->confirmer($transfert);
+
+        Log::info('Transfert confirmé via API', [
+            'transfert_id' => $transfert->id,
+            'numero' => $transfert->numero,
+        ]);
     }
 }

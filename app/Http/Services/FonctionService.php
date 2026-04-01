@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Models\Fonction;
+use Illuminate\Support\Facades\Log;
 
 class FonctionService
 {
@@ -18,12 +19,24 @@ class FonctionService
 
         // shuffle the result
         $string = str_shuffle($pin);
-        return Fonction::create(array_merge($body, ['code' => $string, 'dure_mandat' => 0]));
+        $fonction = Fonction::create(array_merge($body, ['code' => $string, 'dure_mandat' => 0]));
+
+        Log::info('Fonction créée', [
+            'fonction_id' => $fonction->id,
+            'code' => $fonction->code,
+        ]);
+
+        return $fonction;
     }
 
     public function update(Fonction $fonction, array $body)
     {
         $fonction->update($body);
+
+        Log::info('Fonction mise à jour', [
+            'fonction_id' => $fonction->id,
+        ]);
+
         return $fonction;
     }
 }

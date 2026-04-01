@@ -11,6 +11,7 @@ use App\Models\Nature;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class RoleController extends Controller
 {
@@ -39,7 +40,11 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $this->roleService->create($request->all());
+        $role = $this->roleService->create($request->all());
+
+        Log::info('Rôle créé via API', [
+            'role_id' => $role->id,
+        ]);
     }
 
     /**
@@ -66,7 +71,11 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role)
     {
-        $this->roleService->update($role, $request->except(['code']));
+        $role = $this->roleService->update($role, $request->except(['code']));
+
+        Log::info('Rôle mis à jour via API', [
+            'role_id' => $role->id,
+        ]);
     }
 
     /**
@@ -86,6 +95,11 @@ class RoleController extends Controller
                 ]);
             });
         DB::commit();
+
+        Log::info('Fonctionnalités du rôle mises à jour via API', [
+            'role_id' => $role->id,
+            'nombre_fonctionnalites' => count($request->get('fonctionnalites', [])),
+        ]);
     }
 
     /**
@@ -93,10 +107,16 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
+        $roleId = $role->id;
+
         DB::beginTransaction();
         Habilitation::where('role_id', $role->id)
             ->delete();
         $role->delete();
         DB::commit();
+
+        Log::info('Rôle supprimé via API', [
+            'role_id' => $roleId,
+        ]);
     }
 }

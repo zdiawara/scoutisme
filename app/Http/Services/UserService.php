@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class UserService
 {
@@ -21,12 +22,23 @@ class UserService
 
         DB::commit();
 
+        Log::info('Utilisateur créé', [
+            'user_id' => $user->id,
+            'email' => $user->email,
+        ]);
+
         return $user;
     }
 
     public function update(User $user, array $body): User
     {
         $user->update($body);
+
+        Log::info('Utilisateur mis à jour', [
+            'user_id' => $user->id,
+            'email' => $user->email,
+        ]);
+
         return $user;
     }
 
@@ -90,6 +102,9 @@ class UserService
             ->count();
 
         if ($nbUser >= 1) {
+            Log::warning('Création de compte refusée: compte déjà existant pour la personne', [
+                'personne_id' => $personne->id,
+            ]);
             throw new BadRequestException($personne->nom . " " . $personne->prenom . " possède déjà un compte");
         }
 
@@ -107,6 +122,12 @@ class UserService
         // Auth::login($user);
 
         DB::commit();
+
+        Log::info('Compte utilisateur créé à partir d\'une personne', [
+            'user_id' => $user->id,
+            'personne_id' => $personne->id,
+        ]);
+
         return $user;
     }
 

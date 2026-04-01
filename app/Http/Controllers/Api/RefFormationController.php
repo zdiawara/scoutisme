@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Services\RefFormationService;
 use App\Models\RefFormation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RefFormationController extends Controller
 {
@@ -33,7 +34,11 @@ class RefFormationController extends Controller
      */
     public function store(Request $request)
     {
-        $this->refFormationService->create($request->all());
+        $refFormation = $this->refFormationService->create($request->all());
+
+        Log::info('Référence de formation créée via API', [
+            'ref_formation_id' => $refFormation->id,
+        ]);
     }
 
     /**
@@ -49,6 +54,10 @@ class RefFormationController extends Controller
      */
     public function update(Request $request, RefFormation $refFormation)
     {
-        $this->refFormationService->update($refFormation, $request->except(['code']));
+        $refFormation = $this->refFormationService->update($refFormation, $request->except(['code']));
+
+        Log::info('Référence de formation mise à jour via API', [
+            'ref_formation_id' => $refFormation->id,
+        ]);
     }
 }

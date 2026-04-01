@@ -7,6 +7,7 @@ use App\Http\Resources\UserResource;
 use App\Http\Services\UserService;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -40,6 +41,12 @@ class UserController extends Controller
     {
         $user = $this->userService->create($request->all());
         $this->userService->addFonctionnalitesAndRoles($user);
+
+        Log::info('Utilisateur créé via API', [
+            'user_id' => $user->id,
+            'email' => $user->email,
+        ]);
+
         return new UserResource($user);
     }
 
@@ -60,6 +67,12 @@ class UserController extends Controller
     {
         $user = $this->userService->update($user, $request->all());
         $this->userService->addFonctionnalitesAndRoles($user);
+
+        Log::info('Utilisateur mis à jour via API', [
+            'user_id' => $user->id,
+            'email' => $user->email,
+        ]);
+
         return new UserResource($user);
     }
 }

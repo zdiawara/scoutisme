@@ -11,6 +11,7 @@ use App\Models\Personne;
 use App\Models\Transfert;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use sirajcse\UniqueIdGenerator\UniqueIdGenerator;
 
@@ -48,26 +49,44 @@ class TransfertService
             ->first();
 
         if (!isset($uniteArrivee)) {
+            Log::warning('Création de transfert refusée: unité d\'arrivée introuvable', [
+                'scout_id' => $personne->id,
+                'code_unite_arrivee' => $codeUniteArrivee,
+            ]);
             throw new BadRequestException("Unité d'arrivée n'existe pas");
         }
 
         if ($personne->type != "scout") {
+            Log::warning('Création de transfert refusée: type de personne invalide', [
+                'personne_id' => $personne->id,
+                'type' => $personne->type,
+            ]);
             throw new BadRequestException("Cette personne n'est pas un scout");
         }
 
 
         // même unité
         if (!isset($personne->organisation)) {
+            Log::warning('Création de transfert refusée: scout sans unité', [
+                'scout_id' => $personne->id,
+            ]);
             throw new BadRequestException("Ce scout n'est pas dans une unité");
         }
 
         if ($personne->organisation->code == $codeUniteArrivee) {
+            Log::warning('Création de transfert refusée: unité de départ identique à l\'arrivée', [
+                'scout_id' => $personne->id,
+                'code_unite' => $codeUniteArrivee,
+            ]);
             throw new BadRequestException("Unité de depart et d'arrivée doivent être différentes");
         }
 
         $attributionResponsable = $this->attributinService->findResponsable($uniteArrivee->id);
 
         if (!isset($attributionResponsable)) {
+            Log::warning('Création de transfert refusée: aucun responsable dans l\'unité d\'arrivée', [
+                'unite_arrivee_id' => $uniteArrivee->id,
+            ]);
             throw new BadRequestException("Aucun chef d'unité positionné sur " . $uniteArrivee->nom);
         }
 
@@ -75,6 +94,9 @@ class TransfertService
             ->first();
 
         if (!isset($userChefUnite)) {
+            Log::warning('Création de transfert refusée: chef d\'unité sans compte', [
+                'unite_arrivee_id' => $uniteArrivee->id,
+            ]);
             throw new BadRequestException("Le chef d'unité de " . $uniteArrivee->nom . " ne possède pas de compte.");
         }
 
@@ -89,6 +111,13 @@ class TransfertService
         Mail::to($userChefUnite->email)->send(new TransfertScoutMail($transfert));
 
         DB::commit();
+
+        Log::info('Transfert créé et notification envoyée', [
+            'transfert_id' => $transfert->id,
+            'numero' => $transfert->numero,
+            'scout_id' => $transfert->scout_id,
+        ]);
+
         return new Transfert();
     }
 
@@ -97,6 +126,10 @@ class TransfertService
 
 
         if ($transfert->etat == 'accepte') {
+            Log::warning('Confirmation de transfert refusée: déjà accepté', [
+                'transfert_id' => $transfert->id,
+                'numero' => $transfert->numero,
+            ]);
             throw new BadRequestException("Ce transfert est déjà accepté.");
         }
 
@@ -114,5 +147,10 @@ class TransfertService
         ]);
 
         DB::commit();
+
+        Log::info('Transfert confirmé', [
+            'transfert_id' => $transfert->id,
+            'numero' => $transfert->numero,
+        ]);
     }
 }

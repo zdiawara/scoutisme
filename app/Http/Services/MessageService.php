@@ -7,23 +7,40 @@ use App\Models\Message;
 use App\Models\Personne;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class MessageService
 {
     public function create(array $body)
     {
         if (collect($body['destinataires'] ?? null)->isEmpty()) {
+            Log::warning('Création de message refusée: aucun destinataire', []);
             throw new BadRequestException("Pas de destinataires trouvés");
         }
-        return Message::create($body);
+
+        $message = Message::create($body);
+
+        Log::info('Message créé', [
+            'message_id' => $message->id,
+            'nombre_destinataires' => count($message->destinataires ?? []),
+        ]);
+
+        return $message;
     }
 
     public function createFromCriteres(array $body)
     {
         $destinataires = collect($this->computeDestinataires($body['critere']));
-        return $this->create(array_merge($body, [
+        $message = $this->create(array_merge($body, [
             'destinataires' => $destinataires
         ]));
+
+        Log::info('Message créé à partir de critères', [
+            'message_id' => $message->id,
+            'nombre_destinataires' => $destinataires->count(),
+        ]);
+
+        return $message;
     }
 
     private function computeDestinataires(array $critere): array

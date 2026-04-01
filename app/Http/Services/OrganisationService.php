@@ -4,14 +4,22 @@ namespace App\Http\Services;
 
 use App\Models\Organisation;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class OrganisationService
 {
     public function create(array $body)
     {
-        return Organisation::create(collect($body)->merge([
+        $organisation = Organisation::create(collect($body)->merge([
             'code' => $this->buildCode($body['nom'])
         ])->toArray());
+
+        Log::info('Organisation créée', [
+            'organisation_id' => $organisation->id,
+            'code' => $organisation->code,
+        ]);
+
+        return $organisation;
     }
 
     private function buildCode(string $nomOrganisation)
@@ -39,6 +47,11 @@ class OrganisationService
                 WHERE JSON_CONTAINS(JSON_EXTRACT(o.parents, '$[*].id') ,  '\"" . $organisation->id . "\"') = 1;
             ");
         }
+
+        Log::info('Organisation mise à jour', [
+            'organisation_id' => $organisation->id,
+        ]);
+
         return $organisation;
     }
 

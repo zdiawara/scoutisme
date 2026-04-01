@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Models\TypeOrganisation;
+use Illuminate\Support\Facades\Log;
 
 class TypeOrganisationService
 {
@@ -18,12 +19,24 @@ class TypeOrganisationService
 
         // shuffle the result
         $string = str_shuffle($pin);
-        return TypeOrganisation::create(array_merge($body, ['code' => $string]));
+        $typeOrganisation = TypeOrganisation::create(array_merge($body, ['code' => $string]));
+
+        Log::info('Type d\'organisation créé', [
+            'type_organisation_id' => $typeOrganisation->id,
+            'code' => $typeOrganisation->code,
+        ]);
+
+        return $typeOrganisation;
     }
 
     public function update(TypeOrganisation $typeOrganisation, array $body): TypeOrganisation
     {
         $typeOrganisation->update($body);
+
+        Log::info('Type d\'organisation mis à jour', [
+            'type_organisation_id' => $typeOrganisation->id,
+        ]);
+
         return $typeOrganisation;
     }
 

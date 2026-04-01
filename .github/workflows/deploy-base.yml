@@ -93,7 +93,6 @@ jobs:
       - name: Install Deps and Migration
         uses: appleboy/ssh-action@master
         with:
-          username: ${{ secrets.ASBF_SSH_USERNAME }}
           host: ${{ secrets.ASBF_SSH_HOST }}
           port: ${{ secrets.ASBF_SSH_PORT }}
           key: ${{ secrets.ASBF_SSH_PRIVATE_KEY }}

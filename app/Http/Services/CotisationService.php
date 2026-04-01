@@ -20,8 +20,17 @@ class CotisationService
     {
         $cotisation = Cotisation::where('annee', $annee)
             ->where('personne_id', $personneId)
-            ->with(['paiements.createur', 'paiements.valideur'])
             ->first();
+        if (intval($annee) < date("Y")) {
+            return null;
+        }
+
+        if ($cotisation == null) {
+            $cotisation = $this->create($personneId, $annee);
+        }
+
+        $cotisation->load(['paiements.createur', 'paiements.valideur']);
+
         return $cotisation;
     }
 

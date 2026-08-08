@@ -1,4 +1,4 @@
-## Chef d'unité
+## Chef d'unité.
 
 - Recherche un scout
 - Créer / Modifier scout

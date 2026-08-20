@@ -1,9 +1,11 @@
 import { personneApi } from "api";
 import { HookModalForm, Radio } from "components";
 import { WrapperV2Props, withMutationForm } from "hoc";
+import { useAuth } from "hooks/index";
 import { FC, Fragment } from "react";
 import { ListGroup } from "react-bootstrap";
 import * as Icon from "react-bootstrap-icons";
+import { buildPerimetres } from "utils/functions";
 
 const COLUMNS = [
   {
@@ -123,14 +125,7 @@ const Form: FC<WrapperV2Props> = (props) => {
 
 const ExportPersonneForm = withMutationForm(Form);
 
-const defaultValues = [
-  "p_nom",
-  "p_prenom",
-  "p_genre",
-  "o_nom",
-  "o_nature",
-  "f_nom",
-].reduce((prev, cur) => {
+const defaultValues = ["p_nom", "p_prenom", "p_genre", "o_nom", "o_nature", "f_nom"].reduce((prev, cur) => {
   prev[cur] = "1";
   return prev;
 }, {} as Record<string, any>);
@@ -140,10 +135,11 @@ type ExportPersonneModalProps = {
   closeModal: () => void;
 };
 
-export const ExportPersonneModal: FC<ExportPersonneModalProps> = ({
-  filter,
-  closeModal,
-}) => {
+export const ExportPersonneModal: FC<ExportPersonneModalProps> = ({ filter, closeModal }) => {
+  const auth = useAuth();
+  const isAdmin = auth.userDroit?.isAdmin;
+  const personne = auth.user?.personne;
+
   const exporter = (data: Record<string, any>) => {
     const fields = Object.entries(data)
       .filter((entry) => {
@@ -151,7 +147,13 @@ export const ExportPersonneModal: FC<ExportPersonneModalProps> = ({
       })
       .map((entry) => entry[0])
       .join(";");
-    return personneApi.download("exports/csv", { ...filter, fields });
+
+    const filterParams = { ...filter, fields } as Record<string, any>;
+    if (!isAdmin && personne?.organisation?.id && !filterParams.organisationId) {
+      filterParams.organisationId = personne?.organisation?.id;
+      filterParams.perimetres = buildPerimetres(personne?.organisation?.nature.code).join(";");
+    }
+    return personneApi.download("exports/csv", filterParams);
   };
 
   return (
